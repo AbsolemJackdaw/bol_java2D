@@ -1,0 +1,61 @@
+long start;
+		long elapsed;
+		long wait;
+
+		// game loop
+		while (running) {
+
+			long now = System.nanoTime();
+			long updateLength = now - lastLoopTime;
+			lastLoopTime = now;
+			double delta = updateLength / ((double)OPTIMAL_TIME);
+
+			// update the frame counter
+			lastFpsTime += updateLength;
+			fps++;
+
+			// update our FPS counter if a second has passed since
+			// we last recorded
+			if (lastFpsTime >= 1000000000)
+			{
+				System.out.println("(FPS: "+fps+")");
+				lastFpsTime = 0;
+				fps = 0;
+			}
+
+			//			start = System.nanoTime();
+
+			update();
+			draw();
+			drawToScreen();
+
+			//			elapsed = System.nanoTime() - start;
+			//
+			//			wait = targetTime - (elapsed / 1000000);
+			//			if (wait < 0)
+			//				wait = 5;
+			//
+			//			try {
+			//				Thread.sleep(wait);
+			//			} catch (final Exception e) {
+			//				e.printStackTrace();
+			//			}
+
+
+			// we want each frame to take 10 milliseconds, to do this
+			// we've recorded when we started the frame. We add 10 milliseconds
+			// to this and then factor in the current time to give 
+			// us our final value to wait for
+			// remember this is in ms, whereas our lastLoopTime etc. vars are in ns.
+			wait = (lastLoopTime-System.nanoTime() + OPTIMAL_TIME)/1000000;
+			
+			if( wait < 0)
+				wait =5;
+				
+			try{
+				Thread.sleep(wait);
+			}catch (final Exception e) {
+				e.printStackTrace();
+			}
+
+		}
