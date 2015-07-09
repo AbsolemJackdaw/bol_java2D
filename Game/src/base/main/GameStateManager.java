@@ -1,6 +1,7 @@
 package base.main;
 
 import game.GameStateMenu;
+import game.Help;
 import game.World;
 import game.content.Images;
 
@@ -58,6 +59,9 @@ public class GameStateManager {
 			break;
 		case GAME:
 			gameStates[state] = new World(this);
+			break;
+		case HELP:
+			gameStates[state] = new Help(this);
 			break;
 		}
 	}

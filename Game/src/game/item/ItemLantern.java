@@ -19,7 +19,6 @@ public class ItemLantern extends Item implements IInventory {
 
 	@Override
 	public void useItem(Item item, TileMap map, World world, Player player,	int key) {
-		//TODO open gui
 
 		GuiLantern gui = new GuiLantern(this, player).setLantern(this);
 		world.displayGui(gui);

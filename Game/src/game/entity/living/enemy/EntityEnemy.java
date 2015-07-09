@@ -1,19 +1,31 @@
 package game.entity.living.enemy;
 
 import game.World;
+import game.entity.EntityAI;
 import game.entity.MapObject;
 import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
-import game.item.tool.ItemTool;
+import game.item.ItemTool;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
+import base.main.music.Music;
 import base.tilemap.TileMap;
 
 public class EntityEnemy extends EntityLiving {
 
 	BufferedImage[] entityTexture;
+
+	private boolean flinching;
+	private int flinchTimer = 100;
+
+	private int attackTimer;
+
+	/**set when attacked*/
+	private int followTimer;
+
+	EntityAI ai = new EntityAI();
 
 	public EntityEnemy(TileMap tm, World world, String uin) {
 		super(tm, world, uin);
@@ -39,98 +51,84 @@ public class EntityEnemy extends EntityLiving {
 	}
 
 	@Override
+	public void draw(Graphics2D g) {
+		if(flinching)
+			flinchTimer++;
+		if(flinchTimer > 50){
+			flinchTimer = 0;
+			flinching = false;
+		}
+		if(flinchTimer % 5 == 0)
+		{
+			super.draw(g);
+		}
+	}
+
+	@Override
 	public void onEntityHit(Player p, MapObject mo) {
 
 		int bonus = 0;
-		if(p.invArmor.getStackInSlot(3) != null){
+		if(p.invArmor.getWeapon() != null && p.invArmor.getWeapon().getItem() instanceof ItemTool){
 			ItemTool weapon = (ItemTool) p.invArmor.getStackInSlot(3).getItem();
 			bonus = weapon.getAttackDamage();
+			p.invArmor.getWeapon().damageStack(1);
+			flinching = true;
 		}
 
 		health -= p.getAttackDamage() + bonus;
 
 	}
 
-	private int moveDirectionCountDown = 600; //600 ticks : 10 seconds
-
 	@Override
 	public void update() {
 		super.update();
-		
-		if(!getWorld().isNightTime()){
-			if(new Random().nextInt(60) == 0){
-				health--;
+
+		if(followPlayer())
+			attackTimer++;
+
+		if(attackTimer % 300 == 0){ //5 seconds
+			Player p = world.getPlayer();
+			if(getRectangle().intersects(p.getRectangle())){
+				p.onEntityHit(p, this);
 			}
 		}
-		
+
+		if(!getWorld().isNightTime()){
+			if(rand.nextInt(100) == 0)
+				if(!flinching){
+					health--;
+					Music.play(getEntityHitSound());
+					flinching = true;
+				}
+		}
+
+		if(followTimer > 0){
+			ai.setPathToPlayer(this);
+			followTimer--;
+		}
+
 		if(health <= 0){
 			this.remove = true;
 		}
-
-		getNextPosition();
-		checkTileMapCollision();
-		setPosition(xtemp, ytemp);
-
-		moveDirectionCountDown --;
-
-		if(moveDirectionCountDown == 0){
-			moveDirectionCountDown = new Random().nextInt(600)+300;
-			if(new Random().nextInt(2) == 0){
-				left = true; right = false;
-			}else{
-				left = false; right = true;
-			}
-		}
-
-		if(dx == 0){
-			jumping = true;
-			
-		}
-
-		// jumping
-		if (jumping && !falling) {
-			dy = jumpStart;
-			falling = true;
-		}
-
-		// falling
-		if (falling) {
-			dy += fallSpeed;
-
-			if (dy > 0)
-				jumping = false;
-			if ((dy < 0) && !jumping)
-				dy += stopJumpSpeed;
-
-			if (dy > maxFallSpeed)
-				dy = maxFallSpeed;
-
-		}
-
-		if( tileMap.getBlockID(currCol,currRow) == 7){
-			left = false; right = true;
-		}
-
-		if(tileMap.getBlockID(currCol, currRow) == 6){
-			left = true; right = false;
-		}
-
-		if (right)
-			facingRight = true;
-		if (left)
-			facingRight = false;
 	}
 
-	@Override
-	protected void updateAnimation() {
+	public boolean isAgressive(){
+		return false;
+	}
 
-		if (left || right) {
-			if (currentAction != 0) {
-				currentAction = 0;
-				getAnimation().setFrames(entityTexture);
-				getAnimation().setDelay(75);
-			}
-		}
-		getAnimation().update();
+	protected boolean followPlayer(){
+		return followTimer > 0;
+	}
+
+	protected void setFollowing(int followTimer){
+		this.followTimer = followTimer;
+	}
+
+	protected void setFlinching() {
+		flinching = true;
+	}
+	
+	public int getAttackDamage(){
+		return 1;
 	}
 }

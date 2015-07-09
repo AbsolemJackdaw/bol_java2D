@@ -5,7 +5,7 @@ import game.content.save.DataTag;
 import game.entity.MapObject;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
-import game.item.tool.ItemTool;
+import game.item.ItemTool;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -17,6 +17,8 @@ public class BlockBreakable extends Block{
 
 	private int health;
 	private boolean jiggle;
+
+	/**the tool that can be used to destroy this block*/
 	private int effectiveTool;
 
 	int tracker = 0;
@@ -40,7 +42,7 @@ public class BlockBreakable extends Block{
 	}
 
 	private int defaultHealth;
-	
+
 	public BlockBreakable setHealth(int i){
 		health = i;
 		defaultHealth = i;
@@ -50,7 +52,7 @@ public class BlockBreakable extends Block{
 	public void resetHealth(){
 		health = defaultHealth;
 	}
-	
+
 	public int getHealth(){
 		return health;
 	}
@@ -92,9 +94,15 @@ public class BlockBreakable extends Block{
 		jiggle = true;
 
 		int wepDmg = 0;
+
 		ItemStack wep = world.getPlayer().invArmor.getWeapon();
+		ItemTool tool = null;
+
+		if(wep != null)
+			tool = ((ItemTool)wep.getItem());
+
 		if(wep != null && effectiveTool == ((ItemTool)wep.getItem()).getEffectiveness())
-			wepDmg = ((ItemTool)wep.getItem()).getEffectiveDamage();
+			wepDmg = tool.getEffectiveDamage();
 
 		switch (getType()) {
 		case ROCK:
@@ -106,11 +114,22 @@ public class BlockBreakable extends Block{
 		default:
 			break;
 		}
-		health -= world.getPlayer().getAttackDamage() + wepDmg;
-		//TODO add check so blocks might not be broken without specific tool
-		//boolean check requiresTool ?
 
-//		System.out.println(health);
+		if(tool == null){
+			health -= world.getPlayer().getAttackDamage();
+		}else{
+			if(needsToolToMine()){//if this block needs a tool, break only when tool is held
+				if(effectiveTool == tool.getEffectiveness())
+					health -= world.getPlayer().getAttackDamage() + wepDmg;
+			}else
+				if(effectiveTool == tool.getEffectiveness())//if the block doesnt need a tool, a bonus for wielding the right tool will kick in
+					health -= world.getPlayer().getAttackDamage() + wepDmg;
+				else
+					health -= world.getPlayer().getAttackDamage() + (wepDmg/2);//if bonus tool is net yield, use half of the current weapons dmg as bonus
+			
+			wep.damageStack(1);
+		}
+
 		if(health <= 0)
 			mine(p);
 
@@ -140,5 +159,9 @@ public class BlockBreakable extends Block{
 	public void readFromSave(DataTag data) {
 		super.readFromSave(data);
 		health = data.readInt("punchHealth");
+	}
+
+	public boolean needsToolToMine(){
+		return false;
 	}
 }

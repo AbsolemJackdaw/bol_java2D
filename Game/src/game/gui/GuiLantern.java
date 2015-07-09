@@ -44,16 +44,8 @@ public class GuiLantern extends GuiContainer {
 			if(lantern.isLit())
 				g.drawImage(img.getSubimage(100, 0, 48, 62), GamePanel.WIDTH/2 - 128/2, GamePanel.HEIGHT/2 - 68/2 ,null);
 
-		for(int slot = 0; slot < player.getInventory().getItems().length; slot++){
-			ItemStack i = player.getStackInSlot(slot);
-			if(i != null){
-
-				int x = slot < 5 ? (centerX - 73) + (slot*18) : (centerX - 73) + ((slot-5)*18);
-				int y = slot < 5 ? centerY + 35 : centerY + 35 + 18;
-
-				i.getItem().draw(g, x, y, i);
-			}
-		}
+		
+		drawPlayerInventoryItems(g, 73, 35);
 
 		ItemStack i = secondairyInventory.getStackInSlot(0);
 		if(i != null){
@@ -97,7 +89,7 @@ public class GuiLantern extends GuiContainer {
 
 	@Override
 	public int rowsY() {
-		return isNotPlayerInventory() ? 1 : 2;
+		return isNotPlayerInventory() ? 1 : 2+getExtraSlots();
 	}
 
 

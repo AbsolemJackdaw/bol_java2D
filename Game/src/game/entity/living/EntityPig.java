@@ -6,8 +6,8 @@ import game.entity.EntityAI;
 import game.entity.MapObject;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
+import game.item.ItemTool;
 import game.item.Items;
-import game.item.tool.ItemTool;
 
 import java.awt.Graphics2D;
 
@@ -19,6 +19,9 @@ public class EntityPig extends EntityLiving{
 	private EntityAI ai = new EntityAI();
 	private boolean flicker;
 	private int flickerTimer = 100;
+
+	private double defMaxSpeed;
+	private double defMoveSpeed;
 
 	public EntityPig(TileMap tm, World world, String uin) {
 		super(tm, world, uin);
@@ -35,8 +38,8 @@ public class EntityPig extends EntityLiving{
 		height = 32;
 
 
-		moveSpeed = 0.05 + rand.nextDouble();  // inital walking speed. you speed up as you walk
-		maxSpeed = 0.5 + rand.nextDouble(); // change to jump farther and walk faster
+		moveSpeed = defMoveSpeed = 0.05 + rand.nextDouble();  // inital walking speed. you speed up as you walk
+		maxSpeed = defMaxSpeed = 0.5 + rand.nextDouble(); // change to jump farther and walk faster
 		stopSpeed = 0.1;
 		fallSpeed = 0.15; // affects falling and jumping
 		maxFallSpeed = 4.0;
@@ -79,6 +82,8 @@ public class EntityPig extends EntityLiving{
 		setPosition(xtemp, ytemp);
 
 		ai.walkAroundRandomly(this);
+
+		calmDown();
 	}
 
 	@Override
@@ -90,12 +95,18 @@ public class EntityPig extends EntityLiving{
 
 		int wepDmg = 0;
 		ItemStack wep = world.getPlayer().invArmor.getWeapon();
-		if(wep != null && 3 == ((ItemTool)wep.getItem()).getEffectiveness())
-			wepDmg = ((ItemTool)wep.getItem()).getEffectiveDamage();
+
+		if(wep != null && wep.getItem() instanceof ItemTool){
+			ItemTool tool = (ItemTool)wep.getItem();
+			if(ItemTool.SWORD == tool.getEffectiveness()){
+				wepDmg = ((ItemTool)wep.getItem()).getEffectiveDamage();
+			}
+			wep.damageStack(1);
+		}
 
 		health -= wepDmg + dmg;
 
-		Music.play("hitpig_" + (rand.nextInt(5)+1));
+		Music.play(getEntityHitSound());
 		ai.panic(this);
 		if(health < 0)
 			kill(p);
@@ -106,9 +117,9 @@ public class EntityPig extends EntityLiving{
 	public ItemStack[] getDrops() {
 		drops[0] = new ItemStack(Items.meat_pig_raw, rand.nextInt(2)+1);
 		drops[1] = new ItemStack(Items.grease, rand.nextInt(2)+1);
-		drops[2] = new ItemStack(Items.grease, rand.nextInt(2)+1);
+		drops[2] = new ItemStack(Items.leather, rand.nextInt(3)+1);
 		return drops;
-		
+
 	}
 
 	public void kill(Player p)
@@ -118,5 +129,25 @@ public class EntityPig extends EntityLiving{
 		}else{
 			health = maxHealth;
 		}
+	}
+
+	/**gets the entity's speed back to normal after it panics (/gets hit by the player)*/
+	private void calmDown(){
+
+		if(moveSpeed > defMoveSpeed)
+			moveSpeed-=0.1d;
+		else if(moveSpeed < defMoveSpeed)
+			moveSpeed +=0.1d;
+
+		if(maxSpeed > defMaxSpeed)
+			maxSpeed-=0.01d;
+		else if(maxSpeed < defMaxSpeed)
+			maxSpeed +=0.01d;
+
+	}
+	
+	@Override
+	public String getEntityHitSound() {
+		return "hitpig_" + (rand.nextInt(5)+1);
 	}
 }

@@ -10,9 +10,9 @@ import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.GuiOven;
 import game.item.ItemStack;
+import game.item.ItemTool;
 import game.item.Items;
 import game.item.crafting.OvenRecipes;
-import game.item.tool.ItemTool;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -28,8 +28,6 @@ public class BlockOven extends BlockBreakable implements IInventory{
 	public int currentFuelTimer;
 
 	Animation fire = new Animation();
-	
-	BufferedImage img = Images.loadImage("/blocks/oven.png");
 
 	public BlockOven(TileMap tm, World world) {
 		super(tm, world, "oven",ItemTool.NOTHING);
@@ -40,7 +38,7 @@ public class BlockOven extends BlockBreakable implements IInventory{
 
 	@Override
 	public BufferedImage getEntityTexture() {
-		return img;
+		return Images.loadImage("/blocks/oven.png");
 	}
 
 	@Override
@@ -57,8 +55,8 @@ public class BlockOven extends BlockBreakable implements IInventory{
 	public void update() {
 		super.update();
 
-//		System.out.println(timer + " " + (((float)timer/(float)currentFuelTimer)*32f));
-		
+		//		System.out.println(timer + " " + (((float)timer/(float)currentFuelTimer)*32f));
+
 		if(timer > 0){
 			timer -- ;
 
@@ -76,20 +74,32 @@ public class BlockOven extends BlockBreakable implements IInventory{
 
 		if(getStackInSlot(0) != null && getStackInSlot(1) != null){
 			if(timer == 0 && getStackInSlot(0).stackSize > 0){
-				if(getStackInSlot(0) != null)
+				if(getStackInSlot(2) != null){
+					if(getStackInSlot(2).getItem().equals(OvenRecipes.getRecipe(getStackInSlot(1)).getItem()))
+						if(getStackInSlot(0) != null){
+							currentFuelTimer = timer = getStackInSlot(0).getItem().getFuelTimer();
+							getStackInSlot(0).stackSize--;
+							if(getStackInSlot(0).stackSize <= 0){
+								setStackInSlot(0, null);
+							}
+						}
+				}else if(getStackInSlot(0) != null){
 					currentFuelTimer = timer = getStackInSlot(0).getItem().getFuelTimer();
-
-				getStackInSlot(0).stackSize--;
-				if(getStackInSlot(0).stackSize <= 0){
-					setStackInSlot(0, null);
+					getStackInSlot(0).stackSize--;
+					if(getStackInSlot(0).stackSize <= 0){
+						setStackInSlot(0, null);
+					}
 				}
 			}
 		}
 
 		if(timer > 0)
 			fire.update();
-		
-//		System.out.println(getHealth());
+
+	}
+
+	public boolean isLit(){
+		return timer > 0;
 	}
 
 	@Override
@@ -232,5 +242,14 @@ public class BlockOven extends BlockBreakable implements IInventory{
 		}
 		timer = data.readInt("timer");
 		currentFuelTimer = data.readInt("fueltimer");
+	}
+
+	@Override
+	public boolean needsToolToMine() {
+		return false;
+	}
+
+	public int getRadius(){
+		return 150;
 	}
 }

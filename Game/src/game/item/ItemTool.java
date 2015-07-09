@@ -1,10 +1,8 @@
-package game.item.tool;
+package game.item;
 
-import base.tilemap.TileMap;
 import game.World;
 import game.entity.living.player.Player;
-import game.item.Item;
-import game.item.ItemStack;
+import base.tilemap.TileMap;
 
 public class ItemTool extends Item {
 
@@ -39,7 +37,7 @@ public class ItemTool extends Item {
 		this.effectiveness = i;
 		return this;
 	}
-	
+
 	/**Used to calculate damage done to blocks*/
 	public int getEffectiveDamage() {
 		return effectiveDamage;
@@ -62,6 +60,11 @@ public class ItemTool extends Item {
 		player.invArmor.setWeapon(newWeapon);
 		player.getInventory().setStackInSlot(key, null);
 		player.getInventory().setStackInSlot(key, newInvItem);
-	
+
+	}
+
+	@Override
+	public boolean isStackable() {
+		return false;
 	}
 }

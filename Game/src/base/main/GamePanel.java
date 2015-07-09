@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -15,6 +16,8 @@ import base.main.keyhandler.KeyHandler;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 
+	public ArrayList<String> typedKeys = new ArrayList<>();
+	
 	// dimensions
 	public static final int WIDTH = 512;
 	public static final int HEIGHT = 300;
@@ -104,8 +107,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 		init();
 
-		//BEST UPDATE SYSTEM EVER !
+		//Best Update System I found on the net !
 		//http://entropyinteractive.com/2011/02/game-engine-design-the-game-loop/
+		//thanksx1000 to this dude, as well as cuddos
 		
 		// convert the time to seconds
         double nextTime = (double)System.nanoTime() / 1000000000.0;

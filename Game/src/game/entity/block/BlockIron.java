@@ -3,8 +3,8 @@ package game.entity.block;
 import game.World;
 import game.content.Images;
 import game.item.ItemStack;
+import game.item.ItemTool;
 import game.item.Items;
-import game.item.tool.ItemTool;
 
 import java.awt.image.BufferedImage;
 import java.util.Random;
@@ -36,5 +36,10 @@ public class BlockIron extends BlockBreakable {
 	@Override
 	public ItemStack getDrop() {
 		return new ItemStack(Items.iron, new Random().nextInt(2)+1);
+	}
+	
+	@Override
+	public boolean needsToolToMine() {
+		return true;
 	}
 }

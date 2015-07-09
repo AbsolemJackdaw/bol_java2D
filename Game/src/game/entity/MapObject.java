@@ -68,7 +68,7 @@ public abstract class MapObject {
 	protected boolean tileHurtsPlayer = false;
 
 	// animation
-	private Animation animation;
+	protected Animation animation;
 	protected int currentAction;
 	protected int previousAction;
 
@@ -134,6 +134,8 @@ public abstract class MapObject {
 		return false;
 	}
 	
+	/**gets called only once to set the Animation texture sequence
+	 * can return a new instance without it being called every frame*/
 	public BufferedImage getEntityTexture(){
 		return Images.instance.defaultAnim[0];
 	}
@@ -163,6 +165,12 @@ public abstract class MapObject {
 		currCol = (int) xScreen / tileSize;
 		currRow = (int) yScreen / tileSize;
 
+		if(currCol < 0 || currCol >= tileMap.getXRows() || currRow <0 || currRow >= tileMap.getYRows()){
+			this.remove = true;
+			System.out.println("The MapObject " + this.getUin() + " evaporated due to it being out of the map.");
+			return;
+		}
+		
 		xdest = xScreen + dx;
 		ydest = yScreen + dy;
 
@@ -336,14 +344,12 @@ public abstract class MapObject {
 		left = b;
 		if(right) 
 			right = !b;
-//		facingRight = !b;
 	}
 	
 	public void setRight(boolean b) {
 		right = b;
 		if(left) 
 			left = !b;
-//		facingRight = b;
 	}
 
 	public void setUp(boolean b) {
@@ -386,10 +392,15 @@ public abstract class MapObject {
 
 	protected void updateAnimation(){
 		animation.update();
+		if(remove)
+			return;
 	}
 	
 	public void onEntityHit(Player p, MapObject mo){
 		
 	}
 	
+	public void interact(Player p, MapObject o){
+
+	}
 }

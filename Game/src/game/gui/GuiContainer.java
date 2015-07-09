@@ -4,10 +4,15 @@ import game.World;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.container.Container;
+import game.item.Item;
+import game.item.ItemArmor;
+import game.item.ItemBelt;
+import game.item.ItemStack;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import base.main.keyhandler.KeyHandler;
 
@@ -38,7 +43,7 @@ public class GuiContainer extends Gui implements Container{
 		slotSelected.x = getFirstSlotLocationX();
 		slotSelected.y = getFirstSlotLocationY();
 	}
-	
+
 	public GuiContainer(World world, Player p) {
 		super(world, p);
 
@@ -155,6 +160,77 @@ public class GuiContainer extends Gui implements Container{
 
 	@Override
 	public int rowsY() {
+		return 0;
+	}
+
+	protected void drawPlayerInventoryItems(Graphics2D g, int offsetX, int offsetY){
+		int extra = 0;
+		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
+			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
+			Item i = is.getItem();
+			if(i instanceof ItemBelt){
+				int dex = ((ItemBelt)i).getInventorySlots();
+				extra = dex;
+			}
+		}
+		for(int slot = 0; slot < 10 + extra; slot++){
+			ItemStack i = player.getStackInSlot(slot);
+			if(i != null){
+				int x = slot < 5 ? (centerX - offsetX) + (slot*18) :
+					slot >= 10 && slot < 15 ? (centerX - offsetX) + ((slot-10)*18):
+						slot >= 15 && slot < 20 ? (centerX - offsetX) + ((slot-15)*18):
+							slot >= 20 && slot < 25 ? (centerX - offsetX) + ((slot-20)*18):
+								slot >= 25 && slot < 30 ? (centerX - offsetX) + ((slot-25)*18):
+									(centerX - offsetX) + ((slot-5)*18);
+
+								int y = slot < 5 ? centerY + offsetY :
+									slot >= 10 && slot < 15 ? centerY + offsetY + 18*2:
+										slot >= 15 && slot < 20 ? centerY + offsetY + 18*3:
+											slot >= 20 && slot < 25 ? centerY + offsetY + 18*4:
+												slot >= 25 && slot < 30 ? centerY + offsetY + 18*5:
+													centerY + offsetY + 18;
+
+												
+												if(!i.getItem().isStackable() && i.getDamage() > 0){
+													double dmg = (double)i.getDamage()/100.0d * 15.0d;
+													g.setColor(Color.DARK_GRAY);
+													g.drawRect(x,y+14, 15, 1);
+													g.setColor(Color.GREEN);
+													g.drawRect(x, y+14, (int)dmg, 1);
+												}
+												
+												i.getItem().draw(g, x, y, i);
+			}
+		}
+	}
+
+	protected void drawPlayerExtendedContainer(Graphics2D g, int offsetX, int offsetY, int subX, int subY, int posX, int posY, BufferedImage img){
+
+		int extra = 0;
+		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
+			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
+			Item i = is.getItem();
+			if(i instanceof ItemBelt){
+				int dex = ((ItemBelt)i).getInventorySlots();
+				extra = dex;
+			}
+		}
+
+		for(int i = 0; i < extra/5; i++){
+			g.drawImage(img.getSubimage(offsetX, offsetY, subY, subX), centerX - posX, centerY - posY + i*18 ,null);
+		}
+	}
+
+	protected int getExtraSlots(){
+		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
+			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
+			Item i = is.getItem();
+			if(i instanceof ItemBelt){
+				int dex = ((ItemBelt)i).getInventorySlots();
+				return dex == 5 ? 1 : dex == 10 ? 2 : dex == 20 ? 4 :0 ;
+
+			}
+		}
 		return 0;
 	}
 }

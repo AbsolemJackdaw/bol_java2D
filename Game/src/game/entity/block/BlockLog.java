@@ -3,17 +3,16 @@ package game.entity.block;
 import game.World;
 import game.content.Images;
 import game.item.ItemStack;
+import game.item.ItemTool;
 import game.item.Items;
-import game.item.tool.ItemTool;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import base.tilemap.TileMap;
 
 public class BlockLog extends BlockBreakable{
 
-	BufferedImage img = Images.loadImage("/blocks/log.png");
-	
 	public BlockLog(TileMap tm, World world) {
 		super(tm, world, Blocks.LOG, ItemTool.AXE);
 		setHealth(5);
@@ -21,7 +20,7 @@ public class BlockLog extends BlockBreakable{
 	
 	@Override
 	public BufferedImage getEntityTexture() {
-		return img;
+		return Images.loadImage("/blocks/log.png");
 	}
 
 	@Override
@@ -32,6 +31,16 @@ public class BlockLog extends BlockBreakable{
 	@Override
 	public ItemStack getDrop() {
 		return new ItemStack(Items.log, 1);
+	}
+	
+	@Override
+	public void update() {
+		super.update();
+	}
+	
+	@Override
+	public void draw(Graphics2D g) {
+		super.draw(g);
 	}
 
 }

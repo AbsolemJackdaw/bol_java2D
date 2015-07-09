@@ -1,28 +1,69 @@
 package base.main.keyhandler;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class KeyHandler {
-	public static final int NUM_KEYS = 256;
+	public static final int NUM_KEYS = 32;
 
 	public static int keyCode;
 
 	public static boolean anyKey;
 	public static boolean prevAnyKey;
-	
+
 	public static boolean keyState[] = new boolean[NUM_KEYS];
 	public static boolean prevKeyState[] = new boolean[NUM_KEYS];
 
+	private static ArrayList<String> typed = new ArrayList<>();
+
+	public static int[] registeredKeys = new int[]{
+		KeyEvent.VK_Z,
+		KeyEvent.VK_Q,
+		KeyEvent.VK_S,
+		KeyEvent.VK_D,
+
+		KeyEvent.VK_SPACE, //Attack
+		KeyEvent.VK_ENTER,//Accept
+		KeyEvent.VK_E,//inventory
+		KeyEvent.VK_F, //interact
+
+		/**console has been invalidated and is opened with ctrl-shift
+		 * tab isn't recognized by swing. (this is normal)*/
+		KeyEvent.VK_TAB,//for console shouldn't be changeable. maybe for talking later ?
+		KeyEvent.VK_B,//for bounding boxes. shouldn't be changeable
+
+		KeyEvent.VK_1,
+		KeyEvent.VK_2,
+		KeyEvent.VK_3,
+		KeyEvent.VK_4,
+		KeyEvent.VK_5,
+		KeyEvent.VK_6,
+		KeyEvent.VK_7,
+		KeyEvent.VK_8,
+		KeyEvent.VK_9,
+		KeyEvent.VK_M,//Place button for xbox controllers 
+
+		KeyEvent.VK_ESCAPE,
+		KeyEvent.VK_N, //escape button 2, for controllers only
+
+		KeyEvent.VK_SHIFT,
+		KeyEvent.VK_CONTROL,
+		
+		KeyEvent.VK_F5,
+	};
+
 	public static int UP = 0;
 	public static int LEFT = 1;
-	public static int RIGHT = 2;
-	public static int SPACE = 3;
-	public static int ENTER = 4;
-	public static int DOWN = 5;
-	public static int CTRL = 6;
-	public static int INVENTORY = 7;
-	public static int B = 8;
-	public static int ESCAPE = 9;
+	public static int DOWN = 2;
+	public static int RIGHT = 3;
+
+	public static int SPACE = 4;
+	public static int ENTER = 5;
+	public static int INVENTORY = 6;
+	public static int INTERACT = 7;
+
+	public static int T = 8;
+	public static int B = 9;
 
 	public static int ONE = 10;
 	public static int TWO = 11;
@@ -35,11 +76,18 @@ public class KeyHandler {
 	public static int NINE = 18;
 	public static int PLACE = 19;
 
-	public static int INTERACT = 20;
+	public static int ESCAPE = 20;
 
 	public static int ESCAPE2 = 21;
 
-	public static int ANYKEY = 22;
+	public static int SHIFT = 22;
+
+	public static int CTRL = 23;
+
+	public static int QUICKSAVE = 24;
+	
+	public static int ANYKEY = 25;
+
 
 	public static boolean anyKeyPress() {
 		for (int i = 0; i < NUM_KEYS; i++)
@@ -49,20 +97,33 @@ public class KeyHandler {
 	}
 
 	public static String keyPressed(int i, String string){
+		//		System.out.println(string);
 
-		if(keyState[ANYKEY] && !prevKeyState[ANYKEY]){
-			String s = KeyEvent.getKeyText(keyCode);
-			if(s.length() == 1)
+		if(typed.isEmpty())
+			return string;
+
+		if(keyState[ANYKEY] && !prevKeyState[ANYKEY] || typed.size() > 0){
+
+			String s = typed.get(0);
+
+			if(keyCode == KeyEvent.VK_8 && prevKeyState[SHIFT] || keyCode == KeyEvent.VK_MINUS && prevKeyState[SHIFT])
+				string+="_";
+
+			else if(s.length() == 1)
 				string +=s;
-			if(keyCode == KeyEvent.VK_BACK_SPACE && string.length() > 0){
+			else if(keyCode == KeyEvent.VK_BACK_SPACE && string.length() > 0){
 				String s2 = string.substring(0, string.length()-1);
 				string = s2;
 			}
-			if(keyCode == KeyEvent.VK_SPACE)
+			else if(keyCode == KeyEvent.VK_SPACE)
 				string+=" ";
-			
-			System.out.println("key typed "+s);
-			System.out.println("string returned " + string);
+
+
+			typed.remove(0);
+			typed.trimToSize();
+
+			//			System.out.println("key typed "+s);
+			//			System.out.println("string returned " + string);
 		}
 		return string.toLowerCase();
 	}
@@ -80,44 +141,47 @@ public class KeyHandler {
 		return (keyState[SPACE] && !prevKeyState[SPACE]) || (keyState[ENTER] && !prevKeyState[ENTER]);
 	}
 
+	/**prevents the game from registering every key and displaying it in the console*/
+	private static boolean flag;
+	
 	public static void keySet(int i, boolean b){
 
 		keyCode = i;
+		
+		if(i == KeyEvent.VK_SHIFT && prevKeyState[CTRL])//when console is opened
+			flag = true;
+		if(i == KeyEvent.VK_ESCAPE || i == KeyEvent.VK_ENTER)//when console is closed
+			flag = false;
+		
+		if(b && flag)
+			typed.add(KeyEvent.getKeyText(i));
 
-		//		if (i == KeyEvent.VK_UP)
-		//			keyState[UP] = b;
-		//		else if (i == KeyEvent.VK_LEFT)
-		//			keyState[LEFT] = b;
-		//		else if (i == KeyEvent.VK_RIGHT)
-		//			keyState[RIGHT] = b;
-		//		else if (i == KeyEvent.VK_DOWN)
-		//			keyState[DOWN] = b;
 
-		if (i == KeyEvent.VK_Z)
+		if (i == registeredKeys[UP])
 			keyState[UP] = b;
-		else if (i == KeyEvent.VK_Q)
+		else if (i == registeredKeys[LEFT])
 			keyState[LEFT] = b;
-		else if (i == KeyEvent.VK_D)
+		else if (i == registeredKeys[RIGHT])
 			keyState[RIGHT] = b;
-		else if (i == KeyEvent.VK_S)
+		else if (i == registeredKeys[DOWN])
 			keyState[DOWN] = b;
 
-		else if (i == KeyEvent.VK_SPACE)
+		else if (i == registeredKeys[SPACE])
 			keyState[SPACE] = b;
 
-		else if (i == KeyEvent.VK_ENTER)
+		else if (i == registeredKeys[ENTER])
 			keyState[ENTER] = b;
 
-		else if (i == KeyEvent.VK_ESCAPE)
+		else if (i == registeredKeys[ESCAPE])
 			keyState[ESCAPE] = b;
 
-		else if (i == KeyEvent.VK_T)
-			keyState[CTRL] = b;
+		else if (i == registeredKeys[T])
+			keyState[T] = b;
 
-		else if (i == KeyEvent.VK_E)
+		else if (i == registeredKeys[INVENTORY])
 			keyState[INVENTORY] = b;
 
-		else if (i == KeyEvent.VK_B)
+		else if (i == registeredKeys[B])
 			keyState[B] = b;
 
 		else if (i == KeyEvent.VK_1){
@@ -147,17 +211,23 @@ public class KeyHandler {
 		else if (i == KeyEvent.VK_9){
 			keyState[NINE] = b;
 		}
-		else if(i == KeyEvent.VK_F){
+		else if(i == registeredKeys[INTERACT]){
 			keyState[INTERACT] = b;
-		}
+		}else if(i == registeredKeys[SHIFT] )
+			keyState[SHIFT] = b;
+		else if(i == registeredKeys[CTRL] )
+			keyState[CTRL] = b;
+		else if (i == registeredKeys[QUICKSAVE])
+			keyState[QUICKSAVE] = b;
+		
 		//xbox only.
-		else if(i == KeyEvent.VK_M){
+		else if(i == registeredKeys[PLACE]){
 			keyState[PLACE] = b;
 		}
-		else if(i == KeyEvent.VK_N){
+		else if(i == registeredKeys[ESCAPE2]){
 			keyState[ESCAPE2] = b;
 		}
-		
+
 		keyState[ANYKEY] = b;
 	}
 

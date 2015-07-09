@@ -3,12 +3,16 @@ package game.gui;
 import game.World;
 import game.content.Images;
 import game.entity.living.player.Player;
+import game.item.Item;
+import game.item.ItemArmor;
+import game.item.ItemBelt;
 import game.item.ItemBlock;
 import game.item.ItemStack;
+import game.item.ItemTool;
 import game.item.Items;
 import game.item.crafting.Crafting;
-import game.item.tool.ItemTool;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -37,26 +41,49 @@ public class GuiPlayerInventory extends GuiContainer {
 	public void draw(Graphics2D g) {
 		g.drawImage(img.getSubimage(35, 3, 150, 75), GamePanel.WIDTH/2 - 150/2, GamePanel.HEIGHT/2 - 75/2 ,null);
 
-		g.drawImage(Images.instance.playerSheet.get(0)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
-		g.drawImage(Images.instance.playerSheet.get(1)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
-		g.drawImage(Images.instance.playerSheet.get(2)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
-		g.drawImage(Images.instance.playerSheet.get(3)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
+		g.drawImage(player.playerSheet.get(0)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
+		g.drawImage(player.playerSheet.get(1)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
+		g.drawImage(player.playerSheet.get(2)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
+		g.drawImage(player.playerSheet.get(3)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
+
+		int extra = 0;
+		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
+			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
+			Item i = is.getItem();
+			if(i instanceof ItemBelt){
+				int dex = ((ItemBelt)i).getInventorySlots();
+				extra = dex;
+			}
+		}
+		if(extra == 5)
+			g.drawImage(img.getSubimage(79, 97, 102, 22), GamePanel.WIDTH/2 - 150/2 + 44, GamePanel.HEIGHT/2 - 75/2 +65 ,null);
+		if(extra == 10)
+			g.drawImage(img.getSubimage(79, 97, 102, 43), GamePanel.WIDTH/2 - 150/2 + 44, GamePanel.HEIGHT/2 - 75/2 +65 ,null);
+		else if (extra == 20){
+			g.drawImage(img.getSubimage(79, 97, 102, 43), GamePanel.WIDTH/2 - 150/2 + 44, GamePanel.HEIGHT/2 - 75/2 +65 ,null);
+			g.drawImage(img.getSubimage(79, 97, 102, 43), GamePanel.WIDTH/2 - 150/2 + 44, GamePanel.HEIGHT/2 - 75/2 +101 ,null);
+		}else if (extra == 15){
+			g.drawImage(img.getSubimage(79, 97, 102, 43), GamePanel.WIDTH/2 - 150/2 + 44, GamePanel.HEIGHT/2 - 75/2 +65 ,null);
+			g.drawImage(img.getSubimage(79, 97, 102, 22), GamePanel.WIDTH/2 - 150/2 + 44, GamePanel.HEIGHT/2 - 75/2 +101 ,null);
+		}
 
 		super.draw(g);
 
-		for(int slot = 0; slot < player.getMaxSlots(); slot++){
-			ItemStack stack = player.getStackInSlot(slot);
-			if(stack != null){
-				int i = slot < 5 ? slot : slot - 5;
-				int j = slot < 5 ? 0 : 18;
-				stack.getItem().draw(g, GamePanel.WIDTH/2 - 150/2 + 49 + (18*i), (GamePanel.HEIGHT/2 - 4)+ j, stack);
-			}
-		}
+		drawPlayerInventoryItems(g, 26, -4);
 
 		for(int slot = 0; slot < secondairyInventory.getMaxSlots(); slot++){
 			ItemStack stack = secondairyInventory.getStackInSlot(slot);
 			if(stack != null){
-				stack.getItem().draw(g, GamePanel.WIDTH/2 - 150/2 + 51 + (18*slot)-2, (GamePanel.HEIGHT/2 - 28), stack);
+				if(!stack.getItem().isStackable() && stack.getDamage() > 0){
+					double dmg = (double)stack.getDamage()/100.0d * 15.0d;
+					
+					g.setColor(Color.DARK_GRAY);
+					g.drawRect(centerX - 26 + (18*slot),centerY-14, 15, 1);
+					g.setColor(Color.GREEN);
+					g.drawRect(centerX - 26 + (18*slot), centerY-14, (int)dmg, 1);
+				}
+				
+				stack.getItem().draw(g, centerX - 26 + (18*slot), centerY-28, stack);
 			}
 		}
 
@@ -108,7 +135,7 @@ public class GuiPlayerInventory extends GuiContainer {
 
 	@Override
 	public int rowsY() {
-		return isNotPlayerInventory() ? 1 : 2;
+		return isNotPlayerInventory() ? 1 : 2+getExtraSlots();
 	}
 
 	@Override
@@ -117,7 +144,8 @@ public class GuiPlayerInventory extends GuiContainer {
 		if(currentContainer != 2){
 			super.handleGuiKeyInput();
 
-			if(KeyHandler.isPressed(KeyHandler.PLACE) && XboxController.controller != null){
+			//TODO make a place key for inventory
+			if(KeyHandler.isPressed(KeyHandler.PLACE) && XboxController.controller != null || KeyHandler.isPressed(KeyHandler.CTRL)){
 
 				if(player.getStackInSlot(slot_index) != null){
 
@@ -190,48 +218,63 @@ public class GuiPlayerInventory extends GuiContainer {
 					if(secondairyInventory.getStackInSlot(slot_index) != null)
 						if(playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(slot_index)))
 							secondairyInventory.setStackInSlot(slot_index, null);
-				}else{//inentory to armor logic
+				}else{//inventory to armor logic
 					int slot = slotIndex[0]+ (slotIndex[1]*(rowsX()));
 					System.out.println(slot);
-					if(playerInventory.getStackInSlot(slot) != null)
-						if(playerInventory.getStackInSlot(slot).getItem() instanceof ItemTool){
+					if(playerInventory.getStackInSlot(slot) != null){
+						Item item = playerInventory.getStackInSlot(slot).getItem();
+						ItemStack stack = playerInventory.getStackInSlot(slot);
+						if(item instanceof ItemTool){
 							if(secondairyInventory.getStackInSlot(3) == null){//3 is weapon slot
-								secondairyInventory.setStackInSlot(3, playerInventory.getStackInSlot(slot));
+								secondairyInventory.setStackInSlot(3, stack);
 								playerInventory.setStackInSlot(slot, null);
 							}else{
 								ItemStack a = playerInventory.getStackInSlot(slot);
 								ItemStack b = secondairyInventory.getStackInSlot(3);
-								
+
 								playerInventory.removeStack(slot);
 								secondairyInventory.removeStack(3);
-								
+
 								if(playerInventory.setStackInNextAvailableSlot(b))//set tool to next available slot to occupy any spacing
 									secondairyInventory.setStackInSlot(3, a);
 								else{//switch out items
 									playerInventory.setStackInSlot(slot, b);
 									secondairyInventory.setStackInSlot(3, a);
 								}
-								
+
+							}
+						}else if(item instanceof ItemArmor){
+							ItemArmor armor = (ItemArmor)item;
+							int index = armor.getIndex();
+
+							if(secondairyInventory.getStackInSlot(index) == null){//set item to corresponding armor slot
+								secondairyInventory.setStackInSlot(index, stack);
+								playerInventory.setStackInSlot(slot, null);//set moved stack in player inventory to null
+							}else{
+								ItemStack a = playerInventory.getStackInSlot(slot);
+								ItemStack b = secondairyInventory.getStackInSlot(index);
+
+								playerInventory.removeStack(slot);
+								secondairyInventory.removeStack(index);
+
+								if(playerInventory.setStackInNextAvailableSlot(b))//set tool to next available slot to occupy any spacing
+									secondairyInventory.setStackInSlot(index, a);
+								else{//switch out items
+									playerInventory.setStackInSlot(slot, b);
+									secondairyInventory.setStackInSlot(index, a);
+								}
 							}
 						}
-					//TODO instanceof ItemArmor
-					//					if(playerInventory.getStackInSlot(slot).getItem() instanceof ItemTool){
-					//						if(blockInventory.getStackInSlot(3) == null){
-					//							blockInventory.setStackInSlot(3, playerInventory.getStackInSlot(slot));
-					//							playerInventory.setStackInSlot(slot, null);
-					//						}
-					//					}
+					}
 				}
 	}
 
 	private void buttonClicked(int id){
-		System.out.println("click click : " + id);
-
 		if(id == 0){
-			Crafting.craft(player, Crafting.Sticks);
+			Crafting.craft(player, Crafting.Sticks, false);
 		}
 		if(id == 1){
-			Crafting.craft(player, Crafting.CraftTable);
+			Crafting.craft(player, Crafting.CraftTable, false);
 		}
 	}
 }

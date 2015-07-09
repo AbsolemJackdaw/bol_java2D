@@ -1,5 +1,6 @@
 package game;
 
+import game.content.SpawningLogic;
 import game.content.save.DataTag;
 import game.content.save.Save;
 import game.entity.Entity;
@@ -43,6 +44,7 @@ public class Loading {
 
 		//get gametime to transfer to the new world and continue counting
 		int time = cw.GameTime;
+		float nightShade = cw.nightAlhpa;
 
 		//set a new world
 		gsm.setState(GameStateManager.GAME);
@@ -57,16 +59,22 @@ public class Loading {
 			nw.reloadMap(s);
 			maps++;
 			generateRandomTree(nw);
-			generateRandomOre(nw, Blocks.IRON, 3);
-			generateRandomOre(nw, Blocks.ROCK, 10);
+			generateRandomOre(nw, Blocks.IRON, 5);
+			generateRandomOre(nw, Blocks.ROCK, 20);
 			populateEntities(nw, Entity.PIG, 10);
 			//set gametime to continue counting
 			nw.GameTime = time;
+			nw.nightAlhpa = nightShade;
+			
+			if(nw.isNightTime()){
+				SpawningLogic.spawnNightCreatures(nw, true);
+			}
 
 		}else{
 			nw.readFromSave(Save.getWorldData(index));
 			//set gametime to continue counting
 			nw.GameTime = time;
+			nw.nightAlhpa = nightShade;
 		}
 
 		Save.writeRandomParts();
@@ -76,6 +84,10 @@ public class Loading {
 				if(nw.tileMap.getBlockID(i, j) == 7)
 					nw.getPlayer().setPosition(i*32 + 32+16, j*32);
 			}
+
+		//save the new world as well > this prevents bugs/glitches if closed without saving !
+		Save.writeWorld(nw, index);
+		Save.writePlayerData(nw.getPlayer());
 
 	}
 
@@ -94,7 +106,7 @@ public class Loading {
 
 		//get gametime to transfer to the new world and continue counting
 		int time = cw.GameTime;
-
+		float nightShade = cw.nightAlhpa;
 		//set a new world
 		gsm.setState(GameStateManager.GAME);
 
@@ -106,7 +118,11 @@ public class Loading {
 
 		//set gametime to continue counting
 		nw.GameTime = time;
-		
+		nw.nightAlhpa = nightShade;
+
+		if(!nw.hasCreaturesSpawned){
+			SpawningLogic.spawnNightCreatures(nw, true);
+		}
 		for(int i = 0; i < nw.tileMap.getXRows(); i++)
 			for(int j = 0; j < nw.tileMap.getYRows(); j++){
 				if(nw.tileMap.getBlockID(i, j) == 6){
@@ -115,6 +131,10 @@ public class Loading {
 				}
 			}
 		Save.writeRandomParts();
+
+		//save world we went to, this prevents bugs/glitches if closed without saving !
+		Save.writeWorld(nw, index);
+		Save.writePlayerData(nw.getPlayer());
 	}
 
 	public static void startAtLastSavedLevel(GameStateManager gsm){
@@ -131,7 +151,7 @@ public class Loading {
 
 		TileMap tm = world.tileMap;
 
-		for(int numTrees = 0; numTrees < 4; numTrees++){
+		for(int numTrees = 0; numTrees < 5; numTrees++){
 
 			int x = new Random().nextInt(tm.getXRows());
 			int y = new Random().nextInt(tm.getYRows());
@@ -199,5 +219,4 @@ public class Loading {
 		index = tag.readInt("worldIndex");
 		maps = tag.readInt("mapNumber");
 	}
-
 }

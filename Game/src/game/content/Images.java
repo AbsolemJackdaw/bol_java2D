@@ -19,26 +19,11 @@ public class Images {
 	public static void init(){
 		instance = new Images();
 	}
-	// for every animation, add the number of frames here
-	// sample : 2,5,8,4 (2 for idle 0, 5 for walking 1, etc.
-	//public static final int[] numFrames = {20, 10, 1, 1, 3 };
-
-	public static final int[] playerSprites = {
-		/*body (general)*/1,
-		/*idle*/1,1,8,
-		/*falling/jump*/2,2,
-		/*running*/9,1,10,
-		/*weapon arms*/1,
-		/*fight arms*/3,
-		/*fight body parts*/3
-	};
-
 	
 	public BufferedImage menu = loadImage("/background/menu.png");
 
 	public Background menuBackGround = new Background("/background/menu.png", 2, false, 5);
 	
-	public ArrayList<BufferedImage[]> playerSheet = loadMultiAnimation(playerSprites, 32, 32, "/player/player_2.png");
 	public BufferedImage[] defaultAnim = loadMultiImage("/images/default.png", 32, 0, 5);
 
 	
@@ -81,7 +66,7 @@ public class Images {
 		return null;
 	}
 	
-	public static BufferedImage[] loadMultiImage(String s, int x, int y, int subImages) {
+	public static BufferedImage[] loadMultiImage(String s, int x, int y, int sizeX, int sizeY, int subImages) {
 		BufferedImage[] ret;
 		try {
 			final BufferedImage spritesheet = ImageIO.read(Images.class.getResourceAsStream(s));
@@ -89,7 +74,7 @@ public class Images {
 			ret = new BufferedImage[subImages];
 
 			for (int i = 0; i < subImages; i++)
-				ret[i] = spritesheet.getSubimage(i * x, y, x, x);
+				ret[i] = spritesheet.getSubimage(i * x, y, sizeX, sizeY);
 
 			return ret;
 		} catch (final Exception e) {
@@ -98,6 +83,10 @@ public class Images {
 			System.exit(0);
 		}
 		return null;
+	}
+	
+	public static BufferedImage[] loadMultiImage(String s, int x, int y, int subImages) {
+		return loadMultiImage(s, x, y, x, x, subImages);
 	}
 	
 	public static BufferedImage getSimpleImage(String path){

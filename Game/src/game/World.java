@@ -8,6 +8,7 @@ import game.content.save.Save;
 import game.entity.Entity;
 import game.entity.MapObject;
 import game.entity.block.BlockLight;
+import game.entity.block.BlockOven;
 import game.entity.block.Blocks;
 import game.entity.living.EntityLiving;
 import game.entity.living.environement.EntityDeathAnim;
@@ -23,6 +24,7 @@ import game.item.Items;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
@@ -54,12 +56,19 @@ public class World extends GameState{
 	public Gui guiDisplaying;
 
 	public int GameTime = 0;
+	public int GameTimeTotalCycle = 18000*3;
 
 	//	private static final BufferedImage lighting = new BufferedImage(GamePanel.WIDTH, GamePanel.HEIGHT, BufferedImage.TYPE_INT_ARGB);
-	static float nightAlhpa = 0;
+	public float nightAlhpa = 0;
 
-	ItemStack lantern = new ItemStack(Items.lantern,1);
+	private boolean messageSaved;
+	private Font font = new Font("Constantia", Font.PLAIN, 36);
+	private float messageAlpha = 1.0F;
 
+	private Font defaultfont = new Font("Century Gothic", Font.PLAIN, 10);
+
+	public boolean hasCreaturesSpawned;
+	
 	public World(GameStateManager gsm) {
 		this.gsm = gsm;
 
@@ -86,6 +95,7 @@ public class World extends GameState{
 
 		g.setColor(Color.white);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		g.setFont(defaultfont);
 
 		if(backGrounds != null && !backGrounds.isEmpty())
 			for(Background bg : backGrounds)
@@ -93,12 +103,10 @@ public class World extends GameState{
 
 		tileMap.draw(g, player);
 
-
 		for(MapObject obj : listWithMapObjects){
 			//do not draw entities outside of the player's range
-			if(!isOutOfBounds(obj)){
+			if(!isOutOfBounds(obj))
 				obj.draw(g);
-			}
 		}
 
 		player.draw(g);
@@ -129,10 +137,10 @@ public class World extends GameState{
 			/**changed light to player instead of blocks*/
 
 			for(MapObject mo : listWithMapObjects){
-				if(mo instanceof BlockLight){
+				if(isOutOfBounds(mo))
+					continue;
 
-					if(isOutOfBounds(mo))
-						continue;
+				if(mo instanceof BlockLight){
 
 					BlockLight light = (BlockLight)mo;
 
@@ -160,7 +168,36 @@ public class World extends GameState{
 						ellipse = new Ellipse2D.Double(x+(i1*(scale/2f)),y+(i1*(scale/2f)),h-(i1*scale),w-(i1*scale));
 						gbi.fill(ellipse);
 					}
+				}else if (mo instanceof BlockOven){
+					BlockOven oven = (BlockOven)mo;
+					if(!oven.isLit())
+						continue;
+
+					for(int i = 0; i < 2; i++){
+						float f =  0f + (float)i / 10f;
+						gbi.setColor(new Color(0.0f, 0.0f, 0.0f, f));    
+						gbi.setComposite(AlphaComposite.DstOut);
+						gbi.fill(new Ellipse2D.Double((oven.posX() + i * 5) - (oven.getRadius()/2 - 32/2), (oven.posY() + i * 5) - (oven.getRadius()/2 - 32/2), oven.getRadius() - i * 10, oven.getRadius() - i *10));
+					}
+
+					int i = 2;
+
+					int x =(oven.posX() + i * 5) - (oven.getRadius()/2 - 32/2);
+					int y = (oven.posY() + i * 5) - (oven.getRadius()/2 - 32/2);
+					int h = oven.getRadius() - i * 10;
+					int w = oven.getRadius() - i *10;
+
+					float scale = 15f;
+					float f =  0f + (float)i / 10f;
+
+					for(float i1 = 0; i1 <2; i1++){
+						gbi.setColor(new Color(0f, 0f, 0f, f));    
+						gbi.setComposite(AlphaComposite.DstOut);
+						ellipse = new Ellipse2D.Double(x+(i1*(scale/2f)),y+(i1*(scale/2f)),h-(i1*scale),w-(i1*scale));
+						gbi.fill(ellipse);
+					}
 				}
+
 			}
 
 			//cut torch light out dynamicly
@@ -204,10 +241,28 @@ public class World extends GameState{
 			g.setColor(Color.white);
 			g.drawString(consolePrint, 25,25);
 		}
+
+		if(messageSaved)
+		{	
+			//set the opacity
+			g.setFont(font);
+			g.setColor(new Color(1f, 1f, 1f, messageAlpha));
+			g.drawString("Successfully saved.", GamePanel.WIDTH / 2 - (GamePanel.WIDTH / 4), GamePanel.HEIGHT / 2);
+			messageAlpha -= 0.01f;
+
+			//increase the opacity and repaint
+			if (messageAlpha <= 0.0F)
+				messageAlpha = 0.0F;
+
+			if(messageAlpha == 0.0F){
+				messageSaved = false;
+				messageAlpha = 1.0f;
+			}
+		}
 	}
 
 	public boolean isNightTime(){
-		return GameTime > 18000;
+		return GameTime > 36000;
 	}
 
 	public int getGameTime(){
@@ -228,12 +283,15 @@ public class World extends GameState{
 		if((guiDisplaying instanceof GuiHud)){
 			GameTime++;
 
-			if(GameTime >= 32000){
+			if(GameTime >= 54000){
 				GameTime = 0;
 			}
 
-			if(isNightTime())
-				SpawningLogic.spawnNightCreatures(this);
+			if(hasCreaturesSpawned)
+				if(!isNightTime())
+					hasCreaturesSpawned = false;
+					
+			SpawningLogic.spawnNightCreatures(this, false);
 
 			player.update();
 
@@ -278,7 +336,14 @@ public class World extends GameState{
 			return;
 		}
 
-		if(KeyHandler.isPressed(KeyHandler.CTRL)){
+		if(KeyHandler.isPressed(KeyHandler.QUICKSAVE)){
+			Save.writePlayerData(getPlayer());
+			Save.writeWorld(this, Loading.index);
+			Save.writeRandomParts();
+			messageSaved = true;
+		}
+
+		if(KeyHandler.isPressed(KeyHandler.SHIFT) && KeyHandler.prevKeyState[KeyHandler.CTRL]){
 			displayConsole();
 			return;
 		}
@@ -327,6 +392,8 @@ public class World extends GameState{
 		tag.writeInt("gametime", GameTime);
 		tag.writeFloat("nightshade", new Float(nightAlhpa));
 
+		tag.writeBoolean("creatureFlag", hasCreaturesSpawned);
+		
 		DataList list = new DataList();
 		for(MapObject mo : listWithMapObjects){
 			DataTag dt = new DataTag();
@@ -342,6 +409,8 @@ public class World extends GameState{
 		GameTime = tag.readInt("gametime");
 		nightAlhpa = tag.readFloat("nightshade");
 
+		hasCreaturesSpawned = tag.readBoolean("creatureFlag");
+		
 		DataList list = tag.readList("content");
 
 		for(int i = 0; i < list.data().size(); i ++){
@@ -404,15 +473,18 @@ public class World extends GameState{
 			isConsoleDisplayed = false;
 		else
 			consolePrint = KeyHandler.keyPressed(KeyHandler.ANYKEY, consolePrint);
+
 		if(KeyHandler.isPressed(KeyHandler.ENTER))
 			consoleCommands(consolePrint);
 	}
 
 	private void consoleCommands(String cmd){
 		if(cmd.equals("night"))
-			GameTime = 18000;
+			GameTime = 36000;
+
 		else if(cmd.equals("day"))
 			GameTime = 0;
+
 		else if(cmd.startsWith("need")){
 			String [] split = cmd.split("\\s+") ;
 			if(split.length == 3){
@@ -440,6 +512,19 @@ public class World extends GameState{
 						listWithMapObjects.add(entity);
 					}
 				}
+			}
+		}else if(cmd.startsWith("time")){
+			String [] split = cmd.split("\\s+") ;
+			if(split.length == 2){
+				try {
+					int timeSet = Integer.valueOf(split[1]);
+					GameTime = timeSet;
+				} catch (Exception e) {
+					//					e.printStackTrace();
+					System.out.println("[ERROR] " + split[1] + " is not a valid number !");
+				}
+			}else{
+				System.out.println("[INFO" + " current time = " + GameTime);
 			}
 		}
 		consolePrint = "";

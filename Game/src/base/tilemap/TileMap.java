@@ -64,6 +64,10 @@ public class TileMap {
 
 	/**x, y being the coords of the block in rows and collumns*/
 	public int getBlockID(int x, int y){
+		if(x < 0 || y < 0 || x >= getXRows() || y >= getYRows()){
+			System.out.println("[ERRROR] entity was out of map. returning solid block to prevent crash.");
+			return 23;
+		}
 		return map[y][x];
 	}
 
@@ -101,7 +105,6 @@ public class TileMap {
 				final int r = rc / numTilesAcross;
 				final int c = rc % numTilesAcross;
 
-				//TODO only draw a selection of images, not the entire map
 				g.drawImage(tiles[r][c].getImage(), (int) x + (col * tileSize),
 						(int) y + (row * tileSize), null);
 			}
@@ -125,7 +128,6 @@ public class TileMap {
 		//				final int c = rc % numTilesAcross;
 		//				//				System.out.println(r + " " + c + " " + numTilesAcross + " " + rc/numTilesAcross);
 		//
-		//				//TODO only draw a selection of images, not the entire map
 		//				g.drawImage(tiles[r][c].getImage(), (int) x + (col * tileSize),
 		//						(int) y + (row * tileSize), null);
 		//			}

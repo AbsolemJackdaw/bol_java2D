@@ -13,13 +13,21 @@ import base.main.keyhandler.KeyHandler;
 
 public class GuiCrafting extends GuiContainer {
 
-	public GuiCrafting(World world, Player p) {
+	private boolean advanced;
+
+	public GuiCrafting(World world, Player p, boolean advanced) {
 		super(world, p);
+		this.advanced = advanced;
 
 		BufferedImage[] textures = new BufferedImage[15];
-		for(int i = 0; i < 15; i ++)
-			if(Crafting.result(i) != null)
-				textures[i] = Crafting.result(i).getItem().getTexture();
+		for(int i = 0; i < 15; i ++){
+			if(!advanced){
+				if(Crafting.result(i) != null)
+					textures[i] = Crafting.result(i).getItem().getTexture();
+			}else
+				if(Crafting.resultAdvanced(i) != null)
+					textures[i] = Crafting.resultAdvanced(i).getItem().getTexture();
+		}
 
 		for(int i = 0; i < rowsX(); i ++){
 			for(int j = 0; j < rowsY(); j++){
@@ -29,36 +37,38 @@ public class GuiCrafting extends GuiContainer {
 	}
 
 	private void buttonClicked(int id){
-		Crafting.craft(player, id);
+		Crafting.craft(player, id, advanced);
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
+		BufferedImage img = Images.loadImage("/gui/crafting.png");
 
-		g.drawImage(Images.loadImage("/gui/crafting.png").getSubimage(0, 0, 96, 106), centerX - (96/2), centerY - (106/2),96,106,null);
+		g.drawImage(img.getSubimage(0, 0, 96, 106), centerX - (96/2), centerY - (106/2),96,106,null);
 
 		for(Button b : buttonList){
 			b.draw(g);
 		}
 
-		for(int slot = 0; slot < player.getInventory().getItems().length; slot++){
-			ItemStack i = player.getStackInSlot(slot);
-			if(i != null){
-
-				int x = slot < 5 ? (centerX - 40) + (slot*getSlotSpacingX()) : (centerX - 40) + ((slot-5)*getSlotSpacingX());
-				int y = slot < 5 ? centerY + 19 : centerY + 19 + getSlotSpacingY();
-
-				i.getItem().draw(g, x, y, i);
-			}
-		}
+		drawPlayerExtendedContainer(g, 8, 72, 18, 92, 40, -55, img);
+		drawPlayerInventoryItems(g, 40, 19);
 
 		int i = 0;
-		for(ItemStack stack : Crafting.getRecipe(slot_index)){
-			if(stack != null){
-				stack.getItem().draw(g, centerX + 51 + ((i%3)*getSlotSpacingX()), centerY - 45 + ((i/3)*getSlotSpacingY()), stack);
-				i++;
+
+		if(!advanced)
+			for(ItemStack stack : Crafting.getRecipe(slot_index)){
+				if(stack != null){
+					stack.getItem().draw(g, centerX + 51 + ((i%3)*getSlotSpacingX()), centerY - 45 + ((i/3)*getSlotSpacingY()), stack);
+					i++;
+				}
 			}
-		}
+		else
+			for(ItemStack stack : Crafting.getRecipeAdvanced(slot_index)){
+				if(stack != null){
+					stack.getItem().draw(g, centerX + 51 + ((i%3)*getSlotSpacingX()), centerY - 45 + ((i/3)*getSlotSpacingY()), stack);
+					i++;
+				}
+			}
 
 		super.draw(g);
 	}

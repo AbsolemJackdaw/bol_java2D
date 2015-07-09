@@ -22,6 +22,10 @@ public class Animation {
 		setFrames(Images.instance.defaultAnim);
 		setDelay(100);
 	}
+	
+	public boolean hasFrames(){
+		return frames != null;
+	}
 
 	public long getDelay(){
 		return delay;

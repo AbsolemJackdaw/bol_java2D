@@ -20,11 +20,21 @@ public class Item {
 	private boolean cookable;
 	private boolean fuel;
 	private int fuelTimer;
-
+	private int itemDamage;
+	
 	public Item(String uin){
 		UIN = uin;
 	}
+	
+	public Item setItemDamage(int i){
+		itemDamage = i;
+		return this;
+	}
 
+	public int getItemDamage(){
+		return itemDamage;
+	}
+	
 	public Item setTexture(BufferedImage img){
 		texture = img;
 		return this;
@@ -56,12 +66,11 @@ public class Item {
 			g.drawString(stack.stackSize+"", x+3, y+16);
 		}
 	}
+	
 	public void writeToSave(DataTag tag){
-		tag.writeString("UIN", UIN);
 	}
 
 	public void readFromSave(DataTag tag){
-
 	}
 
 	public String getUIN(){
@@ -106,6 +115,10 @@ public class Item {
 	/**if the item can handle any logic set to true: it will call the update method*/
 	public boolean isUpdateAble(){
 		return false;
+	}
+	
+	public boolean isStackable(){
+		return true;
 	}
 	
 	public void update(){

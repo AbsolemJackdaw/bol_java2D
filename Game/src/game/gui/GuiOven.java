@@ -30,17 +30,9 @@ public class GuiOven extends GuiContainer {
 
 		g.drawImage(gui.getSubimage(0, 0, 125, 90), GamePanel.WIDTH/2 - 150/2, GamePanel.HEIGHT/2 - 75/2 ,null);
 
-		for(int slot = 0; slot < player.getInventory().getItems().length; slot++){
-			ItemStack i = player.getStackInSlot(slot);
-			if(i != null){
-
-				int x = slot < 5 ? (centerX - 43) + (slot*18) : (centerX - 43) + ((slot-5)*18);
-				int y = slot < 5 ? centerY + 15 : centerY + 14 + 18;
-
-				i.getItem().draw(g, x, y, i);
-			}
-		}
-
+		drawPlayerExtendedContainer(g, 30, 69, 19, 92, 45, -50, gui);
+		drawPlayerInventoryItems(g, 43, 15);
+		
 		for(int slot = 0; slot < secondairyInventory.getInventory().getItems().length; slot++){
 			ItemStack i = secondairyInventory.getStackInSlot(slot);
 			if(i != null){
@@ -57,7 +49,6 @@ public class GuiOven extends GuiContainer {
 		if(oven.timer > 0){
 			int fireTimer = oven.currentFuelTimer;
 			float x = (((float)oven.timer/(float)fireTimer)*32f);
-//			System.out.println(x);
 			g.drawImage(gui.getSubimage(128, (int)x, 15, 32), centerX-73, centerY+16+(int)x, null);
 
 		}
@@ -99,7 +90,7 @@ public class GuiOven extends GuiContainer {
 
 	@Override
 	public int rowsY() {
-		return isNotPlayerInventory() ? 1 : 2;
+		return isNotPlayerInventory() ? 1 : 2 + getExtraSlots();
 	}
 
 
@@ -114,7 +105,6 @@ public class GuiOven extends GuiContainer {
 		if(secondairyInventory != null)
 			if(KeyHandler.isValidationKeyPressed())
 				if(isNotPlayerInventory() && secondairyInventory != null){
-					System.out.println(slot_index);
 					if(secondairyInventory.getStackInSlot(slot_index) != null){
 
 						if(secondairyInventory.getStackInSlot(slot_index).stackSize > 1){
@@ -132,7 +122,6 @@ public class GuiOven extends GuiContainer {
 					}
 				}else{
 					int slot = slotIndex[0]+ (slotIndex[1]*(rowsX()));
-					System.out.println(slot);
 
 					if(playerInventory.getStackInSlot(slot) != null){
 						ItemStack stack = playerInventory.getStackInSlot(slot);

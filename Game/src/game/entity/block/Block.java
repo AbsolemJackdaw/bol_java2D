@@ -2,7 +2,6 @@ package game.entity.block;
 
 import game.World;
 import game.entity.MapObject;
-import game.entity.living.player.Player;
 import game.item.ItemStack;
 
 import java.awt.Graphics2D;
@@ -88,10 +87,6 @@ public class Block extends MapObject{
 
 	public boolean isStackable(){
 		return true;
-	}
-
-	public void interact(Player p, MapObject o){
-
 	}
 
 	public MapObject setType(int type){

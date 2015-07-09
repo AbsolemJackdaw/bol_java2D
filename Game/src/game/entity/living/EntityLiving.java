@@ -45,4 +45,11 @@ public class EntityLiving extends MapObject{
 		return true;
 	}
 	
+	public String getEntityHitSound(){
+		return null;
+	}
+	
+	public String getEntityIdleSound(){
+		return null;
+	}
 }

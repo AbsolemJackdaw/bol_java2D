@@ -119,4 +119,21 @@ public class DataTag {
 
 		return s;
 	}
+
+	@SuppressWarnings("unchecked")
+	public void writeBoolean(String tag, boolean flag){
+		byte b;
+		if(flag)
+			b = 1;
+		else
+			b =0;
+		
+		data.put(tag, b);
+	}
+	
+	public boolean readBoolean(String tag){
+		byte b = (byte) data.get(tag);
+		
+		return b == 1 ? true : false;
+	}
 }

@@ -3,8 +3,8 @@ package game.entity.block;
 import game.World;
 import game.content.Images;
 import game.item.ItemStack;
+import game.item.ItemTool;
 import game.item.Items;
-import game.item.tool.ItemTool;
 
 import java.awt.image.BufferedImage;
 import java.util.Random;

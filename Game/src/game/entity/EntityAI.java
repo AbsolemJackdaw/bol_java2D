@@ -1,6 +1,7 @@
 package game.entity;
 
 import game.entity.living.EntityLiving;
+import game.entity.living.player.Player;
 
 
 public class EntityAI {
@@ -8,16 +9,15 @@ public class EntityAI {
 	int entityTimer = 0;
 
 	public void walkAroundRandomly(EntityLiving el){
-
 		//start timer if x position is the same for a while
 		if(el.dx == 0){
 			el.setJumping(true);
 		}
-		
+
 		if(el.jumping){
 			entityTimer++;
 		}
-		
+
 		if(entityTimer > 250){
 			if(el.left){
 				el.left = false;
@@ -31,7 +31,6 @@ public class EntityAI {
 			}
 			entityTimer = 0;
 		}
-//		System.out.println(entityTimer +" " + el.left + " " +el.right);
 
 		// turn around when arrow blocks are hit
 		if( el.tileMap.getBlockID(el.currCol,el.currRow) == 7){
@@ -47,10 +46,6 @@ public class EntityAI {
 		if (el.left)
 			el.facingRight = false;
 		//
-		
-		if(el.jumping && !el.falling){
-			
-		}
 
 		// jumping
 		if (el.jumping && !el.falling) {
@@ -73,10 +68,59 @@ public class EntityAI {
 		}
 	}
 
+	/**makes the entity flutter around*/ //TODO needs improvement
+	public void flutterAround(EntityLiving el){
+		entityTimer++;
+
+		if(entityTimer > 256) 
+			entityTimer = 0;
+
+		if(entityTimer % 6 == 0){
+			if(entityTimer > 1)
+				if(el.rand.nextInt(entityTimer) > 10)
+					el.dy--;
+				else
+					;
+			else
+				el.dy --;
+		}
+
+
+		if(entityTimer % 80 == 0)
+			if(el.left){
+				el.left = false;
+				el.right = true;
+				el.facingRight = true;
+			}
+			else if (el.right){
+				el.left = true;
+				el.right = false;
+				el.facingRight = false;
+			}
+
+	}
+
+	public void setPathToPlayer(EntityLiving el){
+
+		Player p = el.getWorld().getPlayer();
+		if(p.xScreen < el.xScreen)
+			el.dx-=el.moveSpeed*1.5d;
+		else
+			el.dx+=el.moveSpeed*1.5d;
+		
+		if(p.yScreen < el.yScreen)
+			el.dy-=el.fallSpeed*1.5d;
+		else
+			el.dy+= el.fallSpeed*1.5d;
+
+	}
+
 	public void panic(EntityLiving el) {
-		if(el.left){
-			el.setRight(true);
-		}else
-			el.setLeft(true);
+//		if(el.left){
+//			el.setRight(true);
+//		}else
+//			el.setLeft(true);
+//		el.moveSpeed = el.moveSpeed*1.5;
+//		el.maxSpeed = el.maxSpeed*2;
 	}
 }
