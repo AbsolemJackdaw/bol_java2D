@@ -6,6 +6,7 @@ import game.entity.living.player.Player;
 import game.item.ItemLantern;
 import game.item.ItemStack;
 import game.item.Items;
+import game.util.Util;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -39,12 +40,12 @@ public class GuiLantern extends GuiContainer {
 		String sec = seconds < 10 ? "0"+seconds : ""+seconds;
 
 		g.drawString(minutes+":"+sec, centerX +1, centerY-25);
-		
+
 		if(lantern != null)
 			if(lantern.isLit())
 				g.drawImage(img.getSubimage(100, 0, 48, 62), GamePanel.WIDTH/2 - 128/2, GamePanel.HEIGHT/2 - 68/2 ,null);
 
-		
+		drawPlayerExtendedContainer(g, 0, 89, 37, 92, 75, -70, img);
 		drawPlayerInventoryItems(g, 73, 35);
 
 		ItemStack i = secondairyInventory.getStackInSlot(0);
@@ -89,7 +90,7 @@ public class GuiLantern extends GuiContainer {
 
 	@Override
 	public int rowsY() {
-		return isNotPlayerInventory() ? 1 : 2+getExtraSlots();
+		return isNotPlayerInventory() ? 1 : 2 + getExtraSlots();
 	}
 
 
@@ -103,27 +104,29 @@ public class GuiLantern extends GuiContainer {
 
 		if(KeyHandler.isValidationKeyPressed()){
 			if(isNotPlayerInventory()){
-				System.out.println(slot_index);
 				if(slot_index == 0){
 					if(secondairyInventory.getStackInSlot(0) != null){
-						ItemStack stack = secondairyInventory.getStackInSlot(0);
-						stack.stackSize--;
-						ItemStack newStack = new ItemStack(stack.getItem(),1);
-						playerInventory.setStackInNextAvailableSlot(newStack);
-						if(stack.stackSize<=0)
+
+						if(KeyHandler.shiftIsHeld()){
+							playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(0).copy());
 							secondairyInventory.setStackInSlot(0, null);
+						}else{
+							ItemStack stack = secondairyInventory.getStackInSlot(0);
+							ItemStack newStack = new ItemStack(stack.getItem(),1);
+							playerInventory.setStackInNextAvailableSlot(newStack);
+							Util.decreaseStack(secondairyInventory, 0, 1);
+						}
 					}
-				}else{
+				}else{ //slot used to light the lamp
 					if(lantern != null){
 						if(lantern.getStackInSlot(0) != null){
-							lantern.getStackInSlot(0).stackSize--;
+
 							lantern.burnTime += lantern.defaultBurnTime;
-							if(lantern.getStackInSlot(0).stackSize <= 0)
-								lantern.setStackInSlot(0, null);
+							Util.decreaseStack(secondairyInventory, 0, 1);
+
 							if(!lantern.isLit())
 								lantern.setLit(true);
-						}else{
-							System.out.println(lantern.isLit());
+						}else{ // if lamp stack is empty, it can be toggled on or off !
 							if(lantern.isLit()){
 								lantern.setLit(false);
 								return;
@@ -151,6 +154,11 @@ public class GuiLantern extends GuiContainer {
 				}
 			}
 		}
+	}
+
+	@Override
+	public int[] getToolTipWindowPosition() {
+		return new int[]{275, 183};
 	}
 
 }

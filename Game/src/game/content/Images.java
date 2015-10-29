@@ -1,7 +1,6 @@
 package game.content;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -19,26 +18,26 @@ public class Images {
 	public static void init(){
 		instance = new Images();
 	}
-	
+
 	public BufferedImage menu = loadImage("/background/menu.png");
 
 	public Background menuBackGround = new Background("/background/menu.png", 2, false, 5);
-	
+
 	public BufferedImage[] defaultAnim = loadMultiImage("/images/default.png", 32, 0, 5);
 
-	
-	public static BufferedImage loadImage(String s){
-		BufferedImage image = null;
+	public BufferedImage[] stalactites = new BufferedImage[5];
 
+	public static BufferedImage loadImage(String path){
+		BufferedImage img = null;
 		try {
-			image = ImageIO.read(Images.class.getClass().getResourceAsStream(s));
-		} catch (IOException e) {
+			img = ImageIO.read(Images.class.getClass().getResourceAsStream(path));
+		} catch (final Exception e) {
 			e.printStackTrace();
-			System.out.println("Failed to load " + s + ". Shutting down system.");
+			System.out.println("Error loading graphics." + " " + path + " might be an invalid directory");
 			System.exit(0);
 		}
 
-		return image;
+		return img;
 	}
 
 	public static ArrayList<BufferedImage[]> loadMultiAnimation(int[] frames, int width, int height, String path){
@@ -65,7 +64,7 @@ public class Images {
 		}
 		return null;
 	}
-	
+
 	public static BufferedImage[] loadMultiImage(String s, int x, int y, int sizeX, int sizeY, int subImages) {
 		BufferedImage[] ret;
 		try {
@@ -84,21 +83,8 @@ public class Images {
 		}
 		return null;
 	}
-	
+
 	public static BufferedImage[] loadMultiImage(String s, int x, int y, int subImages) {
 		return loadMultiImage(s, x, y, x, x, subImages);
-	}
-	
-	public static BufferedImage getSimpleImage(String path){
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(Images.class.getClass().getResourceAsStream(path));
-		} catch (final Exception e) {
-			e.printStackTrace();
-			System.out.println("Error loading graphics." + " " + path + " might be an invalid directory");
-			System.exit(0);
-		}
-		
-		return img;
 	}
 }

@@ -4,11 +4,11 @@ import game.Loading;
 import game.World;
 import game.content.save.Save;
 import game.entity.living.player.Player;
+import game.util.Util;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 import base.main.GamePanel;
 import base.main.GameStateManager;
@@ -33,32 +33,35 @@ public class GuiPause extends Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
+	
 		super.draw(g);
+		
 		g.setFont(font);
 		g.setColor(color);
-		g.drawString("Pause", GamePanel.WIDTH/2 - 40, GamePanel.HEIGHT/2 - 50);
+		
+		Util.drawCenteredString(g, "Pause", font, GamePanel.WIDTH/2, 175);
 
 		// Draw menu square
-		Rectangle rect = new Rectangle((GamePanel.WIDTH / 2) - 20, 127 + (currentChoice * 15), 55, 15);
 		g.setColor(clr);
-		g.draw(rect);
+		g.drawRoundRect((GamePanel.WIDTH / 2) - 28, GamePanel.HEIGHT - 150 + (currentChoice * 15) - 19, 55, 15, 5, 5);
 
 		// draw menu options
 		g.setFont(fontChoices);
 		for (int i = 0; i < options.length; i++) {
 			if (i == currentChoice)
-				g.setColor(Color.BLACK);
+				g.setColor(Color.black);
 			else
-				g.setColor(Color.RED);
-			g.drawString(options[i], (GamePanel.WIDTH / 2) - 15 + (i > 0 ? 10 : 0), 140 + (i * 15));
+				g.setColor(Color.red.darker());
+			
+			Util.drawCenteredString(g, options[i], fontChoices, GamePanel.WIDTH / 2, GamePanel.HEIGHT - 150 + (i * 15));
+			
 		}
-
-		if(showMessageSaved)
-		{	
+		
+		if(showMessageSaved){	
 			//set the opacity
 			g.setFont(font);
 			g.setColor(new Color(1f, 1f, 1f, alpha));
-			g.drawString("Successfully saved.", GamePanel.WIDTH / 2 - (GamePanel.WIDTH / 4), GamePanel.HEIGHT / 2);
+			Util.drawCenteredString(g, "Save Succesful", font, GamePanel.WIDTH / 2, GamePanel.HEIGHT / 2 + 30);
 			alpha -= 0.01f;
 
 			//increase the opacity and repaint
@@ -96,12 +99,12 @@ public class GuiPause extends Gui {
 	public void handleGuiKeyInput() {
 		if (KeyHandler.isValidationKeyPressed())
 			select();
-		if (KeyHandler.isPressed(KeyHandler.UP)) {
+		if (KeyHandler.isUpKeyHit()) {
 			currentChoice--;
 			if (currentChoice == -1)
 				currentChoice = options.length - 1;
 		}
-		if (KeyHandler.isPressed(KeyHandler.DOWN)) {
+		if (KeyHandler.isDownKeyHit()) {
 			currentChoice++;
 			if (currentChoice == options.length)
 				currentChoice = 0;

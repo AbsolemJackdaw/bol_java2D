@@ -67,4 +67,12 @@ public class ItemStack
 		data.writeInt("dmg", getDamage());
 		item.writeToSave(data);
 	}
+	
+	public ItemStack copy(){
+		
+		ItemStack stack = new ItemStack(item, stackSize, item.getItemDamage());
+		stack.setDamage(damage);
+		
+		return stack;
+	}
 }

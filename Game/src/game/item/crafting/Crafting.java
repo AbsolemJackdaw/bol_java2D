@@ -16,14 +16,11 @@ public class Crafting {
 	public static final int Axe = 6;
 	public static final int Belt = 7;
 	public static final int Pouch = 8;
-	public static final int Belt_S = 9;
-	public static final int CraftAdvanced = 10;
+	public static final int CraftAdvanced = 9;
 
 
 	//ADVANCED CRAFTING
 	public static final int Lantern = 0;
-	public static final int Belt_M = 1;
-	public static final int Belt_L = 2;
 
 	public static ItemStack[] getRecipe(int i){
 		ItemStack[] is = new ItemStack[10];
@@ -64,10 +61,6 @@ public class Crafting {
 			is[0] = new ItemStack(Items.leather, 5);
 			is[1] = new ItemStack(Items.ingot, 1);
 			is[2] = new ItemStack(Items.stick, 10);
-			break;
-		case Belt_S:
-			is[0] = new ItemStack(Items.belt,1);
-			is[1] = new ItemStack(Items.pouch,1);
 			break;
 		case CraftAdvanced:
 			is[0] = new ItemStack(Items.ingot,10);
@@ -112,9 +105,6 @@ public class Crafting {
 		case Pouch:
 			st = new ItemStack(Items.pouch,1);
 			break;
-		case Belt_S : 
-			st = new ItemStack(Items.belt_s,1);
-			break;
 		case CraftAdvanced:
 			st = new ItemStack(Items.advancedCraftTable,1);
 			break;
@@ -128,12 +118,6 @@ public class Crafting {
 		case Lantern:
 			st = new ItemStack(Items.lantern, 1);
 			break;
-		case Belt_M : 
-			st = new ItemStack(Items.belt_m,1);
-			break;
-		case Belt_L : 
-			st = new ItemStack(Items.belt_l,1);
-			break;
 		}
 		return st;
 	}
@@ -143,14 +127,6 @@ public class Crafting {
 		switch(i){
 		case Lantern:
 			is[0] = new ItemStack(Items.ingot, 10);
-			break;
-		case Belt_M:
-			is[0] = new ItemStack(Items.belt_s,1);
-			is[1] = new ItemStack(Items.pouch,1);
-			break;
-		case Belt_L:
-			is[0] = new ItemStack(Items.belt_m,1);
-			is[1] = new ItemStack(Items.pouch,2);
 			break;
 		}
 		return is;

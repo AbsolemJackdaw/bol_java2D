@@ -8,6 +8,7 @@ import game.entity.block.BlockBreakable;
 import game.entity.block.BlockLog;
 import game.entity.block.Blocks;
 import game.entity.living.EntityLiving;
+import game.util.Util;
 
 import java.util.Random;
 
@@ -23,13 +24,14 @@ public class Loading {
 	/**increases and decreases. tracks the player's current map*/
 	public static int index = 0;
 
+	/**
+	 *Provides a random new map between map #2 and #max_total of maps 
+	 */
 	public static String newMap(){
 
-		//int i = new Random().nextInt(5)+1;
-
 		//skip map x_1, so that map is used only in the very beginning
-		// 7+ 2 is max 9 maps, where map min is 2
-		int i = new Random().nextInt(7)+2; 
+		// x1 + x2 is max_total maps, where map min is 2
+		int i = new Random().nextInt(10)+2; 
 		String s = "/maps/cave_rand_" + i + ".map";
 		System.out.println(s);
 		return s;
@@ -38,103 +40,105 @@ public class Loading {
 	public static void gotoNextLevel(GameStateManager gsm){
 
 		//save world we are currently in
-		World cw = (World)gsm.getGameState(gsm.getCurrentState());
-		Save.writeWorld(cw, index);
-		Save.writePlayerData(cw.getPlayer());
+		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+		Save.writeWorld(currentWorld, index);
+		Save.writePlayerData(currentWorld.getPlayer());
 
 		//get gametime to transfer to the new world and continue counting
-		int time = cw.GameTime;
-		float nightShade = cw.nightAlhpa;
+		int time = currentWorld.GameTime;
+		float nightShade = currentWorld.nightAlhpa;
 
 		//set a new world
 		gsm.setState(GameStateManager.GAME);
 
 		//increase index to indicate the new world's index
 		index++;
-		World nw = (World)gsm.getGameState(gsm.getCurrentState());
+		World newWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
+		newWorld.bg = Util.generateStalactiteBackGround();
+		
 		//if its a new map
 		if(index == maps){
 			String s = newMap();
-			nw.reloadMap(s);
+			newWorld.reloadMap(s);
 			maps++;
-			generateRandomTree(nw);
-			generateRandomOre(nw, Blocks.IRON, 5);
-			generateRandomOre(nw, Blocks.ROCK, 20);
-			populateEntities(nw, Entity.PIG, 10);
+			generateRandomTree(newWorld);
+			generateRandomOre(newWorld, Blocks.IRON, 7);
+			generateRandomOre(newWorld, Blocks.ROCK, 20);
+			populateEntities(newWorld, Entity.PIG, 10);
 			//set gametime to continue counting
-			nw.GameTime = time;
-			nw.nightAlhpa = nightShade;
+			newWorld.GameTime = time;
+			newWorld.nightAlhpa = nightShade;
 			
-			if(nw.isNightTime()){
-				SpawningLogic.spawnNightCreatures(nw, true);
+			if(newWorld.isNightTime()){
+				SpawningLogic.spawnNightCreatures(newWorld, true);
 			}
 
 		}else{
-			nw.readFromSave(Save.getWorldData(index));
+			newWorld.readFromSave(Save.getWorldData(index));
 			//set gametime to continue counting
-			nw.GameTime = time;
-			nw.nightAlhpa = nightShade;
+			newWorld.GameTime = time;
+			newWorld.nightAlhpa = nightShade;
 		}
 
 		Save.writeRandomParts();
 
-		for(int i = 0; i < nw.tileMap.getXRows(); i++)
-			for(int j = 0; j < nw.tileMap.getYRows(); j++){
-				if(nw.tileMap.getBlockID(i, j) == 7)
-					nw.getPlayer().setPosition(i*32 + 32+16, j*32);
+		for(int i = 0; i < newWorld.tileMap.getXRows(); i++)
+			for(int j = 0; j < newWorld.tileMap.getYRows(); j++){
+				if(newWorld.tileMap.getBlockID(i, j) == 7)
+					newWorld.getPlayer().setPosition(i*32 + 32+16, j*32);
 			}
 
 		//save the new world as well > this prevents bugs/glitches if closed without saving !
-		Save.writeWorld(nw, index);
-		Save.writePlayerData(nw.getPlayer());
+		Save.writeWorld(newWorld, index);
+		Save.writePlayerData(newWorld.getPlayer());
 
 	}
 
 	public static void gotoPreviousLevel(GameStateManager gsm){
 
-		World cw = (World)gsm.getGameState(gsm.getCurrentState());
+		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
 		if(index == 0){
-			cw.getPlayer().setVector(4, 0);
+			currentWorld.getPlayer().setVector(4, 0);
 			return;
 		}
 
 		//save world we are currently in
-		Save.writeWorld(cw, index);
-		Save.writePlayerData(cw.getPlayer());
+		Save.writeWorld(currentWorld, index);
+		Save.writePlayerData(currentWorld.getPlayer());
 
 		//get gametime to transfer to the new world and continue counting
-		int time = cw.GameTime;
-		float nightShade = cw.nightAlhpa;
+		int time = currentWorld.GameTime;
+		float nightShade = currentWorld.nightAlhpa;
 		//set a new world
 		gsm.setState(GameStateManager.GAME);
 
 		//increase index to indicate the new world's index
 		index--;
-		World nw = (World)gsm.getGameState(gsm.getCurrentState());
+		World newWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
-		nw.readFromSave(Save.getWorldData(index));
+		newWorld.readFromSave(Save.getWorldData(index));
 
 		//set gametime to continue counting
-		nw.GameTime = time;
-		nw.nightAlhpa = nightShade;
+		newWorld.GameTime = time;
+		newWorld.nightAlhpa = nightShade;
 
-		if(!nw.hasCreaturesSpawned){
-			SpawningLogic.spawnNightCreatures(nw, true);
+		if(!newWorld.hasCreaturesSpawned){
+			SpawningLogic.spawnNightCreatures(newWorld, true);
 		}
-		for(int i = 0; i < nw.tileMap.getXRows(); i++)
-			for(int j = 0; j < nw.tileMap.getYRows(); j++){
-				if(nw.tileMap.getBlockID(i, j) == 6){
-					nw.getPlayer().setPosition(i*32 - 16, j*32);
-					nw.getPlayer().facingRight = false;
+		for(int i = 0; i < newWorld.tileMap.getXRows(); i++)
+			for(int j = 0; j < newWorld.tileMap.getYRows(); j++){
+				if(newWorld.tileMap.getBlockID(i, j) == 6){
+					newWorld.getPlayer().setPosition(i*32 - 16, j*32);
+					newWorld.getPlayer().facingRight = false;
 				}
 			}
 		Save.writeRandomParts();
 
 		//save world we went to, this prevents bugs/glitches if closed without saving !
-		Save.writeWorld(nw, index);
-		Save.writePlayerData(nw.getPlayer());
+		Save.writeWorld(newWorld, index);
+		Save.writePlayerData(newWorld.getPlayer());
 	}
 
 	public static void startAtLastSavedLevel(GameStateManager gsm){

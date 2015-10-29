@@ -13,8 +13,10 @@ public class ItemLantern extends Item implements IInventory {
 	public final int defaultBurnTime = 60*60;
 	private boolean isLit = false;
 
-	public ItemLantern(String uin) {
-		super(uin);
+	public ItemLantern(String uin, String displayName) {
+		super(uin, displayName);
+		
+		this.tooltipList.add("A small light in the darkness ... ");
 	}
 
 	@Override

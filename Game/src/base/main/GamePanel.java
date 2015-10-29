@@ -1,13 +1,16 @@
 package base.main;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import base.main.keyhandler.KeyHandler;
@@ -17,10 +20,12 @@ import base.main.keyhandler.KeyHandler;
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 	public ArrayList<String> typedKeys = new ArrayList<>();
+
+	private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	// dimensions
-	public static final int WIDTH = 512;
-	public static final int HEIGHT = 300;
+	public static final int WIDTH = (int)screenSize.getWidth()/2; //TODO change integer's accordingly
+	public static final int HEIGHT = (int)screenSize.getHeight()/2;
 	public static float SCALE = 2f;
 
 	public static int SCALEDX;
@@ -45,17 +50,34 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	// game state manager
 	private GameStateManager gsm;
 
-	public GamePanel() {
+	public JFrame gameWindow;
+
+	public GamePanel(JFrame window) {
 		super();
-		float x = WIDTH*SCALE;
+
+		gameWindow = window;
+
+		setPreferredSize();
+
+		setBackground(Color.black);
+	}
+
+	public void setPreferredSize(){
+
+		setPreferredSize(getDimension());
+		setFocusable(true);
+		requestFocus();
+	}
+
+	public Dimension getDimension(){
+
+		float x = WIDTH * SCALE;
 		float y = HEIGHT * SCALE;
+
 		SCALEDX = (int)x;
 		SCALEDY = (int)y;
 
-		setPreferredSize(new Dimension(SCALEDX, SCALEDY));
-		setFocusable(true);
-		requestFocus();
-
+		return new Dimension(SCALEDX, SCALEDY);
 	}
 
 	@Override
@@ -73,8 +95,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	private void drawToScreen() {
+
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+		double posX = screenSize.getWidth()/2 - SCALEDX/2;
+		double posY = screenSize.getHeight()/2 - SCALEDY/2;
+		
 		Graphics g2 = getGraphics();
-		g2.drawImage(image, 0, 0, SCALEDX, SCALEDY, null);
+		
+		g2.drawImage(image, (int)posX , (int)posY, SCALEDX, SCALEDY, null);
 		g2.dispose();
 	}
 
@@ -85,7 +114,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 		running = true;
 
-		gsm = new GameStateManager();
+		gsm = new GameStateManager(this);
 	}
 
 	@Override
@@ -110,56 +139,56 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		//Best Update System I found on the net !
 		//http://entropyinteractive.com/2011/02/game-engine-design-the-game-loop/
 		//thanksx1000 to this dude, as well as cuddos
-		
+
 		// convert the time to seconds
-        double nextTime = (double)System.nanoTime() / 1000000000.0;
-        double maxTimeDiff = 0.5;
-        int skippedFrames = 1;
-        int maxSkippedFrames = 5;
-        double delta = 1.0/60.0;
-        
-        while(running)
-        {
-            // convert the time to seconds
-            double currTime = (double)System.nanoTime() / 1000000000.0;
-            if((currTime - nextTime) > maxTimeDiff) nextTime = currTime;
-            if(currTime >= nextTime)
-            {
-                // assign the time for the next update
-                nextTime += delta;
-                
-                update();
-                
-                if((currTime < nextTime) || (skippedFrames > maxSkippedFrames))
-                {
-                    draw();
-                    drawToScreen();
-                    skippedFrames = 1;
-                }
-                else
-                {
-                    skippedFrames++;
-                }
-            }
-            else
-            {
-                // calculate the time to sleep
-                int sleepTime = (int)(1000.0 * (nextTime - currTime));
-                // sanity check
-                if(sleepTime > 0)
-                {
-                    // sleep until the next update
-                    try
-                    {
-                        Thread.sleep(sleepTime);
-                    }
-                    catch(InterruptedException e)
-                    {
-                        // do nothing
-                    }
-                }
-            }
-        }
+		double nextTime = (double)System.nanoTime() / 1000000000.0;
+		double maxTimeDiff = 0.5;
+		int skippedFrames = 1;
+		int maxSkippedFrames = 5;
+		double delta = 1.0/60.0;
+
+		while(running)
+		{
+			// convert the time to seconds
+			double currTime = (double)System.nanoTime() / 1000000000.0;
+			if((currTime - nextTime) > maxTimeDiff) nextTime = currTime;
+			if(currTime >= nextTime)
+			{
+				// assign the time for the next update
+				nextTime += delta;
+
+				update();
+
+				if((currTime < nextTime) || (skippedFrames > maxSkippedFrames))
+				{
+					draw();
+					drawToScreen();
+					skippedFrames = 1;
+				}
+				else
+				{
+					skippedFrames++;
+				}
+			}
+			else
+			{
+				// calculate the time to sleep
+				int sleepTime = (int)(1000.0 * (nextTime - currTime));
+				// sanity check
+				if(sleepTime > 0)
+				{
+					// sleep until the next update
+					try
+					{
+						Thread.sleep(sleepTime);
+					}
+					catch(InterruptedException e)
+					{
+						// do nothing
+					}
+				}
+			}
+		}
 	}
 
 	private void update() {

@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 public class ItemWood extends ItemBlock{
 
 	public ItemWood() {
-		super(Blocks.LOG);
+		super(Blocks.LOG, "Log");
 	}
 	
 	@Override

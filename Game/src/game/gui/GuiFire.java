@@ -5,6 +5,7 @@ import game.entity.block.BlockLight;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
+import game.util.Util;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -45,7 +46,7 @@ public class GuiFire extends GuiContainer {
 
 		drawPlayerExtendedContainer(g, 0, 88, 22, 96, 75, -69, img);
 		drawPlayerInventoryItems(g, 73, 35);
-		
+
 		ItemStack i = secondairyInventory.getStackInSlot(0);
 		if(i != null){
 			int x = centerX - 48;
@@ -58,7 +59,7 @@ public class GuiFire extends GuiContainer {
 
 	@Override
 	public int getFirstSlotLocationX() {
-		return isNotPlayerInventory() ? centerX-49  :centerX - 2 - (72);
+		return isNotPlayerInventory() ? centerX-48  :centerX - 2 - (72);
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public class GuiFire extends GuiContainer {
 
 	@Override
 	public int rowsY() {
-		return isNotPlayerInventory() ? 1 : 2+getExtraSlots();
+		return isNotPlayerInventory() ? 1 : 2 + getExtraSlots();
 	}
 
 
@@ -104,20 +105,23 @@ public class GuiFire extends GuiContainer {
 			if(isNotPlayerInventory()){
 				if(slot_index == 0){
 					if(secondairyInventory.getStackInSlot(0) != null){
-						ItemStack stack = secondairyInventory.getStackInSlot(0);
-						stack.stackSize--;
-						ItemStack newStack = new ItemStack(stack.getItem(),1);
-						playerInventory.setStackInNextAvailableSlot(newStack);
-						if(stack.stackSize<=0)
+
+						if(KeyHandler.shiftIsHeld()){
+							playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(0).copy());
 							secondairyInventory.setStackInSlot(0, null);
+						}else{
+							ItemStack stack = secondairyInventory.getStackInSlot(0);
+							ItemStack newStack = new ItemStack(stack.getItem(),1);
+							playerInventory.setStackInNextAvailableSlot(newStack);
+							Util.decreaseStack(secondairyInventory, 0, 1);
+						}
 					}
-				}else{
+				}else{ // click the slot that is a stub for lighting logs
 					if(fire != null){
-						if(fire.getStackInSlot(0) != null){
-							fire.getStackInSlot(0).stackSize--;
-							fire.timer += fire.getStackInSlot(0).getItem().getFuelTimer();
-							if(fire.getStackInSlot(0).stackSize <= 0)
-								fire.setStackInSlot(0, null);
+						if(secondairyInventory.getStackInSlot(0) != null){
+							ItemStack stack = secondairyInventory.getStackInSlot(0);
+							fire.timer += stack.getItem().getFuelTimer();
+							Util.decreaseStack(secondairyInventory, 0, 1);
 						}
 					}
 				}
@@ -126,12 +130,14 @@ public class GuiFire extends GuiContainer {
 				if(playerInventory.getStackInSlot(slot) != null){
 					ItemStack stack = playerInventory.getStackInSlot(slot);
 					if(stack.getItem().isFuel()){
-						ItemStack newStack = new ItemStack(stack.getItem(), 1);
-						if(secondairyInventory.setStackInNextAvailableSlot(newStack)){
-							stack.stackSize--;
-							if(stack.stackSize <= 0){
-								playerInventory.setStackInSlot(slot, null);
-							}
+						
+						if(KeyHandler.shiftIsHeld()){
+							secondairyInventory.setStackInSlot(0, stack.copy());
+							playerInventory.setStackInSlot(slot, null);
+						}else{
+							ItemStack newStack = new ItemStack(stack.getItem(), 1);
+							secondairyInventory.setStackInSlot(0, newStack);
+							Util.decreaseStack(playerInventory, slot, 1);
 						}
 					}
 				}
@@ -139,4 +145,8 @@ public class GuiFire extends GuiContainer {
 		}
 	}
 
+	@Override
+	public int[] getToolTipWindowPosition() {
+		return new int[]{275,183};
+	}
 }

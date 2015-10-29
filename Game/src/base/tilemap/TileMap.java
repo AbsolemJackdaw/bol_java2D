@@ -50,15 +50,15 @@ public class TileMap {
 	private Tile[][] tiles;
 
 	// drawing
-//	private int rowOffset;
-//	private int colOffset;
-//	private final int numRowsToDraw;
-//	private final int numColsToDraw;
+	//	private int rowOffset;
+	//	private int colOffset;
+	//	private final int numRowsToDraw;
+	//	private final int numColsToDraw;
 
 	public TileMap(int tileSize) {
 		this.tileSize = tileSize;
-//		numRowsToDraw = (GamePanel.HEIGHT / tileSize) + 2;
-//		numColsToDraw = (GamePanel.WIDTH / tileSize) + 2;
+		//		numRowsToDraw = (GamePanel.HEIGHT / tileSize) + 2;
+		//		numColsToDraw = (GamePanel.WIDTH / tileSize) + 2;
 		tween = 0.05;
 	}
 
@@ -71,22 +71,22 @@ public class TileMap {
 		return map[y][x];
 	}
 
-	public void draw(Graphics2D g, Player player) {
+	public void draw(Graphics2D g, Player player, int renderPass) {
 
 		int Px = player.getScreenXpos()/32; //get row number
 		int Py = (player.getScreenYpos()/32);
 
-		int arroundX = 16;
-		int arroundY = 10;
+		int arroundX = 22; //TODO make renderDistance Configurable
+		int arroundY = 12;
 
-		int someX = Px-arroundX;
-		int someXMax = Px+arroundX;
-		
-		int someY = Py-arroundY;
-		int someYMax = Py+arroundY;
+		int xDistanceMin = Px-arroundX;
+		int xDistanceMax = Px+arroundX;
 
-		for(int row = someY; row < someYMax; row ++){
-			for(int col = someX; col < someXMax; col ++){
+		int yDistanceMin = Py-arroundY;
+		int yDistanceMax = Py+arroundY;
+
+		for(int row = yDistanceMin; row < yDistanceMax; row ++){
+			for(int col = xDistanceMin; col < xDistanceMax; col ++){
 
 				if(row >= 0 && row < mapYRows)
 					;
@@ -105,33 +105,22 @@ public class TileMap {
 				final int r = rc / numTilesAcross;
 				final int c = rc % numTilesAcross;
 
-				g.drawImage(tiles[r][c].getImage(), (int) x + (col * tileSize),
-						(int) y + (row * tileSize), null);
+				boolean flag = shouldRenderOnPass2(rc);
+
+				if(renderPass == 1 && !flag)
+					g.drawImage(tiles[r][c].getImage(), (int) x + (col * tileSize),
+							(int) y + (row * tileSize), null);
+
+				else if (renderPass == 2 && flag)
+					g.drawImage(tiles[r][c].getImage(), (int) x + (col * tileSize),
+							(int) y + (row * tileSize), null);
 			}
 		}
+	}
 
-		//		for (int row = rowOffset; row < (rowOffset + numRowsToDraw); row++) {
-		//
-		//			if (row >= mapYRows)
-		//				break;
-		//
-		//			for (int col = colOffset; col < (colOffset + numColsToDraw); col++) {
-		//
-		//				if (col >= mapXRows)
-		//					break;
-		//
-		//				if (map[row][col] == 0)
-		//					continue;
-		//
-		//				final int rc = map[row][col];
-		//				final int r = rc / numTilesAcross;
-		//				final int c = rc % numTilesAcross;
-		//				//				System.out.println(r + " " + c + " " + numTilesAcross + " " + rc/numTilesAcross);
-		//
-		//				g.drawImage(tiles[r][c].getImage(), (int) x + (col * tileSize),
-		//						(int) y + (row * tileSize), null);
-		//			}
-		//		}
+	private boolean shouldRenderOnPass2(int blockID){
+
+		return blockID == 9 || blockID == 10;
 	}
 
 	private void fixBounds() {
@@ -270,8 +259,8 @@ public class TileMap {
 
 		fixBounds();
 
-//		colOffset = (int) -this.x / tileSize;
-//		rowOffset = (int) -this.y / tileSize;
+		//		colOffset = (int) -this.x / tileSize;
+		//		rowOffset = (int) -this.y / tileSize;
 
 	}
 

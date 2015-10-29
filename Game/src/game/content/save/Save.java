@@ -14,10 +14,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import base.main.keyhandler.KeyHandler;
+
 public class Save {
 	
-	//TODO write RandomParts' integers
-
 	public static DataTag getPlayerData(){
 		Object obj = read("player/player");
 		if(obj == null)
@@ -62,6 +62,35 @@ public class Save {
 		Loading.readRandomParts(d);
 	}
 
+	public static void writeKeyBinds(){
+		
+		DataTag tag = new DataTag();
+		
+		for(int i  = 0; i < KeyHandler.registeredKeys.length; i ++){
+			
+			tag.writeInt("key_"+i, KeyHandler.registeredKeys[i]);
+			
+		}
+		
+		write("keybinds/keys", tag);
+		
+	}
+	
+	public static void readKeyBinds(){
+		
+		Object obj = read("keybinds/keys");
+		
+		if(obj == null)
+			return;
+		
+		JSONObject data = (JSONObject) obj;	
+		DataTag tag = new DataTag(data);
+		
+		for(int i = 0; i < KeyHandler.registeredKeys.length; i++){
+			KeyHandler.registeredKeys[i] = tag.readInt("key_"+i);
+		}
+		
+	}
 
 	/**returns an object that is a JsonObject. 
 	 * @params s String name for file*/

@@ -1,5 +1,7 @@
 package game.entity.block;
 
+import static base.main.keyhandler.KeyHandler.INTERACT;
+import static base.main.keyhandler.KeyHandler.getKeyName;
 import game.World;
 import game.content.Images;
 import game.content.save.DataList;
@@ -34,6 +36,8 @@ public class BlockOven extends BlockBreakable implements IInventory{
 
 		fire.setFrames(Images.loadMultiImage("/blocks/ovenFire.png", 32, 0, 4));
 		fire.setDelay(50);
+		
+		blockInfo.add(getKeyName(INTERACT) + " to interact");
 	}
 
 	@Override
@@ -54,8 +58,6 @@ public class BlockOven extends BlockBreakable implements IInventory{
 	@Override
 	public void update() {
 		super.update();
-
-		//		System.out.println(timer + " " + (((float)timer/(float)currentFuelTimer)*32f));
 
 		if(timer > 0){
 			timer -- ;

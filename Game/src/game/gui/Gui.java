@@ -42,4 +42,7 @@ public class Gui {
 		return true;
 	}
 
+	public int[] getToolTipWindowPosition(){
+		return new int[]{0,0};
+	}
 }

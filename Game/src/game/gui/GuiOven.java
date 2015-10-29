@@ -32,7 +32,7 @@ public class GuiOven extends GuiContainer {
 
 		drawPlayerExtendedContainer(g, 30, 69, 19, 92, 45, -50, gui);
 		drawPlayerInventoryItems(g, 43, 15);
-		
+
 		for(int slot = 0; slot < secondairyInventory.getInventory().getItems().length; slot++){
 			ItemStack i = secondairyInventory.getStackInSlot(slot);
 			if(i != null){
@@ -108,12 +108,15 @@ public class GuiOven extends GuiContainer {
 					if(secondairyInventory.getStackInSlot(slot_index) != null){
 
 						if(secondairyInventory.getStackInSlot(slot_index).stackSize > 1){
-							ItemStack stack = secondairyInventory.getStackInSlot(slot_index);
-							stack.stackSize--;
-							ItemStack oneStack = new ItemStack(stack.getItem(), 1);
 
-							if(playerInventory.setStackInNextAvailableSlot(oneStack)){
-								//secondairyInventory.setStackInSlot(slot_index, null);
+							if(KeyHandler.shiftIsHeld()){
+								if(player.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(slot_index)))
+									secondairyInventory.setStackInSlot(slot_index, null);
+							}else{
+								ItemStack stack = secondairyInventory.getStackInSlot(slot_index);
+								stack.stackSize--;
+								ItemStack oneStack = new ItemStack(stack.getItem(), 1);
+								playerInventory.setStackInNextAvailableSlot(oneStack);
 							}
 						}else{
 							if(playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(slot_index)))
@@ -127,15 +130,26 @@ public class GuiOven extends GuiContainer {
 						ItemStack stack = playerInventory.getStackInSlot(slot);
 
 						if(stack.getItem().isCookable() || stack.getItem().isFuel()){
-							ItemStack newStack = new ItemStack(stack.getItem(), 1);
-							if(secondairyInventory.setStackInNextAvailableSlot(newStack)){
-								stack.stackSize--;
-								if(stack.stackSize <= 0){
+
+							if(KeyHandler.shiftIsHeld()){
+								if(secondairyInventory.setStackInNextAvailableSlot(stack.copy()))
 									playerInventory.setStackInSlot(slot, null);
+							}else{
+								ItemStack newStack = new ItemStack(stack.getItem(), 1);
+								if(secondairyInventory.setStackInNextAvailableSlot(newStack)){
+									stack.stackSize--;
+									if(stack.stackSize <= 0){
+										playerInventory.setStackInSlot(slot, null);
+									}
 								}
 							}
 						}
 					}
 				}
+	}
+
+	@Override
+	public int[] getToolTipWindowPosition() {
+		return new int[]{305,114};
 	}
 }

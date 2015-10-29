@@ -5,6 +5,7 @@ import game.content.Images;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.crafting.Crafting;
+import game.util.Util;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -14,6 +15,8 @@ import base.main.keyhandler.KeyHandler;
 public class GuiCrafting extends GuiContainer {
 
 	private boolean advanced;
+
+	private final int[] pos = new int[]{307, 169 };
 
 	public GuiCrafting(World world, Player p, boolean advanced) {
 		super(world, p);
@@ -99,25 +102,25 @@ public class GuiCrafting extends GuiContainer {
 			world.displayGui(null);
 		}
 
-		if(KeyHandler.isPressed(KeyHandler.LEFT))
+		if(KeyHandler.isLeftKeyHit())
 			if(slotIndex[0] > 0){
 				slotSelected.x -=getSlotSpacingX();
 				slotIndex[0]--;
 			}
 
-		if(KeyHandler.isPressed(KeyHandler.RIGHT))
+		if(KeyHandler.isRightKeyHit())
 			if(slotIndex[0] < (rowsX()-1)){
 				slotSelected.x +=getSlotSpacingX();
 				slotIndex[0]++;
 			}
 
-		if(KeyHandler.isPressed(KeyHandler.UP))
+		if(KeyHandler.isUpKeyHit())
 			if(slotIndex[1] > 0){
 				slotSelected.y -=getSlotSpacingY();
 				slotIndex[1]--;
 			}
 
-		if(KeyHandler.isPressed(KeyHandler.DOWN))
+		if(KeyHandler.isDownKeyHit())
 			if(slotIndex[1] < (rowsY()-1)){
 				slotSelected.y +=getSlotSpacingY();
 				slotIndex[1]++;
@@ -136,6 +139,21 @@ public class GuiCrafting extends GuiContainer {
 	@Override
 	public int rowsY() {
 		return 3;
+	}
+	
+	@Override
+	protected void drawToolTip(Graphics2D g) {
+		//super.drawToolTip(g);
+		if(Crafting.result(slot_index) != null){
+			ItemStack stack = Crafting.result(slot_index);
+			Util.drawToolTipWindow(g, getToolTipWindowPosition(), stack.getItem().getToolTip(stack));
+			Util.drawToolTipText(g, stack, getToolTipWindowPosition());
+		}
+	}
+	
+	@Override
+	public int[] getToolTipWindowPosition() {
+		return pos;
 	}
 
 }

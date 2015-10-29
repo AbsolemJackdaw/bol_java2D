@@ -25,8 +25,12 @@ public class GameStateManager {
 	
 	public static final int GAME = 3;
 
-	public GameStateManager() {
+	public GamePanel jframeInstance;
+	
+	public GameStateManager(GamePanel gp) {
 
+		jframeInstance = gp;
+		
 		Music.init();
 		Images.init();
 		

@@ -1,6 +1,7 @@
 package game;
 
-import game.content.Images;
+import static base.main.GamePanel.HEIGHT;
+import static base.main.GamePanel.WIDTH;
 import game.content.SpawningLogic;
 import game.content.save.DataList;
 import game.content.save.DataTag;
@@ -21,6 +22,7 @@ import game.item.Item;
 import game.item.ItemLantern;
 import game.item.ItemStack;
 import game.item.Items;
+import game.util.Util;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -30,7 +32,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import base.main.GamePanel;
 import base.main.GameState;
 import base.main.GameStateManager;
 import base.main.keyhandler.KeyHandler;
@@ -58,7 +59,6 @@ public class World extends GameState{
 	public int GameTime = 0;
 	public int GameTimeTotalCycle = 18000*3;
 
-	//	private static final BufferedImage lighting = new BufferedImage(GamePanel.WIDTH, GamePanel.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	public float nightAlhpa = 0;
 
 	private boolean messageSaved;
@@ -68,6 +68,8 @@ public class World extends GameState{
 	private Font defaultfont = new Font("Century Gothic", Font.PLAIN, 10);
 
 	public boolean hasCreaturesSpawned;
+
+	public BufferedImage bg = null;
 	
 	public World(GameStateManager gsm) {
 		this.gsm = gsm;
@@ -82,8 +84,10 @@ public class World extends GameState{
 			player.readFromSave(Save.getPlayerData());
 
 		backGrounds = new ArrayList<Background>();
-		backGrounds.add(Images.instance.menuBackGround);
+		//		backGrounds.add(Images.instance.menuBackGround);
 
+		bg = Util.generateStalactiteBackGround();
+		
 		listWithMapObjects = new ArrayList<MapObject>();
 
 		displayGui(new GuiHud(this, player));
@@ -93,15 +97,17 @@ public class World extends GameState{
 	@Override
 	public void draw(Graphics2D g){
 
-		g.setColor(Color.white);
-		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		g.setColor(Color.gray);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
 		g.setFont(defaultfont);
+		
+		g.drawImage(bg, 0, 0, null);
 
 		if(backGrounds != null && !backGrounds.isEmpty())
 			for(Background bg : backGrounds)
 				bg.draw(g);
 
-		tileMap.draw(g, player);
+		tileMap.draw(g, player, 1);
 
 		for(MapObject obj : listWithMapObjects){
 			//do not draw entities outside of the player's range
@@ -111,8 +117,10 @@ public class World extends GameState{
 
 		player.draw(g);
 
+		tileMap.draw(g, player, 2);
+		
 		// Creates the buffered image. has to be recreated every time for transparancy
-		BufferedImage lighting = new BufferedImage(GamePanel.WIDTH, GamePanel.HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage lighting = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D gbi = lighting.createGraphics();
 
@@ -127,14 +135,12 @@ public class World extends GameState{
 			}
 
 		gbi.setColor(new Color(0f, 0f, 0.07f, nightAlhpa));
-		gbi.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		gbi.fillRect(0, 0, WIDTH, HEIGHT);
 
 		Ellipse2D ellipse = null;
 
 		//campfire cuts out circle here
 		if(nightAlhpa > 0.1f){
-
-			/**changed light to player instead of blocks*/
 
 			for(MapObject mo : listWithMapObjects){
 				if(isOutOfBounds(mo))
@@ -144,20 +150,12 @@ public class World extends GameState{
 
 					BlockLight light = (BlockLight)mo;
 
-					//Draws the circle of light into the buffered image.
-					for(int i = 0; i < 5; i++){
-						float f =  0f + (float)i / 10f;
-						gbi.setColor(new Color(0.0f, 0.0f, 0.0f, f));    
-						gbi.setComposite(AlphaComposite.DstOut);
-						gbi.fill(new Ellipse2D.Double((light.posX() + i * 5) - (light.getRadius()/2 - 32/2), (light.posY() + i * 5) - (light.getRadius()/2 - 32/2), light.getRadius() - i * 10, light.getRadius() - i *10));
-					}
+					int i = 3;
 
-					int i = 2;
-
-					int x =(light.posX() + i * 5) - (light.getRadius()/2 - 32/2);
-					int y = (light.posY() + i * 5) - (light.getRadius()/2 - 32/2);
-					int h = light.getRadius() - i * 10;
-					int w = light.getRadius() - i *10;
+					int x =(light.posX() + i * 2) - (light.getRadius()/2 - 16);
+					int y = (light.posY() + i * 2) - (light.getRadius()/2 - 16);
+					int h = light.getRadius() - i * 4;
+					int w = light.getRadius() - i * 4;
 
 					float scale = 15f;
 					float f =  0f + (float)i / 10f;
@@ -247,7 +245,7 @@ public class World extends GameState{
 			//set the opacity
 			g.setFont(font);
 			g.setColor(new Color(1f, 1f, 1f, messageAlpha));
-			g.drawString("Successfully saved.", GamePanel.WIDTH / 2 - (GamePanel.WIDTH / 4), GamePanel.HEIGHT / 2);
+			g.drawString("Successfully saved.", WIDTH / 2 - (WIDTH / 4), HEIGHT / 2);
 			messageAlpha -= 0.01f;
 
 			//increase the opacity and repaint
@@ -278,7 +276,7 @@ public class World extends GameState{
 
 		handleInput();
 
-		tileMap.setPosition((GamePanel.WIDTH / 2) - player.getScreenXpos(),(GamePanel.HEIGHT / 2) - player.getScreenYpos());
+		tileMap.setPosition((WIDTH / 2) - player.getScreenXpos(),(HEIGHT / 2) - player.getScreenYpos());
 
 		if((guiDisplaying instanceof GuiHud)){
 			GameTime++;
@@ -290,15 +288,31 @@ public class World extends GameState{
 			if(hasCreaturesSpawned)
 				if(!isNightTime())
 					hasCreaturesSpawned = false;
-					
+
 			SpawningLogic.spawnNightCreatures(this, false);
 
 			player.update();
 
 			for(MapObject obj : listWithMapObjects){
+
 				obj.update();
 
+				if(player.getRectangle().intersects(obj.getRectangle())){
+					if(!player.getCollidingMapObjects().contains(obj)){
+						player.setCollidingMapObjects(obj);
+						player.isCollidingWithBlock = true;
+					}
+
+				}else{
+					player.getCollidingMapObjects().remove(obj);
+					if(player.getCollidingMapObjects().isEmpty())
+						player.isCollidingWithBlock = false;
+				}
+
 				if(obj.remove){
+
+					if(player.getCollidingMapObjects().contains(obj))
+						player.getCollidingMapObjects().remove(obj);
 					listWithMapObjects.remove(obj);
 
 					if(obj instanceof EntityLiving){
@@ -312,6 +326,8 @@ public class World extends GameState{
 				}
 			}
 		}
+
+		//				System.out.println(player.getCollidingBlocks());
 	}
 
 	private void loadWorld() {
@@ -330,6 +346,31 @@ public class World extends GameState{
 	}
 
 	public void handleInput() {
+
+		if(KeyHandler.isPressed(KeyHandler.CTRL))
+		{
+
+
+			//			float x = WIDTH * SCALE;
+			//			float y = HEIGHT * SCALE;
+			//
+			//			SCALEDX = (int)x;
+			//			SCALEDY = (int)y;
+			//
+			//			Container c = this.gsm.jframeInstance.getTopLevelAncestor();
+			//			c.setPreferredSize(new Dimension(SCALEDX, SCALEDY + 30));
+			//			if(c instanceof JFrame){
+			//				((JFrame)c).pack();
+			//				((JFrame)c).setExtendedState(JFrame.MAXIMIZED_BOTH); 
+
+			//				((JFrame)c).setVisible(true);
+			//				((JFrame)c).setLocationRelativeTo(null);
+			//			}
+
+			//			this.gsm.jframeInstance.setPreferredSize(new Dimension(500,300));
+			//			this.gsm.jframeInstance.setFocusable(true);
+			//			this.gsm.jframeInstance.requestFocus();
+		}
 
 		if(isConsoleDisplayed){
 			consoleInput();
@@ -393,7 +434,7 @@ public class World extends GameState{
 		tag.writeFloat("nightshade", new Float(nightAlhpa));
 
 		tag.writeBoolean("creatureFlag", hasCreaturesSpawned);
-		
+
 		DataList list = new DataList();
 		for(MapObject mo : listWithMapObjects){
 			DataTag dt = new DataTag();
@@ -410,7 +451,7 @@ public class World extends GameState{
 		nightAlhpa = tag.readFloat("nightshade");
 
 		hasCreaturesSpawned = tag.readBoolean("creatureFlag");
-		
+
 		DataList list = tag.readList("content");
 
 		for(int i = 0; i < list.data().size(); i ++){
@@ -446,17 +487,17 @@ public class World extends GameState{
 		int Px = player.getScreenXpos();
 		int Py = player.getScreenYpos();
 
-		int arroundX = 32*16;
-		int arroundY = 32*10;
+		int arroundX = 32*20; //TODO make renderDistance Configurable
+		int arroundY = 32*12;
 
-		int someX = Px-arroundX;
-		int someXMax = Px+arroundX;
+		int xDistanceMin = Px-arroundX;
+		int xDistanceMax = Px+arroundX;
 
-		int someY = Py-arroundY;
-		int someYMax = Py+arroundY;
+		int yDistanceMin = Py-arroundY;
+		int yDistanceMax = Py+arroundY;
 
-		if(obj.getScreenXpos() >= someX && obj.getScreenXpos() < someXMax)
-			if(obj.getScreenYpos() >= someY && obj.getScreenYpos() < someYMax)
+		if(obj.getScreenXpos() >= xDistanceMin && obj.getScreenXpos() < xDistanceMax)
+			if(obj.getScreenYpos() >= yDistanceMin && obj.getScreenYpos() < yDistanceMax)
 				return false;
 		return true;
 	}
@@ -490,7 +531,7 @@ public class World extends GameState{
 			if(split.length == 3){
 				Item item = Items.getItemFromUIN(split[1]);
 				if(item != null){
-					ItemStack stack = new ItemStack(item, Integer.valueOf(split[2]));
+					ItemStack stack = new ItemStack(item, Integer.valueOf(split[2]), item.getItemDamage());
 					player.setStackInNextAvailableSlot(stack);
 				}
 			}

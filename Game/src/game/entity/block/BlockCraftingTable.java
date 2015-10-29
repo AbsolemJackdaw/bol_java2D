@@ -1,5 +1,7 @@
 package game.entity.block;
 
+import static base.main.keyhandler.KeyHandler.INTERACT;
+import static base.main.keyhandler.KeyHandler.getKeyName;
 import game.World;
 import game.content.Images;
 import game.entity.Animation;
@@ -30,6 +32,7 @@ public class BlockCraftingTable extends BlockBreakable {
 			animation.setDelay(Animation.NONE);
 		}
 			
+		blockInfo.add(getKeyName(INTERACT) + " to interact");
 	}
 	
 	@Override

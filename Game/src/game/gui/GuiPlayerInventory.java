@@ -6,11 +6,11 @@ import game.entity.living.player.Player;
 import game.item.Item;
 import game.item.ItemArmor;
 import game.item.ItemBelt;
-import game.item.ItemBlock;
 import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
 import game.item.crafting.Crafting;
+import game.util.Constants;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -18,13 +18,12 @@ import java.awt.image.BufferedImage;
 
 import base.main.GamePanel;
 import base.main.keyhandler.KeyHandler;
-import base.main.keyhandler.XboxController;
 
 public class GuiPlayerInventory extends GuiContainer {
 
 	private BufferedImage img;
 
-	//TODO add armor only slot switching compatibility
+	private static final int[] pos = new int[]{329, 117};
 
 	public GuiPlayerInventory(World world, Player p) {
 		super(world, p);
@@ -76,13 +75,13 @@ public class GuiPlayerInventory extends GuiContainer {
 			if(stack != null){
 				if(!stack.getItem().isStackable() && stack.getDamage() > 0){
 					double dmg = (double)stack.getDamage()/100.0d * 15.0d;
-					
+
 					g.setColor(Color.DARK_GRAY);
 					g.drawRect(centerX - 26 + (18*slot),centerY-14, 15, 1);
 					g.setColor(Color.GREEN);
 					g.drawRect(centerX - 26 + (18*slot), centerY-14, (int)dmg, 1);
 				}
-				
+
 				stack.getItem().draw(g, centerX - 26 + (18*slot), centerY-28, stack);
 			}
 		}
@@ -100,7 +99,6 @@ public class GuiPlayerInventory extends GuiContainer {
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -144,28 +142,68 @@ public class GuiPlayerInventory extends GuiContainer {
 		if(currentContainer != 2){
 			super.handleGuiKeyInput();
 
-			//TODO make a place key for inventory
-			if(KeyHandler.isPressed(KeyHandler.PLACE) && XboxController.controller != null || KeyHandler.isPressed(KeyHandler.CTRL)){
+			if(currentContainer == PLAYER_INVENTORY){
 
-				if(player.getStackInSlot(slot_index) != null){
+				if(playerInventory.getStackInSlot(slot_index) != null)
+					for(int key : Constants.hotBarKeys)
+						if(KeyHandler.isPressed(key)){
 
-					if(player.getStackInSlot(slot_index).getItem() != null){
-						//place down blocks
-						if(player.getStackInSlot(slot_index).getItem() instanceof ItemBlock){
-							ItemBlock ib = (ItemBlock)player.getStackInSlot(slot_index).getItem();
-							ib.placeBlock(player.getWorld().tileMap, player.getWorld(), player);
-							player.getStackInSlot(slot_index).stackSize--;
-							if(player.getStackInSlot(slot_index).stackSize == 0)
-								player.setStackInSlot(slot_index, null);
+							int key_slot = key - KeyHandler.ONE;
+
+							//switch items
+							if(slot_index != key_slot){
+								if(playerInventory.getStackInSlot(key_slot) != null){
+
+									ItemStack copyOfHotBar = playerInventory.getStackInSlot(key_slot).copy();
+									ItemStack copyOfSlot = playerInventory.getStackInSlot(slot_index).copy();
+
+									playerInventory.setStackInSlot(key_slot, null);
+									playerInventory.setStackInSlot(slot_index, null);
+
+									player.setStackInSlot(key_slot, copyOfSlot);
+									player.setStackInSlot(slot_index, copyOfHotBar);
+
+								}else{
+									player.setStackInSlot(key_slot, playerInventory.getStackInSlot(slot_index).copy());
+									playerInventory.setStackInSlot(slot_index, null);
+								}
+							}else{
+								if(player.invArmor.getExtra() != null){
+									ItemStack hotBarCopy = playerInventory.getStackInSlot(key_slot).copy();
+
+									for(int i = 10; i < player.getInventory().getMaxSlots(); i++){
+										if(player.getStackInSlot(i) == null){
+											player.setStackInSlot(i, hotBarCopy);
+											player.setStackInSlot(key_slot, null);
+											break;
+										}
+									}
+								}
+							}
+
 						}
-					}
-				}
 			}
+
+//			if(KeyHandler.isPressed(KeyHandler.PLACE) && XboxController.controller != null || KeyHandler.isValidationKeyPressed()){
+//
+//				if(player.getStackInSlot(slot_index) != null){
+//
+//					if(player.getStackInSlot(slot_index).getItem() != null){
+//						//place down blocks
+//						if(player.getStackInSlot(slot_index).getItem() instanceof ItemBlock){
+//							ItemBlock ib = (ItemBlock)player.getStackInSlot(slot_index).getItem();
+//							ib.placeBlock(player.getWorld().tileMap, player.getWorld(), player);
+//
+//							Util.decreaseStack(playerInventory, slot_index, 1);
+//						}
+//					}
+//				}
+//			}
 		}
 
 		if(slot_index == 5 && currentContainer != 2){
 			if(!isNotPlayerInventory() ){
-				if(KeyHandler.isPressed(KeyHandler.LEFT)){
+				if(KeyHandler.isLeftKeyHit()){
 					currentContainer = 2;
 					slotSelected.y = getFirstSlotLocationY();
 					slotSelected.x = getFirstSlotLocationX();
@@ -180,51 +218,71 @@ public class GuiPlayerInventory extends GuiContainer {
 				world.displayGui(null);
 			}
 
-			else if(KeyHandler.isPressed(KeyHandler.LEFT)){
+			else if(KeyHandler.isLeftKeyHit()){
 				if(slotIndex[0] == 1){
 					slotSelected.x -=getSlotSpacingX();
 					slotIndex[0]--;
 				}
 			}
 
-			else if(KeyHandler.isPressed(KeyHandler.RIGHT)){
+			else if(KeyHandler.isRightKeyHit()){
 				if(slotIndex[0] == 0){
 					slotSelected.x +=getSlotSpacingX();
 					slotIndex[0]++;
 				}
 
 				else if(slotIndex[0] == 1){
-					currentContainer = PLAYER;
-					slotSelected.y = getFirstSlotLocationY();
+					currentContainer = PLAYER_INVENTORY;
+					slotSelected.y = getFirstSlotLocationY() + getSlotSpacingY();
 					slotSelected.x = getFirstSlotLocationX();
-					slotIndex[1] = slotIndex[0] = 0;
+					slotIndex[0] = 0;
+					slotIndex[1] = 1;
+
 				}
 			}
 
 			else if(KeyHandler.isValidationKeyPressed())
 				buttonClicked(slot_index);
-
 		}
-
 	}
 
 	@Override
 	protected void containerItemSwappingLogic() {
+
 		if(secondairyInventory != null)
 			if(KeyHandler.isValidationKeyPressed())
+
+				//switch armor to player inventory
 				if(isNotPlayerInventory() && secondairyInventory != null){ //armor inventory
-					System.out.println(slot_index);
-					//switch armor to player inventory
-					if(secondairyInventory.getStackInSlot(slot_index) != null)
-						if(playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(slot_index)))
-							secondairyInventory.setStackInSlot(slot_index, null);
-				}else{//inventory to armor logic
+
+					if(slot_index !=2){ // dont remove belts !
+						if(secondairyInventory.getStackInSlot(slot_index) != null)
+							if(playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(slot_index)))
+								secondairyInventory.setStackInSlot(slot_index, null);
+					}else{
+						//check if any space is left within the reachable inventory
+						for(int i = 0; i < 10; i++){
+							if(playerInventory.getStackInSlot(i) == null){
+								player.setStackInSlot(i, secondairyInventory.getStackInSlot(slot_index).copy());
+								secondairyInventory.setStackInSlot(slot_index, null);
+								break;
+							}
+						}
+					}
+				}
+
+		//inventory to armor logic
+				else{
 					int slot = slotIndex[0]+ (slotIndex[1]*(rowsX()));
-					System.out.println(slot);
+
 					if(playerInventory.getStackInSlot(slot) != null){
 						Item item = playerInventory.getStackInSlot(slot).getItem();
 						ItemStack stack = playerInventory.getStackInSlot(slot);
-						if(item instanceof ItemTool){
+
+						if(item.hasInventoryCallBack())
+							item.inventoryCallBack(slot_index, player);
+
+						else if(item instanceof ItemTool){
 							if(secondairyInventory.getStackInSlot(3) == null){//3 is weapon slot
 								secondairyInventory.setStackInSlot(3, stack);
 								playerInventory.setStackInSlot(slot, null);
@@ -276,5 +334,10 @@ public class GuiPlayerInventory extends GuiContainer {
 		if(id == 1){
 			Crafting.craft(player, Crafting.CraftTable, false);
 		}
+	}
+
+	@Override
+	public int[] getToolTipWindowPosition() {
+		return pos;
 	}
 }

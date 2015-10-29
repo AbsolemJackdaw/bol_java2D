@@ -8,9 +8,10 @@ public class ItemArmor extends Item{
 	
 	private int bodyPart;
 	
-	public ItemArmor(String uin, int bodyPart) {
-		super(uin);
+	public ItemArmor(String uin, String displayName, int bodyPart) {
+		super(uin, displayName);
 		this.bodyPart = bodyPart;
+		
 	}
 	
 	public int getIndex(){

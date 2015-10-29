@@ -2,6 +2,9 @@ package game.item;
 
 import game.World;
 import game.entity.living.player.Player;
+
+import java.util.List;
+
 import base.tilemap.TileMap;
 
 public class ItemTool extends Item {
@@ -15,12 +18,13 @@ public class ItemTool extends Item {
 	public static final int AXE = 2;
 	public static final int SWORD = 3;
 
-	public ItemTool(String uin){
-		super(uin);
+	public ItemTool(String uin, String displayName){
+		super(uin, displayName);
 	}
 
 	public ItemTool setAttackDamage(int i){
 		attackDamage = i;
+
 		return this;
 	}
 	/**Used to calculate damage done to entities*/
@@ -54,8 +58,8 @@ public class ItemTool extends Item {
 		ItemStack invCopy = player.getInventory().getStackInSlot(key);
 		ItemStack equippedWeapon = player.invArmor.getWeapon();
 
-		ItemStack newInvItem = new ItemStack(equippedWeapon.getItem(), equippedWeapon.stackSize);
-		ItemStack newWeapon = new ItemStack(invCopy.getItem(), invCopy.stackSize);
+		ItemStack newInvItem = equippedWeapon.copy();
+		ItemStack newWeapon = invCopy.copy();
 
 		player.invArmor.setWeapon(newWeapon);
 		player.getInventory().setStackInSlot(key, null);
@@ -66,5 +70,22 @@ public class ItemTool extends Item {
 	@Override
 	public boolean isStackable() {
 		return false;
+	}
+
+	@Override
+	public List<String> getToolTip(ItemStack stack) {
+
+		if(tooltipList.size()< 3)
+			tooltipList.add(stack.getDamage()+"/"+stack.getMaxDamage()) ;
+		else
+			if(!tooltipList.get(2).equals(stack.getDamage()+"/"+stack.getMaxDamage()))
+				tooltipList.set(2, stack.getDamage()+"/"+stack.getMaxDamage());
+
+		if(tooltipList.size() < 2)
+			tooltipList.add("Dmg : " + getAttackDamage());
+		else
+			tooltipList.set(1, "Dmg : " + getAttackDamage());
+
+		return super.getToolTip(stack);
 	}
 }

@@ -10,7 +10,7 @@ public class DataTag {
 
 	@Override
 	public String toString() {
-		return data.toString();
+		return data.toJSONString();
 	}
 
 	public DataTag(JSONObject data){
@@ -132,7 +132,12 @@ public class DataTag {
 	}
 	
 	public boolean readBoolean(String tag){
-		byte b = (byte) data.get(tag);
+		Object o = data.get(tag);
+		
+		byte b = 0;
+		
+		if(o instanceof Byte)
+			b = (byte)o;
 		
 		return b == 1 ? true : false;
 	}

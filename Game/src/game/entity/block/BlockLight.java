@@ -1,5 +1,7 @@
 package game.entity.block;
 
+import static base.main.keyhandler.KeyHandler.INTERACT;
+import static base.main.keyhandler.KeyHandler.getKeyName;
 import game.World;
 import game.content.Images;
 import game.content.save.DataTag;
@@ -30,6 +32,8 @@ public class BlockLight extends BlockBreakable implements IInventory{
 		setHealth(2);
 		fire.setFrames(Images.loadMultiImage("/blocks/camp_fire.png", 32, 0, 4));
 		fire.setDelay(90);
+		
+		blockInfo.add(getKeyName(INTERACT) + " to interact");
 	}
 
 	public Block setRadius(int rad){
@@ -38,7 +42,7 @@ public class BlockLight extends BlockBreakable implements IInventory{
 	}
 
 	public int getRadius(){
-		int t = timer == 0 ? 0 : (timer > (800 * 6) && timer < (800*8)) ? 200 : timer > (800*3) && timer < (800*6) ? 125 : timer > 0 && timer < (800*3) ? 75 : 250;
+		int t = timer == 0 ? 0 : (timer > (800 * 6) && timer < (800*8)) ? 200 : timer > (800*3) && timer < (800*6) ? 175 : timer > 0 && timer < (800*3) ? 75 : 250;
 		return  t;
 	}
 
@@ -81,21 +85,17 @@ public class BlockLight extends BlockBreakable implements IInventory{
 		if(timer > 0)
 			timer --;
 
-		if(getStackInSlot(0) != null)
-			if(getStackInSlot(0).getItem().isFuel()){
-				timer += getStackInSlot(0).getItem().getFuelTimer();
-				getStackInSlot(0).stackSize--;
-				if(getStackInSlot(0).stackSize <=0)
-					setStackInSlot(0, null);
-			}
-
-		if(timer > 0)
+		if(timer > 0){
 			fire.update();
+		
+			if(world.isNightTime())
+				if(world.nightAlhpa > 0.8f)
+					world.nightAlhpa = 0.8f;
+		}
 	}
 
 	@Override
 	protected void mine(Player p) {
-		//oven can not be destroyed with items in it
 		if(timer <= 0){
 			super.mine(p);
 		}else{
@@ -171,7 +171,7 @@ public class BlockLight extends BlockBreakable implements IInventory{
 	}
 
 	@Override
-	public void removeStack(int slot) {
+	public void removeStack(int slot){
 		inventory[0] = null;
 	}
 
@@ -181,7 +181,7 @@ public class BlockLight extends BlockBreakable implements IInventory{
 	}
 
 	@Override
-	public IInventory getInventory() {
+	public IInventory getInventory(){
 		return this;
 	}
 

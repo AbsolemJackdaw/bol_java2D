@@ -17,21 +17,29 @@ public class KeyHandler {
 	private static ArrayList<String> typed = new ArrayList<>();
 
 	public static int[] registeredKeys = new int[]{
-		KeyEvent.VK_Z,
-		KeyEvent.VK_Q,
-		KeyEvent.VK_S,
-		KeyEvent.VK_D,
+		KeyEvent.VK_Z, //0
+		KeyEvent.VK_Q, //1
+		KeyEvent.VK_S, //2
+		KeyEvent.VK_D, //3
 
-		KeyEvent.VK_SPACE, //Attack
-		KeyEvent.VK_ENTER,//Accept
-		KeyEvent.VK_E,//inventory
-		KeyEvent.VK_F, //interact
+		KeyEvent.VK_SPACE, //4 //Attack
+		KeyEvent.VK_ENTER, //5 //Accept
+		KeyEvent.VK_E, //6 //inventory
+		KeyEvent.VK_F, //7 //interact
 
 		/**console has been invalidated and is opened with ctrl-shift
 		 * tab isn't recognized by swing. (this is normal)*/
-		KeyEvent.VK_TAB,//for console shouldn't be changeable. maybe for talking later ?
-		KeyEvent.VK_B,//for bounding boxes. shouldn't be changeable
+		KeyEvent.VK_TAB,//8 //for console shouldn't be changeable. maybe for talking later ?
 
+		KeyEvent.VK_B,//9 //for bounding boxes. shouldn't be changeable
+		KeyEvent.VK_F5, //10
+		KeyEvent.VK_A, //11
+
+		KeyEvent.VK_UP,
+		KeyEvent.VK_DOWN,
+		KeyEvent.VK_LEFT,
+		KeyEvent.VK_RIGHT,
+		
 		KeyEvent.VK_1,
 		KeyEvent.VK_2,
 		KeyEvent.VK_3,
@@ -41,6 +49,8 @@ public class KeyHandler {
 		KeyEvent.VK_7,
 		KeyEvent.VK_8,
 		KeyEvent.VK_9,
+		KeyEvent.VK_0,
+
 		KeyEvent.VK_M,//Place button for xbox controllers 
 
 		KeyEvent.VK_ESCAPE,
@@ -48,8 +58,6 @@ public class KeyHandler {
 
 		KeyEvent.VK_SHIFT,
 		KeyEvent.VK_CONTROL,
-		
-		KeyEvent.VK_F5,
 	};
 
 	public static int UP = 0;
@@ -62,32 +70,37 @@ public class KeyHandler {
 	public static int INVENTORY = 6;
 	public static int INTERACT = 7;
 
-	public static int T = 8;
+	public static int CONSOLE = 8;
 	public static int B = 9;
+	public static int QUICKSAVE = 10;
+	public static int JUNK = 11;
 
-	public static int ONE = 10;
-	public static int TWO = 11;
-	public static int THREE = 12;
-	public static int FOUR = 13;
-	public static int FIVE = 14;
-	public static int SIX = 15;
-	public static int SEVEN = 16;
-	public static int EIGHT = 17;
-	public static int NINE = 18;
-	public static int PLACE = 19;
+	public static int ARROW_UP = 12;
+	public static int ARROW_DOWN = 13;
+	public static int ARROW_LEFT = 14;
+	public static int ARROW_RIGHT = 15;
 
-	public static int ESCAPE = 20;
+	public static int ONE = 16;
+	public static int TWO = 17;
+	public static int THREE = 18;
+	public static int FOUR = 19;
+	public static int FIVE = 20;
+	public static int SIX = 21;
+	public static int SEVEN = 22;
+	public static int EIGHT = 23;
+	public static int NINE = 24;
+	public static int ZERO = 25;
 
-	public static int ESCAPE2 = 21;
-
-	public static int SHIFT = 22;
-
-	public static int CTRL = 23;
-
-	public static int QUICKSAVE = 24;
+	//xboxOnly
+	public static int PLACE = 26;
+	public static int ESCAPE2 = 28;
+	//
 	
-	public static int ANYKEY = 25;
+	public static int ESCAPE = 27;
+	public static int SHIFT = 29;
+	public static int CTRL = 30;
 
+	public static int ANYKEY = 31;
 
 	public static boolean anyKeyPress() {
 		for (int i = 0; i < NUM_KEYS; i++)
@@ -97,7 +110,6 @@ public class KeyHandler {
 	}
 
 	public static String keyPressed(int i, String string){
-		//		System.out.println(string);
 
 		if(typed.isEmpty())
 			return string;
@@ -122,9 +134,8 @@ public class KeyHandler {
 			typed.remove(0);
 			typed.trimToSize();
 
-			//			System.out.println("key typed "+s);
-			//			System.out.println("string returned " + string);
 		}
+
 		return string.toLowerCase();
 	}
 
@@ -143,16 +154,16 @@ public class KeyHandler {
 
 	/**prevents the game from registering every key and displaying it in the console*/
 	private static boolean flag;
-	
+
 	public static void keySet(int i, boolean b){
 
 		keyCode = i;
-		
+
 		if(i == KeyEvent.VK_SHIFT && prevKeyState[CTRL])//when console is opened
 			flag = true;
 		if(i == KeyEvent.VK_ESCAPE || i == KeyEvent.VK_ENTER)//when console is closed
 			flag = false;
-		
+
 		if(b && flag)
 			typed.add(KeyEvent.getKeyText(i));
 
@@ -175,8 +186,8 @@ public class KeyHandler {
 		else if (i == registeredKeys[ESCAPE])
 			keyState[ESCAPE] = b;
 
-		else if (i == registeredKeys[T])
-			keyState[T] = b;
+		else if (i == registeredKeys[CONSOLE])
+			keyState[CONSOLE] = b;
 
 		else if (i == registeredKeys[INVENTORY])
 			keyState[INVENTORY] = b;
@@ -211,6 +222,21 @@ public class KeyHandler {
 		else if (i == KeyEvent.VK_9){
 			keyState[NINE] = b;
 		}
+		else if ( i == KeyEvent.VK_0){
+			keyState[ZERO] = b;
+		}
+		else if( i == KeyEvent.VK_UP){
+			keyState[ARROW_UP] = b;
+		}
+		else if( i == KeyEvent.VK_DOWN){
+			keyState[ARROW_DOWN] = b;
+		}
+		else if( i == KeyEvent.VK_LEFT){
+			keyState[ARROW_LEFT] = b;
+		}
+		else if( i == KeyEvent.VK_RIGHT){
+			keyState[ARROW_RIGHT] = b;
+		}
 		else if(i == registeredKeys[INTERACT]){
 			keyState[INTERACT] = b;
 		}else if(i == registeredKeys[SHIFT] )
@@ -219,12 +245,14 @@ public class KeyHandler {
 			keyState[CTRL] = b;
 		else if (i == registeredKeys[QUICKSAVE])
 			keyState[QUICKSAVE] = b;
-		
+		else if(i == registeredKeys[JUNK])
+			keyState[JUNK] = b;
+
 		//xbox only.
-		else if(i == registeredKeys[PLACE]){
+		else if(i == registeredKeys[PLACE] && XboxController.controller != null){
 			keyState[PLACE] = b;
 		}
-		else if(i == registeredKeys[ESCAPE2]){
+		else if(i == registeredKeys[ESCAPE2] && XboxController.controller != null){
 			keyState[ESCAPE2] = b;
 		}
 
@@ -234,5 +262,45 @@ public class KeyHandler {
 	public static void update() {
 		for (int i = 0; i < NUM_KEYS; i++)
 			prevKeyState[i] = keyState[i];
+	}
+	
+	public static boolean shiftIsHeld(){
+		return prevKeyState[SHIFT];
+	}
+
+	public static String getKeyName(int keyId) {
+		return KeyEvent.getKeyText(KeyHandler.registeredKeys[keyId]);
+	}
+	
+	public static boolean isUpKeyPressed(){
+		return keyState[UP] || keyState[ARROW_UP];
+	}
+	
+	public static boolean isDownKeyPressed(){
+		return keyState[DOWN] || keyState[ARROW_DOWN];
+	}
+	
+	public static boolean isLeftKeyPressed(){
+		return keyState[LEFT] || keyState[ARROW_LEFT];
+	}
+	
+	public static boolean isRightKeyPressed(){
+		return keyState[RIGHT] || keyState[ARROW_RIGHT];
+	}
+	
+	public static boolean isUpKeyHit(){
+		return isPressed(UP) || isPressed(ARROW_UP);
+	}
+	
+	public static boolean isDownKeyHit(){
+		return isPressed(DOWN) || isPressed(ARROW_DOWN);
+	}
+	
+	public static boolean isLeftKeyHit(){
+		return isPressed(LEFT) || isPressed(ARROW_LEFT);
+	}
+	
+	public static boolean isRightKeyHit(){
+		return isPressed(RIGHT) || isPressed(ARROW_RIGHT);
 	}
 }

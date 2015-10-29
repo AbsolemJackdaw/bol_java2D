@@ -1,10 +1,14 @@
 package game.entity.block;
 
+import static base.main.keyhandler.KeyHandler.SPACE;
+import static base.main.keyhandler.KeyHandler.getKeyName;
 import game.World;
 import game.entity.MapObject;
 import game.item.ItemStack;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import base.tilemap.TileMap;
@@ -17,6 +21,8 @@ public class Block extends MapObject{
 	
 	public Random rand = new Random();
 
+	protected List<String> blockInfo = new ArrayList<String>();
+	
 	public Block(TileMap tm, World world, String uin) {
 		super(tm, world, uin);
 		width = 32;
@@ -32,6 +38,7 @@ public class Block extends MapObject{
 
 		facingRight = true;
 
+		blockInfo.add(getKeyName(SPACE)+ " to Harvest");
 	}
 
 	@Override
@@ -96,5 +103,9 @@ public class Block extends MapObject{
 
 	public int getType(){
 		return type;
+	}
+	
+	public List<String> getBlockInfo(){
+		return blockInfo;
 	}
 }

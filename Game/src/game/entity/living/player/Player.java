@@ -19,6 +19,7 @@ import game.item.ItemBlock;
 import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
+import game.util.Constants;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -26,6 +27,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 import base.main.keyhandler.KeyHandler;
 import base.main.keyhandler.XboxController;
@@ -90,6 +92,8 @@ public class Player extends EntityLiving implements IInventory{
 	// sample : 2,5,8,4 (2 for idle 0, 5 for walking 1, etc.
 	//public static final int[] numFrames = {20, 10, 1, 1, 3 };
 
+	private List<MapObject> collidingEntities = new ArrayList<MapObject>();
+
 	public static final int[] playerSprites = {
 		/*body (general)*/1,
 		/*idle*/1,1,8,
@@ -118,10 +122,14 @@ public class Player extends EntityLiving implements IInventory{
 	//ARMOR INFO
 	//0 helm
 	//1 chest
-	//2 legs 
+	//2 extra
 	//3 weapon
 
 	public ArmorInventory invArmor = new ArmorInventory();
+
+	public boolean isCollidingWithBlock;
+
+	private boolean inWater;
 
 	public Player(TileMap tm, World world) {
 		super(tm, world, "player");
@@ -193,66 +201,115 @@ public class Player extends EntityLiving implements IInventory{
 
 	@Override
 	public void getNextPosition() {
-		// movement
-		if (left) {
-			dx -= moveSpeed;
-			if (dx < -maxSpeed)
-				dx = -maxSpeed;
-		} else if (right) {
-			dx += moveSpeed;
-			if (dx > maxSpeed)
-				dx = maxSpeed;
-		} else if (dx > 0) {
-			dx -= stopSpeed;
-			if (dx < 0)
+
+		if(!inWater){
+			// movement
+			if (left) {
+				dx -= moveSpeed;
+				if (dx < -maxSpeed)
+					dx = -maxSpeed;
+			} else if (right) {
+				dx += moveSpeed;
+				if (dx > maxSpeed)
+					dx = maxSpeed;
+			} else if (dx > 0) {
+				dx -= stopSpeed;
+				if (dx < 0)
+					dx = 0;
+			} else if (dx < 0) {
+				dx += stopSpeed;
+				if (dx > 0)
+					dx = 0;
+			}
+
+			// cannot move while attacking, except in air
+			if ((currentAction == ACTION_ATTACK) && !(jumping || falling))
 				dx = 0;
-		} else if (dx < 0) {
-			dx += stopSpeed;
-			if (dx > 0)
-				dx = 0;
+
+			// jumping
+			if (jumping && !falling) {
+				dy = jumpStart;
+				falling = true;
+				//Music.play("jump_" + (rand.nextInt(5)+1));
+			}
+
+			// falling
+			if (falling) {
+				dy += fallSpeed;
+
+				if (dy > 0)
+					jumping = false;
+				if ((dy < 0) && !jumping)
+					dy += stopJumpSpeed;
+
+				if (dy > maxFallSpeed)
+					dy = maxFallSpeed;
+			}
 		}
 
-		// cannot move while attacking, except in air
-		if ((currentAction == ACTION_ATTACK) && !(jumping || falling))
-			dx = 0;
+		else{
 
-		// jumping
-		if (jumping && !falling) {
-			dy = jumpStart;
-			falling = true;
-			//Music.play("jump_" + (rand.nextInt(5)+1));
-		}
+			if (left) {
+				dx -= moveSpeed/2;
+				if (dx < -maxSpeed/2)
+					dx = -maxSpeed/2;
+			} else if (right) {
+				dx += moveSpeed/2;
+				if (dx > maxSpeed/2)
+					dx = maxSpeed/2;
+			} else if (dx > 0) {
+				dx -= stopSpeed;
+				if (dx < 0)
+					dx = 0;
+			} else if (dx < 0) {
+				dx += stopSpeed;
+				if (dx > 0)
+					dx = 0;
+			}
 
-		// falling
-		if (falling) {
-			dy += fallSpeed;
-
-			if (dy > 0)
-				jumping = false;
-			if ((dy < 0) && !jumping)
-				dy += stopJumpSpeed;
-
-			if (dy > maxFallSpeed)
-				dy = maxFallSpeed;
-
+			if (up) {
+				dy -= moveSpeed/2;
+				if (dy < -maxSpeed/2)
+					dy = -maxSpeed/2;
+				
+				//TODO make a possible better check ? 
+				if(world.tileMap.getBlockID(currRow+1, currCol) > 20 || world.tileMap.getBlockID(currRow-1, currCol) > 20){
+					dy -= moveSpeed;
+					if (dy < -maxSpeed)
+						dy = -maxSpeed;
+				}
+			} else if (!up && falling) {
+				dy += moveSpeed/2;
+				if (dy > maxSpeed/2)
+					dy = maxSpeed/2;
+			} else if (dy > 0) {
+				dy -= stopSpeed;
+				if (dy < 0)
+					dy = 0;
+			} else if (dy < 0) {
+				dy += stopSpeed;
+				if (dy > 0)
+					dy = 0;
+			}
 		}
 	}
 
-	private int[] keys = new int[]{KeyHandler.ONE, KeyHandler.TWO, KeyHandler.THREE,
-			KeyHandler.FOUR, KeyHandler.FIVE, KeyHandler.SIX,KeyHandler.SEVEN, KeyHandler.EIGHT, KeyHandler.NINE};
-
 	public void handleInput(){
 
-		setLeft(KeyHandler.keyState[KeyHandler.LEFT]);
+		setLeft(KeyHandler.isLeftKeyPressed());
 
-		setRight(KeyHandler.keyState[KeyHandler.RIGHT]);
+		setRight(KeyHandler.isRightKeyPressed());
+
+		setUp(KeyHandler.isUpKeyPressed());
+
+		setDown(KeyHandler.isDownKeyPressed());
 
 		if(XboxController.controller != null){
 			setJumping(KeyHandler.keyState[KeyHandler.SPACE]);
 			if (KeyHandler.isPressed(KeyHandler.SPACE))
 				setAttacking();
 		}else{
-			setJumping(KeyHandler.keyState[KeyHandler.UP]);
+			setJumping(KeyHandler.isUpKeyPressed());
 			if (KeyHandler.isPressed(KeyHandler.SPACE))
 				setAttacking();
 		}
@@ -263,9 +320,9 @@ public class Player extends EntityLiving implements IInventory{
 				if(o.intersects(this))
 					o.interact(this, o);
 
-		for(int key : keys)
+		for(int key : Constants.hotBarKeys)
 			if(KeyHandler.isPressed(key)){
-				int keyPressed = key-10;
+				int keyPressed = key - KeyHandler.ONE;
 
 				if(getStackInSlot(keyPressed) != null){
 					if(getStackInSlot(keyPressed).getItem() != null){
@@ -278,7 +335,7 @@ public class Player extends EntityLiving implements IInventory{
 						//equip armor or weapon
 						else if(item instanceof ItemTool){
 							if(invArmor.getWeapon() == null){
-								invArmor.setWeapon(getStackInSlot(keyPressed));
+								invArmor.setWeapon(getStackInSlot(keyPressed).copy());
 								setStackInSlot(keyPressed, null);
 							}else
 								item.useItem(getStackInSlot(keyPressed).getItem(), tileMap, getWorld(), this, keyPressed);
@@ -286,6 +343,11 @@ public class Player extends EntityLiving implements IInventory{
 						//any other item
 						else
 							item.useItem(getStackInSlot(keyPressed).getItem(), tileMap, getWorld(), this, keyPressed);
+					}
+				}else{
+					if(invArmor.getWeapon() != null){
+						setStackInSlot(keyPressed, invArmor.getWeapon().copy());
+						invArmor.setWeapon(null);
 					}
 				}
 			}
@@ -298,8 +360,6 @@ public class Player extends EntityLiving implements IInventory{
 		checkTileMapCollision();
 		setPosition(xtemp, ytemp);
 
-		//check for animation to loop, then stop attacking
-		//TODO turn around held weapon 360 degrees in guise of animation, if any weapon held
 		if (currentAction == ACTION_ATTACK){
 
 			if(this.invArmor.getWeapon() != null){
@@ -313,20 +373,20 @@ public class Player extends EntityLiving implements IInventory{
 				attacking = false;
 		}
 
+		if(attacking && (currentAction != ACTION_ATTACK)) {
+			for(MapObject obj : collidingEntities){
 
-		if (attacking && (currentAction != ACTION_ATTACK)) {
-			//TODO attack enemies
-			for(MapObject o : getWorld().listWithMapObjects){
 				entitySizeX += 5;
-				if(getRectangle().intersects(o.getRectangle())){
-					matchTool(o);
-					if(o.getScreenXpos() > getScreenXpos() && facingRight)
-						o.onEntityHit(this, o);
-					else if( o.getScreenXpos() < getScreenXpos() && !facingRight)
-						o.onEntityHit(this, o);
-				}
+				matchTool(obj);
+				if(obj.getScreenXpos() > getScreenXpos() && facingRight)
+					obj.onEntityHit(this, obj);
+				else if( obj.getScreenXpos() < getScreenXpos() && !facingRight)
+					obj.onEntityHit(this, obj);
+
 				entitySizeX -= 5;
 			}
+
+
 		}
 
 		//remove weapon if broken after attacking
@@ -360,10 +420,15 @@ public class Player extends EntityLiving implements IInventory{
 					item.update();
 			}
 		}
+
+
+
 	}
 
-	/**equipes the player with the needed tool when hitting an entity, if the tool is aquiered.*/
+	/**equipes the player with the needed tool when hitting an entity, if the tool is acquired.*/
 	private void matchTool(MapObject o) {
+
+		//player needs a belt to auto - match tool !
 		if(invArmor.getStackInSlot(ItemArmor.EXTRA) == null)
 			return;
 		if(!(invArmor.getStackInSlot(ItemArmor.EXTRA).getItem() instanceof ItemBelt))
@@ -371,11 +436,12 @@ public class Player extends EntityLiving implements IInventory{
 
 		if(o instanceof BlockBreakable){
 			BlockBreakable bl = (BlockBreakable)o;
+
 			if(bl.getEffectiveTool() == ItemTool.AXE){
 				if(invArmor.getWeapon() == null){
 					if(getInventory().hasStack(new ItemStack(Items.axe,1))){
 						int i = getSlotForStack(new ItemStack(Items.axe, 1));
-						invArmor.setWeapon(getStackInSlot(i));
+						invArmor.setWeapon(getStackInSlot(i).copy());
 						getInventory().setStackInSlot(i, null);
 					}
 				}
@@ -383,27 +449,27 @@ public class Player extends EntityLiving implements IInventory{
 					if(getInventory().hasStack(new ItemStack(Items.axe,1))){
 						int i = getSlotForStack(new ItemStack(Items.axe, 1));
 
-						ItemStack heldTool = invArmor.getWeapon();
-						ItemStack newTool = getStackInSlot(i);
+						ItemStack heldTool = invArmor.getWeapon().copy();
+						ItemStack newTool = getStackInSlot(i).copy();
 
 						invArmor.setWeapon(newTool);
 						setStackInSlot(i, null);
-						setStackInSlot(i, heldTool);
+						setStackInSlot(i, heldTool.copy());
 					}
 				}
 			}else if(bl.getEffectiveTool() == ItemTool.PICKAXE){
 				if(invArmor.getWeapon() == null){
 					if(getInventory().hasStack(new ItemStack(Items.pickaxe,1))){
 						int i = getSlotForStack(new ItemStack(Items.pickaxe, 1));
-						invArmor.setWeapon(new ItemStack(Items.pickaxe, 1));
+						invArmor.setWeapon(getStackInSlot(i).copy());
 						getInventory().setStackInSlot(i, null);
 					}
 				}
 				else if(!invArmor.getWeapon().getItem().equals(Items.pickaxe)){
 					if(getInventory().hasStack(new ItemStack(Items.pickaxe,1))){
 						int i = getSlotForStack(new ItemStack(Items.pickaxe, 1));
-						ItemStack heldTool = invArmor.getWeapon();
-						ItemStack newTool = getStackInSlot(i);
+						ItemStack heldTool = invArmor.getWeapon().copy();
+						ItemStack newTool = getStackInSlot(i).copy();
 
 						invArmor.setWeapon(newTool);
 						setStackInSlot(i, null);
@@ -414,15 +480,15 @@ public class Player extends EntityLiving implements IInventory{
 				if(invArmor.getWeapon() == null){
 					if(getInventory().hasStack(new ItemStack(Items.sword,1))){
 						int i = getSlotForStack(new ItemStack(Items.sword, 1));
-						invArmor.setWeapon(new ItemStack(Items.sword, 1));
+						invArmor.setWeapon(getStackInSlot(i).copy());
 						getInventory().setStackInSlot(i, null);
 					}
 				}
 				else if(!invArmor.getWeapon().getItem().equals(Items.sword)){
 					if(getInventory().hasStack(new ItemStack(Items.sword,1))){
 						int i = getSlotForStack(new ItemStack(Items.sword, 1));
-						ItemStack heldTool = invArmor.getWeapon();
-						ItemStack newTool = getStackInSlot(i);
+						ItemStack heldTool = invArmor.getWeapon().copy();
+						ItemStack newTool = getStackInSlot(i).copy();
 
 						invArmor.setWeapon(newTool);
 						setStackInSlot(i, null);
@@ -435,15 +501,15 @@ public class Player extends EntityLiving implements IInventory{
 			if(invArmor.getWeapon() == null){
 				if(getInventory().hasStack(new ItemStack(Items.sword,1))){
 					int i = getSlotForStack(new ItemStack(Items.sword, 1));
-					invArmor.setWeapon(new ItemStack(Items.sword, 1));
+					invArmor.setWeapon(getStackInSlot(i).copy());
 					getInventory().setStackInSlot(i, null);
 				}
 			}
 			else if(!invArmor.getWeapon().getItem().equals(Items.sword)){
 				if(getInventory().hasStack(new ItemStack(Items.sword,1))){
 					int i = getSlotForStack(new ItemStack(Items.sword, 1));
-					ItemStack heldTool = invArmor.getWeapon();
-					ItemStack newTool = getStackInSlot(i);
+					ItemStack heldTool = invArmor.getWeapon().copy();
+					ItemStack newTool = getStackInSlot(i).copy();
 
 					invArmor.setWeapon(newTool);
 					setStackInSlot(i, null);
@@ -457,7 +523,7 @@ public class Player extends EntityLiving implements IInventory{
 		attacking = true;
 	}
 
-	/**return an array of images that conseales the body parts*/
+	/**return an array of images that conceals the body parts*/
 	private BufferedImage[] getBodyPart(int i){
 		return playerSheet.get(i);
 	}
@@ -599,22 +665,27 @@ public class Player extends EntityLiving implements IInventory{
 			Loading.gotoPreviousLevel(getWorld().gsm);
 		}
 
+		if(tileMap.getBlockID(currCol, currRow) == 10 || tileMap.getBlockID(currCol, currRow) == 9){
+			inWater = true;
+		}else
+			inWater = false;
+
 		super.checkTileMapCollision();
 	}
 
 	public int getAttackDamage(){
 		return 1;
 	}
-	
+
 	@Override
 	public void onEntityHit(Player p, MapObject mo) {
 
 		if(mo instanceof EntityEnemy){
-			EntityEnemy ee = (EntityEnemy)mo;
+			//			EntityEnemy ee = (EntityEnemy)mo;
 			//playerhealth -= ee.getAttackDamage();
 			//TODO do particles
 		}
-	
+
 	}
 
 	/*======================INVENTORY====================*/
@@ -735,7 +806,7 @@ public class Player extends EntityLiving implements IInventory{
 		super.writeToSave(data);
 
 		DataList list = new DataList();
-		for(int slot = 0; slot < getMaxSlots(); slot++){
+		for(int slot = 0; slot < inventory.length; slot++){
 			ItemStack stack = getStackInSlot(slot);
 			if(stack != null){
 				DataTag tag = new DataTag();
@@ -747,7 +818,7 @@ public class Player extends EntityLiving implements IInventory{
 		data.writeList("items", list);
 
 		DataList armor = new DataList();
-		for(int slot = 0; slot < invArmor.getMaxSlots(); slot++){
+		for(int slot = 0; slot < this.armorItems.length; slot++){
 			ItemStack stack = invArmor.getStackInSlot(slot);
 			if(stack != null){
 				DataTag tag = new DataTag();
@@ -920,5 +991,19 @@ public class Player extends EntityLiving implements IInventory{
 	public int getRadius(){
 		//if player has torch, get light strenght from torch
 		return 200;
+	}
+
+	/**
+	 * Returns list with blocks the player is currently colliding with
+	 */
+	public List<MapObject> getCollidingMapObjects(){
+		return collidingEntities;
+	}
+
+	/**
+	 *Adds a block to the list of blocks the player is colliding with 
+	 */
+	public void setCollidingMapObjects(MapObject obj){
+		collidingEntities.add(obj);
 	}
 }

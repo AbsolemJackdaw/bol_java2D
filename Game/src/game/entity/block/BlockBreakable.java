@@ -98,10 +98,10 @@ public class BlockBreakable extends Block{
 		ItemStack wep = world.getPlayer().invArmor.getWeapon();
 		ItemTool tool = null;
 
-		if(wep != null)
+		if(wep != null && wep.getItem() instanceof ItemTool)
 			tool = ((ItemTool)wep.getItem());
 
-		if(wep != null && effectiveTool == ((ItemTool)wep.getItem()).getEffectiveness())
+		if(tool != null && effectiveTool == tool.getEffectiveness())
 			wepDmg = tool.getEffectiveDamage();
 
 		switch (getType()) {
@@ -116,7 +116,8 @@ public class BlockBreakable extends Block{
 		}
 
 		if(tool == null){
-			health -= world.getPlayer().getAttackDamage();
+			if(!needsToolToMine())
+				health -= world.getPlayer().getAttackDamage();
 		}else{
 			if(needsToolToMine()){//if this block needs a tool, break only when tool is held
 				if(effectiveTool == tool.getEffectiveness())
@@ -126,8 +127,7 @@ public class BlockBreakable extends Block{
 					health -= world.getPlayer().getAttackDamage() + wepDmg;
 				else
 					health -= world.getPlayer().getAttackDamage() + (wepDmg/2);//if bonus tool is net yield, use half of the current weapons dmg as bonus
-			
-			wep.damageStack(1);
+
 		}
 
 		if(health <= 0)
@@ -137,9 +137,13 @@ public class BlockBreakable extends Block{
 
 	protected void mine(Player p){
 		if(getDrop() != null){
-			if(p.getInventory().setStackInNextAvailableSlot(getDrop()))
+			if(p.getInventory().setStackInNextAvailableSlot(getDrop())){
 				remove = true;
-			else {
+				
+				if(p.invArmor.getWeapon() != null){
+					p.invArmor.getWeapon().damageStack(1);
+				}
+			}else {
 				remove = false;
 				health = defaultHealth;
 			}
