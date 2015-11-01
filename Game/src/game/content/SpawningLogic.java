@@ -15,9 +15,7 @@ public class SpawningLogic {
 		// check for air block
 		// spawn creature
 
-		int nightfall = (world.GameTimeTotalCycle / 3) * 2;
-
-		if (world.getGameTime() == nightfall || forceGeneration) {
+		if (world.gametime.getCurrentTime() == world.gametime.getDawn() || forceGeneration) {
 			Random rand = new Random();
 			// number of entities
 			int r = rand.nextInt(9) + 2; // min 2, max 10

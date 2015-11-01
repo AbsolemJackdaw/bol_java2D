@@ -1,6 +1,7 @@
 package game.util;
 
-import game.content.Images;
+import engine.window.GamePanel;
+import game.Loading;
 import game.entity.block.Block;
 import game.entity.inventory.IInventory;
 import game.item.ItemStack;
@@ -12,15 +13,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
-
-import base.main.GamePanel;
 
 public class Util {
 
@@ -148,7 +143,7 @@ public class Util {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-		double width = Images.instance.stalactites[0].getWidth();
+		double width = Loading.stalactites[0].getWidth();
 		double max = screenSize.getWidth() / width;
 
 		BufferedImage img = new BufferedImage(GamePanel.WIDTH, GamePanel.HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -158,12 +153,12 @@ public class Util {
 		g.setColor(Color.red);
 		
 		for(int i = 0; i < max; i++){
-			BufferedImage theImg = Images.instance.stalactites[new Random().nextInt(Images.instance.stalactites.length)];
+			BufferedImage theImg = Loading.stalactites[new Random().nextInt(Loading.stalactites.length)];
 			g.drawImage(theImg, (int) (width*i), 0, null);
 		}
 
 		for(int i = 0; i < max; i++){
-			BufferedImage theImg = Images.instance.stalactites[new Random().nextInt(Images.instance.stalactites.length)];
+			BufferedImage theImg = Loading.stalactites[new Random().nextInt(Loading.stalactites.length)];
 			g.drawImage(theImg, (int) (width*i), GamePanel.HEIGHT, theImg.getWidth(), -theImg.getHeight(),   null);
 		}
 

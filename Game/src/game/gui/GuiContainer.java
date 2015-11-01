@@ -1,5 +1,6 @@
 package game.gui;
 
+import engine.keyhandlers.KeyHandler;
 import game.World;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
@@ -15,7 +16,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import base.main.keyhandler.KeyHandler;
 
 public class GuiContainer extends Gui implements Container{
 

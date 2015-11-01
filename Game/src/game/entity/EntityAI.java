@@ -33,11 +33,11 @@ public class EntityAI {
 		}
 
 		// turn around when arrow blocks are hit
-		if( el.tileMap.getBlockID(el.currCol,el.currRow) == 7){
+		if( el.tileMap.getBlockID(el.currentRow,el.currentCollumn) == 7){
 			el.left = false; el.right = true;
 		}
 
-		if(el.tileMap.getBlockID(el.currCol, el.currRow) == 6){
+		if(el.tileMap.getBlockID(el.currentRow, el.currentCollumn) == 6){
 			el.left = true; el.right = false;
 		}
 

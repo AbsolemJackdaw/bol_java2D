@@ -1,6 +1,7 @@
 package game.gui;
 
-import game.content.Images;
+import engine.image.Images;
+import engine.keyhandlers.KeyHandler;
 import game.entity.block.BlockLight;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
@@ -10,13 +11,11 @@ import game.util.Util;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import base.main.GamePanel;
-import base.main.keyhandler.KeyHandler;
 
 public class GuiFire extends GuiContainer {
 
-	BlockLight fire;
-	BufferedImage img = Images.loadImage("/gui/camp_fire.png");
+	private BlockLight fire;
+	private BufferedImage img = Images.loadImage("/gui/camp_fire.png");
 
 	public GuiFire(IInventory inv, Player p) {
 		super(inv, p);
@@ -31,26 +30,26 @@ public class GuiFire extends GuiContainer {
 	@Override
 	public void draw(Graphics2D g) {
 
-		g.drawImage(img.getSubimage(0, 0, 100, 108), GamePanel.WIDTH/2 - 150/2, GamePanel.HEIGHT/2 - 75/2 ,null);
+		g.drawImage(img.getSubimage(0, 0, 100, 108), centerX - 50, centerY - 54 ,null);
 
 		int time = fire.timer/60;
 		int minutes = time/60;
 		int seconds = time%60;
 		String sec = seconds < 10 ? "0"+seconds : ""+seconds;
 
-		g.drawString(minutes+":"+sec, centerX +1, centerY-25);
+		g.drawString(minutes+":"+sec, centerX +26, centerY- 43);
 
 		if(fire != null)
 			if(fire.isLit())
-				g.drawImage(img.getSubimage(100, 0, 50, 64), centerX - 71, centerY - 32 ,null);
+				g.drawImage(img.getSubimage(100, 0, 50, 64), centerX - 46, centerY - 49 ,null);
 
-		drawPlayerExtendedContainer(g, 0, 88, 22, 96, 75, -69, img);
-		drawPlayerInventoryItems(g, 73, 35);
+		drawPlayerExtendedContainer(g, 0, 88, 22, 96, 50, -52, img);
+		drawPlayerInventoryItems(g, 48, 18);
 
 		ItemStack i = secondairyInventory.getStackInSlot(0);
 		if(i != null){
-			int x = centerX - 48;
-			int y = centerY - 5;
+			int x = centerX - 22;
+			int y = centerY - 22;
 			i.getItem().draw(g, x, y, i);
 		}
 		super.draw(g);
@@ -59,22 +58,17 @@ public class GuiFire extends GuiContainer {
 
 	@Override
 	public int getFirstSlotLocationX() {
-		return isNotPlayerInventory() ? centerX-48  :centerX - 2 - (72);
+		return isNotPlayerInventory() ? centerX - 23 :centerX - 49;
 	}
 
 	@Override
 	public int getFirstSlotLocationY() {
-		return isNotPlayerInventory() ? centerY - 6: centerY + 34;
-	}
-
-	@Override
-	public boolean pausesGame() {
-		return true;
+		return isNotPlayerInventory() ? centerY - 23: centerY + 17;
 	}
 
 	@Override
 	public int getSlotSpacingX() {
-		return isNotPlayerInventory() ? 50 : 18;
+		return isNotPlayerInventory() ? 49 : 18;
 	}
 
 	@Override
@@ -147,6 +141,6 @@ public class GuiFire extends GuiContainer {
 
 	@Override
 	public int[] getToolTipWindowPosition() {
-		return new int[]{275,183};
+		return new int[]{centerX + 43, centerY + 15};
 	}
 }

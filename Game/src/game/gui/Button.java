@@ -1,6 +1,6 @@
 package game.gui;
 
-import game.content.Images;
+import engine.image.Images;
 import game.item.Items;
 
 import java.awt.Graphics2D;

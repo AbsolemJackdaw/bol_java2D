@@ -1,11 +1,11 @@
 package game.entity;
 
+import engine.map.TileMap;
 import game.World;
 import game.entity.living.EntityBat;
 import game.entity.living.EntityLiving;
 import game.entity.living.EntityPig;
 import game.entity.living.environement.EntityDeathAnim;
-import base.tilemap.TileMap;
 
 public class Entity {
 

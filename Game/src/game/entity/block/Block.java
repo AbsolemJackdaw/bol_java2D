@@ -1,7 +1,8 @@
 package game.entity.block;
 
-import static base.main.keyhandler.KeyHandler.SPACE;
-import static base.main.keyhandler.KeyHandler.getKeyName;
+import static engine.keyhandlers.KeyHandler.SPACE;
+import static engine.keyhandlers.KeyHandler.getKeyName;
+import engine.map.TileMap;
 import game.World;
 import game.entity.MapObject;
 import game.item.ItemStack;
@@ -11,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import base.tilemap.TileMap;
 
 public class Block extends MapObject{
 
@@ -73,8 +73,8 @@ public class Block extends MapObject{
 					Block b = (Block)obj;
 
 					if(b != this){
-						if(this.currCol == b.currCol){
-							if(this.currRow+1 == b.currRow){
+						if(this.currentRow == b.currentRow){
+							if(this.currentCollumn+1 == b.currentCollumn){
 								if(this.yScreen+32 >= b.yScreen && b.isStackable()){
 									falling = false;
 									dy = 0;

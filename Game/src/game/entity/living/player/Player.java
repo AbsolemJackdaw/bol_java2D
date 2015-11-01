@@ -1,11 +1,14 @@
 
 package game.entity.living.player;
 
+import engine.image.Images;
+import engine.keyhandlers.KeyHandler;
+import engine.keyhandlers.XboxController;
+import engine.map.TileMap;
+import engine.save.DataList;
+import engine.save.DataTag;
 import game.Loading;
 import game.World;
-import game.content.Images;
-import game.content.save.DataList;
-import game.content.save.DataTag;
 import game.entity.Animation;
 import game.entity.MapObject;
 import game.entity.block.BlockBreakable;
@@ -29,9 +32,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import base.main.keyhandler.KeyHandler;
-import base.main.keyhandler.XboxController;
-import base.tilemap.TileMap;
 
 public class Player extends EntityLiving implements IInventory{
 
@@ -92,8 +92,6 @@ public class Player extends EntityLiving implements IInventory{
 	// sample : 2,5,8,4 (2 for idle 0, 5 for walking 1, etc.
 	//public static final int[] numFrames = {20, 10, 1, 1, 3 };
 
-	private List<MapObject> collidingEntities = new ArrayList<MapObject>();
-
 	public static final int[] playerSprites = {
 		/*body (general)*/1,
 		/*idle*/1,1,8,
@@ -118,18 +116,17 @@ public class Player extends EntityLiving implements IInventory{
 	int weaponRotation = 0;
 
 	private ItemStack[] inventory = new ItemStack[30];
+	
+	/**Where 0 is Helmet, 1 is Chest, 2 is Extra and 3 is Weapon*/
 	private ItemStack[] armorItems = new ItemStack[4];
-	//ARMOR INFO
-	//0 helm
-	//1 chest
-	//2 extra
-	//3 weapon
 
 	public ArmorInventory invArmor = new ArmorInventory();
 
 	public boolean isCollidingWithBlock;
 
 	private boolean inWater;
+
+	private List<MapObject> collidingEntities = new ArrayList<MapObject>();
 
 	public Player(TileMap tm, World world) {
 		super(tm, world, "player");
@@ -140,10 +137,10 @@ public class Player extends EntityLiving implements IInventory{
 		entitySizeX = 20;
 		entitySizeY = 30;
 
-		moveSpeed = 0.5; // inital walking speed. you speed up as you walk
-		maxSpeed = 3; // change to jump farther and walk faster
+		moveSpeed = 0.5;
+		maxSpeed = 3; 
 		stopSpeed = 0.4;
-		fallSpeed = 0.15; // affects falling and jumping
+		fallSpeed = 0.15;
 		maxFallSpeed = 4.0;
 		jumpStart = -4.8;
 		stopJumpSpeed = 0.3;
@@ -273,7 +270,7 @@ public class Player extends EntityLiving implements IInventory{
 					dy = -maxSpeed/2;
 				
 				//TODO make a possible better check ? 
-				if(world.tileMap.getBlockID(currRow+1, currCol) > 20 || world.tileMap.getBlockID(currRow-1, currCol) > 20){
+				if(world.tileMap.getBlockID(currentCollumn+1, currentRow) > 20 || world.tileMap.getBlockID(currentCollumn-1, currentRow) > 20){
 					dy -= moveSpeed;
 					if (dy < -maxSpeed)
 						dy = -maxSpeed;
@@ -657,15 +654,15 @@ public class Player extends EntityLiving implements IInventory{
 	@Override
 	public void checkTileMapCollision() {
 
-		if(tileMap.getBlockID(currCol, currRow) == 6){
+		if(tileMap.getBlockID(currentRow, currentCollumn) == 6){
 			Loading.gotoNextLevel(getWorld().gsm);
 		}
 
-		if(tileMap.getBlockID(currCol, currRow) == 7){
+		if(tileMap.getBlockID(currentRow, currentCollumn) == 7){
 			Loading.gotoPreviousLevel(getWorld().gsm);
 		}
 
-		if(tileMap.getBlockID(currCol, currRow) == 10 || tileMap.getBlockID(currCol, currRow) == 9){
+		if(tileMap.getBlockID(currentRow, currentCollumn) == 10 || tileMap.getBlockID(currentRow, currentCollumn) == 9){
 			inWater = true;
 		}else
 			inWater = false;

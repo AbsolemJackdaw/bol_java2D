@@ -1,11 +1,11 @@
 package game.item;
 
+import engine.map.TileMap;
 import game.World;
 import game.entity.living.player.Player;
 
 import java.util.List;
 
-import base.tilemap.TileMap;
 
 public class ItemTool extends Item {
 

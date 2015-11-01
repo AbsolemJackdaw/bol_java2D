@@ -1,12 +1,11 @@
-package base.tilemap;
+package engine.imaging;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import base.main.GamePanel;
-
+import engine.window.GamePanel;
 
 
 public class Background {
@@ -31,9 +30,9 @@ public class Background {
 	}
 
 	/**
-	 * @params s path to file
-	 * @params ms movescale
-	 * @params isStatic wether the image will be static, or move around with the player
+	 * @param s : path to image to use as background
+	 * @param ms : move scale
+	 * @param isStatic : whether the image will be static, or move around with the player
 	 * */
 	public Background(String s, double ms, boolean isStatic, int scrollSpeed) {
 
@@ -43,6 +42,20 @@ public class Background {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
+		this.isStatic = isStatic;
+		speed = scrollSpeed;
+	}
+
+	/**
+	 * @param img : image to draw as background
+	 * @param ms : move scale
+	 * @param isStatic : whether the image will be static, or move around with the player
+	 * */
+	public Background(BufferedImage img, double ms, boolean isStatic, int scrollSpeed) {
+
+		image = img;
+		moveScale = ms;
+		
 		this.isStatic = isStatic;
 		speed = scrollSpeed;
 	}
@@ -63,13 +76,13 @@ public class Background {
 
 	}
 
-	/* used to move around the back ground */
+	/** used to move around the back ground */
 	public void setVector(double dx, double dy) {
 		this.dx = dx;
 		this.dy = dy;
 	}
 
-	/* used to move around the back ground */
+	/** used to move around the back ground */
 	public void update() {
 		x += dx;
 		y += dy;

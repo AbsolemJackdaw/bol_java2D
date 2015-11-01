@@ -1,11 +1,11 @@
 package game.item;
 
+import engine.map.TileMap;
+import engine.save.DataTag;
 import game.World;
-import game.content.save.DataTag;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.GuiLantern;
-import base.tilemap.TileMap;
 
 public class ItemLantern extends Item implements IInventory {
 

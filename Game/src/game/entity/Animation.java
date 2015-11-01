@@ -1,6 +1,6 @@
 package game.entity;
 
-import game.content.Images;
+import engine.image.Images;
 
 import java.awt.image.BufferedImage;
 
@@ -16,11 +16,17 @@ public class Animation {
 	
 	public static final int NONE = -1;
 
+	private BufferedImage[] defaultAnim = Images.loadMultiImage("/images/default.png", 32, 0, 5);
+
 	public Animation() {
 		playedOnce = false;
 		//default animation image so no null pointer occurs when first initializing an animation
-		setFrames(Images.instance.defaultAnim);
+		setFrames(defaultAnim);
 		setDelay(100);
+	}
+	
+	public BufferedImage[] getDefaultAnimation(){
+		return defaultAnim;
 	}
 	
 	public boolean hasFrames(){

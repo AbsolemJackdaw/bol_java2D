@@ -1,6 +1,7 @@
 package game.gui;
 
-import game.content.Images;
+import engine.image.Images;
+import engine.keyhandlers.KeyHandler;
 import game.entity.block.BlockOven;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
@@ -9,13 +10,11 @@ import game.item.ItemStack;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import base.main.GamePanel;
-import base.main.keyhandler.KeyHandler;
 
 public class GuiOven extends GuiContainer {
 
-	BlockOven oven;
-	BufferedImage gui = Images.loadImage("/gui/oven.png");
+	private BlockOven oven;
+	private BufferedImage gui = Images.loadImage("/gui/oven.png");
 
 	public GuiOven(IInventory blockInv, Player p) {
 		super(blockInv, p);
@@ -28,7 +27,7 @@ public class GuiOven extends GuiContainer {
 	@Override
 	public void draw(Graphics2D g) {
 
-		g.drawImage(gui.getSubimage(0, 0, 125, 90), GamePanel.WIDTH/2 - 150/2, GamePanel.HEIGHT/2 - 75/2 ,null);
+		g.drawImage(gui.getSubimage(0, 0, 125, 90), centerX - 150/2, centerY - 75/2 ,null);
 
 		drawPlayerExtendedContainer(g, 30, 69, 19, 92, 45, -50, gui);
 		drawPlayerInventoryItems(g, 43, 15);
@@ -66,11 +65,6 @@ public class GuiOven extends GuiContainer {
 	@Override
 	public int getFirstSlotLocationY() {
 		return isNotPlayerInventory() ? centerY - 19 : centerY + 14;
-	}
-
-	@Override
-	public boolean pausesGame() {
-		return true;
 	}
 
 	@Override
@@ -150,6 +144,6 @@ public class GuiOven extends GuiContainer {
 
 	@Override
 	public int[] getToolTipWindowPosition() {
-		return new int[]{305,114};
+		return new int[]{centerX + 48, centerY + 13};
 	}
 }

@@ -1,32 +1,31 @@
 package game;
 
-import game.content.Images;
-import game.content.save.Save;
+import static game.util.Constants.COLOR_GENERAL;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
-import base.main.GameState;
-import base.main.GameStateManager;
-import base.main.keyhandler.KeyHandler;
-import base.tilemap.Background;
+import engine.gamestate.GameState;
+import engine.gamestate.GameStateManagerBase;
+import engine.imaging.Background;
+import engine.keyhandlers.KeyHandler;
+import game.content.save.Save;
 
 public class Help extends GameState{
 
 	private Background bg;
 	private Font font;
-	private Color color = new Color(250, 231, 217);
 
 	private int[] selection = new int[2]; 
 
-	public Help(GameStateManager manager) {
+	public Help(GameStateManagerBase manager) {
 
 		Save.readKeyBinds();
 
 		gsm = manager;
-		bg = Images.instance.menuBackGround;
+		bg = new Background("/background/menu.png", 2, false, 5);
 		font = new Font("Constantia", Font.PLAIN, 18);
 	}
 
@@ -48,7 +47,7 @@ public class Help extends GameState{
 		g.drawString("(Attack/Validation, Validation, Inventory, Interaction)",10,90);
 		g.drawString("(Console, BB, QuickSave, Destroy Item)",10,150);
 
-		g.setColor(color);
+		g.setColor(COLOR_GENERAL);
 
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.UP]), 40, 55);
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.LEFT]), 90, 55);
@@ -64,7 +63,7 @@ public class Help extends GameState{
 		g.drawString("Ctrl +" , 40, 175);
 		g.drawString("Shift", 40, 190);
 
-		g.setColor(color);
+		g.setColor(COLOR_GENERAL);
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.B]), 90, 175);
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.QUICKSAVE]), 140, 175);
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.JUNK]), 190, 175);
@@ -75,8 +74,6 @@ public class Help extends GameState{
 			g.drawRect(37 + selection[0]*50,41 + selection[1]*60 ,48,30);
 		else
 			g.drawRect(37 + selection[0]*50,41 + selection[1]*60 ,48,16);
-
-		font = new Font("Constantia", Font.PLAIN, 18);
 
 	}
 
@@ -111,7 +108,6 @@ public class Help extends GameState{
 			}
 			else{
 				int i = (selection[1]*4) + selection[0];
-				System.out.println(i);
 				if(i != 8)
 					KeyHandler.registeredKeys[i] = KeyHandler.keyCode;
 			}

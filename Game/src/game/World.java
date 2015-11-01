@@ -1,10 +1,16 @@
 package game;
 
-import static base.main.GamePanel.HEIGHT;
-import static base.main.GamePanel.WIDTH;
+import static engine.window.GamePanel.HEIGHT;
+import static engine.window.GamePanel.WIDTH;
+import engine.gamestate.GameState;
+import engine.gamestate.GameStateManagerBase;
+import engine.imaging.Background;
+import engine.keyhandlers.KeyHandler;
+import engine.keyhandlers.XboxController;
+import engine.map.TileMap;
+import engine.save.DataList;
+import engine.save.DataTag;
 import game.content.SpawningLogic;
-import game.content.save.DataList;
-import game.content.save.DataTag;
 import game.content.save.Save;
 import game.entity.Entity;
 import game.entity.MapObject;
@@ -22,6 +28,8 @@ import game.item.Item;
 import game.item.ItemLantern;
 import game.item.ItemStack;
 import game.item.Items;
+import game.util.Constants;
+import game.util.Time;
 import game.util.Util;
 
 import java.awt.AlphaComposite;
@@ -32,12 +40,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import base.main.GameState;
-import base.main.GameStateManager;
-import base.main.keyhandler.KeyHandler;
-import base.main.keyhandler.XboxController;
-import base.tilemap.Background;
-import base.tilemap.TileMap;
 
 public class World extends GameState{
 
@@ -45,25 +47,24 @@ public class World extends GameState{
 
 	public TileMap tileMap;
 
-	public boolean showBB;
+	public boolean showBoundingBoxes;
 
 	protected ArrayList<Background> backGrounds;
 
 	private String worldPath = "/maps/cave_rand_1.map";
 
+	/**ArrayList filled with every entity in this world instance*/
 	public ArrayList<MapObject> listWithMapObjects ;
 
 	public boolean isDisplayingGui;
 	public Gui guiDisplaying;
 
-	public int GameTime = 0;
-	public int GameTimeTotalCycle = 18000*3;
-
+	public Time gametime = new Time(18000, 2, 1);
+	
 	public float nightAlhpa = 0;
 
-	private boolean messageSaved;
-	private Font font = new Font("Constantia", Font.PLAIN, 36);
-	private float messageAlpha = 1.0F;
+	private boolean displaySaveMessage;
+	private float displayMessage = 1.0F;
 
 	private Font defaultfont = new Font("Century Gothic", Font.PLAIN, 10);
 
@@ -71,7 +72,7 @@ public class World extends GameState{
 
 	public BufferedImage bg = null;
 	
-	public World(GameStateManager gsm) {
+	public World(GameStateManagerBase gsm) {
 		this.gsm = gsm;
 
 		tileMap = new TileMap(32);
@@ -240,31 +241,27 @@ public class World extends GameState{
 			g.drawString(consolePrint, 25,25);
 		}
 
-		if(messageSaved)
+		if(displaySaveMessage)
 		{	
 			//set the opacity
-			g.setFont(font);
-			g.setColor(new Color(1f, 1f, 1f, messageAlpha));
+			g.setFont(Constants.FONT_HEADER);
+			g.setColor(new Color(1f, 1f, 1f, displayMessage));
 			g.drawString("Successfully saved.", WIDTH / 2 - (WIDTH / 4), HEIGHT / 2);
-			messageAlpha -= 0.01f;
+			displayMessage -= 0.01f;
 
 			//increase the opacity and repaint
-			if (messageAlpha <= 0.0F)
-				messageAlpha = 0.0F;
+			if (displayMessage <= 0.0F)
+				displayMessage = 0.0F;
 
-			if(messageAlpha == 0.0F){
-				messageSaved = false;
-				messageAlpha = 1.0f;
+			if(displayMessage == 0.0F){
+				displaySaveMessage = false;
+				displayMessage = 1.0f;
 			}
 		}
 	}
 
 	public boolean isNightTime(){
-		return GameTime > 36000;
-	}
-
-	public int getGameTime(){
-		return GameTime;
+		return gametime.getCurrentTime() > gametime.getDawn();
 	}
 
 	@Override
@@ -276,14 +273,10 @@ public class World extends GameState{
 
 		handleInput();
 
-		tileMap.setPosition((WIDTH / 2) - player.getScreenXpos(),(HEIGHT / 2) - player.getScreenYpos());
+		tileMap.setPosition((WIDTH / 2) - player.getScreenXpos(), (HEIGHT / 2) - player.getScreenYpos());
 
-		if((guiDisplaying instanceof GuiHud)){
-			GameTime++;
-
-			if(GameTime >= 54000){
-				GameTime = 0;
-			}
+		if(guiDisplaying instanceof GuiHud){
+			gametime.updateTime();
 
 			if(hasCreaturesSpawned)
 				if(!isNightTime())
@@ -326,8 +319,6 @@ public class World extends GameState{
 				}
 			}
 		}
-
-		//				System.out.println(player.getCollidingBlocks());
 	}
 
 	private void loadWorld() {
@@ -347,31 +338,6 @@ public class World extends GameState{
 
 	public void handleInput() {
 
-		if(KeyHandler.isPressed(KeyHandler.CTRL))
-		{
-
-
-			//			float x = WIDTH * SCALE;
-			//			float y = HEIGHT * SCALE;
-			//
-			//			SCALEDX = (int)x;
-			//			SCALEDY = (int)y;
-			//
-			//			Container c = this.gsm.jframeInstance.getTopLevelAncestor();
-			//			c.setPreferredSize(new Dimension(SCALEDX, SCALEDY + 30));
-			//			if(c instanceof JFrame){
-			//				((JFrame)c).pack();
-			//				((JFrame)c).setExtendedState(JFrame.MAXIMIZED_BOTH); 
-
-			//				((JFrame)c).setVisible(true);
-			//				((JFrame)c).setLocationRelativeTo(null);
-			//			}
-
-			//			this.gsm.jframeInstance.setPreferredSize(new Dimension(500,300));
-			//			this.gsm.jframeInstance.setFocusable(true);
-			//			this.gsm.jframeInstance.requestFocus();
-		}
-
 		if(isConsoleDisplayed){
 			consoleInput();
 			return;
@@ -381,7 +347,7 @@ public class World extends GameState{
 			Save.writePlayerData(getPlayer());
 			Save.writeWorld(this, Loading.index);
 			Save.writeRandomParts();
-			messageSaved = true;
+			displaySaveMessage = true;
 		}
 
 		if(KeyHandler.isPressed(KeyHandler.SHIFT) && KeyHandler.prevKeyState[KeyHandler.CTRL]){
@@ -417,9 +383,8 @@ public class World extends GameState{
 		player.handleInput();
 
 		if (KeyHandler.isPressed(KeyHandler.B)){
-			showBB = showBB ? false :true;
+			showBoundingBoxes = showBoundingBoxes ? false :true;
 		}
-
 	}
 
 	public Player getPlayer(){
@@ -430,7 +395,7 @@ public class World extends GameState{
 
 		tag.writeString("map", worldPath);
 
-		tag.writeInt("gametime", GameTime);
+		tag.writeInt("gametime", gametime.getCurrentTime());
 		tag.writeFloat("nightshade", new Float(nightAlhpa));
 
 		tag.writeBoolean("creatureFlag", hasCreaturesSpawned);
@@ -447,7 +412,7 @@ public class World extends GameState{
 	public void readFromSave(DataTag tag){
 
 		reloadMap(tag.readString("map"));
-		GameTime = tag.readInt("gametime");
+		gametime.writeCurrentGameTime(tag.readInt("gametime"));
 		nightAlhpa = tag.readFloat("nightshade");
 
 		hasCreaturesSpawned = tag.readBoolean("creatureFlag");
@@ -499,6 +464,7 @@ public class World extends GameState{
 		if(obj.getScreenXpos() >= xDistanceMin && obj.getScreenXpos() < xDistanceMax)
 			if(obj.getScreenYpos() >= yDistanceMin && obj.getScreenYpos() < yDistanceMax)
 				return false;
+		
 		return true;
 	}
 
@@ -521,10 +487,10 @@ public class World extends GameState{
 
 	private void consoleCommands(String cmd){
 		if(cmd.equals("night"))
-			GameTime = 36000;
+			gametime.writeCurrentGameTime(gametime.getDawn());
 
 		else if(cmd.equals("day"))
-			GameTime = 0;
+			gametime.writeCurrentGameTime(0);
 
 		else if(cmd.startsWith("need")){
 			String [] split = cmd.split("\\s+") ;
@@ -559,15 +525,15 @@ public class World extends GameState{
 			if(split.length == 2){
 				try {
 					int timeSet = Integer.valueOf(split[1]);
-					GameTime = timeSet;
+					gametime.writeCurrentGameTime(timeSet);
 				} catch (Exception e) {
-					//					e.printStackTrace();
 					System.out.println("[ERROR] " + split[1] + " is not a valid number !");
 				}
 			}else{
-				System.out.println("[INFO" + " current time = " + GameTime);
+				System.out.println("[INFO" + " current time = " + gametime.getCurrentTime());
 			}
 		}
+		
 		consolePrint = "";
 		isConsoleDisplayed = false;
 	}

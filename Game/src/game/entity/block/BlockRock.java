@@ -1,7 +1,8 @@
 package game.entity.block;
 
+import engine.image.Images;
+import engine.map.TileMap;
 import game.World;
-import game.content.Images;
 import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
@@ -9,7 +10,6 @@ import game.item.Items;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import base.tilemap.TileMap;
 
 public class BlockRock extends BlockBreakable{
 

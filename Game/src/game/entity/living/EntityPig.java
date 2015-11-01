@@ -1,7 +1,9 @@
 package game.entity.living;
 
+import engine.image.Images;
+import engine.map.TileMap;
+import engine.music.Music;
 import game.World;
-import game.content.Images;
 import game.entity.EntityAI;
 import game.entity.MapObject;
 import game.entity.living.player.Player;
@@ -11,8 +13,6 @@ import game.item.Items;
 
 import java.awt.Graphics2D;
 
-import base.main.music.Music;
-import base.tilemap.TileMap;
 
 public class EntityPig extends EntityLiving{
 

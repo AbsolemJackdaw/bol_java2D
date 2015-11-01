@@ -1,5 +1,8 @@
 package game.gui;
 
+import engine.keyhandlers.KeyHandler;
+import engine.window.GamePanel;
+import game.GameStateManager;
 import game.Loading;
 import game.World;
 import game.content.save.Save;
@@ -9,10 +12,6 @@ import game.util.Util;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-
-import base.main.GamePanel;
-import base.main.GameStateManager;
-import base.main.keyhandler.KeyHandler;
 
 public class GuiPause extends Gui {
 
@@ -116,10 +115,5 @@ public class GuiPause extends Gui {
 		Save.writePlayerData(player);
 		Save.writeRandomParts();
 		Save.writeWorld((World)world.gsm.getGameState(world.gsm.getCurrentState()), Loading.index);
-	}
-
-	@Override
-	public boolean pausesGame() {
-		return true;
 	}
 }

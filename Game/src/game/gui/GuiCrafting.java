@@ -1,7 +1,8 @@
 package game.gui;
 
+import engine.image.Images;
+import engine.keyhandlers.KeyHandler;
 import game.World;
-import game.content.Images;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.crafting.Crafting;
@@ -10,13 +11,12 @@ import game.util.Util;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import base.main.keyhandler.KeyHandler;
 
 public class GuiCrafting extends GuiContainer {
 
 	private boolean advanced;
 
-	private final int[] pos = new int[]{307, 169 };
+	private final int[] pos = new int[]{centerX + 50, centerY+18};
 
 	public GuiCrafting(World world, Player p, boolean advanced) {
 		super(world, p);
@@ -143,7 +143,6 @@ public class GuiCrafting extends GuiContainer {
 	
 	@Override
 	protected void drawToolTip(Graphics2D g) {
-		//super.drawToolTip(g);
 		if(Crafting.result(slot_index) != null){
 			ItemStack stack = Crafting.result(slot_index);
 			Util.drawToolTipWindow(g, getToolTipWindowPosition(), stack.getItem().getToolTip(stack));
@@ -153,7 +152,7 @@ public class GuiCrafting extends GuiContainer {
 	
 	@Override
 	public int[] getToolTipWindowPosition() {
-		return pos;
+		return pos ;
 	}
 
 }

@@ -1,10 +1,12 @@
-package base.main;
+package engine.gamestate;
 
 import java.awt.Graphics2D;
 
+
+
 public abstract class GameState {
 
-	public GameStateManager gsm;
+	public GameStateManagerBase gsm;
 
 	public abstract void draw(Graphics2D g);
 

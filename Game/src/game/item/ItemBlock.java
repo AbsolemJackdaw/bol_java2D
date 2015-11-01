@@ -1,11 +1,11 @@
 package game.item;
 
+import engine.map.TileMap;
 import game.World;
 import game.entity.MapObject;
 import game.entity.block.Blocks;
 import game.entity.living.player.Player;
 import game.util.Util;
-import base.tilemap.TileMap;
 
 public class ItemBlock extends Item{
 

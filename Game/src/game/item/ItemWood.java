@@ -1,6 +1,6 @@
 package game.item;
 
-import game.content.Images;
+import engine.image.Images;
 import game.entity.block.Blocks;
 
 import java.awt.image.BufferedImage;

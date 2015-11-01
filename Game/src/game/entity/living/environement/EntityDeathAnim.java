@@ -1,15 +1,15 @@
 package game.entity.living.environement;
 
+import engine.image.Images;
+import engine.map.TileMap;
+import engine.save.DataTag;
 import game.World;
-import game.content.Images;
-import game.content.save.DataTag;
 import game.entity.MapObject;
 import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 
 import java.awt.Graphics2D;
 
-import base.tilemap.TileMap;
 
 public class EntityDeathAnim extends EntityLiving{
 

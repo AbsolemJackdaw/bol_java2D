@@ -1,9 +1,9 @@
 package game.entity.living;
 
+import engine.map.TileMap;
+import engine.save.DataTag;
 import game.World;
-import game.content.save.DataTag;
 import game.entity.MapObject;
-import base.tilemap.TileMap;
 
 public class EntityLiving extends MapObject{
 

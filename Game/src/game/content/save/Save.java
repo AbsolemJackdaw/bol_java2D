@@ -1,20 +1,15 @@
 package game.content.save;
 
+import static engine.save.Save.*;
+
+import org.json.simple.JSONObject;
+
+import engine.keyhandlers.KeyHandler;
+import engine.save.DataTag;
 import game.Loading;
 import game.World;
 import game.entity.living.player.Player;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import base.main.keyhandler.KeyHandler;
 
 public class Save {
 	
@@ -90,42 +85,5 @@ public class Save {
 			KeyHandler.registeredKeys[i] = tag.readInt("key_"+i);
 		}
 		
-	}
-
-	/**returns an object that is a JsonObject. 
-	 * @params s String name for file*/
-	private static Object read(String s){
-
-		JSONParser parser = new JSONParser();
-
-		try {
-			Object obj = parser.parse(new FileReader("saves/"+s+".json"));
-			return obj;
-		} catch (FileNotFoundException e) {
-			System.out.println("[SAVING] Save file '" + s + "' not found.");
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	/**Writes a json file from the given DataTag
-	 * @params s String name for file*/
-	private static void write(String s, DataTag obj){
-		try {
-
-			File theDir = new File("saves/"+s+".json");
-			theDir.getParentFile().mkdirs();
-
-			FileWriter file = new FileWriter(theDir);
-			file.write(obj.toString());
-			file.flush();
-			file.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

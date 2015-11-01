@@ -1,8 +1,8 @@
 package game.entity.block;
 
+import engine.map.TileMap;
 import game.World;
 import game.entity.MapObject;
-import base.tilemap.TileMap;
 
 public class Blocks {
 

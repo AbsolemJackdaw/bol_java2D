@@ -1,6 +1,6 @@
 package game.item;
 
-import game.content.save.DataTag;
+import engine.save.DataTag;
 
 public class ItemStack
 {

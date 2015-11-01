@@ -1,6 +1,7 @@
-package base.tilemap;
+package engine.map;
 
 
+import engine.window.GamePanel;
 import game.entity.living.player.Player;
 
 import java.awt.Graphics2D;
@@ -11,7 +12,6 @@ import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 
-import base.main.GamePanel;
 
 
 public class TileMap {
@@ -49,16 +49,8 @@ public class TileMap {
 	private int numTilesAcross;
 	private Tile[][] tiles;
 
-	// drawing
-	//	private int rowOffset;
-	//	private int colOffset;
-	//	private final int numRowsToDraw;
-	//	private final int numColsToDraw;
-
 	public TileMap(int tileSize) {
 		this.tileSize = tileSize;
-		//		numRowsToDraw = (GamePanel.HEIGHT / tileSize) + 2;
-		//		numColsToDraw = (GamePanel.WIDTH / tileSize) + 2;
 		tween = 0.05;
 	}
 
@@ -258,10 +250,6 @@ public class TileMap {
 		this.y += (y - this.y) * tween;
 
 		fixBounds();
-
-		//		colOffset = (int) -this.x / tileSize;
-		//		rowOffset = (int) -this.y / tileSize;
-
 	}
 
 	public void setTween(double d) {

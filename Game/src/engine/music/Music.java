@@ -1,4 +1,4 @@
-package base.main.music;
+package engine.music;
 
 import java.util.HashMap;
 
@@ -30,38 +30,6 @@ public class Music {
 		clips = new HashMap<String, Clip>();
 		gap = 0;
 		
-		load("/sounds/hit_wood_1.mp3", "hit_wood_1");
-		load("/sounds/hit_wood_2.mp3", "hit_wood_2");
-		load("/sounds/hit_wood_3.mp3", "hit_wood_3");
-		load("/sounds/hit_wood_4.mp3", "hit_wood_4");
-		load("/sounds/hit_wood_5.mp3", "hit_wood_5");
-		load("/sounds/hit_wood_6.mp3", "hit_wood_6");
-
-		load("/sounds/hit_rock_1.mp3", "hit_rock_1");
-		load("/sounds/hit_rock_2.mp3", "hit_rock_2");
-		load("/sounds/hit_rock_3.mp3", "hit_rock_3");
-		load("/sounds/hit_rock_4.mp3", "hit_rock_4");
-		load("/sounds/hit_rock_5.mp3", "hit_rock_5");
-
-		load("/sounds/step_1.mp3", "step_1");
-		load("/sounds/step_2.mp3", "step_2");
-		load("/sounds/step_3.mp3", "step_3");
-		load("/sounds/step_4.mp3", "step_4");
-		load("/sounds/step_5.mp3", "step_5");
-		
-		load("/sounds/jump_1.mp3", "jump_1");
-		load("/sounds/jump_2.mp3", "jump_2");
-		load("/sounds/jump_3.mp3", "jump_3");
-		load("/sounds/jump_4.mp3", "jump_4");
-		load("/sounds/jump_5.mp3", "jump_5");
-
-		load("/sounds/pig_hurt_1.mp3", "hitpig_1");
-		load("/sounds/pig_hurt_2.mp3", "hitpig_2");
-		load("/sounds/pig_hurt_3.mp3", "hitpig_3");
-		load("/sounds/pig_hurt_4.mp3", "hitpig_4");
-		load("/sounds/pig_hurt_5.mp3", "hitpig_5");
-
-
 	}
 
 	public static void load(String s, String n) {

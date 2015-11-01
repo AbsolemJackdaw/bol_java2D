@@ -1,0 +1,13 @@
+XboxController detection when connected ? 
+ > solution, add a controls menu option to modify controls and switch to/from kyboard to controller
+     reload controller when chosen.
+     
+     Imply feature where holding spacebar loops attacking
+     
+particle FX
+
+player health system
+
+kao nemesis wanted to imply invisible blocks. a prototype for the invisible blocks type is already set in the Tile class
+
+make a config menu option to change drawing distance

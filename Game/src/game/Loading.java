@@ -1,7 +1,10 @@
 package game;
 
+import static engine.music.Music.load;
+import engine.gamestate.GameStateManagerBase;
+import engine.map.TileMap;
+import engine.save.DataTag;
 import game.content.SpawningLogic;
-import game.content.save.DataTag;
 import game.content.save.Save;
 import game.entity.Entity;
 import game.entity.block.BlockBreakable;
@@ -10,12 +13,13 @@ import game.entity.block.Blocks;
 import game.entity.living.EntityLiving;
 import game.util.Util;
 
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import base.main.GameStateManager;
-import base.tilemap.TileMap;
 
 public class Loading {
+
+	public static BufferedImage[] stalactites = new BufferedImage[5];
 
 	//both ints are saved in World
 	/**always increases. tracks the number of unlocked maps*/
@@ -37,7 +41,7 @@ public class Loading {
 		return s;
 	}
 
-	public static void gotoNextLevel(GameStateManager gsm){
+	public static void gotoNextLevel(GameStateManagerBase gsm){
 
 		//save world we are currently in
 		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
@@ -45,7 +49,7 @@ public class Loading {
 		Save.writePlayerData(currentWorld.getPlayer());
 
 		//get gametime to transfer to the new world and continue counting
-		int time = currentWorld.GameTime;
+		int time = currentWorld.gametime.getCurrentTime();
 		float nightShade = currentWorld.nightAlhpa;
 
 		//set a new world
@@ -56,7 +60,7 @@ public class Loading {
 		World newWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
 		newWorld.bg = Util.generateStalactiteBackGround();
-		
+
 		//if its a new map
 		if(index == maps){
 			String s = newMap();
@@ -67,9 +71,9 @@ public class Loading {
 			generateRandomOre(newWorld, Blocks.ROCK, 20);
 			populateEntities(newWorld, Entity.PIG, 10);
 			//set gametime to continue counting
-			newWorld.GameTime = time;
+			newWorld.gametime.writeCurrentGameTime(time);
 			newWorld.nightAlhpa = nightShade;
-			
+
 			if(newWorld.isNightTime()){
 				SpawningLogic.spawnNightCreatures(newWorld, true);
 			}
@@ -77,7 +81,7 @@ public class Loading {
 		}else{
 			newWorld.readFromSave(Save.getWorldData(index));
 			//set gametime to continue counting
-			newWorld.GameTime = time;
+			newWorld.gametime.writeCurrentGameTime(time);
 			newWorld.nightAlhpa = nightShade;
 		}
 
@@ -95,7 +99,7 @@ public class Loading {
 
 	}
 
-	public static void gotoPreviousLevel(GameStateManager gsm){
+	public static void gotoPreviousLevel(GameStateManagerBase gsm){
 
 		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
@@ -109,7 +113,7 @@ public class Loading {
 		Save.writePlayerData(currentWorld.getPlayer());
 
 		//get gametime to transfer to the new world and continue counting
-		int time = currentWorld.GameTime;
+		int time = currentWorld.gametime.getCurrentTime();
 		float nightShade = currentWorld.nightAlhpa;
 		//set a new world
 		gsm.setState(GameStateManager.GAME);
@@ -121,7 +125,7 @@ public class Loading {
 		newWorld.readFromSave(Save.getWorldData(index));
 
 		//set gametime to continue counting
-		newWorld.GameTime = time;
+		newWorld.gametime.writeCurrentGameTime(time);
 		newWorld.nightAlhpa = nightShade;
 
 		if(!newWorld.hasCreaturesSpawned){
@@ -141,7 +145,7 @@ public class Loading {
 		Save.writePlayerData(newWorld.getPlayer());
 	}
 
-	public static void startAtLastSavedLevel(GameStateManager gsm){
+	public static void startAtLastSavedLevel(GameStateManagerBase gsm){
 		World nw = (World)gsm.getGameState(gsm.getCurrentState());
 		try {
 			nw.readFromSave(Save.getWorldData(index));
@@ -222,5 +226,38 @@ public class Loading {
 	public static void readRandomParts(DataTag tag){
 		index = tag.readInt("worldIndex");
 		maps = tag.readInt("mapNumber");
+	}
+
+	public static void loadMusic(){
+		load("/sounds/hit_wood_1.mp3", "hit_wood_1");
+		load("/sounds/hit_wood_2.mp3", "hit_wood_2");
+		load("/sounds/hit_wood_3.mp3", "hit_wood_3");
+		load("/sounds/hit_wood_4.mp3", "hit_wood_4");
+		load("/sounds/hit_wood_5.mp3", "hit_wood_5");
+		load("/sounds/hit_wood_6.mp3", "hit_wood_6");
+
+		load("/sounds/hit_rock_1.mp3", "hit_rock_1");
+		load("/sounds/hit_rock_2.mp3", "hit_rock_2");
+		load("/sounds/hit_rock_3.mp3", "hit_rock_3");
+		load("/sounds/hit_rock_4.mp3", "hit_rock_4");
+		load("/sounds/hit_rock_5.mp3", "hit_rock_5");
+
+		load("/sounds/step_1.mp3", "step_1");
+		load("/sounds/step_2.mp3", "step_2");
+		load("/sounds/step_3.mp3", "step_3");
+		load("/sounds/step_4.mp3", "step_4");
+		load("/sounds/step_5.mp3", "step_5");
+
+		load("/sounds/jump_1.mp3", "jump_1");
+		load("/sounds/jump_2.mp3", "jump_2");
+		load("/sounds/jump_3.mp3", "jump_3");
+		load("/sounds/jump_4.mp3", "jump_4");
+		load("/sounds/jump_5.mp3", "jump_5");
+
+		load("/sounds/pig_hurt_1.mp3", "hitpig_1");
+		load("/sounds/pig_hurt_2.mp3", "hitpig_2");
+		load("/sounds/pig_hurt_3.mp3", "hitpig_3");
+		load("/sounds/pig_hurt_4.mp3", "hitpig_4");
+		load("/sounds/pig_hurt_5.mp3", "hitpig_5");
 	}
 }

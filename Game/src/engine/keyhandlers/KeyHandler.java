@@ -1,7 +1,8 @@
-package base.main.keyhandler;
+package engine.keyhandlers;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+
 
 public class KeyHandler {
 	public static final int NUM_KEYS = 32;
@@ -14,7 +15,7 @@ public class KeyHandler {
 	public static boolean keyState[] = new boolean[NUM_KEYS];
 	public static boolean prevKeyState[] = new boolean[NUM_KEYS];
 
-	private static ArrayList<String> typed = new ArrayList<>();
+	private static ArrayList<String> keysTyped = new ArrayList<>();
 
 	public static int[] registeredKeys = new int[]{
 		KeyEvent.VK_Z, //0
@@ -39,7 +40,7 @@ public class KeyHandler {
 		KeyEvent.VK_DOWN,
 		KeyEvent.VK_LEFT,
 		KeyEvent.VK_RIGHT,
-		
+
 		KeyEvent.VK_1,
 		KeyEvent.VK_2,
 		KeyEvent.VK_3,
@@ -95,7 +96,7 @@ public class KeyHandler {
 	public static int PLACE = 26;
 	public static int ESCAPE2 = 28;
 	//
-	
+
 	public static int ESCAPE = 27;
 	public static int SHIFT = 29;
 	public static int CTRL = 30;
@@ -111,12 +112,12 @@ public class KeyHandler {
 
 	public static String keyPressed(int i, String string){
 
-		if(typed.isEmpty())
+		if(keysTyped.isEmpty())
 			return string;
 
-		if(keyState[ANYKEY] && !prevKeyState[ANYKEY] || typed.size() > 0){
+		if(keyState[ANYKEY] && !prevKeyState[ANYKEY] || keysTyped.size() > 0){
 
-			String s = typed.get(0);
+			String s = keysTyped.get(0);
 
 			if(keyCode == KeyEvent.VK_8 && prevKeyState[SHIFT] || keyCode == KeyEvent.VK_MINUS && prevKeyState[SHIFT])
 				string+="_";
@@ -131,44 +132,52 @@ public class KeyHandler {
 				string+=" ";
 
 
-			typed.remove(0);
-			typed.trimToSize();
+			keysTyped.remove(0);
+			keysTyped.trimToSize();
 
 		}
 
 		return string.toLowerCase();
 	}
 
-	public static boolean isPressed(int i) {
-		return keyState[i] && !prevKeyState[i] ;
+	/**
+	 * If the key given is pressed.
+	 * ea : returns once, if key is held, it will not continue firing
+	 * @param keyID : Keyhandler's key id;
+	 */
+	public static boolean isPressed(int keyID) {
+		return keyState[keyID] && !prevKeyState[keyID] ;
 	}
 
-	public static boolean isReleased(int i) {
-		return !keyState[i] && prevKeyState[i];
+	/**
+	 * If the key has been released;
+	 * @param keyID : Keyhandler's key id;
+	 */
+	public static boolean isReleased(int keyID) {
+		return !keyState[keyID] && prevKeyState[keyID];
 	}
-
 
 	public static boolean isValidationKeyPressed(){
 		return (keyState[SPACE] && !prevKeyState[SPACE]) || (keyState[ENTER] && !prevKeyState[ENTER]);
 	}
 
 	/**prevents the game from registering every key and displaying it in the console*/
-	private static boolean flag;
+	private static boolean isConsoleOpen;
 
 	public static void keySet(int i, boolean b){
 
 		keyCode = i;
 
 		if(i == KeyEvent.VK_SHIFT && prevKeyState[CTRL])//when console is opened
-			flag = true;
+			isConsoleOpen = true;
 		if(i == KeyEvent.VK_ESCAPE || i == KeyEvent.VK_ENTER)//when console is closed
-			flag = false;
+			isConsoleOpen = false;
 
-		if(b && flag)
-			typed.add(KeyEvent.getKeyText(i));
+		if(b && isConsoleOpen)
+			keysTyped.add(KeyEvent.getKeyText(i));
 
 
-		if (i == registeredKeys[UP])
+		else if (i == registeredKeys[UP])
 			keyState[UP] = b;
 		else if (i == registeredKeys[LEFT])
 			keyState[LEFT] = b;
@@ -195,51 +204,51 @@ public class KeyHandler {
 		else if (i == registeredKeys[B])
 			keyState[B] = b;
 
-		else if (i == KeyEvent.VK_1){
+		else if (i == KeyEvent.VK_1)
 			keyState[ONE] = b;
-		}
-		else if (i == KeyEvent.VK_2){
+		
+		else if (i == KeyEvent.VK_2)
 			keyState[TWO] = b;
-		}
-		else if (i == KeyEvent.VK_3){
+		
+		else if (i == KeyEvent.VK_3)
 			keyState[THREE] = b;
-		}
-		else if (i == KeyEvent.VK_4){
+		
+		else if (i == KeyEvent.VK_4)
 			keyState[FOUR] = b;
-		}
-		else if (i == KeyEvent.VK_5){
+		
+		else if (i == KeyEvent.VK_5)
 			keyState[FIVE] = b;
-		}
-		else if (i == KeyEvent.VK_6){
+		
+		else if (i == KeyEvent.VK_6)
 			keyState[SIX] = b;
-		}
-		else if (i == KeyEvent.VK_7){
+		
+		else if (i == KeyEvent.VK_7)
 			keyState[SEVEN] = b;
-		}
-		else if (i == KeyEvent.VK_8){
+		
+		else if (i == KeyEvent.VK_8)
 			keyState[EIGHT] = b;
-		}
-		else if (i == KeyEvent.VK_9){
+		
+		else if (i == KeyEvent.VK_9)
 			keyState[NINE] = b;
-		}
-		else if ( i == KeyEvent.VK_0){
+		
+		else if ( i == KeyEvent.VK_0)
 			keyState[ZERO] = b;
-		}
-		else if( i == KeyEvent.VK_UP){
+		
+		else if( i == KeyEvent.VK_UP)
 			keyState[ARROW_UP] = b;
-		}
-		else if( i == KeyEvent.VK_DOWN){
+		
+		else if( i == KeyEvent.VK_DOWN)
 			keyState[ARROW_DOWN] = b;
-		}
-		else if( i == KeyEvent.VK_LEFT){
+		
+		else if( i == KeyEvent.VK_LEFT)
 			keyState[ARROW_LEFT] = b;
-		}
-		else if( i == KeyEvent.VK_RIGHT){
+		
+		else if( i == KeyEvent.VK_RIGHT)
 			keyState[ARROW_RIGHT] = b;
-		}
-		else if(i == registeredKeys[INTERACT]){
+		
+		else if(i == registeredKeys[INTERACT])
 			keyState[INTERACT] = b;
-		}else if(i == registeredKeys[SHIFT] )
+		else if(i == registeredKeys[SHIFT] )
 			keyState[SHIFT] = b;
 		else if(i == registeredKeys[CTRL] )
 			keyState[CTRL] = b;
@@ -249,12 +258,10 @@ public class KeyHandler {
 			keyState[JUNK] = b;
 
 		//xbox only.
-		else if(i == registeredKeys[PLACE] && XboxController.controller != null){
+		else if(i == registeredKeys[PLACE] && XboxController.controller != null)
 			keyState[PLACE] = b;
-		}
-		else if(i == registeredKeys[ESCAPE2] && XboxController.controller != null){
+		else if(i == registeredKeys[ESCAPE2] && XboxController.controller != null)
 			keyState[ESCAPE2] = b;
-		}
 
 		keyState[ANYKEY] = b;
 	}
@@ -263,7 +270,7 @@ public class KeyHandler {
 		for (int i = 0; i < NUM_KEYS; i++)
 			prevKeyState[i] = keyState[i];
 	}
-	
+
 	public static boolean shiftIsHeld(){
 		return prevKeyState[SHIFT];
 	}
@@ -271,35 +278,35 @@ public class KeyHandler {
 	public static String getKeyName(int keyId) {
 		return KeyEvent.getKeyText(KeyHandler.registeredKeys[keyId]);
 	}
-	
+
 	public static boolean isUpKeyPressed(){
 		return keyState[UP] || keyState[ARROW_UP];
 	}
-	
+
 	public static boolean isDownKeyPressed(){
 		return keyState[DOWN] || keyState[ARROW_DOWN];
 	}
-	
+
 	public static boolean isLeftKeyPressed(){
 		return keyState[LEFT] || keyState[ARROW_LEFT];
 	}
-	
+
 	public static boolean isRightKeyPressed(){
 		return keyState[RIGHT] || keyState[ARROW_RIGHT];
 	}
-	
+
 	public static boolean isUpKeyHit(){
 		return isPressed(UP) || isPressed(ARROW_UP);
 	}
-	
+
 	public static boolean isDownKeyHit(){
 		return isPressed(DOWN) || isPressed(ARROW_DOWN);
 	}
-	
+
 	public static boolean isLeftKeyHit(){
 		return isPressed(LEFT) || isPressed(ARROW_LEFT);
 	}
-	
+
 	public static boolean isRightKeyHit(){
 		return isPressed(RIGHT) || isPressed(ARROW_RIGHT);
 	}

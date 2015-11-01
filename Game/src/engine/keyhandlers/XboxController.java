@@ -1,10 +1,11 @@
-package base.main.keyhandler;
+package engine.keyhandlers;
 
 import java.awt.event.KeyEvent;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
+
 
 public class XboxController {
 
@@ -67,27 +68,20 @@ public class XboxController {
 		UP = controller.getPovY() == -1f;
 		DOWN = controller.getPovY() == 1f;
 
-//		KeyHandler.keySet(KeyEvent.VK_LEFT, LEFT);
-//		KeyHandler.keySet(KeyEvent.VK_RIGHT, RIGHT);
-//		KeyHandler.keySet(KeyEvent.VK_UP, UP);
-//		KeyHandler.keySet(KeyEvent.VK_DOWN, DOWN);
-		
 		KeyHandler.keySet(KeyEvent.VK_Q, LEFT);
 		KeyHandler.keySet(KeyEvent.VK_D, RIGHT);
 		KeyHandler.keySet(KeyEvent.VK_Z, UP);
 		KeyHandler.keySet(KeyEvent.VK_S, DOWN);
 
-		if(controller.isButtonPressed(X)){
+		if(controller.isButtonPressed(X))
 			KeyHandler.keySet(KeyEvent.VK_R, true);
-		}else{
+		else
 			KeyHandler.keySet(KeyEvent.VK_R, false);
-		}
 
-		if(controller.isButtonPressed(A)){
+		if(controller.isButtonPressed(A))
 			KeyHandler.keySet(KeyEvent.VK_SPACE, true);
-		}else{
+		else
 			KeyHandler.keySet(KeyEvent.VK_SPACE, false);
-		}
 
 		if(controller.isButtonPressed(START)){
 			KeyHandler.keySet(KeyEvent.VK_ESCAPE, true);

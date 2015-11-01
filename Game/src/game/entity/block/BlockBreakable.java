@@ -1,7 +1,9 @@
 package game.entity.block;
 
+import engine.map.TileMap;
+import engine.music.Music;
+import engine.save.DataTag;
 import game.World;
-import game.content.save.DataTag;
 import game.entity.MapObject;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
@@ -10,8 +12,6 @@ import game.item.ItemTool;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import base.main.music.Music;
-import base.tilemap.TileMap;
 
 public class BlockBreakable extends Block{
 
@@ -82,7 +82,7 @@ public class BlockBreakable extends Block{
 					(int) (((xScreen + xmap) - (width / 2)) + width),
 					(int) ((yScreen + ymap) - (height / 2)), -width, height, null);
 
-		if (getWorld().showBB) {
+		if (getWorld().showBoundingBoxes) {
 			g.setColor(Color.WHITE);
 			g.draw(getRectangle());
 		}

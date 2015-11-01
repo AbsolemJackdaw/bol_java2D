@@ -1,5 +1,7 @@
 package game.entity.living.enemy;
 
+import engine.map.TileMap;
+import engine.music.Music;
 import game.World;
 import game.entity.EntityAI;
 import game.entity.MapObject;
@@ -10,8 +12,6 @@ import game.item.ItemTool;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import base.main.music.Music;
-import base.tilemap.TileMap;
 
 public class EntityEnemy extends EntityLiving {
 

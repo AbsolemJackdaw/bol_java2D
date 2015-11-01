@@ -1,13 +1,20 @@
 package game.util;
 
+import java.awt.Color;
 import java.awt.Font;
 
-import base.main.keyhandler.KeyHandler;
+import engine.keyhandlers.KeyHandler;
+
 
 public class Constants {
 
 	public static final	Font FONT_ITEMS = new Font("Century Gothic", Font.PLAIN, 10);
 
+	public static final Font FONT_HEADER = new Font("Constantia", Font.PLAIN, 36);
+	public static final Font FONT_CHOICES = new Font("Arial", Font.PLAIN, 12);
+	
+	public static final Color COLOR_GENERAL = new Color(250, 231, 217);
+	
 	public static int[] hotBarKeys = new int[]{
 		KeyHandler.ONE, 
 		KeyHandler.TWO,

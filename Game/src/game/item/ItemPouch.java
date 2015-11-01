@@ -1,11 +1,11 @@
 package game.item;
 
+import engine.keyhandlers.KeyHandler;
 import game.entity.living.player.Player;
 import game.util.Util;
 
 import java.awt.event.KeyEvent;
 
-import base.main.keyhandler.KeyHandler;
 
 public class ItemPouch extends Item {
 

@@ -1,11 +1,10 @@
-package game.content;
+package engine.image;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import base.tilemap.Background;
 
 public class Images {
 
@@ -18,14 +17,6 @@ public class Images {
 	public static void init(){
 		instance = new Images();
 	}
-
-	public BufferedImage menu = loadImage("/background/menu.png");
-
-	public Background menuBackGround = new Background("/background/menu.png", 2, false, 5);
-
-	public BufferedImage[] defaultAnim = loadMultiImage("/images/default.png", 32, 0, 5);
-
-	public BufferedImage[] stalactites = new BufferedImage[5];
 
 	public static BufferedImage loadImage(String path){
 		BufferedImage img = null;

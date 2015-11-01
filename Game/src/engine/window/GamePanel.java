@@ -1,4 +1,4 @@
-package base.main;
+package engine.window;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,23 +8,21 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import base.main.keyhandler.KeyHandler;
+import engine.gamestate.GameStateManagerBase;
+import engine.keyhandlers.KeyHandler;
+
 
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 
-	public ArrayList<String> typedKeys = new ArrayList<>();
-
 	private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	// dimensions
-	public static final int WIDTH = (int)screenSize.getWidth()/2; //TODO change integer's accordingly
+	public static final int WIDTH = (int)screenSize.getWidth()/2; //TODO apply screensize modifications possible ?
 	public static final int HEIGHT = (int)screenSize.getHeight()/2;
 	public static float SCALE = 2f;
 
@@ -34,8 +32,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	// game thread
 	private Thread thread;
 	private boolean running;
-	//	private final int FPS = 60;
-	//	private final long targetTime = 1000 / FPS;
 
 	long lastLoopTime = System.nanoTime();
 	final int TARGET_FPS = 60;
@@ -48,14 +44,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private Graphics2D g;
 
 	// game state manager
-	private GameStateManager gsm;
+	private GameStateManagerBase gsm;
 
-	public JFrame gameWindow;
-
-	public GamePanel(JFrame window) {
+	public GamePanel() {
 		super();
-
-		gameWindow = window;
 
 		setPreferredSize();
 
@@ -83,17 +75,25 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void addNotify() {
 		super.addNotify();
+		
 		if (thread == null) {
 			thread = new Thread(this);
 			addKeyListener(this);
 			thread.start();
 		}
+		
 	}
 
+	/**
+	 * Draws world to the game
+	 */
 	private void draw() {
 		gsm.draw(g);
 	}
 
+	/**
+	 * draws a scaled instance of the screensize to the screen.
+	 */
 	private void drawToScreen() {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -114,7 +114,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 		running = true;
 
-		gsm = new GameStateManager(this);
+		gsm = new GameStateManagerBase();
 	}
 
 	@Override

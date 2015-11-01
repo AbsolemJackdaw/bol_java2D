@@ -1,8 +1,9 @@
-package base.main;
-
-import java.awt.BorderLayout;
+package engine;
 
 import javax.swing.JFrame;
+
+import engine.window.GamePanel;
+
 
 public class Main {
 
@@ -11,12 +12,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
+		//TODO get window name from launch settings
 		final JFrame window = new JFrame("The Brim of Life");
-		
-		GamePanel game = new GamePanel(window);
-		
-		window.getContentPane().add(game, BorderLayout.CENTER);
-		
+		window.setContentPane(new GamePanel());
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setUndecorated(true);
 		window.setResizable(false);

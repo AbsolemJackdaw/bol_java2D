@@ -1,4 +1,4 @@
-package base.tilemap;
+package engine.map;
 
 import java.awt.image.BufferedImage;
 
@@ -13,6 +13,8 @@ public class Tile {
 	// tile types
 	public static final int GHOST = 0;
 	public static final int SOLID = 1;
+	/**prototype. is currently used nowhere*/
+	public static final int INVISIBLE = 2;
 
 	public Tile(BufferedImage image, int type) {
 		this.image = image;

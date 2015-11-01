@@ -1,7 +1,9 @@
 package game.gui;
 
+import engine.image.Images;
+import engine.keyhandlers.KeyHandler;
+import engine.window.GamePanel;
 import game.World;
-import game.content.Images;
 import game.entity.living.player.Player;
 import game.item.Item;
 import game.item.ItemArmor;
@@ -16,14 +18,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import base.main.GamePanel;
-import base.main.keyhandler.KeyHandler;
 
 public class GuiPlayerInventory extends GuiContainer {
 
 	private BufferedImage img;
 
-	private static final int[] pos = new int[]{329, 117};
+	private final int[] pos = new int[]{centerX + 72, centerY-4};
 
 	public GuiPlayerInventory(World world, Player p) {
 		super(world, p);
@@ -99,11 +99,6 @@ public class GuiPlayerInventory extends GuiContainer {
 				}
 			}
 		}
-	}
-
-	@Override
-	public boolean pausesGame() {
-		return true;
 	}
 
 	@Override

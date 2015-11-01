@@ -1,20 +1,19 @@
 package game.entity;
 
 
-import game.World;
-import game.content.Images;
-import game.content.save.DataTag;
-import game.entity.living.player.Player;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import base.main.GamePanel;
-import base.tilemap.Tile;
-import base.tilemap.TileMap;
+import engine.map.Tile;
+import engine.map.TileMap;
+import engine.save.DataTag;
+import engine.window.GamePanel;
+import game.World;
+import game.entity.living.player.Player;
+
 
 public abstract class MapObject {
 
@@ -44,16 +43,16 @@ public abstract class MapObject {
 	protected int height;
 
 	// collision box
-	/**the object's size, x*/
+	/**the object's size, x. (CollisionBox)*/
 	protected int entitySizeX;
-	/**the object's size, y*/
+	/**the object's size, y. (CollisionBox)*/
 	protected int entitySizeY;
 
 	// collision
 	/**y row on the map*/
-	protected int currRow;
+	protected int currentCollumn; //TODO rename these !
 	/**x row on the map*/
-	protected int currCol;
+	protected int currentRow;
 
 	protected double xdest;
 	protected double ydest;
@@ -65,29 +64,41 @@ public abstract class MapObject {
 	protected boolean bottomLeft;
 	protected boolean bottomRight;
 
-	protected boolean tileHurtsPlayer = false;
-
 	// animation
+	/**The Entity's animation. */
 	protected Animation animation;
+	/**Action this entity is currently executing*/
 	protected int currentAction;
 	protected int previousAction;
 
+	/**Set to true if the entity should face right. False if it has to be turned around*/
 	public boolean facingRight;
 
 	// movement
+	/**Wether the entity is walking left or not*/
 	protected boolean left;
+	/**Wether the entity is walking right or not*/
 	protected boolean right;
+	/**Wether the entity is going up or not*/
 	protected boolean up;
+	/**Wether the entity is going down or not*/
 	protected boolean down;
+	/**Wether the entity is currently jumping or not*/
 	protected boolean jumping;
+	/**Wether the entity is currently falling or not*/
 	protected boolean falling;
 
 	// movement attributes
+	/**Initial move speed. You speed up as you walk*/
 	protected double moveSpeed;
+	/**Maximum of speed this entity can walk. Also affects jumping distance*/
 	protected double maxSpeed;
+	/**Speed this entity will stop with. lower numbers result in a slower stop, thus sliding*/
 	protected double stopSpeed;
+	/**Affects falling and jumping*/
 	protected double fallSpeed;
 	protected double maxFallSpeed;
+	/**How high this entity can jump. Counts from a negative number up to 0*/
 	protected double jumpStart;
 	protected double stopJumpSpeed;
 
@@ -95,17 +106,19 @@ public abstract class MapObject {
 	protected boolean ignoreGravity = false;
 
 	protected World world;
-	
+
+	/**Unique Item Name. Every entity needs a unique name that is used to save it, and reconstruct it when loading it back into the world.*/
 	private final String UIN;
 
 	protected Random rand = new Random();
-	
+
 	/**used to remove objects. if this is set to true, it will remove the entity from the entity list > simulate his death*/
 	public boolean remove;
+	
 	// constructor
 	public MapObject(TileMap tm, World world, String uin) {
 		UIN = uin;
-		
+
 		tileMap = tm;
 		tileSize = tm.getTileSize();
 		this.world = world;
@@ -124,20 +137,20 @@ public abstract class MapObject {
 	public String getUin(){
 		return UIN;
 	}
-	
+
 	public Animation getAnimation(){
 		return animation;
 	}
-	
+
 	/**if this returns false, make sure you override getEntityTexture to set a non-animated texture*/
 	public boolean hasAnimation(){
 		return false;
 	}
-	
+
 	/**gets called only once to set the Animation texture sequence
 	 * can return a new instance without it being called every frame*/
 	public BufferedImage getEntityTexture(){
-		return Images.instance.defaultAnim[0];
+		return this.animation.getDefaultAnimation()[0];
 	}
 
 	/**processes the surounding tiles so the entity can update it's falling/walking logic*/
@@ -162,15 +175,15 @@ public abstract class MapObject {
 
 	public void checkTileMapCollision() {
 
-		currCol = (int) xScreen / tileSize;
-		currRow = (int) yScreen / tileSize;
+		currentRow = (int) xScreen / tileSize;
+		currentCollumn = (int) yScreen / tileSize;
 
-		if(currCol < 0 || currCol >= tileMap.getXRows() || currRow <0 || currRow >= tileMap.getYRows()){
+		if(currentRow < 0 || currentRow >= tileMap.getXRows() || currentCollumn <0 || currentCollumn >= tileMap.getYRows()){
 			this.remove = true;
 			System.out.println("The MapObject " + this.getUin() + " evaporated due to it being out of the map.");
 			return;
 		}
-		
+
 		xdest = xScreen + dx;
 		ydest = yScreen + dy;
 
@@ -181,7 +194,7 @@ public abstract class MapObject {
 		if (dy < 0)
 			if (topLeft || topRight) {
 				dy = 0;
-				ytemp = (currRow * tileSize) + (entitySizeY / 2);
+				ytemp = (currentCollumn * tileSize) + (entitySizeY / 2);
 
 			} else
 				ytemp += dy;
@@ -189,7 +202,7 @@ public abstract class MapObject {
 			if (bottomLeft || bottomRight) {
 				dy = 0;
 				falling = false;
-				ytemp = ((currRow + 1) * tileSize) - (entitySizeY / 2);
+				ytemp = ((currentCollumn + 1) * tileSize) - (entitySizeY / 2);
 			} else
 				ytemp += dy;
 
@@ -197,13 +210,13 @@ public abstract class MapObject {
 		if (dx < 0)
 			if (topLeft || bottomLeft) {
 				dx = 0;
-				xtemp = (currCol * tileSize) + (entitySizeX / 2);
+				xtemp = (currentRow * tileSize) + (entitySizeX / 2);
 			} else
 				xtemp += dx;
 		if (dx > 0)
 			if (topRight || bottomRight) {
 				dx = 0;
-				xtemp = ((currCol + 1) * tileSize) - (entitySizeX / 2);
+				xtemp = ((currentRow + 1) * tileSize) - (entitySizeX / 2);
 			} else
 				xtemp += dx;
 
@@ -242,7 +255,7 @@ public abstract class MapObject {
 					(int) (((xScreen + xmap) - (width / 2)) + width),
 					(int) ((yScreen + ymap) - (height / 2)), -width, height, null);
 
-		if (getWorld().showBB) {
+		if (getWorld().showBoundingBoxes) {
 			g.setColor(Color.WHITE);
 			g.draw(getRectangle());
 		}
@@ -278,11 +291,11 @@ public abstract class MapObject {
 				(int) ((yScreen + ymap) - (entitySizeY / 2)),
 				entitySizeX, entitySizeY);
 	}
-	
+
 	public int posX(){
 		return (int) ((xScreen + xmap) - ((entitySizeX) / 2));
 	}
-	
+
 	public int posY(){
 		return (int) ((yScreen + ymap) - (entitySizeY / 2));
 	}
@@ -345,7 +358,7 @@ public abstract class MapObject {
 		if(right) 
 			right = !b;
 	}
-	
+
 	public void setRight(boolean b) {
 		right = b;
 		if(left) 
@@ -370,7 +383,7 @@ public abstract class MapObject {
 
 		data.writeDouble("dirX", dx);
 		data.writeDouble("dirY", dy);
-		
+
 		data.writeString("UIN", UIN);
 	}
 
@@ -383,7 +396,7 @@ public abstract class MapObject {
 
 		dx = data.readDouble("dirX");
 		dy = data.readDouble("dirY");
-		
+
 	}
 
 	public void update(){
@@ -395,11 +408,11 @@ public abstract class MapObject {
 		if(remove)
 			return;
 	}
-	
+
 	public void onEntityHit(Player p, MapObject mo){
-		
+
 	}
-	
+
 	public void interact(Player p, MapObject o){
 
 	}

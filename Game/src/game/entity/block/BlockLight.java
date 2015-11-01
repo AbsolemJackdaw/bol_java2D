@@ -1,10 +1,11 @@
 package game.entity.block;
 
-import static base.main.keyhandler.KeyHandler.INTERACT;
-import static base.main.keyhandler.KeyHandler.getKeyName;
+import static engine.keyhandlers.KeyHandler.INTERACT;
+import static engine.keyhandlers.KeyHandler.getKeyName;
+import engine.image.Images;
+import engine.map.TileMap;
+import engine.save.DataTag;
 import game.World;
-import game.content.Images;
-import game.content.save.DataTag;
 import game.entity.Animation;
 import game.entity.MapObject;
 import game.entity.inventory.IInventory;
@@ -17,7 +18,6 @@ import game.item.Items;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import base.tilemap.TileMap;
 
 public class BlockLight extends BlockBreakable implements IInventory{
 
