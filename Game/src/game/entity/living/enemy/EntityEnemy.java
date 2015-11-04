@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 
 import engine.game.MapObject;
 import engine.game.entity.EntityLiving;
-import engine.game.entity.EntityPlayer;
 import engine.map.TileMap;
 import engine.music.Music;
 import game.World;
@@ -66,7 +65,7 @@ public class EntityEnemy extends EntityLiving {
 	}
 
 	@Override
-	public void onEntityHit(EntityPlayer player, MapObject mo){
+	public void onEntityHit(Player player, MapObject mo){
 
 		Player p = (Player)player;
 		

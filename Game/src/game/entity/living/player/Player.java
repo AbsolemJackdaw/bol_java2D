@@ -26,10 +26,17 @@ import static game.util.Constants.LEGS_IDLE;
 import static game.util.Constants.LEGS_RUN;
 import static game.util.Constants.LEG_JUMP;
 import static game.util.Constants.hotBarKeys;
+
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+
 import engine.game.MapObject;
 import engine.game.entity.EntityLiving;
 import engine.game.entity.EntityMovement;
-import engine.game.entity.EntityPlayer;
 import engine.image.Images;
 import engine.imaging.Animation;
 import engine.keyhandlers.KeyHandler;
@@ -50,15 +57,7 @@ import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class Player extends EntityPlayer implements IInventory{
+public class Player extends EntityLiving implements IInventory{
 
 	private boolean flinching;
 	private long flinchTimer = 0;
@@ -73,6 +72,12 @@ public class Player extends EntityPlayer implements IInventory{
 	private Animation armor_arms = new Animation();
 	private Animation armor_extra = new Animation();
 
+	protected EntityMovement movement = new EntityMovement();
+
+	public boolean isCollidingWithBlock;
+
+	protected List<MapObject> collidingEntities = new ArrayList<MapObject>();
+	
 	// for every animation, add the number of frames here
 	// sample : 2,5,8,4 (2 for idle 0, 5 for walking 1, etc.
 	//public static final int[] numFrames = {20, 10, 1, 1, 3 };
@@ -109,7 +114,7 @@ public class Player extends EntityPlayer implements IInventory{
 	private boolean inWater;
 	
 	public Player(TileMap tm, World world) {
-		super(tm, world);
+		super(tm, world, "player");
 
 		width = 32;
 		height = 32;
@@ -197,7 +202,7 @@ public class Player extends EntityPlayer implements IInventory{
 
 		if(!inWater){
 
-			super.getNextPosition();
+			movement.doPlayerMovement(this);
 
 			// cannot move while attacking, except in air
 			if ((currentAction == ACTION_ATTACK) && !(jumping || falling))
@@ -219,9 +224,16 @@ public class Player extends EntityPlayer implements IInventory{
 
 	}
 
-	@Override
 	public void handleInput(){
 
+		setLeft(KeyHandler.isLeftKeyPressed());
+
+		setRight(KeyHandler.isRightKeyPressed());
+
+		setUp(KeyHandler.isUpKeyPressed());
+
+		setDown(KeyHandler.isDownKeyPressed());
+		
 		if(XboxController.controller != null){
 			setJumping(KeyHandler.keyState[KeyHandler.SPACE]);
 			if (KeyHandler.isPressed(KeyHandler.SPACE))
@@ -591,7 +603,7 @@ public class Player extends EntityPlayer implements IInventory{
 	}
 
 	@Override
-	public void onEntityHit(EntityPlayer p, MapObject mo) {
+	public void onEntityHit(Player p, MapObject mo) {
 
 		if(mo instanceof EntityEnemy){
 
@@ -905,5 +917,19 @@ public class Player extends EntityPlayer implements IInventory{
 	
 	public World getWorld(){
 		return (World)this.world;
+	}
+	
+	/**
+	 * Returns list with blocks the player is currently colliding with
+	 */
+	public List<MapObject> getCollidingMapObjects(){
+		return collidingEntities;
+	}
+
+	/**
+	 *Adds a block to the list of blocks the player is colliding with 
+	 */
+	public void setCollidingMapObjects(MapObject obj){
+		collidingEntities.add(obj);
 	}
 }

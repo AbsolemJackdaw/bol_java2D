@@ -3,7 +3,6 @@ package game.entity.block;
 import static engine.keyhandlers.KeyHandler.INTERACT;
 import static engine.keyhandlers.KeyHandler.getKeyName;
 import engine.game.MapObject;
-import engine.game.entity.EntityPlayer;
 import engine.image.Images;
 import engine.imaging.Animation;
 import engine.map.TileMap;
@@ -117,7 +116,7 @@ public class BlockOven extends BlockBreakable implements IInventory{
 	}
 
 	@Override
-	public void interact(EntityPlayer p, MapObject o) {
+	public void interact(Player p, MapObject o) {
 		GuiOven gui = new GuiOven(this, (Player)p);
 		gui.setOven((BlockOven)o);
 		getWorld().displayGui(gui);

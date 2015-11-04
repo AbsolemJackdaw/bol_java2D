@@ -1,7 +1,6 @@
 package game.entity.living;
 
 import engine.game.MapObject;
-import engine.game.entity.EntityPlayer;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.music.Music;
@@ -77,7 +76,7 @@ public class EntityBat extends EntityEnemy {
 	}
 
 	@Override
-	public void onEntityHit(EntityPlayer player, MapObject mo) {
+	public void onEntityHit(Player player, MapObject mo) {
 
 		Player p = (Player)player;
 		

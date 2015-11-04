@@ -77,7 +77,10 @@ public class World extends GameWorld{
 
 		super.init();
 
-		this.player = (Player)getEntityPlayer();
+		this.player = new Player(tileMap, this);
+		
+		if(Save.getPlayerData() != null)
+			player.readFromSave(Save.getPlayerData());
 		
 		displayGui(new GuiHud(this, player));
 

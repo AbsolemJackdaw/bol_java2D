@@ -1,8 +1,9 @@
 package game.entity.living;
 
+import java.awt.Graphics2D;
+
 import engine.game.MapObject;
 import engine.game.entity.EntityLiving;
-import engine.game.entity.EntityPlayer;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.music.Music;
@@ -12,8 +13,6 @@ import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
-
-import java.awt.Graphics2D;
 
 
 public class EntityPig extends EntityLiving{
@@ -89,7 +88,7 @@ public class EntityPig extends EntityLiving{
 	}
 
 	@Override
-	public void onEntityHit(EntityPlayer player, MapObject mo) {
+	public void onEntityHit(Player player, MapObject mo) {
 
 		Player p = (Player)player;
 		flicker = true;

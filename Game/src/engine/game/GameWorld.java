@@ -3,18 +3,14 @@ package engine.game;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
-import engine.game.entity.EntityPlayer;
 import engine.gamestate.GameState;
 import engine.gamestate.GameStateManagerBase;
 import engine.map.TileMap;
 import engine.save.DataList;
 import engine.save.DataTag;
-import game.content.save.Save;
 
 public class GameWorld extends GameState {
 
-	public EntityPlayer entityPlayer;
-	
 	public TileMap tileMap;
 
 	/**ArrayList filled with every entity in this world instance*/
@@ -74,17 +70,9 @@ public class GameWorld extends GameState {
 		loadMap(tag.readString("map"));
 	}
 	
-	public EntityPlayer getEntityPlayer(){
-		return entityPlayer;
-	}
-	
 	public void init(){
 		if(resourceMapPath.length() < 5)
 			loadMap("/maps/cave_rand_1.map");
-
-		entityPlayer = new EntityPlayer(tileMap, this);
-
-		if(Save.getPlayerData() != null)
-			entityPlayer.readFromSave(Save.getPlayerData());
+		
 	}
 }

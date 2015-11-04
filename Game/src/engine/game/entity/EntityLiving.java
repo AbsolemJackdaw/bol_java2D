@@ -68,4 +68,13 @@ public class EntityLiving extends MapObject{
 	public String getEntityIdleSound(){
 		return null;
 	}
+	
+	@Override
+	public void update() {
+		super.update();
+		
+		getNextPosition();
+		checkTileMapCollision();
+		setPosition(xtemp, ytemp);
+	}
 }

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import engine.game.MapObject;
-import engine.game.entity.EntityPlayer;
 import engine.map.TileMap;
 import engine.music.Music;
 import engine.save.DataTag;
@@ -90,9 +89,8 @@ public class BlockBreakable extends Block{
 	}
 
 	@Override
-	public void onEntityHit(EntityPlayer p , MapObject mo) {
+	public void onEntityHit(Player player , MapObject mo) {
 
-		Player player = (Player)p;
 		jiggle = true;
 
 		int wepDmg = 0;

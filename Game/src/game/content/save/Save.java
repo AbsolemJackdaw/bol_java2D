@@ -22,9 +22,9 @@ public class Save {
 		return new DataTag(data);
 	}
 
-	public static void writePlayerData(Player entityPlayer){
+	public static void writePlayerData(Player player){
 		DataTag tag = new DataTag();
-		entityPlayer.writeToSave(tag);
+		player.writeToSave(tag);
 		write("player/player", tag);
 	}
 

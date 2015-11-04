@@ -1,5 +1,7 @@
 package engine.game.entity;
 
+import game.entity.living.player.Player;
+
 
 public class EntityMovement {
 
@@ -14,7 +16,7 @@ public class EntityMovement {
 	 * Basic water movement for the player.
 	 * Implies going slower in water, 
 	 */
-	public void doPlayerMovement(EntityPlayer player){
+	public void doPlayerMovement(Player player){
 		// movement
 		if (player.left) {
 			player.dx -= player.moveSpeed;
@@ -54,7 +56,7 @@ public class EntityMovement {
 		}
 	}
 	
-	public void doPlayerWaterMovement(EntityPlayer player){
+	public void doPlayerWaterMovement(Player player){
 		if (player.left) {
 			player.dx -= player.moveSpeed/2;
 			if (player.dx < -player.maxSpeed/2)
