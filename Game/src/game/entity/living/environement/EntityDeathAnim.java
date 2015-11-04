@@ -1,14 +1,14 @@
 package game.entity.living.environement;
 
+import java.awt.Graphics2D;
+
 import engine.game.MapObject;
+import engine.game.entity.EntityLiving;
+import engine.game.entity.EntityPlayer;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import game.World;
-import game.entity.living.EntityLiving;
-import game.entity.living.player.Player;
-
-import java.awt.Graphics2D;
 
 
 public class EntityDeathAnim extends EntityLiving{
@@ -50,7 +50,7 @@ public class EntityDeathAnim extends EntityLiving{
 	}
 	
 	@Override
-	public void onEntityHit(Player p, MapObject mo) {
+	public void onEntityHit(EntityPlayer p, MapObject mo) {
 		//override to prevent killing
 	}
 	

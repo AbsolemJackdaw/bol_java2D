@@ -3,12 +3,13 @@ package game.entity.block;
 import static engine.keyhandlers.KeyHandler.INTERACT;
 import static engine.keyhandlers.KeyHandler.getKeyName;
 import engine.game.MapObject;
+import engine.game.entity.EntityPlayer;
 import engine.image.Images;
+import engine.imaging.Animation;
 import engine.map.TileMap;
 import engine.save.DataList;
 import engine.save.DataTag;
 import game.World;
-import game.entity.Animation;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.GuiOven;
@@ -116,8 +117,8 @@ public class BlockOven extends BlockBreakable implements IInventory{
 	}
 
 	@Override
-	public void interact(Player p, MapObject o) {
-		GuiOven gui = new GuiOven(this, p);
+	public void interact(EntityPlayer p, MapObject o) {
+		GuiOven gui = new GuiOven(this, (Player)p);
 		gui.setOven((BlockOven)o);
 		getWorld().displayGui(gui);
 	}

@@ -10,8 +10,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import engine.game.GameWorld;
 import engine.game.MapObject;
-import engine.gamestate.GameState;
+import engine.game.entity.EntityLiving;
 import engine.gamestate.GameStateManagerBase;
 import engine.imaging.Background;
 import engine.keyhandlers.KeyHandler;
@@ -27,7 +28,6 @@ import game.entity.Entity;
 import game.entity.block.BlockLight;
 import game.entity.block.BlockOven;
 import game.entity.block.Blocks;
-import game.entity.living.EntityLiving;
 import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.player.Player;
 import game.gui.Gui;
@@ -42,25 +42,16 @@ import game.util.Constants;
 import game.util.Util;
 
 
-public class World extends GameState{
+public class World extends GameWorld{
 
-	private Player player;
-
-	public TileMap tileMap;
-
-	/**ArrayList filled with every entity in this world instance*/
-	public ArrayList<MapObject> listWithMapObjects ;
+	protected Player player;
 	
 	public boolean isDisplayingGui;
 	public Gui guiDisplaying;
 
 	public Time gametime = new Time(18000, 2, 1);
 	
-	public boolean showBoundingBoxes;
-
 	protected ArrayList<Background> backGrounds;
-
-	private String resourceMapPath = "";
 
 	public float nightAlhpa = 0;
 
@@ -69,11 +60,8 @@ public class World extends GameState{
 
 	public boolean hasCreaturesSpawned;
 
-	private boolean isConsoleDisplayed = false;
-	private String consolePrint = "";
-
 	public World(GameStateManagerBase gsm) {
-		this.gsm = gsm;
+		super(gsm);
 
 		tileMap = new TileMap(32);
 
@@ -87,14 +75,10 @@ public class World extends GameState{
 	 */
 	public void init(){
 
-		if(resourceMapPath.length() < 5)
-			loadMap("/maps/cave_rand_1.map");
+		super.init();
 
-		player = new Player(tileMap, this);
-
-		if(Save.getPlayerData() != null)
-			player.readFromSave(Save.getPlayerData());
-
+		this.player = (Player)getEntityPlayer();
+		
 		displayGui(new GuiHud(this, player));
 
 		int mapHeight = (int)(tileMap.getYRows() * 32);
@@ -279,7 +263,7 @@ public class World extends GameState{
 		}
 
 		if(KeyHandler.isPressed(KeyHandler.QUICKSAVE)){
-			Save.writePlayerData(getPlayer());
+			Save.writePlayerData(player);
 			Save.writeWorld(this, Loading.index);
 			Save.writeRandomParts();
 			displaySaveMessage = true;
@@ -321,27 +305,9 @@ public class World extends GameState{
 			showBoundingBoxes = showBoundingBoxes ? false :true;
 	}
 
-	public void loadMap(String s){
-		resourceMapPath = s;
-		tileMap.loadTiles(getTileTexture());
-		tileMap.loadMap(resourceMapPath);
-		tileMap.setPosition(0, 0);
-	}
-
-	public String getTileTexture(){
-		return "/maps/platformer_tiles.png";
-	}
-
-	public Player getPlayer(){
-		return player;
-	}
-
-	/**
-	 * Write world data to json file
-	 */
+	@Override
 	public void writeToSave(DataTag tag){
-
-		tag.writeString("map", resourceMapPath);
+		super.writeToSave(tag);
 
 		tag.writeInt("gametime", gametime.getCurrentTime());
 		tag.writeFloat("nightshade", new Float(nightAlhpa));
@@ -354,15 +320,14 @@ public class World extends GameState{
 			mo.writeToSave(dt);
 			list.write(dt);
 		}
+		
 		tag.writeList("content", list);
 	}
 
-	/**
-	 * Read world data from json file
-	 */
+	@Override
 	public void readFromSave(DataTag tag){
+		super.readFromSave(tag);
 
-		loadMap(tag.readString("map"));
 		gametime.writeCurrentGameTime(tag.readInt("gametime"));
 		nightAlhpa = tag.readFloat("nightshade");
 
@@ -580,5 +545,9 @@ public class World extends GameState{
 						gbi.fill(ellipse);
 					}
 				}
+	}
+	
+	public Player getPlayer(){
+		return player;
 	}
 }

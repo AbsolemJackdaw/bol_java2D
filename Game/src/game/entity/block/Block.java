@@ -50,11 +50,6 @@ public class Block extends MapObject{
 		checkTileMapCollision();
 		setPosition(xtemp, ytemp);
 
-		//		if(this.xScreen != tileSize*currCol)
-		//			xScreen = tileSize*currCol;
-		//		if(this.yScreen != tileSize*currRow)
-		//			yScreen = tileSize*currRow;
-
 	}
 
 	@Override

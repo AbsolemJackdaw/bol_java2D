@@ -20,7 +20,7 @@ public class ItemFood extends Item{
 
 	@Override
 	public boolean hasInventoryCallBack(Player player) {
-		return (player.world.guiDisplaying instanceof GuiPlayerInventory);
+		return (player.getWorld().guiDisplaying instanceof GuiPlayerInventory);
 	}
 
 	@Override

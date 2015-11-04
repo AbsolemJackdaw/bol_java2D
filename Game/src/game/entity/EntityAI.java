@@ -1,6 +1,7 @@
 package game.entity;
 
-import game.entity.living.EntityLiving;
+import engine.game.entity.EntityLiving;
+import game.World;
 import game.entity.living.player.Player;
 import game.util.Constants;
 
@@ -103,7 +104,10 @@ public class EntityAI {
 
 	public void setPathToPlayer(EntityLiving el){
 
-		Player p = el.getWorld().getPlayer();
+		World world = (World)el.getWorld();
+		
+		Player p = world.getPlayer();
+		
 		if(p.xScreen < el.xScreen)
 			el.dx-=el.moveSpeed*1.5d;
 		else

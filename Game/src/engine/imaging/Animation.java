@@ -1,4 +1,4 @@
-package game.entity;
+package engine.imaging;
 
 import java.awt.image.BufferedImage;
 

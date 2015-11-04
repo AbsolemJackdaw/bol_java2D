@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import engine.game.MapObject;
+import engine.game.entity.EntityPlayer;
 import engine.map.TileMap;
 import engine.music.Music;
 import engine.save.DataTag;
@@ -89,13 +90,14 @@ public class BlockBreakable extends Block{
 	}
 
 	@Override
-	public void onEntityHit(Player p, MapObject mo) {
+	public void onEntityHit(EntityPlayer p , MapObject mo) {
 
+		Player player = (Player)p;
 		jiggle = true;
 
 		int wepDmg = 0;
 
-		ItemStack wep = world.getPlayer().invArmor.getWeapon();
+		ItemStack wep = player.invArmor.getWeapon();
 		ItemTool tool = null;
 
 		if(wep != null && wep.getItem() instanceof ItemTool)
@@ -117,21 +119,21 @@ public class BlockBreakable extends Block{
 
 		if(tool == null){
 			if(!needsToolToMine())
-				health -= world.getPlayer().getAttackDamage();
+				health -= player.getAttackDamage();
 		}else{
 			if(needsToolToMine()){//if this block needs a tool, break only when tool is held
 				if(effectiveTool == tool.getEffectiveness())
-					health -= world.getPlayer().getAttackDamage() + wepDmg;
+					health -= player.getAttackDamage() + wepDmg;
 			}else
 				if(effectiveTool == tool.getEffectiveness())//if the block doesnt need a tool, a bonus for wielding the right tool will kick in
-					health -= world.getPlayer().getAttackDamage() + wepDmg;
+					health -= player.getAttackDamage() + wepDmg;
 				else
-					health -= world.getPlayer().getAttackDamage() + (wepDmg/2);//if bonus tool is net yield, use half of the current weapons dmg as bonus
+					health -= player.getAttackDamage() + (wepDmg/2);//if bonus tool is net yield, use half of the current weapons dmg as bonus
 
 		}
 
 		if(health <= 0)
-			mine(p);
+			mine(player);
 
 	}
 
@@ -167,5 +169,9 @@ public class BlockBreakable extends Block{
 
 	public boolean needsToolToMine(){
 		return false;
+	}
+	
+	public World getWorld(){
+		return (World)world;
 	}
 }

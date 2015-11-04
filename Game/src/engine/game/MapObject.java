@@ -7,13 +7,12 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import engine.game.entity.EntityPlayer;
+import engine.imaging.Animation;
 import engine.map.Tile;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import engine.window.GamePanel;
-import game.World;
-import game.entity.Animation;
-import game.entity.living.player.Player;
 
 
 public abstract class MapObject {
@@ -106,7 +105,7 @@ public abstract class MapObject {
 	/**used for flying entities. true will skip falling logic*/
 	protected boolean ignoreGravity = false;
 
-	public World world;
+	public GameWorld world;
 
 	/**Unique Item Name. Every entity needs a unique name that is used to save it, and reconstruct it when loading it back into the world.*/
 	private final String UIN;
@@ -117,7 +116,7 @@ public abstract class MapObject {
 	public boolean remove;
 	
 	// constructor
-	public MapObject(TileMap tm, World world, String uin) {
+	public MapObject(TileMap tm, GameWorld world, String uin) {
 		UIN = uin;
 
 		tileMap = tm;
@@ -319,8 +318,7 @@ public abstract class MapObject {
 		return width;
 	}
 
-	/** can be null */
-	public World getWorld() {
+	public GameWorld getWorld() {
 		return world;
 	}
 
@@ -412,11 +410,19 @@ public abstract class MapObject {
 			return;
 	}
 
-	public void onEntityHit(Player p, MapObject mo){
+	/**
+	 * @param player : the player in the world that hit the target
+	 * @param mo : the mapObject that got hit 
+	 */
+	public void onEntityHit(EntityPlayer player, MapObject mo){
 
 	}
 
-	public void interact(Player p, MapObject o){
+	/**
+	 * @param player : the player that should interact with this object
+	 * @param mo : the mapObject that will be interacted with 
+	 */
+	public void interact(EntityPlayer player, MapObject mo){
 
 	}
 }

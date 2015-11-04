@@ -1,8 +1,8 @@
 package game.content;
 
+import engine.game.entity.EntityLiving;
 import game.World;
 import game.entity.Entity;
-import game.entity.living.EntityLiving;
 
 import java.util.Random;
 

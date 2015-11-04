@@ -5,6 +5,7 @@ import static engine.music.Music.load;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import engine.game.entity.EntityLiving;
 import engine.gamestate.GameStateManagerBase;
 import engine.map.TileMap;
 import engine.save.DataTag;
@@ -15,7 +16,6 @@ import game.entity.Entity;
 import game.entity.block.BlockBreakable;
 import game.entity.block.BlockLog;
 import game.entity.block.Blocks;
-import game.entity.living.EntityLiving;
 
 
 public class Loading {

@@ -1,6 +1,7 @@
 package game.entity.living;
 
 import engine.game.MapObject;
+import engine.game.entity.EntityPlayer;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.music.Music;
@@ -76,8 +77,10 @@ public class EntityBat extends EntityEnemy {
 	}
 
 	@Override
-	public void onEntityHit(Player p, MapObject mo) {
+	public void onEntityHit(EntityPlayer player, MapObject mo) {
 
+		Player p = (Player)player;
+		
 		setFollowing(rand.nextInt(600)+1200);
 
 		setFlinching();
@@ -85,7 +88,7 @@ public class EntityBat extends EntityEnemy {
 		int dmg = p.getAttackDamage();
 
 		int wepDmg = 0;
-		ItemStack wep = world.getPlayer().invArmor.getWeapon();
+		ItemStack wep = p.invArmor.getWeapon();
 
 		if(wep != null && wep.getItem() instanceof ItemTool){
 			ItemTool tool = (ItemTool)wep.getItem();
@@ -148,5 +151,4 @@ public class EntityBat extends EntityEnemy {
 	public int getAttackDamage() {
 		return 1;
 	}
-
 }

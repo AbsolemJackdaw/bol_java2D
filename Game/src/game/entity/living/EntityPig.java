@@ -1,6 +1,8 @@
 package game.entity.living;
 
 import engine.game.MapObject;
+import engine.game.entity.EntityLiving;
+import engine.game.entity.EntityPlayer;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.music.Music;
@@ -87,14 +89,15 @@ public class EntityPig extends EntityLiving{
 	}
 
 	@Override
-	public void onEntityHit(Player p, MapObject mo) {
+	public void onEntityHit(EntityPlayer player, MapObject mo) {
 
+		Player p = (Player)player;
 		flicker = true;
 
 		int dmg = p.getAttackDamage();
 
 		int wepDmg = 0;
-		ItemStack wep = world.getPlayer().invArmor.getWeapon();
+		ItemStack wep = p.invArmor.getWeapon();
 
 		if(wep != null && wep.getItem() instanceof ItemTool){
 			ItemTool tool = (ItemTool)wep.getItem();

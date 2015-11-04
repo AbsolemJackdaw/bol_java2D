@@ -1,16 +1,17 @@
 package game.entity.living.enemy;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 import engine.game.MapObject;
+import engine.game.entity.EntityLiving;
+import engine.game.entity.EntityPlayer;
 import engine.map.TileMap;
 import engine.music.Music;
 import game.World;
 import game.entity.EntityAI;
-import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.ItemTool;
-
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 
 public class EntityEnemy extends EntityLiving {
@@ -65,8 +66,10 @@ public class EntityEnemy extends EntityLiving {
 	}
 
 	@Override
-	public void onEntityHit(Player p, MapObject mo) {
+	public void onEntityHit(EntityPlayer player, MapObject mo){
 
+		Player p = (Player)player;
+		
 		int bonus = 0;
 		if(p.invArmor.getWeapon() != null && p.invArmor.getWeapon().getItem() instanceof ItemTool){
 			ItemTool weapon = (ItemTool) p.invArmor.getStackInSlot(3).getItem();
@@ -87,7 +90,7 @@ public class EntityEnemy extends EntityLiving {
 			attackTimer++;
 
 		if(attackTimer % 300 == 0){ //5 seconds
-			Player p = world.getPlayer();
+			Player p = this.getWorld().getPlayer();
 			if(getRectangle().intersects(p.getRectangle())){
 				p.onEntityHit(p, this);
 			}
@@ -130,5 +133,9 @@ public class EntityEnemy extends EntityLiving {
 	
 	public int getAttackDamage(){
 		return 1;
+	}
+	
+	public World getWorld(){
+		return (World)this.world;
 	}
 }

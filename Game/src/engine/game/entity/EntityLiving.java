@@ -1,16 +1,16 @@
-package game.entity.living;
+package engine.game.entity;
 
+import engine.game.GameWorld;
 import engine.game.MapObject;
 import engine.map.TileMap;
 import engine.save.DataTag;
-import game.World;
 
 public class EntityLiving extends MapObject{
 
 	protected float health = 1;
 	protected float maxHealth = 2;
 	
-	public EntityLiving(TileMap tm, World world, String uin) {
+	public EntityLiving(TileMap tm, GameWorld world, String uin) {
 		super(tm, world, uin);
 
 		health = maxHealth;

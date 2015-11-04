@@ -27,7 +27,11 @@ import static game.util.Constants.LEGS_RUN;
 import static game.util.Constants.LEG_JUMP;
 import static game.util.Constants.hotBarKeys;
 import engine.game.MapObject;
+import engine.game.entity.EntityLiving;
+import engine.game.entity.EntityMovement;
+import engine.game.entity.EntityPlayer;
 import engine.image.Images;
+import engine.imaging.Animation;
 import engine.keyhandlers.KeyHandler;
 import engine.keyhandlers.XboxController;
 import engine.map.TileMap;
@@ -35,11 +39,8 @@ import engine.save.DataList;
 import engine.save.DataTag;
 import game.World;
 import game.content.Loading;
-import game.entity.Animation;
-import game.entity.EntityMovement;
 import game.entity.block.BlockBreakable;
 import game.entity.inventory.IInventory;
-import game.entity.living.EntityLiving;
 import game.entity.living.enemy.EntityEnemy;
 import game.item.Item;
 import game.item.ItemArmor;
@@ -57,7 +58,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Player extends EntityLiving implements IInventory{
+public class Player extends EntityPlayer implements IInventory{
 
 	private boolean flinching;
 	private long flinchTimer = 0;
@@ -105,16 +106,10 @@ public class Player extends EntityLiving implements IInventory{
 
 	public ArmorInventory invArmor = new ArmorInventory();
 
-	public boolean isCollidingWithBlock;
-
 	private boolean inWater;
-
-	private List<MapObject> collidingEntities = new ArrayList<MapObject>();
-
-	protected EntityMovement movement = new EntityMovement();
-
+	
 	public Player(TileMap tm, World world) {
-		super(tm, world, "player");
+		super(tm, world);
 
 		width = 32;
 		height = 32;
@@ -202,7 +197,7 @@ public class Player extends EntityLiving implements IInventory{
 
 		if(!inWater){
 
-			movement.doPlayerMovement(this);
+			super.getNextPosition();
 
 			// cannot move while attacking, except in air
 			if ((currentAction == ACTION_ATTACK) && !(jumping || falling))
@@ -224,15 +219,8 @@ public class Player extends EntityLiving implements IInventory{
 
 	}
 
+	@Override
 	public void handleInput(){
-
-		setLeft(KeyHandler.isLeftKeyPressed());
-
-		setRight(KeyHandler.isRightKeyPressed());
-
-		setUp(KeyHandler.isUpKeyPressed());
-
-		setDown(KeyHandler.isDownKeyPressed());
 
 		if(XboxController.controller != null){
 			setJumping(KeyHandler.keyState[KeyHandler.SPACE]);
@@ -286,9 +274,7 @@ public class Player extends EntityLiving implements IInventory{
 	@Override
 	public void update() {
 
-		getNextPosition();
-		checkTileMapCollision();
-		setPosition(xtemp, ytemp);
+		super.update();
 
 		if (currentAction == ACTION_ATTACK){
 
@@ -325,13 +311,6 @@ public class Player extends EntityLiving implements IInventory{
 				invArmor.setWeapon(null);
 				//TODO break sound and or animation	
 			}
-
-		//check to stop flinching, and ready to get hurt again
-//		if (flinching) {
-//			final long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
-//			if (elapsed > 1200)
-//				flinching = false;
-//		}
 
 		if(flinching)
 			flinchTimer++;
@@ -612,7 +591,7 @@ public class Player extends EntityLiving implements IInventory{
 	}
 
 	@Override
-	public void onEntityHit(Player p, MapObject mo) {
+	public void onEntityHit(EntityPlayer p, MapObject mo) {
 
 		if(mo instanceof EntityEnemy){
 
@@ -923,18 +902,8 @@ public class Player extends EntityLiving implements IInventory{
 		//if player has torch, get light strenght from torch
 		return 200;
 	}
-
-	/**
-	 * Returns list with blocks the player is currently colliding with
-	 */
-	public List<MapObject> getCollidingMapObjects(){
-		return collidingEntities;
-	}
-
-	/**
-	 *Adds a block to the list of blocks the player is colliding with 
-	 */
-	public void setCollidingMapObjects(MapObject obj){
-		collidingEntities.add(obj);
+	
+	public World getWorld(){
+		return (World)this.world;
 	}
 }

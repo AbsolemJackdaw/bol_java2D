@@ -6,10 +6,11 @@ import static engine.keyhandlers.KeyHandler.getKeyName;
 import java.awt.image.BufferedImage;
 
 import engine.game.MapObject;
+import engine.game.entity.EntityPlayer;
 import engine.image.Images;
+import engine.imaging.Animation;
 import engine.map.TileMap;
 import game.World;
-import game.entity.Animation;
 import game.entity.living.player.Player;
 import game.gui.GuiCrafting;
 import game.item.ItemStack;
@@ -52,8 +53,8 @@ public class BlockCraftingTable extends BlockBreakable {
 	}
 	
 	@Override
-	public void interact(Player p, MapObject o) {
-		getWorld().displayGui(new GuiCrafting(getWorld(), p, advanced));
+	public void interact(EntityPlayer p, MapObject o) {
+		getWorld().displayGui(new GuiCrafting(getWorld(), (Player)p, advanced));
 	}
 	
 	@Override
