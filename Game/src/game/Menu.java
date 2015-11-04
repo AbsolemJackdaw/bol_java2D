@@ -1,47 +1,39 @@
 package game;
 
-import engine.gamestate.GameState;
-import engine.gamestate.GameStateManagerBase;
-import engine.image.Images;
-import engine.keyhandlers.KeyHandler;
-import engine.window.GamePanel;
-import game.content.save.Save;
-import game.item.Items;
 import static engine.window.GamePanel.HEIGHT;
 import static engine.window.GamePanel.WIDTH;
-import static game.util.Constants.*;
-import game.util.Util;
+import static game.util.Constants.COLOR_GENERAL;
+import static game.util.Constants.FONT_CHOICES;
+import static game.util.Constants.FONT_HEADER;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import engine.gamestate.GameState;
+import engine.gamestate.GameStateManagerBase;
+import engine.keyhandlers.KeyHandler;
+import engine.window.GamePanel;
+import engine.window.gameAid.Utility;
+import game.content.Loading;
+import game.content.save.Save;
+import game.util.Util;
 
-public class GameStateMenu extends GameState{
+
+public class Menu extends GameState{
 
 	private Color clr = new Color(0xcfd9e7);
 
 	private int currentChoice = 0;
-	private final String[] options = { "Start", "Help", "Quit" };
+	private final String[] options = { "Start", "Options", "Quit" };
 
 	private BufferedImage backGround;
 
-	public GameStateMenu(GameStateManagerBase gsm) {
+	public Menu(GameStateManagerBase gsm) {
 		super();
 		this.gsm = gsm;
 
-		if(Loading.stalactites[0] == null) //check to only load once
-			for(int i = 0; i < Loading.stalactites.length; i++){
-				Loading.stalactites[i] = Images.loadImage("/background/stalactite_"+i+".png");
-			}
-
 		backGround = Util.generateStalactiteBackGround();
-		
-		Save.readKeyBinds();
-
-		Loading.loadMusic();
-		
-		Items.loadItems();
 	}
 
 	@Override
@@ -56,7 +48,7 @@ public class GameStateMenu extends GameState{
 		
 		g.setFont(FONT_HEADER);
 		g.setColor(COLOR_GENERAL);
-		Util.drawCenteredString(g, "The Brim Of Life", FONT_HEADER, WIDTH/2, 175);
+		Utility.drawCenteredString(g, "The Brim Of Life", FONT_HEADER, WIDTH/2, 175);
 
 		// Draw menu square
 		g.setColor(clr);
@@ -93,9 +85,10 @@ public class GameStateMenu extends GameState{
 	private void select() {
 		if (currentChoice == 0){
 			gsm.setState(GameStateManager.GAME);
+			World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 			Save.readRandomParts();
 			Loading.startAtLastSavedLevel(gsm);
-
+			currentWorld.init();
 		}
 		if (currentChoice == 1)
 			gsm.setState(GameStateManager.HELP);

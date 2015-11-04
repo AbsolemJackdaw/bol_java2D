@@ -1,16 +1,42 @@
 
 package game.entity.living.player;
 
+import static game.util.Constants.ACTION_ATTACK;
+import static game.util.Constants.ACTION_FALLING;
+import static game.util.Constants.ACTION_IDLE;
+import static game.util.Constants.ACTION_JUMPING;
+import static game.util.Constants.ACTION_WALK;
+import static game.util.Constants.ARMOR_EXTRA_ATTACK;
+import static game.util.Constants.ARMOR_EXTRA_IDLE;
+import static game.util.Constants.ARMOR_EXTRA_JUMP;
+import static game.util.Constants.ARMOR_EXTRA_RUN;
+import static game.util.Constants.ARMS_ATTACK;
+import static game.util.Constants.ARMS_IDLE;
+import static game.util.Constants.ARMS_RUN;
+import static game.util.Constants.ARMS_WEAPON;
+import static game.util.Constants.ARM_JUMP;
+import static game.util.Constants.BODY_ATTACK;
+import static game.util.Constants.BODY_IDLE;
+import static game.util.Constants.BODY_RUN;
+import static game.util.Constants.HEAD_ATTACK;
+import static game.util.Constants.HEAD_IDLE;
+import static game.util.Constants.HEAD_JUMP;
+import static game.util.Constants.LEGS_ATTACK;
+import static game.util.Constants.LEGS_IDLE;
+import static game.util.Constants.LEGS_RUN;
+import static game.util.Constants.LEG_JUMP;
+import static game.util.Constants.hotBarKeys;
+import engine.game.MapObject;
 import engine.image.Images;
 import engine.keyhandlers.KeyHandler;
 import engine.keyhandlers.XboxController;
 import engine.map.TileMap;
 import engine.save.DataList;
 import engine.save.DataTag;
-import game.Loading;
 import game.World;
+import game.content.Loading;
 import game.entity.Animation;
-import game.entity.MapObject;
+import game.entity.EntityMovement;
 import game.entity.block.BlockBreakable;
 import game.entity.inventory.IInventory;
 import game.entity.living.EntityLiving;
@@ -22,9 +48,7 @@ import game.item.ItemBlock;
 import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
-import game.util.Constants;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -36,49 +60,9 @@ import java.util.List;
 public class Player extends EntityLiving implements IInventory{
 
 	private boolean flinching;
-	private long flinchTimer;
+	private long flinchTimer = 0;
 
 	private boolean attacking;
-
-	private static final int BODY_IDLE = 0;
-	private static final int HEAD_IDLE = 1;
-	private static final int ARMS_IDLE = 2;
-	private static final int LEGS_IDLE = 3;
-
-	private static final int HEAD_JUMP = 4;
-	private static final int ARM_JUMP = 5; //same as leg, but 1st frame
-	private static final int LEG_JUMP = 5; //same as arm, but 2nd frame
-
-	private static final int ARMS_RUN = 6;
-	private static final int BODY_RUN = 7;
-	private static final int LEGS_RUN = 8;
-
-	private static final int ARMS_WEAPON = 9;
-
-	private static final int ARMS_ATTACK = 10;
-	private static final int LEGS_ATTACK = 11; //frame 0
-	private static final int HEAD_ATTACK = 11; //frame 1
-	private static final int BODY_ATTACK = 11; //frame 2
-
-	private static final int ARMOR_EXTRA_IDLE = 0;
-	private static final int ARMOR_EXTRA_ATTACK = 1;
-	private static final int ARMOR_EXTRA_JUMP = 2;
-	private static final int ARMOR_EXTRA_RUN = 3;
-
-	private static final int ARMOR_HEAD_IDLE = 0;
-	private static final int ARMOR_TORSO_IDLE = 1;
-
-	private static final int ARMOR_HEAD_RUN = 3;
-	private static final int ARMOR_TORSO_RUN = 4;
-
-	private static final int ARMOR_HEAD_ATTACK = 6;
-	private static final int ARMOR_TORSO_ATTACK = 7;
-
-	private static final int ACTION_ATTACK = 0;
-	private static final int ACTION_WALK = 1;
-	private static final int ACTION_JUMPING = 2;
-	private static final int ACTION_FALLING = 3;
-	private static final int ACTION_IDLE = 4;
 
 	private Animation head = new Animation();
 	private Animation arms = new Animation();
@@ -112,11 +96,10 @@ public class Player extends EntityLiving implements IInventory{
 	public ArrayList<BufferedImage[]> playerSheet = Images.loadMultiAnimation(playerSprites, 32, 32, "/player/player_2.png");
 	public ArrayList<BufferedImage[]> beltSheet = Images.loadMultiAnimation(beltAnim, 32, 32, "/player/belt_anim.png");
 
-
 	int weaponRotation = 0;
 
 	private ItemStack[] inventory = new ItemStack[30];
-	
+
 	/**Where 0 is Helmet, 1 is Chest, 2 is Extra and 3 is Weapon*/
 	private ItemStack[] armorItems = new ItemStack[4];
 
@@ -127,6 +110,8 @@ public class Player extends EntityLiving implements IInventory{
 	private boolean inWater;
 
 	private List<MapObject> collidingEntities = new ArrayList<MapObject>();
+
+	protected EntityMovement movement = new EntityMovement();
 
 	public Player(TileMap tm, World world) {
 		super(tm, world, "player");
@@ -149,6 +134,7 @@ public class Player extends EntityLiving implements IInventory{
 
 		setPosition(3*32, 3*32);
 
+		initHealth(3f);
 	}
 
 	@Override
@@ -157,25 +143,40 @@ public class Player extends EntityLiving implements IInventory{
 	}
 
 	@Override
+	public void hurtEntity(float f) {
+
+		if(!flinching){
+			super.hurtEntity(f);
+			flinching = true;
+		}
+	}
+	
+	public void heal(float f){
+		health+=f;
+		
+		if(health > getMaxHealth())
+			health = getMaxHealth();
+		
+		if(health <=0)
+			this.remove=true;
+	}
+	
+	@Override
 	public void draw(Graphics2D g) {
 
-		if (flinching) {
-			final long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
-			if (((elapsed / 100) % 2) == 0)
-				g.setColor(Color.RED);
-			else
-				g.setColor(Color.WHITE);
-			//				return;
+		if(flinchTimer % 5 == 0)
+		{
+			//Draw all parts here
+			super.draw(g);
+			super.draw(g, head);
+			super.draw(g, arms);
+			super.draw(g, legs);
+			//armor parts
+			if(armor_extra.hasFrames())
+				super.draw(g, armor_extra);
 		}
 
-		//Draw all parts here
-		super.draw(g);
-		super.draw(g, head);
-		super.draw(g, arms);
-		super.draw(g, legs);
-		//armor parts
-		if(armor_extra.hasFrames())
-			super.draw(g, armor_extra);
+
 
 		if(invArmor.getWeapon() != null){
 			BufferedImage weapon = invArmor.getWeapon().getItem().getTexture();
@@ -200,95 +201,27 @@ public class Player extends EntityLiving implements IInventory{
 	public void getNextPosition() {
 
 		if(!inWater){
-			// movement
-			if (left) {
-				dx -= moveSpeed;
-				if (dx < -maxSpeed)
-					dx = -maxSpeed;
-			} else if (right) {
-				dx += moveSpeed;
-				if (dx > maxSpeed)
-					dx = maxSpeed;
-			} else if (dx > 0) {
-				dx -= stopSpeed;
-				if (dx < 0)
-					dx = 0;
-			} else if (dx < 0) {
-				dx += stopSpeed;
-				if (dx > 0)
-					dx = 0;
-			}
+
+			movement.doPlayerMovement(this);
 
 			// cannot move while attacking, except in air
 			if ((currentAction == ACTION_ATTACK) && !(jumping || falling))
 				dx = 0;
-
-			// jumping
-			if (jumping && !falling) {
-				dy = jumpStart;
-				falling = true;
-				//Music.play("jump_" + (rand.nextInt(5)+1));
-			}
-
-			// falling
-			if (falling) {
-				dy += fallSpeed;
-
-				if (dy > 0)
-					jumping = false;
-				if ((dy < 0) && !jumping)
-					dy += stopJumpSpeed;
-
-				if (dy > maxFallSpeed)
-					dy = maxFallSpeed;
-			}
 		}
 
 		else{
 
-			if (left) {
-				dx -= moveSpeed/2;
-				if (dx < -maxSpeed/2)
-					dx = -maxSpeed/2;
-			} else if (right) {
-				dx += moveSpeed/2;
-				if (dx > maxSpeed/2)
-					dx = maxSpeed/2;
-			} else if (dx > 0) {
-				dx -= stopSpeed;
-				if (dx < 0)
-					dx = 0;
-			} else if (dx < 0) {
-				dx += stopSpeed;
-				if (dx > 0)
-					dx = 0;
-			}
-
-			if (up) {
-				dy -= moveSpeed/2;
-				if (dy < -maxSpeed/2)
-					dy = -maxSpeed/2;
-				
+			movement.doPlayerWaterMovement(this);
+			if(up)
 				//TODO make a possible better check ? 
-				if(world.tileMap.getBlockID(currentCollumn+1, currentRow) > 20 || world.tileMap.getBlockID(currentCollumn-1, currentRow) > 20){
+				if(world.tileMap.getBlockID(currentColumn+1, currentRow) > 20 || world.tileMap.getBlockID(currentColumn-1, currentRow) > 20){
 					dy -= moveSpeed;
 					if (dy < -maxSpeed)
 						dy = -maxSpeed;
 				}
-			} else if (!up && falling) {
-				dy += moveSpeed/2;
-				if (dy > maxSpeed/2)
-					dy = maxSpeed/2;
-			} else if (dy > 0) {
-				dy -= stopSpeed;
-				if (dy < 0)
-					dy = 0;
-			} else if (dy < 0) {
-				dy += stopSpeed;
-				if (dy > 0)
-					dy = 0;
-			}
 		}
+
+
 	}
 
 	public void handleInput(){
@@ -317,7 +250,7 @@ public class Player extends EntityLiving implements IInventory{
 				if(o.intersects(this))
 					o.interact(this, o);
 
-		for(int key : Constants.hotBarKeys)
+		for(int key : hotBarKeys)
 			if(KeyHandler.isPressed(key)){
 				int keyPressed = key - KeyHandler.ONE;
 
@@ -394,12 +327,19 @@ public class Player extends EntityLiving implements IInventory{
 			}
 
 		//check to stop flinching, and ready to get hurt again
-		if (flinching) {
-			final long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
-			if (elapsed > 1200)
-				flinching = false;
-		}
+//		if (flinching) {
+//			final long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
+//			if (elapsed > 1200)
+//				flinching = false;
+//		}
 
+		if(flinching)
+			flinchTimer++;
+		if(flinchTimer > 50){
+			flinchTimer = 0;
+			flinching = false;
+		}
+		
 		updatePlayerAnimation();
 
 		// set direction
@@ -417,9 +357,6 @@ public class Player extends EntityLiving implements IInventory{
 					item.update();
 			}
 		}
-
-
-
 	}
 
 	/**equipes the player with the needed tool when hitting an entity, if the tool is acquired.*/
@@ -654,15 +591,15 @@ public class Player extends EntityLiving implements IInventory{
 	@Override
 	public void checkTileMapCollision() {
 
-		if(tileMap.getBlockID(currentRow, currentCollumn) == 6){
+		if(tileMap.getBlockID(currentRow, currentColumn) == 6){
 			Loading.gotoNextLevel(getWorld().gsm);
 		}
 
-		if(tileMap.getBlockID(currentRow, currentCollumn) == 7){
+		if(tileMap.getBlockID(currentRow, currentColumn) == 7){
 			Loading.gotoPreviousLevel(getWorld().gsm);
 		}
 
-		if(tileMap.getBlockID(currentRow, currentCollumn) == 10 || tileMap.getBlockID(currentRow, currentCollumn) == 9){
+		if(tileMap.getBlockID(currentRow, currentColumn) == 10 || tileMap.getBlockID(currentRow, currentColumn) == 9){
 			inWater = true;
 		}else
 			inWater = false;
@@ -678,11 +615,8 @@ public class Player extends EntityLiving implements IInventory{
 	public void onEntityHit(Player p, MapObject mo) {
 
 		if(mo instanceof EntityEnemy){
-			//			EntityEnemy ee = (EntityEnemy)mo;
-			//playerhealth -= ee.getAttackDamage();
-			//TODO do particles
-		}
 
+		}
 	}
 
 	/*======================INVENTORY====================*/

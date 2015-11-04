@@ -1,9 +1,6 @@
 package engine.map;
 
 
-import engine.window.GamePanel;
-import game.entity.living.player.Player;
-
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -11,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
+
+import engine.window.GamePanel;
 
 
 
@@ -63,10 +62,10 @@ public class TileMap {
 		return map[y][x];
 	}
 
-	public void draw(Graphics2D g, Player player, int renderPass) {
+	public void draw(Graphics2D g, int centralX, int centralY,  int renderPass) {
 
-		int Px = player.getScreenXpos()/32; //get row number
-		int Py = (player.getScreenYpos()/32);
+		int Px = centralX;
+		int Py = centralY;
 
 		int arroundX = 22; //TODO make renderDistance Configurable
 		int arroundY = 12;
@@ -130,12 +129,12 @@ public class TileMap {
 		return mapHeight;
 	}
 
-	/** collums = x */
+	/** row = x */
 	public int getXRows() {
 		return mapXRows;
 	}
 
-	/** Rows = y */
+	/** column = y */
 	public int getYRows() {
 		return mapYRows;
 	}
@@ -188,7 +187,7 @@ public class TileMap {
 
 	public void loadMap(String s) {
 
-		System.out.println("CLASSPATH = " + s);
+//		System.out.println("CLASSPATH = " + s);
 
 		try {
 

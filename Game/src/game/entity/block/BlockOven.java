@@ -2,13 +2,13 @@ package game.entity.block;
 
 import static engine.keyhandlers.KeyHandler.INTERACT;
 import static engine.keyhandlers.KeyHandler.getKeyName;
+import engine.game.MapObject;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.save.DataList;
 import engine.save.DataTag;
 import game.World;
 import game.entity.Animation;
-import game.entity.MapObject;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.GuiOven;

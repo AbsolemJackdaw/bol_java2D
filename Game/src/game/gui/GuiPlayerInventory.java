@@ -274,7 +274,7 @@ public class GuiPlayerInventory extends GuiContainer {
 						Item item = playerInventory.getStackInSlot(slot).getItem();
 						ItemStack stack = playerInventory.getStackInSlot(slot);
 
-						if(item.hasInventoryCallBack())
+						if(item.hasInventoryCallBack(player))
 							item.inventoryCallBack(slot_index, player);
 
 						else if(item instanceof ItemTool){

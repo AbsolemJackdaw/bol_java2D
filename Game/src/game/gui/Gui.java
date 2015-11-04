@@ -1,13 +1,13 @@
 package game.gui;
 
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+
 import engine.keyhandlers.KeyHandler;
 import engine.keyhandlers.XboxController;
 import engine.window.GamePanel;
 import game.World;
 import game.entity.living.player.Player;
-
-import java.awt.Graphics2D;
-import java.util.ArrayList;
 
 
 public class Gui {

@@ -1,10 +1,10 @@
 package game.entity.living.environement;
 
+import engine.game.MapObject;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import game.World;
-import game.entity.MapObject;
 import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 

@@ -1,8 +1,8 @@
 package game.entity;
 
-import engine.image.Images;
-
 import java.awt.image.BufferedImage;
+
+import engine.image.Images;
 
 public class Animation {
 

@@ -1,10 +1,10 @@
 package game.item;
 
+import java.awt.event.KeyEvent;
+
 import engine.keyhandlers.KeyHandler;
 import game.entity.living.player.Player;
 import game.util.Util;
-
-import java.awt.event.KeyEvent;
 
 
 public class ItemPouch extends Item {
@@ -18,7 +18,7 @@ public class ItemPouch extends Item {
 	}
 
 	@Override
-	public boolean hasInventoryCallBack() {
+	public boolean hasInventoryCallBack(Player player) {
 		return true;
 	}
 

@@ -2,6 +2,15 @@ package game;
 
 import static engine.window.GamePanel.HEIGHT;
 import static engine.window.GamePanel.WIDTH;
+
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import engine.game.MapObject;
 import engine.gamestate.GameState;
 import engine.gamestate.GameStateManagerBase;
 import engine.imaging.Background;
@@ -10,10 +19,11 @@ import engine.keyhandlers.XboxController;
 import engine.map.TileMap;
 import engine.save.DataList;
 import engine.save.DataTag;
+import engine.window.gameAid.Time;
+import game.content.Loading;
 import game.content.SpawningLogic;
 import game.content.save.Save;
 import game.entity.Entity;
-import game.entity.MapObject;
 import game.entity.block.BlockLight;
 import game.entity.block.BlockOven;
 import game.entity.block.Blocks;
@@ -29,16 +39,7 @@ import game.item.ItemLantern;
 import game.item.ItemStack;
 import game.item.Items;
 import game.util.Constants;
-import game.util.Time;
 import game.util.Util;
-
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 
 public class World extends GameState{
@@ -47,85 +48,179 @@ public class World extends GameState{
 
 	public TileMap tileMap;
 
-	public boolean showBoundingBoxes;
-
-	protected ArrayList<Background> backGrounds;
-
-	private String worldPath = "/maps/cave_rand_1.map";
-
 	/**ArrayList filled with every entity in this world instance*/
 	public ArrayList<MapObject> listWithMapObjects ;
-
+	
 	public boolean isDisplayingGui;
 	public Gui guiDisplaying;
 
 	public Time gametime = new Time(18000, 2, 1);
 	
+	public boolean showBoundingBoxes;
+
+	protected ArrayList<Background> backGrounds;
+
+	private String resourceMapPath = "";
+
 	public float nightAlhpa = 0;
 
 	private boolean displaySaveMessage;
-	private float displayMessage = 1.0F;
-
-	private Font defaultfont = new Font("Century Gothic", Font.PLAIN, 10);
+	private float displayMessageAlpha = 1.0F;
 
 	public boolean hasCreaturesSpawned;
 
-	public BufferedImage bg = null;
-	
+	private boolean isConsoleDisplayed = false;
+	private String consolePrint = "";
+
 	public World(GameStateManagerBase gsm) {
 		this.gsm = gsm;
 
 		tileMap = new TileMap(32);
 
-		loadWorld();
+		listWithMapObjects = new ArrayList<MapObject>();
+
+	}
+
+	/**
+	 * Method has to be called after world instance has been called 
+	 * and save data has been read;
+	 */
+	public void init(){
+
+		if(resourceMapPath.length() < 5)
+			loadMap("/maps/cave_rand_1.map");
 
 		player = new Player(tileMap, this);
 
 		if(Save.getPlayerData() != null)
 			player.readFromSave(Save.getPlayerData());
 
-		backGrounds = new ArrayList<Background>();
-		//		backGrounds.add(Images.instance.menuBackGround);
-
-		bg = Util.generateStalactiteBackGround();
-		
-		listWithMapObjects = new ArrayList<MapObject>();
-
 		displayGui(new GuiHud(this, player));
 
+		int mapHeight = (int)(tileMap.getYRows() * 32);
+
+		backGrounds = new ArrayList<Background>();
+
+		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 30), 2, 9, false, 10));
+		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 20), 5, 9, false, 10));
+		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 0), 9, 9, false, 10));
 	}
+
+	BufferedImage lighting = null;
+
+	Graphics2D gbi = null; 
 
 	@Override
 	public void draw(Graphics2D g){
 
-		g.setColor(Color.gray);
+		g.setColor(Color.gray.darker());
 		g.fillRect(0, 0, WIDTH, HEIGHT);
-		g.setFont(defaultfont);
-		
-		g.drawImage(bg, 0, 0, null);
+		g.setFont(Constants.FONT_ITEMS);
 
+		//draw backgrounds first. all other pictures will be drawn in front of it
 		if(backGrounds != null && !backGrounds.isEmpty())
 			for(Background bg : backGrounds)
 				bg.draw(g);
 
-		tileMap.draw(g, player, 1);
+		//draw the tile map
+		tileMap.draw(g, 
+				player.getScreenXpos()/32, 
+				player.getScreenYpos()/32,  1);
 
-		for(MapObject obj : listWithMapObjects){
-			//do not draw entities outside of the player's range
-			if(!isOutOfBounds(obj))
-				obj.draw(g);
+		//set night shade if it's night
+		if(nightAlhpa > 0.1f){
+			lighting = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+			gbi = lighting.createGraphics();
+
+			gbi.setColor(new Color(0f, 0f, 0.07f, nightAlhpa));
+			gbi.fillRect(0, 0, WIDTH, HEIGHT);
 		}
 
+		//Draw all objects/entities in the map here
+		for(MapObject obj : listWithMapObjects){
+			//do not draw entities outside of the player's range
+			if(isOutOfBounds(obj))
+				continue;
+
+			obj.draw(g);
+
+			if(nightAlhpa > 0.1f && gbi != null)
+				cutoutLight(obj, gbi);
+		}
+
+		//draw the player. draw it before the night shade !
 		player.draw(g);
 
-		tileMap.draw(g, player, 2);
-		
-		// Creates the buffered image. has to be recreated every time for transparancy
-		BufferedImage lighting = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		tileMap.draw(g, player.getScreenXpos()/32, player.getScreenYpos()/32,  2);
 
-		Graphics2D gbi = lighting.createGraphics();
+		//draw night shade after all visible in the world
+		if(nightAlhpa > 0.1f)
+			g.drawImage(lighting, 0,0, null);
 
-		if((guiDisplaying instanceof GuiHud))
+		//draw gui if any
+		if(isDisplayingGui && guiDisplaying != null){
+			guiDisplaying.draw(g);
+		}
+
+		//draw improvized console window
+		if(isConsoleDisplayed){
+			g.setColor(new Color(0f,0f,0f,0.5f));
+			g.fillRect(10, 10, 250, 25);
+			g.setColor(Color.white);
+			g.drawString(consolePrint, 25,25);
+		}
+
+		if(displaySaveMessage){	
+			//set the opacity
+			g.setFont(Constants.FONT_HEADER);
+			g.setColor(new Color(1f, 1f, 1f, displayMessageAlpha));
+			g.drawString("Successfully saved.", WIDTH / 2 - (WIDTH / 4), HEIGHT / 2);
+			displayMessageAlpha -= 0.01f;
+
+			//increase the opacity and repaint
+			if (displayMessageAlpha <= 0.0F)
+				displayMessageAlpha = 0.0F;
+
+			if(displayMessageAlpha == 0.0F){
+				displaySaveMessage = false;
+				displayMessageAlpha = 1.0f;
+			}
+		}
+	}
+
+	/**returns true if the currentime is bigger then the registered getDawn() time in the time handler*/
+	public boolean isNightTime(){
+		return gametime.getCurrentTime() > gametime.getDawn();
+	}
+
+	@Override
+	public void update(){
+
+		//move tilemap around 
+		tileMap.setPosition((WIDTH / 2) - player.getScreenXpos(), (HEIGHT / 2) - player.getScreenYpos());
+
+		//update backgrounds to move them around
+		if(backGrounds != null && !backGrounds.isEmpty())
+			for(Background bg : backGrounds){
+
+				if (!bg.isStatic)
+					bg.setPosition(tileMap.getx()/bg.speed , tileMap.gety()/bg.speed);
+			}
+
+		//process key input
+		handleInput();
+
+		//update game logics only if displaying gui is HUD, or the gui doesnt pause the game aka, in world
+		if(guiDisplaying instanceof GuiHud || guiDisplaying != null && !guiDisplaying.pausesGame()){
+
+			gametime.updateTime();
+
+			if(hasCreaturesSpawned)
+				if(!isNightTime())
+					hasCreaturesSpawned = false;
+
+			SpawningLogic.spawnNightCreatures(this, false);
+
 			if(isNightTime()){
 				if(nightAlhpa < 0.97f)
 					nightAlhpa +=0.0003f;
@@ -134,155 +229,6 @@ public class World extends GameState{
 				if(nightAlhpa > 0f)
 					nightAlhpa -= 0.0005f;
 			}
-
-		gbi.setColor(new Color(0f, 0f, 0.07f, nightAlhpa));
-		gbi.fillRect(0, 0, WIDTH, HEIGHT);
-
-		Ellipse2D ellipse = null;
-
-		//campfire cuts out circle here
-		if(nightAlhpa > 0.1f){
-
-			for(MapObject mo : listWithMapObjects){
-				if(isOutOfBounds(mo))
-					continue;
-
-				if(mo instanceof BlockLight){
-
-					BlockLight light = (BlockLight)mo;
-
-					int i = 3;
-
-					int x =(light.posX() + i * 2) - (light.getRadius()/2 - 16);
-					int y = (light.posY() + i * 2) - (light.getRadius()/2 - 16);
-					int h = light.getRadius() - i * 4;
-					int w = light.getRadius() - i * 4;
-
-					float scale = 15f;
-					float f =  0f + (float)i / 10f;
-
-					for(float i1 = 0; i1 <5; i1++){
-						gbi.setColor(new Color(0f, 0f, 0f, f));    
-						gbi.setComposite(AlphaComposite.DstOut);
-						ellipse = new Ellipse2D.Double(x+(i1*(scale/2f)),y+(i1*(scale/2f)),h-(i1*scale),w-(i1*scale));
-						gbi.fill(ellipse);
-					}
-				}else if (mo instanceof BlockOven){
-					BlockOven oven = (BlockOven)mo;
-					if(!oven.isLit())
-						continue;
-
-					for(int i = 0; i < 2; i++){
-						float f =  0f + (float)i / 10f;
-						gbi.setColor(new Color(0.0f, 0.0f, 0.0f, f));    
-						gbi.setComposite(AlphaComposite.DstOut);
-						gbi.fill(new Ellipse2D.Double((oven.posX() + i * 5) - (oven.getRadius()/2 - 32/2), (oven.posY() + i * 5) - (oven.getRadius()/2 - 32/2), oven.getRadius() - i * 10, oven.getRadius() - i *10));
-					}
-
-					int i = 2;
-
-					int x =(oven.posX() + i * 5) - (oven.getRadius()/2 - 32/2);
-					int y = (oven.posY() + i * 5) - (oven.getRadius()/2 - 32/2);
-					int h = oven.getRadius() - i * 10;
-					int w = oven.getRadius() - i *10;
-
-					float scale = 15f;
-					float f =  0f + (float)i / 10f;
-
-					for(float i1 = 0; i1 <2; i1++){
-						gbi.setColor(new Color(0f, 0f, 0f, f));    
-						gbi.setComposite(AlphaComposite.DstOut);
-						ellipse = new Ellipse2D.Double(x+(i1*(scale/2f)),y+(i1*(scale/2f)),h-(i1*scale),w-(i1*scale));
-						gbi.fill(ellipse);
-					}
-				}
-
-			}
-
-			//cut torch light out dynamicly
-			for(ItemStack stack : player.getItems())
-				if(stack != null)
-					if(stack.getItem().equals(Items.lantern)){
-
-						ItemLantern lant = (ItemLantern) stack.getItem();
-						if(!lant.isLit())
-							break;
-
-						int i =5;
-
-						float f =  0f + (float)i / 10f;
-
-						int x =(player.posX() + i * 5) - (player.getRadius()/2 - 32/2);
-						int y = (player.posY() + i * 5) - (player.getRadius()/2 - 32/2);
-						int h = player.getRadius() - i * 10;
-						int w = player.getRadius() - i *10;
-
-						float scale = 15f;
-						for(float i1 = 0; i1 <5; i1++){
-							gbi.setColor(new Color(0f, 0f, 0f, f));    
-							gbi.setComposite(AlphaComposite.DstOut);
-							ellipse = new Ellipse2D.Double(x+(i1*(scale/2f)),y+(i1*(scale/2f)),h-(i1*scale),w-(i1*scale));
-							gbi.fill(ellipse);
-						}
-					}
-
-		}
-		// Draws the buffered image.
-		g.drawImage(lighting, 0,0, null);
-
-		if(isDisplayingGui && guiDisplaying != null){
-			guiDisplaying.draw(g);
-		}
-
-		if(isConsoleDisplayed){
-			g.setColor(new Color(0f,0f,0f,0.5f));
-			g.fillRect(10, 10, 250, 25);
-			g.setColor(Color.white);
-			g.drawString(consolePrint, 25,25);
-		}
-
-		if(displaySaveMessage)
-		{	
-			//set the opacity
-			g.setFont(Constants.FONT_HEADER);
-			g.setColor(new Color(1f, 1f, 1f, displayMessage));
-			g.drawString("Successfully saved.", WIDTH / 2 - (WIDTH / 4), HEIGHT / 2);
-			displayMessage -= 0.01f;
-
-			//increase the opacity and repaint
-			if (displayMessage <= 0.0F)
-				displayMessage = 0.0F;
-
-			if(displayMessage == 0.0F){
-				displaySaveMessage = false;
-				displayMessage = 1.0f;
-			}
-		}
-	}
-
-	public boolean isNightTime(){
-		return gametime.getCurrentTime() > gametime.getDawn();
-	}
-
-	@Override
-	public void update(){
-
-		if(backGrounds != null && !backGrounds.isEmpty())
-			for(Background bg : backGrounds)
-				bg.update();
-
-		handleInput();
-
-		tileMap.setPosition((WIDTH / 2) - player.getScreenXpos(), (HEIGHT / 2) - player.getScreenYpos());
-
-		if(guiDisplaying instanceof GuiHud){
-			gametime.updateTime();
-
-			if(hasCreaturesSpawned)
-				if(!isNightTime())
-					hasCreaturesSpawned = false;
-
-			SpawningLogic.spawnNightCreatures(this, false);
 
 			player.update();
 
@@ -321,22 +267,11 @@ public class World extends GameState{
 		}
 	}
 
-	private void loadWorld() {
-		tileMap.loadTiles(getTileTexture());
-		tileMap.loadMap(worldPath);
-		tileMap.setPosition(0, 0);
-	}
-
-	public void reloadMap(String s){
-		tileMap.loadMap(s);
-		worldPath = s;
-	}
-
-	public String getTileTexture(){
-		return "/maps/platformer_tiles.png";
-	}
-
 	public void handleInput() {
+
+		if(KeyHandler.isPressed(KeyHandler.CTRL)){
+			player.initHealth(15f);
+		}
 
 		if(isConsoleDisplayed){
 			consoleInput();
@@ -350,7 +285,7 @@ public class World extends GameState{
 			displaySaveMessage = true;
 		}
 
-		if(KeyHandler.isPressed(KeyHandler.SHIFT) && KeyHandler.prevKeyState[KeyHandler.CTRL]){
+		if(KeyHandler.prevKeyState[KeyHandler.CTRL] && KeyHandler.isPressed(KeyHandler.SHIFT)){
 			displayConsole();
 			return;
 		}
@@ -382,18 +317,31 @@ public class World extends GameState{
 
 		player.handleInput();
 
-		if (KeyHandler.isPressed(KeyHandler.B)){
+		if (KeyHandler.isPressed(KeyHandler.B))
 			showBoundingBoxes = showBoundingBoxes ? false :true;
-		}
+	}
+
+	public void loadMap(String s){
+		resourceMapPath = s;
+		tileMap.loadTiles(getTileTexture());
+		tileMap.loadMap(resourceMapPath);
+		tileMap.setPosition(0, 0);
+	}
+
+	public String getTileTexture(){
+		return "/maps/platformer_tiles.png";
 	}
 
 	public Player getPlayer(){
 		return player;
 	}
 
+	/**
+	 * Write world data to json file
+	 */
 	public void writeToSave(DataTag tag){
 
-		tag.writeString("map", worldPath);
+		tag.writeString("map", resourceMapPath);
 
 		tag.writeInt("gametime", gametime.getCurrentTime());
 		tag.writeFloat("nightshade", new Float(nightAlhpa));
@@ -409,9 +357,12 @@ public class World extends GameState{
 		tag.writeList("content", list);
 	}
 
+	/**
+	 * Read world data from json file
+	 */
 	public void readFromSave(DataTag tag){
 
-		reloadMap(tag.readString("map"));
+		loadMap(tag.readString("map"));
 		gametime.writeCurrentGameTime(tag.readInt("gametime"));
 		nightAlhpa = tag.readFloat("nightshade");
 
@@ -464,12 +415,9 @@ public class World extends GameState{
 		if(obj.getScreenXpos() >= xDistanceMin && obj.getScreenXpos() < xDistanceMax)
 			if(obj.getScreenYpos() >= yDistanceMin && obj.getScreenYpos() < yDistanceMax)
 				return false;
-		
+
 		return true;
 	}
-
-	private boolean isConsoleDisplayed = false;
-	private String consolePrint = "";
 
 	private void displayConsole(){
 		isConsoleDisplayed = true;
@@ -479,14 +427,24 @@ public class World extends GameState{
 		if(KeyHandler.isPressed(KeyHandler.ESCAPE))
 			isConsoleDisplayed = false;
 		else
-			consolePrint = KeyHandler.keyPressed(KeyHandler.ANYKEY, consolePrint);
+			consolePrint = KeyHandler.getKeyString(KeyHandler.ANYKEY, consolePrint);
 
 		if(KeyHandler.isPressed(KeyHandler.ENTER))
 			consoleCommands(consolePrint);
 	}
 
 	private void consoleCommands(String cmd){
-		if(cmd.equals("night"))
+		if(cmd.startsWith("hurt")){
+			String [] split = cmd.split("\\s+");
+			if(split.length == 2)
+				player.hurtEntity(Float.valueOf(split[1]));
+		}
+
+		else if(cmd.equals("heal")){
+			player.heal(1f);
+		}
+
+		else if(cmd.equals("night"))
 			gametime.writeCurrentGameTime(gametime.getDawn());
 
 		else if(cmd.equals("day"))
@@ -533,8 +491,94 @@ public class World extends GameState{
 				System.out.println("[INFO" + " current time = " + gametime.getCurrentTime());
 			}
 		}
-		
+
 		consolePrint = "";
 		isConsoleDisplayed = false;
+	}
+
+	/**cuts out an ellipse in the night shade /lighting bufferedimage drawn over the screen at night*/
+	private void cutoutLight(MapObject mo, Graphics2D gbi){
+
+		Ellipse2D ellipse = null;
+
+		if(mo instanceof BlockLight){
+
+			BlockLight light = (BlockLight)mo;
+
+			int i = 3;
+
+			int x =(light.posX() + i * 2) - (light.getRadius()/2 - 16);
+			int y = (light.posY() + i * 2) - (light.getRadius()/2 - 16);
+			int h = light.getRadius() - i * 4;
+			int w = light.getRadius() - i * 4;
+
+			float scale = 15f;
+			float f =  0f + (float)i / 10f;
+
+			for(float i1 = 0; i1 <5; i1++){
+				gbi.setColor(new Color(0f, 0f, 0f, f));    
+				gbi.setComposite(AlphaComposite.DstOut);
+				ellipse = new Ellipse2D.Double(x+(i1*(scale/2f)),y+(i1*(scale/2f)),h-(i1*scale),w-(i1*scale));
+				gbi.fill(ellipse);
+			}
+		}
+
+		else if (mo instanceof BlockOven){
+			BlockOven oven = (BlockOven)mo;
+
+			if(oven.isLit()){
+
+				for(int i = 0; i < 2; i++){
+					float f =  0f + (float)i / 10f;
+					gbi.setColor(new Color(0.0f, 0.0f, 0.0f, f));    
+					gbi.setComposite(AlphaComposite.DstOut);
+					gbi.fill(new Ellipse2D.Double((oven.posX() + i * 5) - (oven.getRadius()/2 - 32/2), (oven.posY() + i * 5) - (oven.getRadius()/2 - 32/2), oven.getRadius() - i * 10, oven.getRadius() - i *10));
+				}
+
+				int i = 2;
+
+				int x =(oven.posX() + i * 5) - (oven.getRadius()/2 - 32/2);
+				int y = (oven.posY() + i * 5) - (oven.getRadius()/2 - 32/2);
+				int h = oven.getRadius() - i * 10;
+				int w = oven.getRadius() - i *10;
+
+				float scale = 15f;
+				float f =  0f + (float)i / 10f;
+
+				for(float i1 = 0; i1 <2; i1++){
+					gbi.setColor(new Color(0f, 0f, 0f, f));    
+					gbi.setComposite(AlphaComposite.DstOut);
+					ellipse = new Ellipse2D.Double(x+(i1*(scale/2f)),y+(i1*(scale/2f)),h-(i1*scale),w-(i1*scale));
+					gbi.fill(ellipse);
+				}
+			}
+		}
+
+		//cut torch light out dynamicly
+		for(ItemStack stack : player.getItems())
+			if(stack != null)
+				if(stack.getItem().equals(Items.lantern)){
+
+					ItemLantern lant = (ItemLantern) stack.getItem();
+					if(!lant.isLit())
+						break;
+
+					int i =5;
+
+					float f =  0f + (float)i / 10f;
+
+					int x =(player.posX() + i * 5) - (player.getRadius()/2 - 32/2);
+					int y = (player.posY() + i * 5) - (player.getRadius()/2 - 32/2);
+					int h = player.getRadius() - i * 10;
+					int w = player.getRadius() - i *10;
+
+					float scale = 15f;
+					for(float i1 = 0; i1 <5; i1++){
+						gbi.setColor(new Color(0f, 0f, 0f, f));    
+						gbi.setComposite(AlphaComposite.DstOut);
+						ellipse = new Ellipse2D.Double(x+(i1*(scale/2f)),y+(i1*(scale/2f)),h-(i1*scale),w-(i1*scale));
+						gbi.fill(ellipse);
+					}
+				}
 	}
 }

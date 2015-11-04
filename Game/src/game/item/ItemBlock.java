@@ -1,8 +1,8 @@
 package game.item;
 
+import engine.game.MapObject;
 import engine.map.TileMap;
 import game.World;
-import game.entity.MapObject;
 import game.entity.block.Blocks;
 import game.entity.living.player.Player;
 import game.util.Util;
@@ -28,7 +28,7 @@ public class ItemBlock extends Item{
 	}
 
 	@Override
-	public boolean hasInventoryCallBack() {
+	public boolean hasInventoryCallBack(Player player) {
 		return true;
 	}
 

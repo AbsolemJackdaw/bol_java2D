@@ -2,18 +2,19 @@ package game.entity.block;
 
 import static engine.keyhandlers.KeyHandler.INTERACT;
 import static engine.keyhandlers.KeyHandler.getKeyName;
+
+import java.awt.image.BufferedImage;
+
+import engine.game.MapObject;
 import engine.image.Images;
 import engine.map.TileMap;
 import game.World;
 import game.entity.Animation;
-import game.entity.MapObject;
 import game.entity.living.player.Player;
 import game.gui.GuiCrafting;
 import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
-
-import java.awt.image.BufferedImage;
 
 
 public class BlockCraftingTable extends BlockBreakable {

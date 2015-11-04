@@ -42,7 +42,7 @@ public class GameStateManagerBase {
 		return currentState;
 	}
 
-	protected void loadState(int state){
+	protected void loadState(int state) {
 		
 	}
 

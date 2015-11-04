@@ -1,21 +1,25 @@
 package game;
 
+import static engine.window.GamePanel.HEIGHT;
+import static engine.window.GamePanel.WIDTH;
 import static game.util.Constants.COLOR_GENERAL;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 import engine.gamestate.GameState;
 import engine.gamestate.GameStateManagerBase;
-import engine.imaging.Background;
 import engine.keyhandlers.KeyHandler;
 import game.content.save.Save;
+import game.util.Constants;
+import game.util.Util;
 
 public class Help extends GameState{
 
-	private Background bg;
+	private BufferedImage bg;
 	private Font font;
 
 	private int[] selection = new int[2]; 
@@ -25,17 +29,21 @@ public class Help extends GameState{
 		Save.readKeyBinds();
 
 		gsm = manager;
-		bg = new Background("/background/menu.png", 2, false, 5);
-		font = new Font("Constantia", Font.PLAIN, 18);
+		bg = Util.generateStalactiteBackGround();
+		font = Constants.FONT_HEADER_SMALL;
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		bg.draw(g);
+		
+		g.setColor(Color.black);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		
+		g.drawImage(bg, 0, 0, null);
 
 		g.setFont(font);
 
-		g.setColor(Color.black);
+		g.setColor(Constants.COLOR_GENERAL);
 
 		g.drawString("Controls", 10, 15);
 		g.drawString("Various Keys :", 10, 75);
@@ -47,7 +55,7 @@ public class Help extends GameState{
 		g.drawString("(Attack/Validation, Validation, Inventory, Interaction)",10,90);
 		g.drawString("(Console, BB, QuickSave, Destroy Item)",10,150);
 
-		g.setColor(COLOR_GENERAL);
+		g.setColor(Color.white);
 
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.UP]), 40, 55);
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.LEFT]), 90, 55);
@@ -84,7 +92,7 @@ public class Help extends GameState{
 
 			Save.writeKeyBinds();
 
-			gsm.setState(GameStateManager.MENUSTATE);
+			gsm.setState(GameStateManager.MENU);
 
 		}
 

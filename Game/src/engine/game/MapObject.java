@@ -1,4 +1,4 @@
-package game.entity;
+package engine.game;
 
 
 import java.awt.Color;
@@ -12,29 +12,30 @@ import engine.map.TileMap;
 import engine.save.DataTag;
 import engine.window.GamePanel;
 import game.World;
+import game.entity.Animation;
 import game.entity.living.player.Player;
 
 
 public abstract class MapObject {
 
 	// tile stuff
-	protected TileMap tileMap;
+	public TileMap tileMap;
 
 	protected int tileSize;
 	/**pos x on the map*/
-	protected double xmap;
+	public double xmap;
 	/**pos y on the map*/
-	protected double ymap;
+	public double ymap;
 
 	// position and vector
 	/**pos x on screen*/
-	protected double xScreen;
+	public double xScreen;
 	/**pos y on screen*/
-	protected double yScreen;
+	public double yScreen;
 	/**direction x. used for updating position*/
-	protected double dx;
+	public double dx;
 	/**direction y. used for updating position*/
-	protected double dy;
+	public double dy;
 
 	// dimensions
 	/**texture width*/
@@ -49,10 +50,10 @@ public abstract class MapObject {
 	protected int entitySizeY;
 
 	// collision
-	/**y row on the map*/
-	protected int currentCollumn; //TODO rename these !
+	/**y column on the map*/
+	public int currentColumn; 
 	/**x row on the map*/
-	protected int currentRow;
+	public int currentRow;
 
 	protected double xdest;
 	protected double ydest;
@@ -68,7 +69,7 @@ public abstract class MapObject {
 	/**The Entity's animation. */
 	protected Animation animation;
 	/**Action this entity is currently executing*/
-	protected int currentAction;
+	public int currentAction;
 	protected int previousAction;
 
 	/**Set to true if the entity should face right. False if it has to be turned around*/
@@ -76,36 +77,36 @@ public abstract class MapObject {
 
 	// movement
 	/**Wether the entity is walking left or not*/
-	protected boolean left;
+	public boolean left;
 	/**Wether the entity is walking right or not*/
-	protected boolean right;
+	public boolean right;
 	/**Wether the entity is going up or not*/
-	protected boolean up;
+	public boolean up;
 	/**Wether the entity is going down or not*/
-	protected boolean down;
+	public boolean down;
 	/**Wether the entity is currently jumping or not*/
-	protected boolean jumping;
+	public boolean jumping;
 	/**Wether the entity is currently falling or not*/
-	protected boolean falling;
+	public boolean falling;
 
 	// movement attributes
 	/**Initial move speed. You speed up as you walk*/
-	protected double moveSpeed;
+	public double moveSpeed;
 	/**Maximum of speed this entity can walk. Also affects jumping distance*/
-	protected double maxSpeed;
+	public double maxSpeed;
 	/**Speed this entity will stop with. lower numbers result in a slower stop, thus sliding*/
-	protected double stopSpeed;
+	public double stopSpeed;
 	/**Affects falling and jumping*/
-	protected double fallSpeed;
-	protected double maxFallSpeed;
+	public double fallSpeed;
+	public double maxFallSpeed;
 	/**How high this entity can jump. Counts from a negative number up to 0*/
-	protected double jumpStart;
-	protected double stopJumpSpeed;
+	public double jumpStart;
+	public double stopJumpSpeed;
 
 	/**used for flying entities. true will skip falling logic*/
 	protected boolean ignoreGravity = false;
 
-	protected World world;
+	public World world;
 
 	/**Unique Item Name. Every entity needs a unique name that is used to save it, and reconstruct it when loading it back into the world.*/
 	private final String UIN;
@@ -147,9 +148,11 @@ public abstract class MapObject {
 		return false;
 	}
 
-	/**gets called only once to set the Animation texture sequence
-	 * can return a new instance without it being called every frame*/
-	public BufferedImage getEntityTexture(){
+	/**
+	 * Gets called only once to set the Animation texture sequence.
+	 * Returns a new instance of the texture.
+	 */
+	protected BufferedImage getEntityTexture(){
 		return this.animation.getDefaultAnimation()[0];
 	}
 
@@ -176,9 +179,9 @@ public abstract class MapObject {
 	public void checkTileMapCollision() {
 
 		currentRow = (int) xScreen / tileSize;
-		currentCollumn = (int) yScreen / tileSize;
+		currentColumn = (int) yScreen / tileSize;
 
-		if(currentRow < 0 || currentRow >= tileMap.getXRows() || currentCollumn <0 || currentCollumn >= tileMap.getYRows()){
+		if(currentRow < 0 || currentRow >= tileMap.getXRows() || currentColumn <0 || currentColumn >= tileMap.getYRows()){
 			this.remove = true;
 			System.out.println("The MapObject " + this.getUin() + " evaporated due to it being out of the map.");
 			return;
@@ -194,7 +197,7 @@ public abstract class MapObject {
 		if (dy < 0)
 			if (topLeft || topRight) {
 				dy = 0;
-				ytemp = (currentCollumn * tileSize) + (entitySizeY / 2);
+				ytemp = (currentColumn * tileSize) + (entitySizeY / 2);
 
 			} else
 				ytemp += dy;
@@ -202,7 +205,7 @@ public abstract class MapObject {
 			if (bottomLeft || bottomRight) {
 				dy = 0;
 				falling = false;
-				ytemp = ((currentCollumn + 1) * tileSize) - (entitySizeY / 2);
+				ytemp = ((currentColumn + 1) * tileSize) - (entitySizeY / 2);
 			} else
 				ytemp += dy;
 

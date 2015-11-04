@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 
+
 public class KeyHandler {
 	public static final int NUM_KEYS = 32;
 
@@ -36,21 +37,21 @@ public class KeyHandler {
 		KeyEvent.VK_F5, //10
 		KeyEvent.VK_A, //11
 
-		KeyEvent.VK_UP,
-		KeyEvent.VK_DOWN,
-		KeyEvent.VK_LEFT,
-		KeyEvent.VK_RIGHT,
+		KeyEvent.VK_UP, //12
+		KeyEvent.VK_DOWN, //13
+		KeyEvent.VK_LEFT, //14
+		KeyEvent.VK_RIGHT, //15
 
 		KeyEvent.VK_1,
 		KeyEvent.VK_2,
 		KeyEvent.VK_3,
 		KeyEvent.VK_4,
-		KeyEvent.VK_5,
-		KeyEvent.VK_6,
+		KeyEvent.VK_5, //20
+		KeyEvent.VK_6, 
 		KeyEvent.VK_7,
 		KeyEvent.VK_8,
 		KeyEvent.VK_9,
-		KeyEvent.VK_0,
+		KeyEvent.VK_0, //25
 
 		KeyEvent.VK_M,//Place button for xbox controllers 
 
@@ -103,6 +104,7 @@ public class KeyHandler {
 
 	public static int ANYKEY = 31;
 
+	/**Returns true if any of the registered keys are pressed*/
 	public static boolean anyKeyPress() {
 		for (int i = 0; i < NUM_KEYS; i++)
 			if (keyState[i])
@@ -110,7 +112,8 @@ public class KeyHandler {
 		return false;
 	}
 
-	public static String keyPressed(int i, String string){
+	/**Returns a the given string + the key typed*/
+	public static String getKeyString(int i, String string){
 
 		if(keysTyped.isEmpty())
 			return string;
@@ -118,7 +121,7 @@ public class KeyHandler {
 		if(keyState[ANYKEY] && !prevKeyState[ANYKEY] || keysTyped.size() > 0){
 
 			String s = keysTyped.get(0);
-
+			
 			if(keyCode == KeyEvent.VK_8 && prevKeyState[SHIFT] || keyCode == KeyEvent.VK_MINUS && prevKeyState[SHIFT])
 				string+="_";
 
@@ -130,7 +133,6 @@ public class KeyHandler {
 			}
 			else if(keyCode == KeyEvent.VK_SPACE)
 				string+=" ";
-
 
 			keysTyped.remove(0);
 			keysTyped.trimToSize();
@@ -177,7 +179,7 @@ public class KeyHandler {
 			keysTyped.add(KeyEvent.getKeyText(i));
 
 
-		else if (i == registeredKeys[UP])
+		if (i == registeredKeys[UP])
 			keyState[UP] = b;
 		else if (i == registeredKeys[LEFT])
 			keyState[LEFT] = b;
@@ -206,46 +208,46 @@ public class KeyHandler {
 
 		else if (i == KeyEvent.VK_1)
 			keyState[ONE] = b;
-		
+
 		else if (i == KeyEvent.VK_2)
 			keyState[TWO] = b;
-		
+
 		else if (i == KeyEvent.VK_3)
 			keyState[THREE] = b;
-		
+
 		else if (i == KeyEvent.VK_4)
 			keyState[FOUR] = b;
-		
+
 		else if (i == KeyEvent.VK_5)
 			keyState[FIVE] = b;
-		
+
 		else if (i == KeyEvent.VK_6)
 			keyState[SIX] = b;
-		
+
 		else if (i == KeyEvent.VK_7)
 			keyState[SEVEN] = b;
-		
+
 		else if (i == KeyEvent.VK_8)
 			keyState[EIGHT] = b;
-		
+
 		else if (i == KeyEvent.VK_9)
 			keyState[NINE] = b;
-		
+
 		else if ( i == KeyEvent.VK_0)
 			keyState[ZERO] = b;
-		
+
 		else if( i == KeyEvent.VK_UP)
 			keyState[ARROW_UP] = b;
-		
+
 		else if( i == KeyEvent.VK_DOWN)
 			keyState[ARROW_DOWN] = b;
-		
+
 		else if( i == KeyEvent.VK_LEFT)
 			keyState[ARROW_LEFT] = b;
-		
+
 		else if( i == KeyEvent.VK_RIGHT)
 			keyState[ARROW_RIGHT] = b;
-		
+
 		else if(i == registeredKeys[INTERACT])
 			keyState[INTERACT] = b;
 		else if(i == registeredKeys[SHIFT] )
@@ -264,6 +266,7 @@ public class KeyHandler {
 			keyState[ESCAPE2] = b;
 
 		keyState[ANYKEY] = b;
+
 	}
 
 	public static void update() {
@@ -272,7 +275,7 @@ public class KeyHandler {
 	}
 
 	public static boolean shiftIsHeld(){
-		return prevKeyState[SHIFT];
+		return prevKeyState[SHIFT] || keyState[SHIFT];
 	}
 
 	public static String getKeyName(int keyId) {

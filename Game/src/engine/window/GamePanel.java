@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private Graphics2D g;
 
 	// game state manager
-	private GameStateManagerBase gsm;
+	protected GameStateManagerBase gsm;
 
 	public GamePanel() {
 		super();
@@ -113,8 +113,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		g = (Graphics2D) image.getGraphics();
 
 		running = true;
-
-		gsm = new GameStateManagerBase();
+		
+		gsm = getGameStateManager();
+	}
+	
+	/**
+	 * Register
+	 */
+	protected GameStateManagerBase getGameStateManager(){
+		return null;
 	}
 
 	@Override

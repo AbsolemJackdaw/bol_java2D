@@ -1,10 +1,10 @@
 package game.entity.living.enemy;
 
+import engine.game.MapObject;
 import engine.map.TileMap;
 import engine.music.Music;
 import game.World;
 import game.entity.EntityAI;
-import game.entity.MapObject;
 import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.ItemTool;

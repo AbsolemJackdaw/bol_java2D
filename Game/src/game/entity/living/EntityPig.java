@@ -1,11 +1,11 @@
 package game.entity.living;
 
+import engine.game.MapObject;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.music.Music;
 import game.World;
 import game.entity.EntityAI;
-import game.entity.MapObject;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.ItemTool;
@@ -26,7 +26,7 @@ public class EntityPig extends EntityLiving{
 	public EntityPig(TileMap tm, World world, String uin) {
 		super(tm, world, uin);
 
-		setHealth(8);
+		initHealth(8f);
 
 		getAnimation().setFrames(Images.loadMultiImage("/entity/piggy.png", 32, 0, 4));
 		getAnimation().setDelay(150);

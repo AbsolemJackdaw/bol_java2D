@@ -2,12 +2,12 @@ package game.gui;
 
 import engine.keyhandlers.KeyHandler;
 import engine.window.GamePanel;
+import engine.window.gameAid.Utility;
 import game.GameStateManager;
-import game.Loading;
 import game.World;
+import game.content.Loading;
 import game.content.save.Save;
 import game.entity.living.player.Player;
-import game.util.Util;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -38,7 +38,7 @@ public class GuiPause extends Gui {
 		g.setFont(font);
 		g.setColor(color);
 		
-		Util.drawCenteredString(g, "Pause", font, GamePanel.WIDTH/2, 175);
+		Utility.drawCenteredString(g, "Pause", font, GamePanel.WIDTH/2, 175);
 
 		// Draw menu square
 		g.setColor(clr);
@@ -52,7 +52,7 @@ public class GuiPause extends Gui {
 			else
 				g.setColor(Color.red.darker());
 			
-			Util.drawCenteredString(g, options[i], fontChoices, GamePanel.WIDTH / 2, GamePanel.HEIGHT - 150 + (i * 15));
+			Utility.drawCenteredString(g, options[i], fontChoices, GamePanel.WIDTH / 2, GamePanel.HEIGHT - 150 + (i * 15));
 			
 		}
 		
@@ -60,7 +60,7 @@ public class GuiPause extends Gui {
 			//set the opacity
 			g.setFont(font);
 			g.setColor(new Color(1f, 1f, 1f, alpha));
-			Util.drawCenteredString(g, "Save Succesful", font, GamePanel.WIDTH / 2, GamePanel.HEIGHT / 2 + 30);
+			Utility.drawCenteredString(g, "Save Succesful", font, GamePanel.WIDTH / 2, GamePanel.HEIGHT / 2 + 30);
 			alpha -= 0.01f;
 
 			//increase the opacity and repaint
@@ -85,7 +85,7 @@ public class GuiPause extends Gui {
 		else if(currentChoice == 2)
 		{
 			saveGame();
-			world.gsm.setState(GameStateManager.MENUSTATE);
+			world.gsm.setState(GameStateManager.MENU);
 		}
 		else if (currentChoice == 3)
 		{

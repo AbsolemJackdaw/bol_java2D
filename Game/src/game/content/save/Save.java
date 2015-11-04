@@ -1,13 +1,14 @@
 package game.content.save;
 
-import static engine.save.Save.*;
+import static engine.save.Save.read;
+import static engine.save.Save.write;
 
 import org.json.simple.JSONObject;
 
 import engine.keyhandlers.KeyHandler;
 import engine.save.DataTag;
-import game.Loading;
 import game.World;
+import game.content.Loading;
 import game.entity.living.player.Player;
 
 

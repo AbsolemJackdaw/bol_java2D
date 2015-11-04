@@ -1,11 +1,11 @@
 package game.entity.living;
 
+import engine.game.MapObject;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.music.Music;
 import game.World;
 import game.entity.EntityAI;
-import game.entity.MapObject;
 import game.entity.living.enemy.EntityEnemy;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
@@ -20,7 +20,7 @@ public class EntityBat extends EntityEnemy {
 	public EntityBat(TileMap tm, World world, String uin) {
 		super(tm, world, uin);
 
-		setHealth(12);
+		initHealth(12f);
 
 		getAnimation().setFrames(Images.loadMultiImage("/entity/bat.png", 96, 0, 96, 32, 6));
 		getAnimation().setDelay(50);

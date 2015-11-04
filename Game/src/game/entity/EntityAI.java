@@ -2,6 +2,7 @@ package game.entity;
 
 import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
+import game.util.Constants;
 
 
 public class EntityAI {
@@ -33,11 +34,11 @@ public class EntityAI {
 		}
 
 		// turn around when arrow blocks are hit
-		if( el.tileMap.getBlockID(el.currentRow,el.currentCollumn) == 7){
+		if( el.tileMap.getBlockID(el.currentRow,el.currentColumn) == 7){
 			el.left = false; el.right = true;
 		}
 
-		if(el.tileMap.getBlockID(el.currentRow, el.currentCollumn) == 6){
+		if(el.tileMap.getBlockID(el.currentRow, el.currentColumn) == 6){
 			el.left = true; el.right = false;
 		}
 
@@ -77,7 +78,7 @@ public class EntityAI {
 
 		if(entityTimer % 6 == 0){
 			if(entityTimer > 1)
-				if(el.rand.nextInt(entityTimer) > 10)
+				if(Constants.RANDOM.nextInt(entityTimer) > 10)
 					el.dy--;
 				else
 					;
@@ -123,4 +124,5 @@ public class EntityAI {
 //		el.moveSpeed = el.moveSpeed*1.5;
 //		el.maxSpeed = el.maxSpeed*2;
 	}
+	
 }

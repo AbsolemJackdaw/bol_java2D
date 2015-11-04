@@ -1,20 +1,20 @@
 package engine;
 
+import java.awt.Container;
+
 import javax.swing.JFrame;
 
-import engine.window.GamePanel;
-
-
 public class Main {
+
+
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
-		//TODO get window name from launch settings
-		final JFrame window = new JFrame("The Brim of Life");
-		window.setContentPane(new GamePanel());
+		final JFrame window = new JFrame(args[0]);
+		window.setContentPane(getContainerClass(args[1]));
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setUndecorated(true);
 		window.setResizable(false);
@@ -25,4 +25,31 @@ public class Main {
 
 	}
 
+	private static Container getContainerClass(String path){
+
+		Class<?> cl = null; 
+
+		try {
+			cl = Class.forName(path);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+		Container container = null;
+
+		try {
+			container = (Container) cl.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+		if(container==null){
+			System.exit(0);
+		}
+
+		return container;
+
+	}
 }

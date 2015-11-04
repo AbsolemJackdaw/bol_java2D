@@ -1,20 +1,21 @@
-package game;
+package game.content;
 
 import static engine.music.Music.load;
+
+import java.awt.image.BufferedImage;
+import java.util.Random;
+
 import engine.gamestate.GameStateManagerBase;
 import engine.map.TileMap;
 import engine.save.DataTag;
-import game.content.SpawningLogic;
+import game.GameStateManager;
+import game.World;
 import game.content.save.Save;
 import game.entity.Entity;
 import game.entity.block.BlockBreakable;
 import game.entity.block.BlockLog;
 import game.entity.block.Blocks;
 import game.entity.living.EntityLiving;
-import game.util.Util;
-
-import java.awt.image.BufferedImage;
-import java.util.Random;
 
 
 public class Loading {
@@ -59,12 +60,11 @@ public class Loading {
 		index++;
 		World newWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
-		newWorld.bg = Util.generateStalactiteBackGround();
-
 		//if its a new map
 		if(index == maps){
 			String s = newMap();
-			newWorld.reloadMap(s);
+			newWorld.loadMap(s);
+			newWorld.init();
 			maps++;
 			generateRandomTree(newWorld);
 			generateRandomOre(newWorld, Blocks.IRON, 7);
@@ -83,6 +83,7 @@ public class Loading {
 			//set gametime to continue counting
 			newWorld.gametime.writeCurrentGameTime(time);
 			newWorld.nightAlhpa = nightShade;
+			newWorld.init();
 		}
 
 		Save.writeRandomParts();
@@ -124,6 +125,8 @@ public class Loading {
 
 		newWorld.readFromSave(Save.getWorldData(index));
 
+		newWorld.init();
+
 		//set gametime to continue counting
 		newWorld.gametime.writeCurrentGameTime(time);
 		newWorld.nightAlhpa = nightShade;
@@ -146,9 +149,9 @@ public class Loading {
 	}
 
 	public static void startAtLastSavedLevel(GameStateManagerBase gsm){
-		World nw = (World)gsm.getGameState(gsm.getCurrentState());
+		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 		try {
-			nw.readFromSave(Save.getWorldData(index));
+			currentWorld.readFromSave(Save.getWorldData(index));
 		} catch (Exception e) {
 			System.out.println("Savefiles not found. Starting new world.");
 		}
@@ -229,35 +232,45 @@ public class Loading {
 	}
 
 	public static void loadMusic(){
-		load("/sounds/hit_wood_1.mp3", "hit_wood_1");
-		load("/sounds/hit_wood_2.mp3", "hit_wood_2");
-		load("/sounds/hit_wood_3.mp3", "hit_wood_3");
-		load("/sounds/hit_wood_4.mp3", "hit_wood_4");
-		load("/sounds/hit_wood_5.mp3", "hit_wood_5");
-		load("/sounds/hit_wood_6.mp3", "hit_wood_6");
+		loadMusic("/sounds/block/wood/hit_wood_1.mp3", "hit_wood_1");
+		loadMusic("/sounds/block/wood/hit_wood_2.mp3", "hit_wood_2");
+		loadMusic("/sounds/block/wood/hit_wood_3.mp3", "hit_wood_3");
+		loadMusic("/sounds/block/wood/hit_wood_4.mp3", "hit_wood_4");
+		loadMusic("/sounds/block/wood/hit_wood_5.mp3", "hit_wood_5");
+		loadMusic("/sounds/block/wood/hit_wood_6.mp3", "hit_wood_6");
 
-		load("/sounds/hit_rock_1.mp3", "hit_rock_1");
-		load("/sounds/hit_rock_2.mp3", "hit_rock_2");
-		load("/sounds/hit_rock_3.mp3", "hit_rock_3");
-		load("/sounds/hit_rock_4.mp3", "hit_rock_4");
-		load("/sounds/hit_rock_5.mp3", "hit_rock_5");
+		loadMusic("/sounds/block/rock/hit_rock_1.mp3", "hit_rock_1");
+		loadMusic("/sounds/block/rock/hit_rock_2.mp3", "hit_rock_2");
+		loadMusic("/sounds/block/rock/hit_rock_3.mp3", "hit_rock_3");
+		loadMusic("/sounds/block/rock/hit_rock_4.mp3", "hit_rock_4");
+		loadMusic("/sounds/block/rock/hit_rock_5.mp3", "hit_rock_5");
 
-		load("/sounds/step_1.mp3", "step_1");
-		load("/sounds/step_2.mp3", "step_2");
-		load("/sounds/step_3.mp3", "step_3");
-		load("/sounds/step_4.mp3", "step_4");
-		load("/sounds/step_5.mp3", "step_5");
+		loadMusic("/sounds/step_1.mp3", "step_1");
+		loadMusic("/sounds/step_2.mp3", "step_2");
+		loadMusic("/sounds/step_3.mp3", "step_3");
+		loadMusic("/sounds/step_4.mp3", "step_4");
+		loadMusic("/sounds/step_5.mp3", "step_5");
 
-		load("/sounds/jump_1.mp3", "jump_1");
-		load("/sounds/jump_2.mp3", "jump_2");
-		load("/sounds/jump_3.mp3", "jump_3");
-		load("/sounds/jump_4.mp3", "jump_4");
-		load("/sounds/jump_5.mp3", "jump_5");
+		loadMusic("/sounds/jump_1.mp3", "jump_1");
+		loadMusic("/sounds/jump_2.mp3", "jump_2");
+		loadMusic("/sounds/jump_3.mp3", "jump_3");
+		loadMusic("/sounds/jump_4.mp3", "jump_4");
+		loadMusic("/sounds/jump_5.mp3", "jump_5");
 
-		load("/sounds/pig_hurt_1.mp3", "hitpig_1");
-		load("/sounds/pig_hurt_2.mp3", "hitpig_2");
-		load("/sounds/pig_hurt_3.mp3", "hitpig_3");
-		load("/sounds/pig_hurt_4.mp3", "hitpig_4");
-		load("/sounds/pig_hurt_5.mp3", "hitpig_5");
+		loadMusic("/sounds/entity/pig/pig_hurt_1.mp3", "hitpig_1");
+		loadMusic("/sounds/entity/pig/pig_hurt_2.mp3", "hitpig_2");
+		loadMusic("/sounds/entity/pig/pig_hurt_3.mp3", "hitpig_3");
+		loadMusic("/sounds/entity/pig/pig_hurt_4.mp3", "hitpig_4");
+		loadMusic("/sounds/entity/pig/pig_hurt_5.mp3", "hitpig_5");
+
+		loadMusic("/sounds/entity/player/crunch_small1.mp3", "crunch_1");
+		loadMusic("/sounds/entity/player/crunch_small2.mp3", "crunch_2");
+		loadMusic("/sounds/entity/player/crunch_small3.mp3", "crunch_3");
+		loadMusic("/sounds/entity/player/crunch_small4.mp3", "crunch_4");
+		loadMusic("/sounds/entity/player/crunch_small5.mp3", "crunch_5");
+	}
+
+	private static void loadMusic(String path, String name){
+		load(path, name);
 	}
 }

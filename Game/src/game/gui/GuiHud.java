@@ -1,10 +1,10 @@
 package game.gui;
 
+import engine.game.MapObject;
 import engine.image.Images;
 import engine.window.GamePanel;
-import game.Loading;
 import game.World;
-import game.entity.MapObject;
+import game.content.Loading;
 import game.entity.block.Block;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
@@ -33,7 +33,7 @@ public class GuiHud extends Gui{
 
 		int center = centerX - (200/2);
 		int slotStartX = center + 15;
-		
+
 		//inventory space
 		g.drawImage(img.getSubimage(0, 63, 200, 18), center, GamePanel.HEIGHT - 25, null);
 
@@ -76,6 +76,32 @@ public class GuiHud extends Gui{
 					Util.drawToolTipWindow(g, new int[]{player.posX() + 18 ,player.posY() - 20}, b.getBlockInfo());
 					Util.drawToolTipText(g, b, new int[]{player.posX() + 18 ,player.posY() - 20});
 				}
+			}
+		}
+
+		int maxX = 0;
+		
+		if(player.getMaxHealth() < 5)
+			maxX = (int)(player.getMaxHealth()-1) * 13;
+		else
+			maxX = 4*13;
+
+		for(int i = 0; i < player.getMaxHealth(); i ++){
+			int yOffset = ((int)i/5)*12;
+			int xOffset = (int)i%5 *13;
+
+			g.drawImage(img.getSubimage(16, 0, 16, 16), centerX + (100 - maxX) - 32 + xOffset , GamePanel.HEIGHT - 40 - yOffset, null);
+		}
+
+		for(float i = 0; i < player.getHealth(); i+=0.5f){
+
+			int yOffset = ((int)i/5)*12;
+			int xOffset = (int)i%5 *13;
+
+			if((i*10)%2 == 0){
+				g.drawImage(img.getSubimage(0, 0, 8, 16), centerX + 100 -maxX - 32 + xOffset, GamePanel.HEIGHT - 40 - yOffset, null);
+			}else if((i*10)%2 == 1.0f){
+				g.drawImage(img.getSubimage(8, 0, 8, 16), centerX + 100 - maxX + 8 - 32 + xOffset, GamePanel.HEIGHT - 40 - yOffset, null);
 			}
 		}
 	}

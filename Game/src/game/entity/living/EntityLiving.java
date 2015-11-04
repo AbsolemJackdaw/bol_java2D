@@ -1,22 +1,32 @@
 package game.entity.living;
 
+import engine.game.MapObject;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import game.World;
-import game.entity.MapObject;
 
 public class EntityLiving extends MapObject{
 
-	protected int health;
-	protected int maxHealth;
+	protected float health = 1;
+	protected float maxHealth = 2;
 	
 	public EntityLiving(TileMap tm, World world, String uin) {
 		super(tm, world, uin);
 
-		health = 1;
+		health = maxHealth;
 	}
 
-	public EntityLiving setHealth(int health){
+	public void hurtEntity(float f){
+		health -= f;
+		if(health <=0)
+			this.remove=true;
+		if(health > maxHealth)
+			health = maxHealth;
+		
+	
+	}
+	
+	public EntityLiving initHealth(float health){
 		this.health = health;
 		maxHealth = health;
 		return this;
@@ -26,7 +36,8 @@ public class EntityLiving extends MapObject{
 	public void writeToSave(DataTag data) {
 		super.writeToSave(data);
 
-		data.writeInt("health", health);
+		data.writeFloat("health", health);
+		data.writeFloat("maxHealth", maxHealth);
 
 	}
 
@@ -34,11 +45,16 @@ public class EntityLiving extends MapObject{
 	public void readFromSave(DataTag data) {
 		super.readFromSave(data);
 
-		health = data.readInt("health");
+		health = data.readFloat("health");
+		maxHealth = data.readFloat("maxHealth");
 	}
 
-	public int getHealth(){
+	public float getHealth(){
 		return health;
+	}
+	
+	public float getMaxHealth(){
+		return maxHealth;
 	}
 	
 	public boolean canPlayDeathAnimation(){

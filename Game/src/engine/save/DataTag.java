@@ -90,7 +90,7 @@ public class DataTag {
 	}
 
 	public float readFloat(String tag){
-		float f =0;
+		float f = 0;
 
 		if(!data.containsKey(tag)){
 			System.out.println("The tag "+ tag + " did not exist.");
