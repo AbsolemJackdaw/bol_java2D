@@ -35,7 +35,7 @@ public class ItemFood extends Item{
 	}
 	
 	@Override
-	public void useItem(Item item, TileMap map, World world, Player player,int key) {
+	public void useItem(ItemStack item, TileMap map, World world, Player player,int key) {
 		this.inventoryCallBack(key, player);
 	}
 

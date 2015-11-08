@@ -3,10 +3,8 @@ package game.entity.living.enemy;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import engine.game.MapObject;
 import engine.game.entity.EntityLiving;
 import engine.map.TileMap;
-import engine.music.Music;
 import game.World;
 import game.entity.EntityAI;
 import game.entity.living.player.Player;
@@ -65,8 +63,12 @@ public class EntityEnemy extends EntityLiving {
 	}
 
 	@Override
-	public void onEntityHit(Player player, MapObject mo){
+	public void onEntityHit(Player player){
 
+		if(player != null){
+			
+		}
+		
 		Player p = (Player)player;
 		
 		int bonus = 0;
@@ -77,7 +79,7 @@ public class EntityEnemy extends EntityLiving {
 			flinching = true;
 		}
 
-		health -= p.getAttackDamage() + bonus;
+		hurtEntity(p.getAttackDamage() + bonus);
 
 	}
 
@@ -91,18 +93,20 @@ public class EntityEnemy extends EntityLiving {
 		if(attackTimer % 300 == 0){ //5 seconds
 			Player p = this.getWorld().getPlayer();
 			if(getRectangle().intersects(p.getRectangle())){
-				p.onEntityHit(p, this);
+				//TODO implement correctly !
+				p.hurtEntity(0);
+			
 			}
 		}
 
-		if(!getWorld().isNightTime()){
-			if(rand.nextInt(100) == 0)
-				if(!flinching){
-					health--;
-					Music.play(getEntityHitSound());
-					flinching = true;
-				}
-		}
+//		if(!getWorld().isNightTime()){
+//			if(rand.nextInt(100) == 0)
+//				if(!flinching){
+//					health--;
+//					Music.play(getEntityHitSound());
+//					flinching = true;
+//				}
+//		}
 
 		if(followTimer > 0){
 			ai.setPathToPlayer(this);

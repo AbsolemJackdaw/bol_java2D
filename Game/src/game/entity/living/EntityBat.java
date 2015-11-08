@@ -1,6 +1,5 @@
 package game.entity.living;
 
-import engine.game.MapObject;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.music.Music;
@@ -22,13 +21,13 @@ public class EntityBat extends EntityEnemy {
 
 		initHealth(12f);
 
-		getAnimation().setFrames(Images.loadMultiImage("/entity/bat.png", 96, 0, 96, 32, 6));
+		getAnimation().setFrames(Images.loadMultiImage("/entity/bat.png", 32, 0, 4));
 		getAnimation().setDelay(50);
 
 		entitySizeX = 16+8;
 		entitySizeY = 16+8;
 
-		width = 96;
+		width = 32;
 		height = 32;
 
 
@@ -41,9 +40,10 @@ public class EntityBat extends EntityEnemy {
 		stopJumpSpeed = 0.3;
 
 		boolean b = rand.nextBoolean();
-		facingRight = b;
+		facingRight = !b;
 		right = b;
 		left = !b;
+		
 	}
 
 	private EntityAI ai = new EntityAI();
@@ -53,7 +53,7 @@ public class EntityBat extends EntityEnemy {
 
 	@Override
 	public void draw(Graphics2D g) {
-			super.draw(g);
+		super.draw(g);
 	}
 
 	@Override
@@ -65,10 +65,6 @@ public class EntityBat extends EntityEnemy {
 	public void update() {
 		super.update();
 
-		getNextPosition(); // needed for falling
-		checkTileMapCollision();
-		setPosition(xtemp, ytemp);
-
 		if(!followPlayer())
 			ai.flutterAround(this);
 
@@ -76,14 +72,14 @@ public class EntityBat extends EntityEnemy {
 	}
 
 	@Override
-	public void onEntityHit(Player player, MapObject mo) {
+	public void onEntityHit(Player player) {
 
 		Player p = (Player)player;
-		
+
 		setFollowing(rand.nextInt(600)+1200);
 
 		setFlinching();
-		
+
 		int dmg = p.getAttackDamage();
 
 		int wepDmg = 0;
@@ -119,11 +115,14 @@ public class EntityBat extends EntityEnemy {
 
 	public void kill(Player p)
 	{
-		if(p.setStackInNextAvailableSlot(getDrops()[rand.nextInt(drops.length)])){
-			this.remove = true;
-		}else{
-			health = maxHealth;
-		}
+		if(p!= null)
+			if(p.setStackInNextAvailableSlot(getDrops()[rand.nextInt(drops.length)])){
+				this.remove = true;
+			}else{
+				health = maxHealth;
+			}
+		else
+			super.kill(p);
 	}
 
 	/**gets the entity's speed back to normal after it panis (/gets hit by the player)*/
@@ -145,7 +144,7 @@ public class EntityBat extends EntityEnemy {
 	public String getEntityHitSound() {
 		return "hitpig_" + (rand.nextInt(5)+1);
 	}
-	
+
 	@Override
 	public int getAttackDamage() {
 		return 1;

@@ -12,6 +12,9 @@ import engine.map.Tile;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import engine.window.GamePanel;
+import game.World;
+import game.entity.Entity;
+import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.player.Player;
 
 
@@ -114,7 +117,7 @@ public abstract class MapObject {
 
 	/**used to remove objects. if this is set to true, it will remove the entity from the entity list > simulate his death*/
 	public boolean remove;
-	
+
 	// constructor
 	public MapObject(TileMap tm, GameWorld world, String uin) {
 		UIN = uin;
@@ -155,12 +158,12 @@ public abstract class MapObject {
 		return this.animation.getDefaultAnimation()[0];
 	}
 
-	/**processes the surounding tiles so the entity can update it's falling/walking logic*/
+	/**processes the surrounding tiles so the entity can update it's falling/walking logic*/
 	public void calculateCorners(double x, double y) {
 
 		final int leftTile = (int) (x - (entitySizeX / 2)) / tileSize;
 		final int rightTile = (int) ((x + (entitySizeX / 2)) - 1) / tileSize;
-		final int topTile = (int) (y - (entitySizeY / 2)) / tileSize;
+		final int topTile =  (int) (y - (entitySizeY / 2)) / tileSize;
 		final int bottomTile = (int) ((y + (entitySizeY / 2)) - 1) / tileSize;
 
 		final int tl = tileMap.getType(topTile, leftTile);
@@ -242,7 +245,7 @@ public abstract class MapObject {
 	/**
 	 * draw the entity's sprite
 	 * */
-	private void drawSprite(Graphics2D g, Animation am) {
+	protected void drawSprite(Graphics2D g, Animation am) {
 
 		setMapPosition();
 
@@ -414,15 +417,27 @@ public abstract class MapObject {
 	 * @param player : the player in the world that hit the target
 	 * @param mo : the mapObject that got hit 
 	 */
-	public void onEntityHit(Player player, MapObject mo){
+	public void onEntityHit(Player player){
 
 	}
 
 	/**
+	 * Hit map object with an exterior damage source
+	 * @param damage : the damage to deal
+	 * @param mo : the mapObject to hit
+	 * */
+	public void onEntityHit(float damage){
+
+	}
+	/**
 	 * @param player : the player that should interact with this object
 	 * @param mo : the mapObject that will be interacted with 
 	 */
-	public void interact(Player player, MapObject mo){
+	public void interact(Player player){
 
+	}
+
+	public EntityDeathAnim getDeathAnimation() {
+		return new EntityDeathAnim(tileMap, (World) world, Entity.DEATHANIM_MEAT);
 	}
 }

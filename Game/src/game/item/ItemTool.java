@@ -53,9 +53,9 @@ public class ItemTool extends Item {
 	}
 
 	@Override
-	public void useItem(Item item, TileMap map, World world, Player player,int key) {
+	public void useItem(ItemStack item, TileMap map, World world, Player player,int key) {
 
-		ItemStack invCopy = player.getInventory().getStackInSlot(key);
+		ItemStack invCopy = item;
 		ItemStack equippedWeapon = player.invArmor.getWeapon();
 
 		ItemStack newInvItem = equippedWeapon.copy();

@@ -48,7 +48,6 @@ import game.World;
 import game.content.Loading;
 import game.entity.block.BlockBreakable;
 import game.entity.inventory.IInventory;
-import game.entity.living.enemy.EntityEnemy;
 import game.item.Item;
 import game.item.ItemArmor;
 import game.item.ItemBelt;
@@ -77,7 +76,7 @@ public class Player extends EntityLiving implements IInventory{
 	public boolean isCollidingWithBlock;
 
 	protected List<MapObject> collidingEntities = new ArrayList<MapObject>();
-	
+
 	// for every animation, add the number of frames here
 	// sample : 2,5,8,4 (2 for idle 0, 5 for walking 1, etc.
 	//public static final int[] numFrames = {20, 10, 1, 1, 3 };
@@ -112,7 +111,7 @@ public class Player extends EntityLiving implements IInventory{
 	public ArmorInventory invArmor = new ArmorInventory();
 
 	private boolean inWater;
-	
+
 	public Player(TileMap tm, World world) {
 		super(tm, world, "player");
 
@@ -150,17 +149,17 @@ public class Player extends EntityLiving implements IInventory{
 			flinching = true;
 		}
 	}
-	
+
 	public void heal(float f){
 		health+=f;
-		
+
 		if(health > getMaxHealth())
 			health = getMaxHealth();
-		
+
 		if(health <=0)
 			this.remove=true;
 	}
-	
+
 	@Override
 	public void draw(Graphics2D g) {
 
@@ -212,13 +211,19 @@ public class Player extends EntityLiving implements IInventory{
 		else{
 
 			movement.doPlayerWaterMovement(this);
-			if(up)
+			if(up){
+				dy -= moveSpeed;
+				if (dy < -maxSpeed)
+					dy = -maxSpeed;
+
 				//TODO make a possible better check ? 
 				if(world.tileMap.getBlockID(currentColumn+1, currentRow) > 20 || world.tileMap.getBlockID(currentColumn-1, currentRow) > 20){
 					dy -= moveSpeed;
 					if (dy < -maxSpeed)
 						dy = -maxSpeed;
 				}
+			}
+
 		}
 
 
@@ -233,7 +238,7 @@ public class Player extends EntityLiving implements IInventory{
 		setUp(KeyHandler.isUpKeyPressed());
 
 		setDown(KeyHandler.isDownKeyPressed());
-		
+
 		if(XboxController.controller != null){
 			setJumping(KeyHandler.keyState[KeyHandler.SPACE]);
 			if (KeyHandler.isPressed(KeyHandler.SPACE))
@@ -248,7 +253,7 @@ public class Player extends EntityLiving implements IInventory{
 		if(KeyHandler.isPressed(KeyHandler.INTERACT))
 			for(MapObject o : getWorld().listWithMapObjects)
 				if(o.intersects(this))
-					o.interact(this, o);
+					o.interact(this);
 
 		for(int key : hotBarKeys)
 			if(KeyHandler.isPressed(key)){
@@ -259,8 +264,7 @@ public class Player extends EntityLiving implements IInventory{
 						Item item = getStackInSlot(keyPressed).getItem();
 						//place down blocks
 						if(item instanceof ItemBlock){
-							ItemBlock ib = (ItemBlock)item;
-							item.useItem(ib, tileMap, getWorld(),this, keyPressed);
+							item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(),this, keyPressed);
 						}
 						//equip armor or weapon
 						else if(item instanceof ItemTool){
@@ -268,11 +272,11 @@ public class Player extends EntityLiving implements IInventory{
 								invArmor.setWeapon(getStackInSlot(keyPressed).copy());
 								setStackInSlot(keyPressed, null);
 							}else
-								item.useItem(getStackInSlot(keyPressed).getItem(), tileMap, getWorld(), this, keyPressed);
+								item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
 						}
 						//any other item
 						else
-							item.useItem(getStackInSlot(keyPressed).getItem(), tileMap, getWorld(), this, keyPressed);
+							item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
 					}
 				}else{
 					if(invArmor.getWeapon() != null){
@@ -307,9 +311,9 @@ public class Player extends EntityLiving implements IInventory{
 				entitySizeX += 5;
 				matchTool(obj);
 				if(obj.getScreenXpos() > getScreenXpos() && facingRight)
-					obj.onEntityHit(this, obj);
+					obj.onEntityHit(this);
 				else if( obj.getScreenXpos() < getScreenXpos() && !facingRight)
-					obj.onEntityHit(this, obj);
+					obj.onEntityHit(this);
 
 				entitySizeX -= 5;
 			}
@@ -330,7 +334,7 @@ public class Player extends EntityLiving implements IInventory{
 			flinchTimer = 0;
 			flinching = false;
 		}
-		
+
 		updatePlayerAnimation();
 
 		// set direction
@@ -600,14 +604,6 @@ public class Player extends EntityLiving implements IInventory{
 
 	public int getAttackDamage(){
 		return 1;
-	}
-
-	@Override
-	public void onEntityHit(Player p, MapObject mo) {
-
-		if(mo instanceof EntityEnemy){
-
-		}
 	}
 
 	/*======================INVENTORY====================*/
@@ -914,11 +910,11 @@ public class Player extends EntityLiving implements IInventory{
 		//if player has torch, get light strenght from torch
 		return 200;
 	}
-	
+
 	public World getWorld(){
 		return (World)this.world;
 	}
-	
+
 	/**
 	 * Returns list with blocks the player is currently colliding with
 	 */

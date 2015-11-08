@@ -1,7 +1,9 @@
 package engine.map;
 
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -53,22 +55,18 @@ public class TileMap {
 		tween = 0.05;
 	}
 
-	/**x, y being the coords of the block in rows and collumns*/
-	public int getBlockID(int x, int y){
-		if(x < 0 || y < 0 || x >= getXRows() || y >= getYRows()){
-			System.out.println("[ERRROR] entity was out of map. returning solid block to prevent crash.");
-			return 23;
-		}
-		return map[y][x];
-	}
-
 	public void draw(Graphics2D g, int centralX, int centralY,  int renderPass) {
 
 		int Px = centralX;
 		int Py = centralY;
 
-		int arroundX = 22; //TODO make renderDistance Configurable
-		int arroundY = 12;
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+		int screenX = (int)screenSize.getWidth()/(tileSize*(int)GamePanel.SCALE);
+		int screenY = (int)screenSize.getHeight()/(tileSize*(int)GamePanel.SCALE);
+		
+		int arroundX = screenX + 3; // + 3 is error margin
+		int arroundY = screenY + 3;
 
 		int xDistanceMin = Px-arroundX;
 		int xDistanceMax = Px+arroundX;
@@ -143,9 +141,26 @@ public class TileMap {
 		return tileSize;
 	}
 
+	/**x, y being the coords of the block in rows and collumns*/
+	public int getBlockID(int x, int y){
+		
+//		System.out.println(x + " " + y + " " + mapXRows + " "  + mapYRows);
+		if(x >=0 && y >=0 && x < mapXRows && y < mapYRows){
+			int rc = map[y][x];
+			int r = rc / numTilesAcross;
+			int c = rc % numTilesAcross;
+			return tiles[r][c].getID();
+		}
+		
+		System.out.println("Entity was out of map ? Returned a solid block to prevent crash.");
+		return 21;
+	}
+	
 	/**x and y are the rows of the map. returns either 0 or 1, for solid or ghost blocks*/
 	public int getType(int y, int x) {
 
+//		System.out.println(x + " " + y + " " + mapXRows + " "  + mapYRows);
+		
 		if(x >=0 && y >=0 && x < mapXRows && y < mapYRows){
 			int rc = map[y][x];
 			int r = rc / numTilesAcross;
@@ -229,13 +244,11 @@ public class TileMap {
 			BufferedImage subimage;
 			for (int col = 0; col < numTilesAcross; col++) {
 
-				subimage = tileset.getSubimage(col * tileSize, 0, tileSize,
-						tileSize);
-				tiles[0][col] = new Tile(subimage, Tile.GHOST);
+				subimage = tileset.getSubimage(col * tileSize, 0, tileSize, tileSize);
+				tiles[0][col] = new Tile(subimage, Tile.GHOST, col);
 
-				subimage = tileset.getSubimage(col * tileSize, tileSize,
-						tileSize, tileSize);
-				tiles[1][col] = new Tile(subimage, Tile.SOLID);
+				subimage = tileset.getSubimage(col * tileSize, tileSize, tileSize, tileSize);
+				tiles[1][col] = new Tile(subimage, Tile.SOLID, col + numTilesAcross);
 			}
 
 		} catch (final Exception e) {
@@ -248,7 +261,7 @@ public class TileMap {
 		this.x += (x - this.x) * tween;
 		this.y += (y - this.y) * tween;
 
-		fixBounds();
+//		fixBounds();
 	}
 
 	public void setTween(double d) {

@@ -2,7 +2,6 @@ package game.entity.living.environement;
 
 import java.awt.Graphics2D;
 
-import engine.game.MapObject;
 import engine.game.entity.EntityLiving;
 import engine.image.Images;
 import engine.map.TileMap;
@@ -13,8 +12,8 @@ import game.entity.living.player.Player;
 
 public class EntityDeathAnim extends EntityLiving{
 
-	public EntityDeathAnim(TileMap tm, World world) {
-		super(tm, world, "DeathAnim");
+	public EntityDeathAnim(TileMap tm, World world, String s) {
+		super(tm, world, s);
 		
 		getAnimation().setFrames(Images.loadMultiImage("/entity/deathAnim.png", 32, 0, 8));
 		getAnimation().setDelay(50);
@@ -50,7 +49,12 @@ public class EntityDeathAnim extends EntityLiving{
 	}
 	
 	@Override
-	public void onEntityHit(Player p, MapObject mo) {
+	public void onEntityHit(Player p) {
+		//override to prevent killing
+	}
+	
+	@Override
+	public void onEntityHit(float damage) {
 		//override to prevent killing
 	}
 	
@@ -58,10 +62,6 @@ public class EntityDeathAnim extends EntityLiving{
 	public void update() {
 		super.update();
 
-		getNextPosition(); // needed for falling
-		checkTileMapCollision();
-		setPosition(xtemp, ytemp);
-		
 		if(getAnimation().hasPlayedOnce())
 			this.remove = true;
 	}
@@ -70,6 +70,7 @@ public class EntityDeathAnim extends EntityLiving{
 	public void draw(Graphics2D g) {
 		super.draw(g);
 	}
+	
 	@Override
 	public boolean canPlayDeathAnimation() {
 		return false;

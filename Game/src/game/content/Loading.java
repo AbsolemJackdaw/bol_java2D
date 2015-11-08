@@ -36,8 +36,8 @@ public class Loading {
 
 		//skip map x_1, so that map is used only in the very beginning
 		// x1 + x2 is max_total maps, where map min is 2
-		int i = new Random().nextInt(10)+2; 
-		String s = "/maps/cave_rand_" + i + ".map";
+		int i = new Random().nextInt(5)+2; 
+		String s = "/maps/maps/map/Map" + i + ".map";
 		System.out.println(s);
 		return s;
 	}
@@ -268,6 +268,15 @@ public class Loading {
 		loadMusic("/sounds/entity/player/crunch_small3.mp3", "crunch_3");
 		loadMusic("/sounds/entity/player/crunch_small4.mp3", "crunch_4");
 		loadMusic("/sounds/entity/player/crunch_small5.mp3", "crunch_5");
+		
+		loadMusic("/sounds/entity/explosion/explode_0.mp3","explode_0");
+		loadMusic("/sounds/entity/explosion/explode_1.mp3","explode_1");
+		loadMusic("/sounds/entity/explosion/explode_2.mp3","explode_2");
+		loadMusic("/sounds/entity/explosion/explode_3.mp3","explode_3");
+		loadMusic("/sounds/entity/explosion/explode_4.mp3","explode_4");
+		loadMusic("/sounds/entity/explosion/explode_5.mp3","explode_5");
+		loadMusic("/sounds/entity/explosion/explode_6.mp3","explode_6");
+
 	}
 
 	private static void loadMusic(String path, String name){

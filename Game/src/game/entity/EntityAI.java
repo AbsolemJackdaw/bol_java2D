@@ -9,6 +9,7 @@ import game.util.Constants;
 public class EntityAI {
 
 	int entityTimer = 0;
+	int entityTimer2 = 0;
 
 	public void walkAroundRandomly(EntityLiving el){
 		//start timer if x position is the same for a while
@@ -70,8 +71,24 @@ public class EntityAI {
 		}
 	}
 
+	/**
+	 * AI to make entity walk on walls etc
+	 */
+	public void crawlAroundEverywhere(EntityLiving el){
+	}
+
 	/**makes the entity flutter around*/ //TODO needs improvement
 	public void flutterAround(EntityLiving el){
+
+		// turn around when arrow blocks are hit
+		if( el.tileMap.getBlockID(el.currentRow,el.currentColumn) == 7){
+			el.left = false; el.right = true;
+		}
+
+		if(el.tileMap.getBlockID(el.currentRow, el.currentColumn) == 6){
+			el.left = true; el.right = false;
+		}
+
 		entityTimer++;
 
 		if(entityTimer > 256) 
@@ -105,14 +122,14 @@ public class EntityAI {
 	public void setPathToPlayer(EntityLiving el){
 
 		World world = (World)el.getWorld();
-		
+
 		Player p = world.getPlayer();
-		
+
 		if(p.xScreen < el.xScreen)
 			el.dx-=el.moveSpeed*1.5d;
 		else
 			el.dx+=el.moveSpeed*1.5d;
-		
+
 		if(p.yScreen < el.yScreen)
 			el.dy-=el.fallSpeed*1.5d;
 		else
@@ -121,12 +138,12 @@ public class EntityAI {
 	}
 
 	public void panic(EntityLiving el) {
-//		if(el.left){
-//			el.setRight(true);
-//		}else
-//			el.setLeft(true);
-//		el.moveSpeed = el.moveSpeed*1.5;
-//		el.maxSpeed = el.maxSpeed*2;
+		//		if(el.left){
+		//			el.setRight(true);
+		//		}else
+		//			el.setLeft(true);
+		//		el.moveSpeed = el.moveSpeed*1.5;
+		//		el.maxSpeed = el.maxSpeed*2;
 	}
-	
+
 }

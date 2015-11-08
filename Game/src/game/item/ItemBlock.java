@@ -20,8 +20,8 @@ public class ItemBlock extends Item{
 	}
 
 	@Override
-	public void useItem(Item item, TileMap map, World world, Player player, int key) {
-		ItemBlock ib = (ItemBlock)item;
+	public void useItem(ItemStack item, TileMap map, World world, Player player, int key) {
+		ItemBlock ib = (ItemBlock)item.getItem();
 		ib.placeBlock(map, world, player);
 
 		Util.decreaseStack(player.getInventory(), key, 1);

@@ -120,7 +120,7 @@ public class Item {
 	}
 
 	/**called when the player presses the numbers on the keyboard to use an item*/
-	public void useItem(Item item, TileMap map, World world, Player player, int key){
+	public void useItem(ItemStack stack, TileMap map, World world, Player player, int key){
 		//System.out.println("item is used");
 	}
 

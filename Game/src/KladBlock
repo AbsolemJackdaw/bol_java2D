@@ -1,8 +1,8 @@
 XboxController detection when connected ? 
- > solution, add a controls menu option to modify controls and switch to/from kyboard to controller
+ > solution, add a controls menu option to modify controls and switch to/from keyboard to controller
      reload controller when chosen.
      
-     Imply feature where holding spacebar loops attacking
+     Imply feature where holding space-bar loops attacking
      
 particle FX
 
@@ -10,4 +10,9 @@ player health system
 
 kao nemesis wanted to imply invisible blocks. a prototype for the invisible blocks type is already set in the Tile class
 
-make a config menu option to change drawing distance
+make a configuration menu option to change drawing distance
+ > thought : get screen size, divide by tile size, draw x + 2 tiles
+ 
+ and i found a way for the invisible goggles btw !
+if you equip the helmet, it will reload the map and every ghost block will turn un-ghost
+thats how i'll solve it i think

@@ -5,7 +5,9 @@ import static engine.window.GamePanel.WIDTH;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import engine.keyhandlers.XboxController;
 import engine.map.TileMap;
 import engine.save.DataList;
 import engine.save.DataTag;
+import engine.window.GamePanel;
 import engine.window.gameAid.Time;
 import game.content.Loading;
 import game.content.SpawningLogic;
@@ -45,12 +48,12 @@ import game.util.Util;
 public class World extends GameWorld{
 
 	protected Player player;
-	
+
 	public boolean isDisplayingGui;
 	public Gui guiDisplaying;
 
 	public Time gametime = new Time(18000, 2, 1);
-	
+
 	protected ArrayList<Background> backGrounds;
 
 	public float nightAlhpa = 0;
@@ -78,10 +81,10 @@ public class World extends GameWorld{
 		super.init();
 
 		this.player = new Player(tileMap, this);
-		
+
 		if(Save.getPlayerData() != null)
 			player.readFromSave(Save.getPlayerData());
-		
+
 		displayGui(new GuiHud(this, player));
 
 		int mapHeight = (int)(tileMap.getYRows() * 32);
@@ -180,11 +183,16 @@ public class World extends GameWorld{
 		return gametime.getCurrentTime() > gametime.getDawn();
 	}
 
+	double offset = 0;
+	boolean shake;
+	double shakeTimer = 50;
+	double shakeTimerMax = 50;
+	
 	@Override
 	public void update(){
 
 		//move tilemap around 
-		tileMap.setPosition((WIDTH / 2) - player.getScreenXpos(), (HEIGHT / 2) - player.getScreenYpos());
+		tileMap.setPosition(((WIDTH / 2) - player.getScreenXpos()) + offset, ((HEIGHT / 2) - player.getScreenYpos()));
 
 		//update backgrounds to move them around
 		if(backGrounds != null && !backGrounds.isEmpty())
@@ -200,6 +208,20 @@ public class World extends GameWorld{
 		//update game logics only if displaying gui is HUD, or the gui doesnt pause the game aka, in world
 		if(guiDisplaying instanceof GuiHud || guiDisplaying != null && !guiDisplaying.pausesGame()){
 
+			if(shake){
+				
+				offset = (-0.5d * Math.sin((0.5d* Math.PI*(shakeTimer/4d))))*100;
+				
+				shakeTimer--;
+				
+			}
+
+			if(shakeTimer <= 0){
+				shake = false;
+				shakeTimer = shakeTimerMax;
+				offset = 0;
+			}
+			
 			gametime.updateTime();
 
 			if(hasCreaturesSpawned)
@@ -239,14 +261,15 @@ public class World extends GameWorld{
 
 					if(player.getCollidingMapObjects().contains(obj))
 						player.getCollidingMapObjects().remove(obj);
+
 					listWithMapObjects.remove(obj);
 
 					if(obj instanceof EntityLiving){
-						if(!((EntityLiving) obj).canPlayDeathAnimation())
-							break;
-						EntityDeathAnim anim = new EntityDeathAnim(tileMap, this);
-						anim.setPosition(obj.getScreenXpos(), obj.getScreenYpos());
-						listWithMapObjects.add(anim);
+						if(((EntityLiving) obj).canPlayDeathAnimation()){
+							EntityDeathAnim anim = obj.getDeathAnimation();
+							anim.setPosition(obj.getScreenXpos(), obj.getScreenYpos());
+							listWithMapObjects.add(anim);
+						}
 					}
 					break;
 				}
@@ -323,7 +346,7 @@ public class World extends GameWorld{
 			mo.writeToSave(dt);
 			list.write(dt);
 		}
-		
+
 		tag.writeList("content", list);
 	}
 
@@ -371,8 +394,13 @@ public class World extends GameWorld{
 		int Px = player.getScreenXpos();
 		int Py = player.getScreenYpos();
 
-		int arroundX = 32*20; //TODO make renderDistance Configurable
-		int arroundY = 32*12;
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+		int screenX = (int)screenSize.getWidth()/(32*(int)GamePanel.SCALE);
+		int screenY = (int)screenSize.getHeight()/(32*(int)GamePanel.SCALE);
+
+		int arroundX = 32* (screenX + 2) ; // +2 is error margin
+		int arroundY = 32* (screenY + 2);
 
 		int xDistanceMin = Px-arroundX;
 		int xDistanceMax = Px+arroundX;
@@ -402,7 +430,15 @@ public class World extends GameWorld{
 	}
 
 	private void consoleCommands(String cmd){
-		if(cmd.startsWith("hurt")){
+
+
+		if(cmd.equals("kill")){
+			for(MapObject mo : listWithMapObjects){
+				if(mo instanceof EntityLiving)
+					mo.remove = true;
+			}
+		}
+		else if(cmd.startsWith("hurt")){
 			String [] split = cmd.split("\\s+");
 			if(split.length == 2)
 				player.hurtEntity(Float.valueOf(split[1]));
@@ -549,8 +585,13 @@ public class World extends GameWorld{
 					}
 				}
 	}
-	
+
 	public Player getPlayer(){
 		return player;
+	}
+
+	public void shakeWorld(){
+		shake = true;
+//		shakeTimer = shakeTimerMax;
 	}
 }

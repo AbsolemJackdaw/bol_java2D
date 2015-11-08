@@ -42,6 +42,10 @@ public class Items {
 	public static ItemBelt belt_m = (ItemBelt) new ItemBelt("belt_m", "Belt").setInventorySlots(15).setTexture(Images.loadImage("/items/belt_med.png"));
 	public static ItemBelt belt_l = (ItemBelt) new ItemBelt("belt_l", "Belt").setInventorySlots(20).setTexture(Images.loadImage("/items/belt_large.png"));
 
+	public static ItemBomb bomb = (ItemBomb) new ItemBomb("bomb", "Bomb", 2).setTexture(Images.loadImage("/items/bomb.png"));
+	public static ItemBomb bomb_better = (ItemBomb) new ItemBomb("bomb_b", "Better Bomb", 4).setTexture(Images.loadImage("/items/bomb.png"));
+	public static ItemBomb bomb_ultra = (ItemBomb) new ItemBomb("bomb_u", "Ultra Bomb", 8).setTexture(Images.loadImage("/items/bomb.png"));
+
 	public static void loadItems(){
 
 			registerItem(stick);
@@ -66,6 +70,10 @@ public class Items {
 			registerItem(leather);
 			registerItem(pouch);
 			registerItem(advancedCraftTable);
+			registerItem(bomb);
+			registerItem(bomb_better);
+			registerItem(bomb_ultra);
+
 
 	}
 

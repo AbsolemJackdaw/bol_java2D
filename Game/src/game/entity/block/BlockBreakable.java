@@ -3,7 +3,6 @@ package game.entity.block;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import engine.game.MapObject;
 import engine.map.TileMap;
 import engine.music.Music;
 import engine.save.DataTag;
@@ -89,7 +88,7 @@ public class BlockBreakable extends Block{
 	}
 
 	@Override
-	public void onEntityHit(Player player , MapObject mo) {
+	public void onEntityHit(Player player) {
 
 		jiggle = true;
 
@@ -135,11 +134,33 @@ public class BlockBreakable extends Block{
 
 	}
 
+	@Override
+	public void onEntityHit(float damage) {
+
+		jiggle = true;
+
+		switch (getType()) {
+		case ROCK:
+			Music.play("hit_rock_" + (rand.nextInt(4)+1));
+			break;
+		case WOOD:
+			Music.play("hit_wood_" + (rand.nextInt(5)+1));
+			break;
+		default:
+			break;
+		}
+		
+		health -= damage;
+		
+		if(health <= 0)
+			remove = true;
+	}
+
 	protected void mine(Player p){
 		if(getDrop() != null){
 			if(p.getInventory().setStackInNextAvailableSlot(getDrop())){
 				remove = true;
-				
+
 				if(p.invArmor.getWeapon() != null){
 					p.invArmor.getWeapon().damageStack(1);
 				}
@@ -168,7 +189,7 @@ public class BlockBreakable extends Block{
 	public boolean needsToolToMine(){
 		return false;
 	}
-	
+
 	public World getWorld(){
 		return (World)world;
 	}
