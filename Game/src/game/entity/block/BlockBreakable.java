@@ -131,7 +131,6 @@ public class BlockBreakable extends Block{
 
 		if(health <= 0)
 			mine(player);
-
 	}
 
 	@Override
@@ -154,6 +153,7 @@ public class BlockBreakable extends Block{
 		
 		if(health <= 0)
 			remove = true;
+		
 	}
 
 	protected void mine(Player p){

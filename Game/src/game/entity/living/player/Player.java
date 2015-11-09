@@ -229,6 +229,8 @@ public class Player extends EntityLiving implements IInventory{
 
 	}
 
+	private int delay = 20;
+
 	public void handleInput(){
 
 		setLeft(KeyHandler.isLeftKeyPressed());
@@ -240,13 +242,25 @@ public class Player extends EntityLiving implements IInventory{
 		setDown(KeyHandler.isDownKeyPressed());
 
 		if(XboxController.controller != null){
-			setJumping(KeyHandler.keyState[KeyHandler.SPACE]);
+			setJumping(KeyHandler.isUpKeyPressed());
 			if (KeyHandler.isPressed(KeyHandler.SPACE))
 				setAttacking();
+			if(KeyHandler.isHeldDown(KeyHandler.SPACE)){
+				setAttacking();
+			}
 		}else{
 			setJumping(KeyHandler.isUpKeyPressed());
 			if (KeyHandler.isPressed(KeyHandler.SPACE))
 				setAttacking();
+			//TODO implement a x tick delay ?
+			if(KeyHandler.isHeldDown(KeyHandler.SPACE)){
+
+				if(delay <= 0){
+					setAttacking();
+					delay = 20;
+				}
+					delay --;
+			}
 		}
 
 
@@ -308,14 +322,14 @@ public class Player extends EntityLiving implements IInventory{
 		if(attacking && (currentAction != ACTION_ATTACK)) {
 			for(MapObject obj : collidingEntities){
 
-				entitySizeX += 5;
+				// entitySizeX += 5; obsolete. entities that are colliding are set somewhere else
 				matchTool(obj);
 				if(obj.getScreenXpos() > getScreenXpos() && facingRight)
 					obj.onEntityHit(this);
 				else if( obj.getScreenXpos() < getScreenXpos() && !facingRight)
 					obj.onEntityHit(this);
 
-				entitySizeX -= 5;
+				// entitySizeX -= 5;
 			}
 
 

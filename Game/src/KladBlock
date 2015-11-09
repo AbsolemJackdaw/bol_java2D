@@ -6,13 +6,20 @@ XboxController detection when connected ?
      
 particle FX
 
-player health system
-
 kao nemesis wanted to imply invisible blocks. a prototype for the invisible blocks type is already set in the Tile class
 
-make a configuration menu option to change drawing distance
- > thought : get screen size, divide by tile size, draw x + 2 tiles
- 
  and i found a way for the invisible goggles btw !
 if you equip the helmet, it will reload the map and every ghost block will turn un-ghost
 thats how i'll solve it i think
+
+turn tile file into a folder with solid and ghost individual textures and load them from there !
+this would allow for infinite textures and you can still set an id for each block. the id could become a string, the name of the .png file !
+
+every level has a goal : x resources, or x this or x that to pass on to the next level
+
+tuto levels : 
+tuto 1 : move, jump, swim;
+tuto 2 : hit, collect resources, kill
+tuto 3 : make a crafting table, place it down (use hotbar nr to interact), craft a sword 
+
+goal is : make a work desk, jump at least once, hit a block, place work desk down

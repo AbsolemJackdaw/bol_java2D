@@ -7,12 +7,12 @@ import game.World;
 public class Blocks {
 
 	public static final String LOG = "log";
-	public static final String CRAFTINGTABLE = "craftingtable";
+	public static final String CRAFTINGTABLE = "workdesk";
 	public static final String IRON = "iron_ore";
 	public static final String ROCK = "rock";
 	public static final String CAMPFIRE = "campfire";
 	public static final String OVEN = "oven";
-	public static final String ADVANCEDCRAFT = "advanced_craftingtable";
+	public static final String ADVANCEDCRAFT = "advanced_workdesk";
 
 	public static MapObject loadMapObjectFromString(String uin, TileMap tm, World w){
 		switch (uin) {

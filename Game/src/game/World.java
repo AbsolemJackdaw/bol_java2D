@@ -7,6 +7,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
@@ -28,6 +29,7 @@ import game.content.Loading;
 import game.content.SpawningLogic;
 import game.content.save.Save;
 import game.entity.Entity;
+import game.entity.block.BlockBreakable;
 import game.entity.block.BlockLight;
 import game.entity.block.BlockOven;
 import game.entity.block.Blocks;
@@ -245,7 +247,13 @@ public class World extends GameWorld{
 
 				obj.update();
 
-				if(player.getRectangle().intersects(obj.getRectangle())){
+				Rectangle playerRectangleExtra = new Rectangle(player.getRectangle().x, player.getRectangle().y, player.getRectangle().width, player.getRectangle().height);
+
+				if(obj instanceof BlockBreakable) // extend bounding box for breakable blocks so you can stand slightly further away
+					//i just like to add this. i forgot the point ...
+					playerRectangleExtra = new Rectangle(player.getRectangle().x - 10, player.getRectangle().y, player.getRectangle().width + 20, player.getRectangle().height);
+				
+				if(playerRectangleExtra.intersects(obj.getRectangle())){
 					if(!player.getCollidingMapObjects().contains(obj)){
 						player.setCollidingMapObjects(obj);
 						player.isCollidingWithBlock = true;

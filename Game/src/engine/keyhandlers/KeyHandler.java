@@ -158,6 +158,16 @@ public class KeyHandler {
 	public static boolean isReleased(int keyID) {
 		return !keyState[keyID] && prevKeyState[keyID];
 	}
+	
+	/**
+	 * Wether the given key is being held down or not.
+	 * This fires after {@link isPressed(int keyID)}  and before {@link isReleased(int keyID)}
+	 * 
+	 * @param Keyhandler's key id;
+	 */
+	public static boolean isHeldDown(int keyID) {
+		return keyState[keyID] && prevKeyState[keyID];
+	}
 
 	public static boolean isValidationKeyPressed(){
 		return (keyState[SPACE] && !prevKeyState[SPACE]) || (keyState[ENTER] && !prevKeyState[ENTER]);
