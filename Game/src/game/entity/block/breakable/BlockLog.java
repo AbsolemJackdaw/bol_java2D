@@ -1,4 +1,4 @@
-package game.entity.block;
+package game.entity.block.breakable;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import engine.image.Images;
 import engine.map.TileMap;
 import game.World;
+import game.entity.block.Blocks;
 import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;

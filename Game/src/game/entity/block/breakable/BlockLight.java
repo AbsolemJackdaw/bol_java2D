@@ -1,4 +1,4 @@
-package game.entity.block;
+package game.entity.block.breakable;
 
 import static engine.keyhandlers.KeyHandler.INTERACT;
 import static engine.keyhandlers.KeyHandler.getKeyName;
@@ -7,6 +7,7 @@ import engine.imaging.Animation;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import game.World;
+import game.entity.block.Block;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.GuiFire;

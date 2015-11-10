@@ -9,7 +9,6 @@ import engine.imaging.Animation;
 import engine.map.TileMap;
 import game.World;
 import game.entity.Entity;
-import game.entity.living.player.Player;
 
 public class EntityExplosion extends EntityDeathAnim {
 
@@ -29,23 +28,7 @@ public class EntityExplosion extends EntityDeathAnim {
 		getAnimation().setFrames(img);
 		getAnimation().setDelay(50);
 	}
-	
 
-	//keep onEntityHit methods empty. 
-	//prevents them from getting hurt
-	@Override
-	public void onEntityHit(float damage) {
-	}
-	
-	@Override
-	public void onEntityHit(Player p) {
-	}
-	
-	@Override
-	public boolean canPlayDeathAnimation() {
-		return false;
-	}
-	
 	@Override
 	protected void drawSprite(Graphics2D g, Animation am) {
 		

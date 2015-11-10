@@ -1,15 +1,16 @@
-package game.entity.block;
-
-import java.awt.Color;
-import java.awt.Graphics2D;
+package game.entity.block.breakable;
 
 import engine.map.TileMap;
 import engine.music.Music;
 import engine.save.DataTag;
 import game.World;
+import game.entity.block.Block;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.ItemTool;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 
 public class BlockBreakable extends Block{

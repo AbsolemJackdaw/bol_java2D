@@ -3,6 +3,12 @@ package game.entity.block;
 import engine.game.MapObject;
 import engine.map.TileMap;
 import game.World;
+import game.entity.block.breakable.BlockCraftingTable;
+import game.entity.block.breakable.BlockIron;
+import game.entity.block.breakable.BlockLight;
+import game.entity.block.breakable.BlockLog;
+import game.entity.block.breakable.BlockOven;
+import game.entity.block.breakable.BlockRock;
 
 public class Blocks {
 
@@ -13,6 +19,7 @@ public class Blocks {
 	public static final String CAMPFIRE = "campfire";
 	public static final String OVEN = "oven";
 	public static final String ADVANCEDCRAFT = "advanced_workdesk";
+	public static final String SIGN = "sign";
 
 	public static MapObject loadMapObjectFromString(String uin, TileMap tm, World w){
 		switch (uin) {

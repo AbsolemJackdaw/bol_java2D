@@ -1,4 +1,4 @@
-package game.entity.block;
+package game.entity.block.breakable;
 
 import static engine.keyhandlers.KeyHandler.INTERACT;
 import static engine.keyhandlers.KeyHandler.getKeyName;
