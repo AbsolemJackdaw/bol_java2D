@@ -23,6 +23,9 @@ public class GameWorld extends GameState {
 
 	public boolean showBoundingBoxes;
 
+	/**Boolean which is set to true if no saves were found and the tutorial island was loaded*/
+	protected boolean firstGame;
+	
 	public GameWorld(GameStateManagerBase gsm) {
 		this.gsm = gsm;
 	}
@@ -71,8 +74,9 @@ public class GameWorld extends GameState {
 	}
 	
 	public void init(){
-		if(resourceMapPath.length() < 5)
-			loadMap("/maps/cave_rand_1.map");
-		
+		if(resourceMapPath.length() < 5){
+			loadMap("/maps/tutorial_island_1");
+			firstGame = true;
+		}
 	}
 }

@@ -23,7 +23,7 @@ public class GuiPause extends Gui {
 
 	private boolean showMessageSaved = false;
 	private int currentChoice = 0;
-	private final String[] options = { "Resume", "Save", "Menu", "Quit" };
+	private final String[] options = { "Resume", "Save", "Options", "Menu", "Quit" };
 
 	public GuiPause(World world, Player p) {
 		super(world, p);
@@ -82,12 +82,16 @@ public class GuiPause extends Gui {
 			showMessageSaved = true;
 			alpha = 1.0F;
 		}
-		else if(currentChoice == 2)
+		else if(currentChoice == 2){
+			saveGame();
+			world.displayGui(new GuiKeyBinds(world, player));
+		}
+		else if(currentChoice == 3)
 		{
 			saveGame();
 			world.gsm.setState(GameStateManager.MENU);
 		}
-		else if (currentChoice == 3)
+		else if (currentChoice == 4)
 		{
 			saveGame();
 			System.exit(0);

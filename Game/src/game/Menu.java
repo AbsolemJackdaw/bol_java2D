@@ -85,9 +85,17 @@ public class Menu extends GameState{
 	private void select() {
 		if (currentChoice == 0){
 			gsm.setState(GameStateManager.GAME);
+			
+			//new blank world
 			World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+			
+			//read map index
 			Save.readRandomParts();
+			
+			//load saves from world. if none, the basic map will be loaded 
 			Loading.startAtLastSavedLevel(gsm);
+			
+			//initiate current world. sets new player 
 			currentWorld.init();
 		}
 		if (currentChoice == 1)

@@ -2,7 +2,7 @@ package game.gui;
 
 import engine.image.Images;
 import engine.keyhandlers.KeyHandler;
-import game.entity.block.BlockLight;
+import game.entity.block.breakable.BlockLight;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.item.ItemStack;

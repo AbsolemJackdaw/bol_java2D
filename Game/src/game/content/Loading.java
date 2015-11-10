@@ -13,9 +13,10 @@ import game.GameStateManager;
 import game.World;
 import game.content.save.Save;
 import game.entity.Entity;
-import game.entity.block.BlockBreakable;
-import game.entity.block.BlockLog;
 import game.entity.block.Blocks;
+import game.entity.block.breakable.BlockBreakable;
+import game.entity.block.breakable.BlockLog;
+import game.entity.living.player.Player;
 
 
 public class Loading {
@@ -36,7 +37,7 @@ public class Loading {
 
 		//skip map x_1, so that map is used only in the very beginning
 		// x1 + x2 is max_total maps, where map min is 2
-		int i = new Random().nextInt(5)+2; 
+		int i = new Random().nextInt(5)+2;
 		String s = "/maps/maps/map/Map" + i + ".map";
 		System.out.println(s);
 		return s;
@@ -147,6 +148,71 @@ public class Loading {
 		Save.writeWorld(newWorld, index);
 		Save.writePlayerData(newWorld.getPlayer());
 	}
+
+	public static void loadFirstTutorialLevel(GameStateManagerBase gsm){
+
+		World world = (World)gsm.getGameState(gsm.getCurrentState());
+
+		Player player = world.getPlayer();
+		player.setPosition(12*32, 12*32);
+		
+//		///
+//		BlockInfoPane pane = new BlockInfoPane(world.tileMap, world, Blocks.SIGN);
+//		ArrayList<String> text = new ArrayList<String>();
+//
+//		text.add("Use " + KeyHandler.getKeyName(KeyHandler.LEFT) + KeyHandler.getKeyName(KeyHandler.DOWN) + KeyHandler.getKeyName(KeyHandler.RIGHT) + " or arrow keys");
+//		text.add("to move around !");
+//
+//		pane.setText(text);
+//		pane.setPosition(12*32, 12*32);
+//
+//		world.listWithMapObjects.add(pane);
+//		/////
+//		pane = new BlockInfoPane(world.tileMap, world, Blocks.SIGN);
+//		ArrayList<String> text2 = new ArrayList<String>();
+//
+//		text2.add("Press " + KeyHandler.getKeyName(KeyHandler.UP) + " or Up-Arrow to jump.");
+//		text2.add("The longer you hold it, the longer you'll leap.");
+//		text2.add("Try to leap this gap !");
+//
+//		pane.setText(text2);
+//		pane.setPosition(20*32, 12*32);
+//
+//		world.listWithMapObjects.add(pane);
+//		/////
+//		pane = new BlockInfoPane(world.tileMap, world, Blocks.SIGN);
+//		ArrayList<String> text3 = new ArrayList<String>();
+//
+//		text3.add("Great ! You almost got the basics done.");
+//		text3.add("Move on to learn how to swim.");
+//
+//		pane.setText(text3);
+//		pane.setPosition(28*32, 12*32);
+//
+//		world.listWithMapObjects.add(pane);
+//		/////
+//		pane = new BlockInfoPane(world.tileMap, world, Blocks.SIGN);
+//		ArrayList<String> text4 = new ArrayList<String>();
+//
+//		text4.add("Use the directional keys to");
+//		text4.add("swim up, left, or right !");
+//
+//		pane.setText(text4);
+//		pane.setPosition(40*32, 12*32);
+//
+//		world.listWithMapObjects.add(pane);
+
+	}
+
+	public static void loadSecondTutorialLevel(){
+
+	}
+
+	public static void loadThirdTutorialLevel(){
+
+	}
+
+
 
 	public static void startAtLastSavedLevel(GameStateManagerBase gsm){
 		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
@@ -268,7 +334,7 @@ public class Loading {
 		loadMusic("/sounds/entity/player/crunch_small3.mp3", "crunch_3");
 		loadMusic("/sounds/entity/player/crunch_small4.mp3", "crunch_4");
 		loadMusic("/sounds/entity/player/crunch_small5.mp3", "crunch_5");
-		
+
 		loadMusic("/sounds/entity/explosion/explode_0.mp3","explode_0");
 		loadMusic("/sounds/entity/explosion/explode_1.mp3","explode_1");
 		loadMusic("/sounds/entity/explosion/explode_2.mp3","explode_2");

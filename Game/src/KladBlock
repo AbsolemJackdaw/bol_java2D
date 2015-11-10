@@ -22,4 +22,6 @@ tuto 1 : move, jump, swim;
 tuto 2 : hit, collect resources, kill
 tuto 3 : make a crafting table, place it down (use hotbar nr to interact), craft a sword 
 
-goal is : make a work desk, jump at least once, hit a block, place work desk down
+for tutos, and other ? make a Sign block, which shows some info when collided ! :)
+
+

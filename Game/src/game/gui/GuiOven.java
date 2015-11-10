@@ -2,7 +2,7 @@ package game.gui;
 
 import engine.image.Images;
 import engine.keyhandlers.KeyHandler;
-import game.entity.block.BlockOven;
+import game.entity.block.breakable.BlockOven;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.item.ItemStack;

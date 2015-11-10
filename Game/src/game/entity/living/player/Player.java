@@ -46,7 +46,7 @@ import engine.save.DataList;
 import engine.save.DataTag;
 import game.World;
 import game.content.Loading;
-import game.entity.block.BlockBreakable;
+import game.entity.block.breakable.BlockBreakable;
 import game.entity.inventory.IInventory;
 import game.item.Item;
 import game.item.ItemArmor;
@@ -118,7 +118,7 @@ public class Player extends EntityLiving implements IInventory{
 		width = 32;
 		height = 32;
 
-		entitySizeX = 20;
+		entitySizeX = 24;
 		entitySizeY = 30;
 
 		moveSpeed = 0.5;
@@ -212,15 +212,12 @@ public class Player extends EntityLiving implements IInventory{
 
 			movement.doPlayerWaterMovement(this);
 			if(up){
-				dy -= moveSpeed;
-				if (dy < -maxSpeed)
-					dy = -maxSpeed;
-
 				//TODO make a possible better check ? 
 				if(world.tileMap.getBlockID(currentColumn+1, currentRow) > 20 || world.tileMap.getBlockID(currentColumn-1, currentRow) > 20){
 					dy -= moveSpeed;
 					if (dy < -maxSpeed)
 						dy = -maxSpeed;
+
 				}
 			}
 
@@ -259,7 +256,7 @@ public class Player extends EntityLiving implements IInventory{
 					setAttacking();
 					delay = 20;
 				}
-					delay --;
+				delay --;
 			}
 		}
 

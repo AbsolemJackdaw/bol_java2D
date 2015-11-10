@@ -13,8 +13,6 @@ import javax.imageio.ImageIO;
 
 import engine.window.GamePanel;
 
-
-
 public class TileMap {
 
 	// position

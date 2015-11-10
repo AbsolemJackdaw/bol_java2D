@@ -29,10 +29,10 @@ import game.content.Loading;
 import game.content.SpawningLogic;
 import game.content.save.Save;
 import game.entity.Entity;
-import game.entity.block.BlockBreakable;
-import game.entity.block.BlockLight;
-import game.entity.block.BlockOven;
 import game.entity.block.Blocks;
+import game.entity.block.breakable.BlockBreakable;
+import game.entity.block.breakable.BlockLight;
+import game.entity.block.breakable.BlockOven;
 import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.player.Player;
 import game.gui.Gui;
@@ -84,8 +84,13 @@ public class World extends GameWorld{
 
 		this.player = new Player(tileMap, this);
 
-		if(Save.getPlayerData() != null)
-			player.readFromSave(Save.getPlayerData());
+		if(firstGame){
+
+			Loading.loadFirstTutorialLevel(gsm);
+			
+		}else
+			if(Save.getPlayerData() != null)
+				player.readFromSave(Save.getPlayerData());
 
 		displayGui(new GuiHud(this, player));
 
@@ -189,7 +194,7 @@ public class World extends GameWorld{
 	boolean shake;
 	double shakeTimer = 50;
 	double shakeTimerMax = 50;
-	
+
 	@Override
 	public void update(){
 
@@ -211,11 +216,11 @@ public class World extends GameWorld{
 		if(guiDisplaying instanceof GuiHud || guiDisplaying != null && !guiDisplaying.pausesGame()){
 
 			if(shake){
-				
+
 				offset = (-0.5d * Math.sin((0.5d* Math.PI*(shakeTimer/4d))))*100;
-				
+
 				shakeTimer--;
-				
+
 			}
 
 			if(shakeTimer <= 0){
@@ -223,7 +228,7 @@ public class World extends GameWorld{
 				shakeTimer = shakeTimerMax;
 				offset = 0;
 			}
-			
+
 			gametime.updateTime();
 
 			if(hasCreaturesSpawned)
@@ -252,7 +257,7 @@ public class World extends GameWorld{
 				if(obj instanceof BlockBreakable) // extend bounding box for breakable blocks so you can stand slightly further away
 					//i just like to add this. i forgot the point ...
 					playerRectangleExtra = new Rectangle(player.getRectangle().x - 10, player.getRectangle().y, player.getRectangle().width + 20, player.getRectangle().height);
-				
+
 				if(playerRectangleExtra.intersects(obj.getRectangle())){
 					if(!player.getCollidingMapObjects().contains(obj)){
 						player.setCollidingMapObjects(obj);
@@ -288,7 +293,7 @@ public class World extends GameWorld{
 	public void handleInput() {
 
 		if(KeyHandler.isPressed(KeyHandler.CTRL)){
-			player.initHealth(15f);
+//			player.initHealth(15f);
 		}
 
 		if(isConsoleDisplayed){
@@ -600,6 +605,6 @@ public class World extends GameWorld{
 
 	public void shakeWorld(){
 		shake = true;
-//		shakeTimer = shakeTimerMax;
+		//		shakeTimer = shakeTimerMax;
 	}
 }
