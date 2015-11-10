@@ -11,6 +11,7 @@ import engine.map.TileMap;
 import engine.save.DataTag;
 import game.GameStateManager;
 import game.World;
+import game.content.WorldTask.EnumTask;
 import game.content.save.Save;
 import game.entity.Entity;
 import game.entity.block.Blocks;
@@ -156,51 +157,10 @@ public class Loading {
 		Player player = world.getPlayer();
 		player.setPosition(12*32, 12*32);
 		
-//		///
-//		BlockInfoPane pane = new BlockInfoPane(world.tileMap, world, Blocks.SIGN);
-//		ArrayList<String> text = new ArrayList<String>();
-//
-//		text.add("Use " + KeyHandler.getKeyName(KeyHandler.LEFT) + KeyHandler.getKeyName(KeyHandler.DOWN) + KeyHandler.getKeyName(KeyHandler.RIGHT) + " or arrow keys");
-//		text.add("to move around !");
-//
-//		pane.setText(text);
-//		pane.setPosition(12*32, 12*32);
-//
-//		world.listWithMapObjects.add(pane);
-//		/////
-//		pane = new BlockInfoPane(world.tileMap, world, Blocks.SIGN);
-//		ArrayList<String> text2 = new ArrayList<String>();
-//
-//		text2.add("Press " + KeyHandler.getKeyName(KeyHandler.UP) + " or Up-Arrow to jump.");
-//		text2.add("The longer you hold it, the longer you'll leap.");
-//		text2.add("Try to leap this gap !");
-//
-//		pane.setText(text2);
-//		pane.setPosition(20*32, 12*32);
-//
-//		world.listWithMapObjects.add(pane);
-//		/////
-//		pane = new BlockInfoPane(world.tileMap, world, Blocks.SIGN);
-//		ArrayList<String> text3 = new ArrayList<String>();
-//
-//		text3.add("Great ! You almost got the basics done.");
-//		text3.add("Move on to learn how to swim.");
-//
-//		pane.setText(text3);
-//		pane.setPosition(28*32, 12*32);
-//
-//		world.listWithMapObjects.add(pane);
-//		/////
-//		pane = new BlockInfoPane(world.tileMap, world, Blocks.SIGN);
-//		ArrayList<String> text4 = new ArrayList<String>();
-//
-//		text4.add("Use the directional keys to");
-//		text4.add("swim up, left, or right !");
-//
-//		pane.setText(text4);
-//		pane.setPosition(40*32, 12*32);
-//
-//		world.listWithMapObjects.add(pane);
+		world.tasks.add(new WorldTask(WorldTask.JUMP, 1, EnumTask.ACTION));
+		world.tasks.add(new WorldTask(WorldTask.WALK, 1, EnumTask.ACTION));
+		world.tasks.add(new WorldTask(WorldTask.SWIM, 1, EnumTask.ACTION));
+		world.tasks.add(new WorldTask("Impossibru Fruit", 100, EnumTask.COLLECTIBLE));
 
 	}
 

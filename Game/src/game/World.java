@@ -25,8 +25,10 @@ import engine.save.DataList;
 import engine.save.DataTag;
 import engine.window.GamePanel;
 import engine.window.gameAid.Time;
+import engine.window.gameAid.Utility;
 import game.content.Loading;
 import game.content.SpawningLogic;
+import game.content.WorldTask;
 import game.content.save.Save;
 import game.entity.Entity;
 import game.entity.block.Blocks;
@@ -65,7 +67,9 @@ public class World extends GameWorld{
 
 	public boolean hasCreaturesSpawned;
 
-	public World(GameStateManagerBase gsm) {
+	public ArrayList<WorldTask> tasks = new ArrayList<WorldTask>();
+
+	public World(GameStateManagerBase gsm){
 		super(gsm);
 
 		tileMap = new TileMap(32);
@@ -87,7 +91,7 @@ public class World extends GameWorld{
 		if(firstGame){
 
 			Loading.loadFirstTutorialLevel(gsm);
-			
+
 		}else
 			if(Save.getPlayerData() != null)
 				player.readFromSave(Save.getPlayerData());
@@ -165,6 +169,21 @@ public class World extends GameWorld{
 			g.fillRect(10, 10, 250, 25);
 			g.setColor(Color.white);
 			g.drawString(consolePrint, 25,25);
+		}
+
+		if(!isConsoleDisplayed && guiDisplaying instanceof GuiHud){
+			g.setFont(Constants.FONT_ITEMS);
+			int i = 0;
+			for(WorldTask task : tasks){
+
+				if(!task.isAchieved())
+					Utility.drawStringWithShadow(task.toString(), 10, 10+i, g, Color.red.darker(), Color.black);
+				else
+					Utility.drawStringWithShadow(task.toString(), 10, 10+i, g, Color.green.darker().darker(), Color.black);
+
+				i+=12;
+			}
+
 		}
 
 		if(displaySaveMessage){	
@@ -293,7 +312,7 @@ public class World extends GameWorld{
 	public void handleInput() {
 
 		if(KeyHandler.isPressed(KeyHandler.CTRL)){
-//			player.initHealth(15f);
+			//			player.initHealth(15f);
 		}
 
 		if(isConsoleDisplayed){

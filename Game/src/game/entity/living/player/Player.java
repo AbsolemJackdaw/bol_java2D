@@ -46,6 +46,7 @@ import engine.save.DataList;
 import engine.save.DataTag;
 import game.World;
 import game.content.Loading;
+import game.content.WorldTask;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.inventory.IInventory;
 import game.item.Item;
@@ -363,6 +364,19 @@ public class Player extends EntityLiving implements IInventory{
 					item.update();
 			}
 		}
+
+		for(WorldTask task : ((World)world).tasks){
+			if(!task.isAchieved()){
+				if(task.object().equals(WorldTask.JUMP) && KeyHandler.isPressed(KeyHandler.UP))
+					task.update(1);
+				if(task.object().equals(WorldTask.WALK)){
+					if(KeyHandler.isLeftKeyHit() || KeyHandler.isRightKeyHit())
+						task.update(1);
+				}
+				if(task.object().equals(WorldTask.SWIM) && isInWater())
+					task.update(1);
+			}
+		}
 	}
 
 	/**equipes the player with the needed tool when hitting an entity, if the tool is acquired.*/
@@ -598,7 +612,21 @@ public class Player extends EntityLiving implements IInventory{
 	public void checkTileMapCollision() {
 
 		if(tileMap.getBlockID(currentRow, currentColumn) == 6){
-			Loading.gotoNextLevel(getWorld().gsm);
+
+			boolean flag = false;
+
+			for(WorldTask task : ((World)world).tasks){
+				if(!task.isAchieved()){
+					flag = true;
+					break;
+				}
+			}
+
+			if(!flag){
+				Loading.gotoNextLevel(getWorld().gsm);
+			}else{
+				setVector(-4, 0);
+			}
 		}
 
 		if(tileMap.getBlockID(currentRow, currentColumn) == 7){
@@ -611,6 +639,10 @@ public class Player extends EntityLiving implements IInventory{
 			inWater = false;
 
 		super.checkTileMapCollision();
+	}
+
+	public boolean isInWater() {
+		return inWater;
 	}
 
 	public int getAttackDamage(){
@@ -705,14 +737,26 @@ public class Player extends EntityLiving implements IInventory{
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack) {
 		if(inventory[slot] == null)
-			inventory[slot] = stack;
-		else if (stack == null && inventory[slot] != null)
+			inventory[slot] = stack.copy();
+		else if (stack == null ){ //implies && inventory[slot] != null, because its an else statement
 			inventory[slot] = null;
+			return;
+		}
 		else if(inventory[slot].getItem().equals(stack.getItem()))
 			inventory[slot].stackSize += stack.stackSize;
 		else
 			System.out.println("something tried to replace the existing item" + inventory[slot].getItem().getUIN() +
 					" by "+ stack.getItem().getUIN() );
+
+
+		if(stack != null || inventory[slot] != null && inventory[slot].getItem().equals(stack.getItem()))
+			for(WorldTask task : ((World)world).tasks){
+				if(!task.isAchieved()){
+					if(task.object().equals(stack.getItem().getUIN())){
+						task.update(stack.stackSize);
+					}
+				}
+			}
 	}
 
 	@Override
