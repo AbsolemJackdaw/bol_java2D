@@ -112,6 +112,7 @@ public class Player extends EntityLiving implements IInventory{
 	public ArmorInventory invArmor = new ArmorInventory();
 
 	private boolean inWater;
+	private boolean wasInwater;
 
 	public Player(TileMap tm, World world) {
 		super(tm, world, "player");
@@ -207,20 +208,22 @@ public class Player extends EntityLiving implements IInventory{
 			// cannot move while attacking, except in air
 			if ((currentAction == ACTION_ATTACK) && !(jumping || falling))
 				dx = 0;
+
+			if(wasInwater){
+				setJumping(true);
+				dy = jumpStart/2;
+			}
+			//fly mechanics ! :D
+			//			if(!jumping && falling)
+			//				if(KeyHandler.isPressed(KeyHandler.UP)){
+			//					dy=jumpStart;
+			//					setJumping(true);
+			//				}
 		}
 
 		else{
 
 			movement.doPlayerWaterMovement(this);
-			if(up){
-				//TODO make a possible better check ? 
-				if(world.tileMap.getBlockID(currentColumn+1, currentRow) > 20 || world.tileMap.getBlockID(currentColumn-1, currentRow) > 20){
-					dy -= moveSpeed;
-					if (dy < -maxSpeed)
-						dy = -maxSpeed;
-
-				}
-			}
 
 		}
 
@@ -633,10 +636,18 @@ public class Player extends EntityLiving implements IInventory{
 			Loading.gotoPreviousLevel(getWorld().gsm);
 		}
 
+		if(wasInwater)
+			wasInwater = false;
+
 		if(tileMap.getBlockID(currentRow, currentColumn) == 10 || tileMap.getBlockID(currentRow, currentColumn) == 9){
 			inWater = true;
-		}else
+		}else{
+
+			if(inWater)
+				wasInwater = true;
+
 			inWater = false;
+		}
 
 		super.checkTileMapCollision();
 	}
