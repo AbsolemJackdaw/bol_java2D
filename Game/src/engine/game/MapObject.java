@@ -351,9 +351,20 @@ public abstract class MapObject {
 		ymap = tileMap.gety();
 	}
 
+	/**
+	 * Sets the map object to the specific coordinates
+	 */
 	public void setPosition(double x, double y) {
 		this.xScreen = x;
 		this.yScreen = y;
+	}
+	
+	/**
+	 * Sets the map object to the row and collumn
+	 */
+	public void setPosition(int x, int y) {
+		this.xScreen = x * 32 + 16;
+		this.yScreen = y * 32 + 16;
 	}
 
 	//facing has to be set manually in the entity class

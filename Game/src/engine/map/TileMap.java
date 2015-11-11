@@ -48,6 +48,8 @@ public class TileMap {
 	private int numTilesAcross;
 	private Tile[][] tiles;
 
+	public static final int AIR = 0;
+	
 	public TileMap(int tileSize) {
 		this.tileSize = tileSize;
 		tween = 0.05;

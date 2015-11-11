@@ -24,8 +24,8 @@ public class Items {
 	public static Item grease = new Item("grease", "Grease").setTexture(Images.loadImage("/items/grease.png"));
 	public static Item leather = new Item("leather", "Leather").setTexture(Images.loadImage("/items/leather.png"));
 	public static Item pouch = new ItemPouch("pouch","Leather Pouch").setTexture(Images.loadImage("/items/pouch.png"));
-
-	public static ItemBlock log = (ItemBlock) new ItemBlock(Blocks.LOG, "Log").setTexture(Images.loadImage("/blocks/log.png")).setFuel().setFuelTimer(800);
+	public static Item woodChip = new Item("woodchip","Wood Chips").setTexture(Images.loadImage("/items/wood_chip.png")).setFuel().setFuelTimer(800);
+	
 	public static ItemBlock craftTable = (ItemBlock) new ItemBlock(Blocks.CRAFTINGTABLE, "Work Desk").setTexture(Images.loadImage("/blocks/workbench.png"));
 	public static ItemBlock campfire = (ItemBlock) new ItemBlock(Blocks.CAMPFIRE, "Campfire").setTexture(Images.loadImage("/blocks/fire_logs.png"));
 	public static ItemBlock oven = (ItemBlock) new ItemBlock(Blocks.OVEN, "Oven").setTexture(Images.loadImage("/blocks/oven.png"));
@@ -50,7 +50,7 @@ public class Items {
 
 			registerItem(stick);
 			registerItem(craftTable);
-			registerItem(log);
+			registerItem(woodChip);
 			registerItem(iron);
 			registerItem(rock);
 			registerItem(pickaxe);

@@ -27,24 +27,24 @@ public class Crafting {
 
 		switch(i){
 		case Sticks:
-			is[0] = new ItemStack(Items.log, 1);
+			is[0] = new ItemStack(Items.woodChip, 1);
 			break;
 		case CraftTable:
 			is[0] = new ItemStack(Items.stick, 12);
-			is[1] = new ItemStack(Items.log, 4);
+			is[1] = new ItemStack(Items.woodChip, 4);
 			break;
 		case Pickaxe:
 			is[0] = new ItemStack(Items.stick, 2);
 			is[1] = new ItemStack(Items.rock, 6);
 			break;
 		case CampFire:
-			is[0] = new ItemStack(Items.log, 4);
+			is[0] = new ItemStack(Items.woodChip, 4);
 			is[1] = new ItemStack(Items.rock, 8);
 			is[2] = new ItemStack(Items.stick, 4);
 			break;
 		case Sword:
 			is[0] = new ItemStack(Items.stick, 2);
-			is[1] = new ItemStack(Items.log, 1);
+			is[1] = new ItemStack(Items.woodChip, 1);
 			is[2] = new ItemStack(Items.rock, 8);
 			break;
 		case Axe:
@@ -64,7 +64,7 @@ public class Crafting {
 			break;
 		case CraftAdvanced:
 			is[0] = new ItemStack(Items.ingot,10);
-			is[1] = new ItemStack(Items.log, 20);
+			is[1] = new ItemStack(Items.woodChip, 20);
 			is[2] = new ItemStack(Items.leather, 10);
 			is[3] = new ItemStack(Items.rock, 25);
 			break;

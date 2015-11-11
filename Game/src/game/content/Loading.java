@@ -16,7 +16,7 @@ import game.content.save.Save;
 import game.entity.Entity;
 import game.entity.block.Blocks;
 import game.entity.block.breakable.BlockBreakable;
-import game.entity.block.breakable.BlockLog;
+import game.entity.block.breakable.BlockWood;
 import game.entity.living.player.Player;
 
 
@@ -64,20 +64,27 @@ public class Loading {
 
 		//if its a new map
 		if(index == maps){
-			String s = newMap();
-			newWorld.loadMap(s);
-			newWorld.init();
-			maps++;
-			generateRandomTree(newWorld);
-			generateRandomOre(newWorld, Blocks.IRON, 7);
-			generateRandomOre(newWorld, Blocks.ROCK, 20);
-			populateEntities(newWorld, Entity.PIG, 10);
-			//set gametime to continue counting
-			newWorld.gametime.writeCurrentGameTime(time);
-			newWorld.nightAlhpa = nightShade;
 
-			if(newWorld.isNightTime()){
-				SpawningLogic.spawnNightCreatures(newWorld, true);
+			if(index == 1){
+				loadSecondTutorialLevel();
+			}else if (index == 2){
+				loadThirdTutorialLevel();
+			}else{
+				String s = newMap();
+				newWorld.loadMap(s);
+				newWorld.init();
+				maps++;
+				generateRandomTree(newWorld);
+				generateRandomOre(newWorld, Blocks.IRON, 7);
+				generateRandomOre(newWorld, Blocks.ROCK, 20);
+				populateEntities(newWorld, Entity.PIG, 10);
+				//set gametime to continue counting
+				newWorld.gametime.writeCurrentGameTime(time);
+				newWorld.nightAlhpa = nightShade;
+
+				if(newWorld.isNightTime()){
+					SpawningLogic.spawnNightCreatures(newWorld, true);
+				}
 			}
 
 		}else{
@@ -136,6 +143,7 @@ public class Loading {
 		if(!newWorld.hasCreaturesSpawned){
 			SpawningLogic.spawnNightCreatures(newWorld, true);
 		}
+		
 		for(int i = 0; i < newWorld.tileMap.getXRows(); i++)
 			for(int j = 0; j < newWorld.tileMap.getYRows(); j++){
 				if(newWorld.tileMap.getBlockID(i, j) == 6){
@@ -155,13 +163,28 @@ public class Loading {
 		World world = (World)gsm.getGameState(gsm.getCurrentState());
 
 		Player player = world.getPlayer();
-		player.setPosition(12*32, 12*32);
-		
+		player.setPosition(15, 64);
+
 		world.tasks.add(new WorldTask(WorldTask.JUMP, 1, EnumTask.ACTION));
 		world.tasks.add(new WorldTask(WorldTask.WALK, 1, EnumTask.ACTION));
 		world.tasks.add(new WorldTask(WorldTask.SWIM, 1, EnumTask.ACTION));
 		world.tasks.add(new WorldTask("Impossibru Fruit", 100, EnumTask.COLLECTIBLE));
 
+		for(int x = 0; x < 8; x+=2){
+			BlockWood vine = new BlockWood(world.tileMap, world);
+			vine.setPosition(66+x, 59);
+			world.listWithMapObjects.add(vine);
+
+			for(int i = 0; i < 6; i ++){
+				if(world.tileMap.isAir(66+x, 60+i)){
+					BlockWood otherVine = new BlockWood(world.tileMap, world);
+					otherVine.setPosition(66+x, 60+i);
+					if(i == 5)
+						otherVine.setEndBlock(true);
+					world.listWithMapObjects.add(otherVine);
+				}
+			}
+		}
 	}
 
 	public static void loadSecondTutorialLevel(){
@@ -171,8 +194,6 @@ public class Loading {
 	public static void loadThirdTutorialLevel(){
 
 	}
-
-
 
 	public static void startAtLastSavedLevel(GameStateManagerBase gsm){
 		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
@@ -184,7 +205,7 @@ public class Loading {
 	}
 
 	private static void generateRandomTree(World world){
-		BlockLog b = null;
+		BlockWood b = null;
 
 		TileMap tm = world.tileMap;
 
@@ -197,8 +218,8 @@ public class Loading {
 
 				if(y - numLogs > 0)
 					if(world.tileMap.isAir(x, (y-numLogs))){
-						b = new BlockLog(tm, world);
-						b.setPosition(x*32+16, (y-numLogs)*32+16);
+						b = new BlockWood(tm, world);
+						b.setPosition(x, (y-numLogs));
 						world.listWithMapObjects.add(b);
 						System.out.println("added block at " + x + " " + (y-numLogs));
 					}

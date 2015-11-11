@@ -14,8 +14,6 @@ import javax.swing.JPanel;
 import engine.gamestate.GameStateManagerBase;
 import engine.keyhandlers.KeyHandler;
 
-
-
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 
