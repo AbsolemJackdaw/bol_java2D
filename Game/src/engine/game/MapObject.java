@@ -305,12 +305,12 @@ public abstract class MapObject {
 		return (int) ((yScreen + ymap) - (entitySizeY / 2));
 	}
 
-	public int getScreenXpos() {
-		return (int) xScreen;
+	public double getScreenXpos() {
+		return xScreen;
 	}
 
-	public int getScreenYpos() {
-		return (int) yScreen;
+	public double getScreenYpos() {
+		return yScreen;
 	}
 
 	public int getTextureHeight() {

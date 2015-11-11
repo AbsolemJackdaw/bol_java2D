@@ -2,7 +2,6 @@ package engine.window;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -72,13 +71,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void addNotify() {
 		super.addNotify();
-		
+
 		if (thread == null) {
 			thread = new Thread(this);
 			addKeyListener(this);
 			thread.start();
 		}
-		
+
 	}
 
 	/**
@@ -98,10 +97,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		//draw in the center
 		double posX = screenSize.getWidth()/2 - SCALEDX/2;
 		double posY = screenSize.getHeight()/2 - SCALEDY/2;
+
+		Graphics2D g2 = (Graphics2D)getGraphics();
+
+		g2.drawImage(image, (int)posX, (int)posY, SCALEDX/*(int)screenSize.getWidth()*/, SCALEDY/*(int)screenSize.getHeight()*/, null);
 		
-		Graphics g2 = getGraphics();
+//		g2.drawImage(image, 0 , 0, (int)screenSize.getWidth(), (int)screenSize.getHeight(), null);
+
 		
-		g2.drawImage(image, (int)posX , (int)posY, SCALEDX, SCALEDY, null);
 		g2.dispose();
 	}
 
@@ -110,11 +113,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
 
+
 		running = true;
-		
+
 		gsm = getGameStateManager();
 	}
-	
+
 	/**
 	 * Register
 	 */

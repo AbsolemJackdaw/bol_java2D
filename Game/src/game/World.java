@@ -124,8 +124,8 @@ public class World extends GameWorld{
 
 		//draw the tile map
 		tileMap.draw(g, 
-				player.getScreenXpos()/32, 
-				player.getScreenYpos()/32,  1);
+				(int)player.getScreenXpos()/32, 
+				(int)player.getScreenYpos()/32,  1);
 
 		//set night shade if it's night
 		if(nightAlhpa > 0.1f){
@@ -151,7 +151,7 @@ public class World extends GameWorld{
 		//draw the player. draw it before the night shade !
 		player.draw(g);
 
-		tileMap.draw(g, player.getScreenXpos()/32, player.getScreenYpos()/32,  2);
+		tileMap.draw(g, (int)player.getScreenXpos()/32, (int)player.getScreenYpos()/32,  2);
 
 		//draw night shade after all visible in the world
 		if(nightAlhpa > 0.1f)
@@ -422,8 +422,8 @@ public class World extends GameWorld{
 	}
 
 	private boolean isOutOfBounds(MapObject obj){
-		int Px = player.getScreenXpos();
-		int Py = player.getScreenYpos();
+		int Px = (int)player.getScreenXpos();
+		int Py = (int)player.getScreenYpos();
 
 		int screenX = Window.getWidth()/(32*(int)GamePanel.SCALE);
 		int screenY = Window.getHeight()/(32*(int)GamePanel.SCALE);

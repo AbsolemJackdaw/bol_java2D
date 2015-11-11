@@ -12,9 +12,9 @@ public class Window {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		screenWidth = (int) screenSize.getWidth();//(int)w * (int)16;
+		screenWidth = 1366; //(int) screenSize.getWidth();//(int)w * (int)16;
 		
-		screenHeight = (int) screenSize.getHeight(); //(int)h * (int)9;
+		screenHeight = 768; //(int) screenSize.getHeight(); //(int)h * (int)9;
 		
 
 	}

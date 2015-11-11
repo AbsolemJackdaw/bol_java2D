@@ -133,7 +133,7 @@ public class Player extends EntityLiving implements IInventory{
 
 		facingRight = true;
 
-		setPosition(3*32, 3*32);
+		setPosition(5, 5);
 
 		initHealth(3f);
 	}
