@@ -216,8 +216,20 @@ public class World extends GameWorld{
 	@Override
 	public void update(){
 
+		double randOff = 0;
+		
+		if(offset > 0){
+			if(Constants.RANDOM.nextInt(3) == 0){
+				randOff = offset;
+				
+				if(Constants.RANDOM.nextInt(2)==0){
+					randOff /= -1;
+				}
+			}
+		}
+		
 		//move tilemap around 
-		tileMap.setPosition(((WIDTH / 2) - player.getScreenXpos()) + offset, ((HEIGHT / 2) - player.getScreenYpos()));
+		tileMap.setPosition(((WIDTH / 2) - player.getScreenXpos()) + offset, ((HEIGHT / 2) - player.getScreenYpos()+randOff));
 
 		//update backgrounds to move them around
 		if(backGrounds != null && !backGrounds.isEmpty())

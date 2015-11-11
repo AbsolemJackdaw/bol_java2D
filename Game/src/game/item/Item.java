@@ -3,6 +3,7 @@ package game.item;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +57,9 @@ public class Item {
 
 	public void draw(Graphics2D g, int x, int y, ItemStack stack){
 
-		g.drawImage(texture, x, y, 16, 16, null);
-
+		Image tmp = texture.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
+		g.drawImage(tmp, x, y, null);
+		
 		g.setFont(font);
 		if(stack.stackSize < 10)
 		{

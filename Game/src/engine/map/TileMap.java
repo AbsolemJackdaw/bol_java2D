@@ -51,7 +51,7 @@ public class TileMap {
 	
 	public TileMap(int tileSize) {
 		this.tileSize = tileSize;
-		tween = 0.05;
+		tween = 0.5;
 	}
 
 	public void draw(Graphics2D g, int centralX, int centralY,  int renderPass) {
@@ -141,7 +141,6 @@ public class TileMap {
 	/**x, y being the coords of the block in rows and collumns*/
 	public int getBlockID(int x, int y){
 		
-//		System.out.println(x + " " + y + " " + mapXRows + " "  + mapYRows);
 		if(x >=0 && y >=0 && x < mapXRows && y < mapYRows){
 			int rc = map[y][x];
 			int r = rc / numTilesAcross;
@@ -156,8 +155,6 @@ public class TileMap {
 	/**x and y are the rows of the map. returns either 0 or 1, for solid or ghost blocks*/
 	public int getType(int y, int x) {
 
-//		System.out.println(x + " " + y + " " + mapXRows + " "  + mapYRows);
-		
 		if(x >=0 && y >=0 && x < mapXRows && y < mapYRows){
 			int rc = map[y][x];
 			int r = rc / numTilesAcross;
@@ -198,8 +195,6 @@ public class TileMap {
 	}
 
 	public void loadMap(String s) {
-
-//		System.out.println("CLASSPATH = " + s);
 
 		try {
 
@@ -258,7 +253,7 @@ public class TileMap {
 		this.x += (x - this.x) * tween;
 		this.y += (y - this.y) * tween;
 
-//		fixBounds();
+		fixBounds();
 	}
 
 	public void setTween(double d) {
