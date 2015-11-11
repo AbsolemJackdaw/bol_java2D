@@ -2,16 +2,15 @@ package game.util;
 
 import engine.window.GamePanel;
 import engine.window.gameAid.Utility;
+import engine.window.gameAid.Window;
 import game.content.Loading;
 import game.entity.block.Block;
 import game.entity.inventory.IInventory;
 import game.item.ItemStack;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Random;
@@ -85,10 +84,8 @@ public class Util {
 	 */
 	public static BufferedImage generateStalactiteBackGround(){
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
 		double width = Loading.stalactites[0].getWidth();
-		double max = screenSize.getWidth() / width;
+		double max = Window.getWidth() / width;
 
 		BufferedImage img = new BufferedImage(GamePanel.WIDTH, GamePanel.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
@@ -117,10 +114,8 @@ public class Util {
 	 */
 	public static BufferedImage generateStalactiteBackGround(int y , int offset){
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
 		double width = Loading.stalactites[0].getWidth();
-		double max = screenSize.getWidth() / width;
+		double max = Window.getWidth() / width;
 
 		BufferedImage img = new BufferedImage(GamePanel.WIDTH, y, BufferedImage.TYPE_INT_ARGB);
 

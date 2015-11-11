@@ -1,9 +1,7 @@
 package engine.map;
 
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -12,6 +10,7 @@ import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 
 import engine.window.GamePanel;
+import engine.window.gameAid.Window;
 
 public class TileMap {
 
@@ -60,10 +59,8 @@ public class TileMap {
 		int Px = centralX;
 		int Py = centralY;
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-		int screenX = (int)screenSize.getWidth()/(tileSize*(int)GamePanel.SCALE);
-		int screenY = (int)screenSize.getHeight()/(tileSize*(int)GamePanel.SCALE);
+		int screenX = Window.getWidth()/(tileSize*(int)GamePanel.SCALE);
+		int screenY = Window.getHeight()/(tileSize*(int)GamePanel.SCALE);
 		
 		int arroundX = screenX + 3; // + 3 is error margin
 		int arroundY = screenY + 3;

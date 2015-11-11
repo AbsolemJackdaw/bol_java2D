@@ -5,10 +5,8 @@ import static engine.window.GamePanel.WIDTH;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -26,6 +24,7 @@ import engine.save.DataTag;
 import engine.window.GamePanel;
 import engine.window.gameAid.Time;
 import engine.window.gameAid.Utility;
+import engine.window.gameAid.Window;
 import game.content.Loading;
 import game.content.SpawningLogic;
 import game.content.WorldTask;
@@ -426,10 +425,8 @@ public class World extends GameWorld{
 		int Px = player.getScreenXpos();
 		int Py = player.getScreenYpos();
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-		int screenX = (int)screenSize.getWidth()/(32*(int)GamePanel.SCALE);
-		int screenY = (int)screenSize.getHeight()/(32*(int)GamePanel.SCALE);
+		int screenX = Window.getWidth()/(32*(int)GamePanel.SCALE);
+		int screenY = Window.getHeight()/(32*(int)GamePanel.SCALE);
 
 		int arroundX = 32* (screenX + 2) ; // +2 is error margin
 		int arroundY = 32* (screenY + 2);

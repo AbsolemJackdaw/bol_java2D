@@ -4,6 +4,8 @@ import java.awt.Container;
 
 import javax.swing.JFrame;
 
+import engine.window.gameAid.Window;
+
 public class Main {
 
 
@@ -13,6 +15,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
+		new Window();
+		
 		final JFrame window = new JFrame(args[0]);
 		window.setContentPane(getContainerClass(args[1]));
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

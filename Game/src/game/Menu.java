@@ -2,9 +2,7 @@ package game;
 
 import static engine.window.GamePanel.HEIGHT;
 import static engine.window.GamePanel.WIDTH;
-import static game.util.Constants.COLOR_GENERAL;
-import static game.util.Constants.FONT_CHOICES;
-import static game.util.Constants.FONT_HEADER;
+import static game.util.Constants.*;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -22,7 +20,7 @@ import game.util.Util;
 
 public class Menu extends GameState{
 
-	private Color clr = new Color(0xcfd9e7);
+//	private Color clr = new Color(0xcfd9e7);
 
 	private int currentChoice = 0;
 	private final String[] options = { "Start", "Options", "Quit" };
@@ -39,29 +37,32 @@ public class Menu extends GameState{
 	@Override
 	public void draw(Graphics2D g){
 
-		
+
 		g.setColor(Color.black);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
 		g.drawImage(backGround, 0, 0, null);
 
-		
+
 		g.setFont(FONT_HEADER);
 		g.setColor(COLOR_GENERAL);
 		Utility.drawCenteredString(g, "The Brim Of Life", FONT_HEADER, WIDTH/2, 175);
 
 		// Draw menu square
-		g.setColor(clr);
-		g.drawRoundRect((GamePanel.WIDTH / 2) - 16, GamePanel.HEIGHT - 150 + (currentChoice * 15) - 12 , 27, 14, 5, 5);
+		//		g.setColor(clr);
+		//		g.drawRoundRect((GamePanel.WIDTH / 2) - 16, GamePanel.HEIGHT - 150 + (currentChoice * 15) - 12 , 27, 14, 5, 5);
 
 		// draw menu options
-		g.setFont(FONT_CHOICES);
+
 		for (int i = 0; i < options.length; i++){
-			if (i == currentChoice)
-				g.setColor(Color.gray);
-			else
+			if (i == currentChoice){
+				Utility.drawCenteredStringWithShadow(g, options[i], FONT_CHOICES, (GamePanel.WIDTH / 2),  GamePanel.HEIGHT - 150 + (i * 15), Color.gray, Color.gray.darker().darker());
+			}
+			else{
 				g.setColor(COLOR_GENERAL);
-			g.drawString(options[i], (GamePanel.WIDTH / 2) - 15, GamePanel.HEIGHT - 150 + (i * 15));
+				Utility.drawCenteredString(g, options[i], FONT_CHOICES, (GamePanel.WIDTH / 2),  GamePanel.HEIGHT - 150 + (i * 15));
+			}
+
 		}
 	}
 
@@ -85,16 +86,16 @@ public class Menu extends GameState{
 	private void select() {
 		if (currentChoice == 0){
 			gsm.setState(GameStateManager.GAME);
-			
+
 			//new blank world
 			World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
-			
+
 			//read map index
 			Save.readRandomParts();
-			
+
 			//load saves from world. if none, the basic map will be loaded 
 			Loading.startAtLastSavedLevel(gsm);
-			
+
 			//initiate current world. sets new player 
 			currentWorld.init();
 		}

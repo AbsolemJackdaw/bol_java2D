@@ -76,4 +76,52 @@ public class Utility {
 		g.drawString(text, x - (textWidth/2), y - (textHeight/2));
 
 	}
+	
+	/**Draws a centered string where x and y are the center of that string*/
+	public static void drawCenteredStringWithShadow(Graphics2D g, String text, Font f, int x, int y){
+
+		g.setFont(f);
+		
+		FontMetrics metrics = g.getFontMetrics(f);
+
+		int textWidth = metrics.stringWidth(text);
+		int textHeight = metrics.getHeight();
+
+		for(int i = 0; i < 2; i++){
+
+			if(i == 0){
+				g.setColor(Color.darkGray);
+				g.drawString(text, x - (textWidth/2) + 1 , y - (textHeight/2) + 1);
+
+			}
+			else{
+				g.setColor(Color.white);
+				g.drawString(text, x - (textWidth/2), y - (textHeight/2));
+			}
+		}
+	}
+	
+	/**Draws a centered string where x and y are the center of that string*/
+	public static void drawCenteredStringWithShadow(Graphics2D g, String text, Font f, int x, int y, Color top, Color shadow){
+
+		g.setFont(f);
+		
+		FontMetrics metrics = g.getFontMetrics(f);
+
+		int textWidth = metrics.stringWidth(text);
+		int textHeight = metrics.getHeight();
+
+		for(int i = 0; i < 2; i++){
+
+			if(i == 0){
+				g.setColor(shadow);
+				g.drawString(text, x - (textWidth/2) + 1, y - (textHeight/2) + 1);
+
+			}
+			else{
+				g.setColor(top);
+				g.drawString(text, x - (textWidth/2), y - (textHeight/2));
+			}
+		}
+	}
 }

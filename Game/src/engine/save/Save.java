@@ -23,7 +23,7 @@ public class Save {
 			Object obj = parser.parse(new FileReader("saves/"+s+".json"));
 			return obj;
 		} catch (FileNotFoundException e) {
-			System.out.println("[SAVING] Save file '" + s + "' not found.");
+//			System.out.println("[SAVING] Save file '" + s + "' not found.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {

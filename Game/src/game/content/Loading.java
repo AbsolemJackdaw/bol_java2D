@@ -292,18 +292,6 @@ public class Loading {
 		loadMusic("/sounds/block/rock/hit_rock_4.mp3", "hit_rock_4");
 		loadMusic("/sounds/block/rock/hit_rock_5.mp3", "hit_rock_5");
 
-		loadMusic("/sounds/step_1.mp3", "step_1");
-		loadMusic("/sounds/step_2.mp3", "step_2");
-		loadMusic("/sounds/step_3.mp3", "step_3");
-		loadMusic("/sounds/step_4.mp3", "step_4");
-		loadMusic("/sounds/step_5.mp3", "step_5");
-
-		loadMusic("/sounds/jump_1.mp3", "jump_1");
-		loadMusic("/sounds/jump_2.mp3", "jump_2");
-		loadMusic("/sounds/jump_3.mp3", "jump_3");
-		loadMusic("/sounds/jump_4.mp3", "jump_4");
-		loadMusic("/sounds/jump_5.mp3", "jump_5");
-
 		loadMusic("/sounds/entity/pig/pig_hurt_1.mp3", "hitpig_1");
 		loadMusic("/sounds/entity/pig/pig_hurt_2.mp3", "hitpig_2");
 		loadMusic("/sounds/entity/pig/pig_hurt_3.mp3", "hitpig_3");

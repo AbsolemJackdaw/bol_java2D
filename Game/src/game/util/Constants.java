@@ -14,7 +14,8 @@ public class Constants {
 	public static final Font FONT_HEADER = new Font("Constantia", Font.PLAIN, 36);
 	public static final Font FONT_HEADER_SMALL = new Font("Constantia", Font.PLAIN, 18);
 	public static final Font FONT_CHOICES = new Font("Arial", Font.PLAIN, 12);
-	
+	public static final Font FONT_CHOICES_BIGGER = new Font("Arial", Font.PLAIN, 16);
+
 	public static final Color COLOR_GENERAL = new Color(250, 231, 217);
 	
 	public static final Random RANDOM = new Random();

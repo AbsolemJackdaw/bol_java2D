@@ -13,15 +13,14 @@ import javax.swing.JPanel;
 
 import engine.gamestate.GameStateManagerBase;
 import engine.keyhandlers.KeyHandler;
+import engine.window.gameAid.Window;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 
-	private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	
 	// dimensions
-	public static final int WIDTH = (int)screenSize.getWidth()/2; //TODO apply screensize modifications possible ?
-	public static final int HEIGHT = (int)screenSize.getHeight()/2;
+	public static final int WIDTH = Window.getWidth()/2; //(int)screenSize.getWidth()/2; //TODO apply screensize modifications possible ?
+	public static final int HEIGHT = Window.getHeight()/2; //(int)screenSize.getHeight()/2;
 	public static float SCALE = 2f;
 
 	public static int SCALEDX;
@@ -61,8 +60,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 	public Dimension getDimension(){
 
-		float x = WIDTH * SCALE;
-		float y = HEIGHT * SCALE;
+		float x = (WIDTH) * SCALE;
+		float y = (HEIGHT) * SCALE;
 
 		SCALEDX = (int)x;
 		SCALEDY = (int)y;
@@ -96,6 +95,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+		//draw in the center
 		double posX = screenSize.getWidth()/2 - SCALEDX/2;
 		double posY = screenSize.getHeight()/2 - SCALEDY/2;
 		
