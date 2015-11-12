@@ -1,21 +1,20 @@
 package game.entity.block.breakable;
 
-import java.awt.image.BufferedImage;
-import java.util.Random;
-
 import engine.image.Images;
-import engine.map.TileMap;
 import game.World;
 import game.entity.block.Blocks;
 import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
 
+import java.awt.image.BufferedImage;
+import java.util.Random;
+
 
 public class BlockIron extends BlockBreakable {
 
-	public BlockIron(TileMap tm, World world) {
-		super(tm, world, Blocks.IRON, ItemTool.PICKAXE);
+	public BlockIron(World world) {
+		super(world, Blocks.IRON, ItemTool.PICKAXE);
 		setHealth(50);
 	}
 

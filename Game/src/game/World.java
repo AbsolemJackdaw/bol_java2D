@@ -89,7 +89,7 @@ public class World extends GameWorld{
 
 		if(firstGame){
 
-			Loading.loadFirstTutorialLevel(gsm);
+			Loading.loadTutorialLevel(gsm);
 
 		}else
 			if(Save.getPlayerData() != null)
@@ -408,7 +408,7 @@ public class World extends GameWorld{
 			DataTag dt = list.readArray(i);
 			String uin = dt.readString("UIN");
 
-			MapObject mo = Blocks.loadMapObjectFromString(uin, tileMap, this);
+			MapObject mo = Blocks.loadMapObjectFromString(uin, this);
 
 			if(mo == null)
 				mo = Entity.createEntityFromUIN(uin, tileMap, this);

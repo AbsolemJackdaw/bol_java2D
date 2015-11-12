@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 
 import engine.image.Images;
 import engine.keyhandlers.XboxController;
-import engine.music.Music;
 import engine.window.GamePanel;
 
 
@@ -20,7 +19,6 @@ public class GameStateManagerBase {
 
 		gameStates = new GameState[NUMGAMESTATES];
 
-		Music.init();
 		Images.init();
 		XboxController.init();
 		

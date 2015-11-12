@@ -4,7 +4,6 @@ import static engine.keyhandlers.KeyHandler.INTERACT;
 import static engine.keyhandlers.KeyHandler.getKeyName;
 import engine.image.Images;
 import engine.imaging.Animation;
-import engine.map.TileMap;
 import engine.save.DataTag;
 import game.World;
 import game.entity.block.Block;
@@ -27,8 +26,8 @@ public class BlockLight extends BlockBreakable implements IInventory{
 
 	Animation fire = new Animation();
 
-	public BlockLight(TileMap tm, World world, String uin) {
-		super(tm, world, uin, ItemTool.NOTHING);
+	public BlockLight(World world, String uin) {
+		super(world, uin, ItemTool.NOTHING);
 		setHealth(2);
 		fire.setFrames(Images.loadMultiImage("/blocks/camp_fire.png", 32, 0, 4));
 		fire.setDelay(90);

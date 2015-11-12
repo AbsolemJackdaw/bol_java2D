@@ -2,7 +2,9 @@ package game;
 
 import static engine.window.GamePanel.HEIGHT;
 import static engine.window.GamePanel.WIDTH;
-import static game.util.Constants.*;
+import static game.util.Constants.COLOR_GENERAL;
+import static game.util.Constants.FONT_CHOICES;
+import static game.util.Constants.FONT_HEADER;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

@@ -13,8 +13,8 @@ public class ItemBlock extends Item{
 		super(s, displayName);
 	}
 
-	public void placeBlock(TileMap map, World world, Player p){
-		MapObject mo = Blocks.loadMapObjectFromString(getUIN(), map, world);
+	public void placeBlock(World world, Player p){
+		MapObject mo = Blocks.loadMapObjectFromString(getUIN(), world);
 		mo.setPosition(p.getScreenXpos(), p.getScreenYpos());
 		world.listWithMapObjects.add(mo);
 	}
@@ -22,7 +22,7 @@ public class ItemBlock extends Item{
 	@Override
 	public void useItem(ItemStack item, TileMap map, World world, Player player, int key) {
 		ItemBlock ib = (ItemBlock)item.getItem();
-		ib.placeBlock(map, world, player);
+		ib.placeBlock(world, player);
 
 		Util.decreaseStack(player.getInventory(), key, 1);
 	}
@@ -39,7 +39,7 @@ public class ItemBlock extends Item{
 			//place down blocks
 			if(player.getStackInSlot(slot).getItem() instanceof ItemBlock){
 				ItemBlock ib = (ItemBlock)player.getStackInSlot(slot).getItem();
-				ib.placeBlock(player.getWorld().tileMap, player.getWorld(), player);
+				ib.placeBlock(player.getWorld(), player);
 
 				Util.decreaseStack(player.getInventory(), slot, 1);
 			}

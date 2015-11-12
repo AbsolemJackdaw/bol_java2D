@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 
 import engine.game.MapObject;
-import engine.map.TileMap;
 import game.World;
 import game.item.ItemStack;
 
@@ -24,8 +23,8 @@ public class Block extends MapObject{
 
 	protected List<String> blockInfo = new ArrayList<String>();
 	
-	public Block(TileMap tm, World world, String uin) {
-		super(tm, world, uin);
+	public Block(World world, String uin) {
+		super(world.tileMap, world, uin);
 		width = 32;
 		height = 32;
 

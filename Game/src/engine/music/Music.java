@@ -29,7 +29,7 @@ public class Music {
 	public static void init() {
 		clips = new HashMap<String, Clip>();
 		gap = 0;
-		
+
 	}
 
 	public static void load(String s, String n) {
@@ -80,20 +80,35 @@ public class Music {
 			System.out.println("the key " + s + " for sounds does not exist");
 			return;
 		}
-		play(s, gap);
+
+		try {
+			play(s, gap);
+		} catch (Exception e) {
+			System.out.println("An error occured playing a sound file !");
+			e.printStackTrace();
+		}
 	}
 
 	public static void play(String s, int i) {
-		if (mute)
-			return;
-		final Clip c = clips.get(s);
-		if (c == null)
-			return;
-		if (c.isRunning())
-			c.stop();
-		c.setFramePosition(i);
-		while (!c.isRunning())
-			c.start();
+		try {
+			
+			if (mute)
+				return;
+			final Clip c = clips.get(s);
+			if (c == null)
+				return;
+			if (c.isRunning())
+				c.stop();
+			
+			c.setFramePosition(i);
+			
+			while (!c.isRunning())
+				c.start();
+			
+		} catch (Exception e) {
+			System.out.println("An error occured trying to play a sound file !");
+			e.printStackTrace();
+		}
 	}
 
 	public static void resume(String s) {

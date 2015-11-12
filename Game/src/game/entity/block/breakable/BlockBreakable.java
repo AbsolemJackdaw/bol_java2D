@@ -1,8 +1,8 @@
 package game.entity.block.breakable;
 
-import engine.map.TileMap;
 import engine.music.Music;
 import engine.save.DataTag;
+import engine.window.MusicPanel;
 import game.World;
 import game.entity.block.Block;
 import game.entity.living.player.Player;
@@ -23,12 +23,12 @@ public class BlockBreakable extends Block{
 
 	int tracker = 0;
 
-	public BlockBreakable(TileMap tm, World world, String uin) {
-		super(tm, world, uin);
+	public BlockBreakable(World world, String uin) {
+		super(world, uin);
 	}
 
-	public BlockBreakable(TileMap tm, World world, String uin, int toolEffectiveness) {
-		this(tm, world, uin);
+	public BlockBreakable(World world, String uin, int toolEffectiveness) {
+		this(world, uin);
 		setEffectiveTool(toolEffectiveness);
 	}
 
@@ -149,12 +149,12 @@ public class BlockBreakable extends Block{
 		default:
 			break;
 		}
-		
+
 		health -= damage;
-		
+
 		if(health <= 0)
 			remove = true;
-		
+
 	}
 
 	protected void mine(Player p){

@@ -1,11 +1,7 @@
 package game.entity.block.breakable;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 import engine.game.MapObject;
 import engine.image.Images;
-import engine.map.TileMap;
 import game.World;
 import game.entity.block.Blocks;
 import game.entity.living.player.Player;
@@ -13,13 +9,27 @@ import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 
 public class BlockWood extends BlockBreakable{
 
 	private boolean isEndBlock;
 
-	public BlockWood(TileMap tm, World world) {
-		super(tm, world, Blocks.VINE, ItemTool.AXE);
+	public BlockWood(World world, boolean b) {
+		this(world);
+//		if(b){
+//			entitySizeY = height = 24;
+//		}else{
+//			entitySizeY = height = 32;
+//		}
+		
+		setEndBlock(b);
+	}
+
+	public BlockWood(World world) {
+		super(world, Blocks.VINE, ItemTool.AXE);
 		setHealth(5);
 
 		moveSpeed = 0; 

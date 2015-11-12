@@ -14,8 +14,8 @@ public class BlockInfoPane extends BlockEnvironement {
 
 	private List<String> text = new ArrayList<>();
 	
-	public BlockInfoPane(TileMap tm, World world, String uin) {
-		super(tm, world, uin);
+	public BlockInfoPane(World world, String uin) {
+		super(world, uin);
 		
 	}
 	

@@ -28,6 +28,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	// game thread
 	private Thread thread;
 	private boolean running;
+	
+	private Thread musicThread;
 
 	long lastLoopTime = System.nanoTime();
 	final int TARGET_FPS = 60;
@@ -77,6 +79,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			addKeyListener(this);
 			thread.start();
 		}
+		
+		if(musicThread == null){
+			musicThread = new Thread(new MusicPanel());
+			musicThread.start();
+		}
 
 	}
 
@@ -112,7 +119,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
-
 
 		running = true;
 

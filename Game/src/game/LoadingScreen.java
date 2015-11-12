@@ -56,8 +56,8 @@ public class LoadingScreen extends GameState{
 
 		loading--;
 
-		if(loading <= 200)
-			Loading.loadMusic();
+//		if(loading <= 200)
+//			Loading.loadMusic();
 
 		if(loading <= 150)
 			Items.loadItems();

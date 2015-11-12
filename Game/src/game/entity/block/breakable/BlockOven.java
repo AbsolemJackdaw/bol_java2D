@@ -4,7 +4,6 @@ import static engine.keyhandlers.KeyHandler.INTERACT;
 import static engine.keyhandlers.KeyHandler.getKeyName;
 import engine.image.Images;
 import engine.imaging.Animation;
-import engine.map.TileMap;
 import engine.save.DataList;
 import engine.save.DataTag;
 import game.World;
@@ -30,8 +29,8 @@ public class BlockOven extends BlockBreakable implements IInventory{
 
 	Animation fire = new Animation();
 
-	public BlockOven(TileMap tm, World world) {
-		super(tm, world, "oven",ItemTool.NOTHING);
+	public BlockOven(World world) {
+		super(world, "oven",ItemTool.NOTHING);
 
 		fire.setFrames(Images.loadMultiImage("/blocks/ovenFire.png", 32, 0, 4));
 		fire.setDelay(50);

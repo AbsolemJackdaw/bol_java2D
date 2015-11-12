@@ -75,7 +75,7 @@ public class GameWorld extends GameState {
 	
 	public void init(){
 		if(resourceMapPath.length() < 5){
-			loadMap("/maps/whisp_tut");
+			loadMap("/maps/tutorial_island");
 			firstGame = true;
 		}
 	}

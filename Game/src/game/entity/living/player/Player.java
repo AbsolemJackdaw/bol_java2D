@@ -763,7 +763,7 @@ public class Player extends EntityLiving implements IInventory{
 		if(stack != null || inventory[slot] != null && inventory[slot].getItem().equals(stack.getItem()))
 			for(WorldTask task : ((World)world).tasks){
 				if(!task.isAchieved()){
-					if(task.object().equals(stack.getItem().getUIN())){
+					if(task.object().equals(stack.getItem().getDisplayName())){
 						task.update(stack.stackSize);
 					}
 				}

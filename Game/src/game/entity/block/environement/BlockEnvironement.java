@@ -1,14 +1,13 @@
 package game.entity.block.environement;
 
-import engine.map.TileMap;
 import game.World;
 import game.entity.block.Block;
 import game.entity.living.player.Player;
 
 public class BlockEnvironement extends Block{
 
-	public BlockEnvironement(TileMap tm, World world, String uin) {
-		super(tm, world, uin);
+	public BlockEnvironement(World world, String uin) {
+		super(world, uin);
 		
 		width = 32;
 		height = 32;

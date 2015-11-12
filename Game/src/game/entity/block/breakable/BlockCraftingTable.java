@@ -2,12 +2,8 @@ package game.entity.block.breakable;
 
 import static engine.keyhandlers.KeyHandler.INTERACT;
 import static engine.keyhandlers.KeyHandler.getKeyName;
-
-import java.awt.image.BufferedImage;
-
 import engine.image.Images;
 import engine.imaging.Animation;
-import engine.map.TileMap;
 import game.World;
 import game.entity.living.player.Player;
 import game.gui.GuiCrafting;
@@ -15,13 +11,15 @@ import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
 
+import java.awt.image.BufferedImage;
+
 
 public class BlockCraftingTable extends BlockBreakable {
 
 	private boolean advanced;
 	
-	public BlockCraftingTable(TileMap tm, World world, int health, boolean advanced, String name) {
-		super(tm, world, name, ItemTool.NOTHING);
+	public BlockCraftingTable(World world, int health, boolean advanced, String name) {
+		super(world, name, ItemTool.NOTHING);
 		setHealth(health);
 		this.advanced = advanced;
 		

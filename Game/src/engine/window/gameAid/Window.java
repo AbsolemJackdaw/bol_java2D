@@ -1,7 +1,5 @@
 package engine.window.gameAid;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 
 public class Window {
 
@@ -10,7 +8,7 @@ public class Window {
 
 	public Window(){
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		screenWidth = 1366; //(int) screenSize.getWidth();//(int)w * (int)16;
 		

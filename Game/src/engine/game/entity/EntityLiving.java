@@ -18,7 +18,7 @@ public class EntityLiving extends MapObject{
 
 	private boolean flicker;
 	private int flickerTimer = 100;
-	
+
 	public EntityLiving(TileMap tm, GameWorld world, String uin) {
 		super(tm, world, uin);
 
@@ -93,7 +93,7 @@ public class EntityLiving extends MapObject{
 		getNextPosition();
 		checkTileMapCollision();
 		setPosition(xtemp, ytemp);
-		
+
 		if(flicker)
 			flickerTimer++;
 		if(flickerTimer > 50){
@@ -105,7 +105,7 @@ public class EntityLiving extends MapObject{
 	@Override
 	public void onEntityHit(float damage) {
 		hurtEntity(damage);
-		
+
 		Music.play(getEntityHitSound());
 
 		if(health < 0)
@@ -138,8 +138,8 @@ public class EntityLiving extends MapObject{
 		if(health < 0)
 			kill(p);
 	}
-	
-	
+
+
 	/**
 	 * Method called when the entity has no mroe health left.
 	 * Use this method to set any drops in the player inventory.
@@ -149,7 +149,7 @@ public class EntityLiving extends MapObject{
 	public void kill(Player player){
 		this.remove = true;
 	}
-	
+
 	@Override
 	public boolean hasAnimation() {
 		return true;

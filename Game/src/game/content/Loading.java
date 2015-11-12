@@ -1,12 +1,12 @@
 package game.content;
 
-import static engine.music.Music.load;
-
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Random;
 
 import engine.game.entity.EntityLiving;
 import engine.gamestate.GameStateManagerBase;
+import engine.keyhandlers.KeyHandler;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import game.GameStateManager;
@@ -16,8 +16,11 @@ import game.content.save.Save;
 import game.entity.Entity;
 import game.entity.block.Blocks;
 import game.entity.block.breakable.BlockBreakable;
+import game.entity.block.breakable.BlockRock;
 import game.entity.block.breakable.BlockWood;
+import game.entity.block.environement.BlockInfoPane;
 import game.entity.living.player.Player;
+import game.item.Items;
 
 
 public class Loading {
@@ -65,26 +68,20 @@ public class Loading {
 		//if its a new map
 		if(index == maps){
 
-			if(index == 1){
-				loadSecondTutorialLevel();
-			}else if (index == 2){
-				loadThirdTutorialLevel();
-			}else{
-				String s = newMap();
-				newWorld.loadMap(s);
-				newWorld.init();
-				maps++;
-				generateRandomTree(newWorld);
-				generateRandomOre(newWorld, Blocks.IRON, 7);
-				generateRandomOre(newWorld, Blocks.ROCK, 20);
-				populateEntities(newWorld, Entity.PIG, 10);
-				//set gametime to continue counting
-				newWorld.gametime.writeCurrentGameTime(time);
-				newWorld.nightAlhpa = nightShade;
+			String s = newMap();
+			newWorld.loadMap(s);
+			newWorld.init();
+			maps++;
+			generateRandomTree(newWorld);
+			generateRandomOre(newWorld, Blocks.IRON, 7);
+			generateRandomOre(newWorld, Blocks.ROCK, 20);
+			populateEntities(newWorld, Entity.PIG, 10);
+			//set gametime to continue counting
+			newWorld.gametime.writeCurrentGameTime(time);
+			newWorld.nightAlhpa = nightShade;
 
-				if(newWorld.isNightTime()){
-					SpawningLogic.spawnNightCreatures(newWorld, true);
-				}
+			if(newWorld.isNightTime()){
+				SpawningLogic.spawnNightCreatures(newWorld, true);
 			}
 
 		}else{
@@ -143,7 +140,7 @@ public class Loading {
 		if(!newWorld.hasCreaturesSpawned){
 			SpawningLogic.spawnNightCreatures(newWorld, true);
 		}
-		
+
 		for(int i = 0; i < newWorld.tileMap.getXRows(); i++)
 			for(int j = 0; j < newWorld.tileMap.getYRows(); j++){
 				if(newWorld.tileMap.getBlockID(i, j) == 6){
@@ -158,40 +155,142 @@ public class Loading {
 		Save.writePlayerData(newWorld.getPlayer());
 	}
 
-	public static void loadFirstTutorialLevel(GameStateManagerBase gsm){
+	public static void loadTutorialLevel(GameStateManagerBase gsm){
 
 		World world = (World)gsm.getGameState(gsm.getCurrentState());
 
 		Player player = world.getPlayer();
-		player.setPosition(15, 64);
+		player.setPosition(66, 63);
 
 		world.tasks.add(new WorldTask(WorldTask.JUMP, 1, EnumTask.ACTION));
 		world.tasks.add(new WorldTask(WorldTask.WALK, 1, EnumTask.ACTION));
 		world.tasks.add(new WorldTask(WorldTask.SWIM, 1, EnumTask.ACTION));
-		world.tasks.add(new WorldTask("Impossibru Fruit", 100, EnumTask.COLLECTIBLE));
+		world.tasks.add(new WorldTask(Items.woodChip.getDisplayName(), 10, EnumTask.COLLECTIBLE));
+		world.tasks.add(new WorldTask(Items.rock.getDisplayName(), 5, EnumTask.COLLECTIBLE));
 
-		for(int x = 0; x < 8; x+=2){
-			BlockWood vine = new BlockWood(world.tileMap, world);
-			vine.setPosition(66+x, 59);
-			world.listWithMapObjects.add(vine);
+		BlockInfoPane pane = null;
+		ArrayList<String> text = null;
 
-			for(int i = 0; i < 6; i ++){
-				if(world.tileMap.isAir(66+x, 60+i)){
-					BlockWood otherVine = new BlockWood(world.tileMap, world);
-					otherVine.setPosition(66+x, 60+i);
-					if(i == 5)
-						otherVine.setEndBlock(true);
-					world.listWithMapObjects.add(otherVine);
-				}
-			}
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add("WELCOME!");
+		text.add("to Tutorial Island.");
+		text.add(KeyHandler.getKeyName(KeyHandler.UP).toLowerCase() + KeyHandler.getKeyName(KeyHandler.LEFT).toLowerCase() +
+				KeyHandler.getKeyName(KeyHandler.DOWN).toLowerCase() +KeyHandler.getKeyName(KeyHandler.RIGHT).toLowerCase() +
+				" to move.");
+		pane.setText(text);
+		pane.setPosition(66,63);
+		world.listWithMapObjects.add(pane);
+
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add("Or arrow Keys, whatever...");
+		pane.setText(text);
+		pane.setPosition(69,63);
+		world.listWithMapObjects.add(pane);
+
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add(KeyHandler.getKeyName(KeyHandler.UP).toLowerCase() + " to jump up ! ^" );
+		pane.setText(text);
+		pane.setPosition(74,63);
+		world.listWithMapObjects.add(pane);
+
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add("Lets take a dip in the" );
+		text.add("strawberry river !");
+		pane.setText(text);
+		pane.setPosition(78,63);
+		world.listWithMapObjects.add(pane);
+
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add("I lied..." );
+		text.add("This is just a pond of water.");
+		text.add("Lets get to the other side !");
+		pane.setText(text);
+		pane.setPosition(81,63);
+		world.listWithMapObjects.add(pane);
+
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add("SPLISH SPLASH," );
+		text.add("YOU ARE TAKING A BATH !");
+		pane.setText(text);
+		pane.setPosition(104,64);
+		world.listWithMapObjects.add(pane);
+
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add("Your adventure is about to start..." );
+		text.add("Just keep hopping up !");
+		pane.setText(text);
+		pane.setPosition(116, 59);
+		world.listWithMapObjects.add(pane);
+
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add("Inventory :" );
+		text.add("Open with " + KeyHandler.getKeyName(KeyHandler.INVENTORY).toLowerCase());
+		text.add("Navigate with arrow keys.");
+		pane.setText(text);
+		pane.setPosition(83, 48);
+		world.listWithMapObjects.add(pane);
+
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add("Have you tried making a work desk ?");
+		text.add("Make some sticks in your inventory !");
+		text.add("Place down the desk with the number in the hotbar.");
+		pane.setText(text);
+		pane.setPosition(102, 22);
+		world.listWithMapObjects.add(pane);
+
+		pane = new BlockInfoPane(world, Blocks.SIGN);
+		text = new ArrayList<String>();
+		text.add("Try fiddling with the numbers while");
+		text.add("in the inventory to move around items.");
+		text.add("You're ready for adventure... Have fun !");
+		pane.setText(text);
+		pane.setPosition(115, 22);
+		world.listWithMapObjects.add(pane);
+
+		BlockRock rock ;
+
+		rock = new BlockRock(world);
+		rock.setPosition(67, 48);
+		world.listWithMapObjects.add(rock);
+
+		rock = new BlockRock(world);
+		rock.setPosition(73, 28);
+		world.listWithMapObjects.add(rock);
+
+		BlockWood wood;
+		for(int i = 0; i < 3; i++){
+			wood = new BlockWood(world, i == 2);
+			wood.setPosition(75, 39+i);
+			world.listWithMapObjects.add(wood);
 		}
-	}
 
-	public static void loadSecondTutorialLevel(){
+		for(int i = 0; i < 4; i++){
+			wood = new BlockWood(world, i == 3);
+			wood.setPosition(68, 39+i);
+			world.listWithMapObjects.add(wood);
+		}
 
-	}
+		for(int i = 0; i < 3; i++){
+			wood = new BlockWood(world, i == 2);
+			wood.setPosition(81, 26+i);
+			world.listWithMapObjects.add(wood);
+		}
 
-	public static void loadThirdTutorialLevel(){
+
+		for(int i = 0; i < 3; i++){
+			wood = new BlockWood(world, i == 2);
+			wood.setPosition(70, 31+i);
+			world.listWithMapObjects.add(wood);
+		}
 
 	}
 
@@ -218,7 +317,7 @@ public class Loading {
 
 				if(y - numLogs > 0)
 					if(world.tileMap.isAir(x, (y-numLogs))){
-						b = new BlockWood(tm, world);
+						b = new BlockWood(world);
 						b.setPosition(x, (y-numLogs));
 						world.listWithMapObjects.add(b);
 						System.out.println("added block at " + x + " " + (y-numLogs));
@@ -231,7 +330,7 @@ public class Loading {
 		TileMap tm = world.tileMap;
 
 		for(int i = 0; i < loops; i++){
-			BlockBreakable b = (BlockBreakable) Blocks.loadMapObjectFromString(block, tm, world);
+			BlockBreakable b = (BlockBreakable) Blocks.loadMapObjectFromString(block, world);
 
 			int x = new Random().nextInt(tm.getXRows());
 			int y = new Random().nextInt(tm.getYRows());
@@ -276,45 +375,5 @@ public class Loading {
 	public static void readRandomParts(DataTag tag){
 		index = tag.readInt("worldIndex");
 		maps = tag.readInt("mapNumber");
-	}
-
-	public static void loadMusic(){
-		loadMusic("/sounds/block/wood/hit_wood_1.mp3", "hit_wood_1");
-		loadMusic("/sounds/block/wood/hit_wood_2.mp3", "hit_wood_2");
-		loadMusic("/sounds/block/wood/hit_wood_3.mp3", "hit_wood_3");
-		loadMusic("/sounds/block/wood/hit_wood_4.mp3", "hit_wood_4");
-		loadMusic("/sounds/block/wood/hit_wood_5.mp3", "hit_wood_5");
-		loadMusic("/sounds/block/wood/hit_wood_6.mp3", "hit_wood_6");
-
-		loadMusic("/sounds/block/rock/hit_rock_1.mp3", "hit_rock_1");
-		loadMusic("/sounds/block/rock/hit_rock_2.mp3", "hit_rock_2");
-		loadMusic("/sounds/block/rock/hit_rock_3.mp3", "hit_rock_3");
-		loadMusic("/sounds/block/rock/hit_rock_4.mp3", "hit_rock_4");
-		loadMusic("/sounds/block/rock/hit_rock_5.mp3", "hit_rock_5");
-
-		loadMusic("/sounds/entity/pig/pig_hurt_1.mp3", "hitpig_1");
-		loadMusic("/sounds/entity/pig/pig_hurt_2.mp3", "hitpig_2");
-		loadMusic("/sounds/entity/pig/pig_hurt_3.mp3", "hitpig_3");
-		loadMusic("/sounds/entity/pig/pig_hurt_4.mp3", "hitpig_4");
-		loadMusic("/sounds/entity/pig/pig_hurt_5.mp3", "hitpig_5");
-
-		loadMusic("/sounds/entity/player/crunch_small1.mp3", "crunch_1");
-		loadMusic("/sounds/entity/player/crunch_small2.mp3", "crunch_2");
-		loadMusic("/sounds/entity/player/crunch_small3.mp3", "crunch_3");
-		loadMusic("/sounds/entity/player/crunch_small4.mp3", "crunch_4");
-		loadMusic("/sounds/entity/player/crunch_small5.mp3", "crunch_5");
-
-		loadMusic("/sounds/entity/explosion/explode_0.mp3","explode_0");
-		loadMusic("/sounds/entity/explosion/explode_1.mp3","explode_1");
-		loadMusic("/sounds/entity/explosion/explode_2.mp3","explode_2");
-		loadMusic("/sounds/entity/explosion/explode_3.mp3","explode_3");
-		loadMusic("/sounds/entity/explosion/explode_4.mp3","explode_4");
-		loadMusic("/sounds/entity/explosion/explode_5.mp3","explode_5");
-		loadMusic("/sounds/entity/explosion/explode_6.mp3","explode_6");
-
-	}
-
-	private static void loadMusic(String path, String name){
-		load(path, name);
 	}
 }
