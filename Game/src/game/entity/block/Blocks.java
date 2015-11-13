@@ -8,6 +8,7 @@ import game.entity.block.breakable.BlockLight;
 import game.entity.block.breakable.BlockOven;
 import game.entity.block.breakable.BlockRock;
 import game.entity.block.breakable.BlockWood;
+import game.entity.block.environement.BlockInfoPane;
 
 public class Blocks {
 
@@ -36,7 +37,8 @@ public class Blocks {
 			return new BlockOven(w).setType(Block.ROCK);
 		case ADVANCEDCRAFT:
 			return new BlockCraftingTable(w, 20, true, ADVANCEDCRAFT).setType(Block.WOOD);
-			
+		case SIGN:
+			return new BlockInfoPane(w, SIGN);
 		default:
 			break;
 		}
