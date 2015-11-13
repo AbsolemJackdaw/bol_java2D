@@ -19,6 +19,7 @@ import engine.imaging.Background;
 import engine.keyhandlers.KeyHandler;
 import engine.keyhandlers.XboxController;
 import engine.map.TileMap;
+import engine.music.Music;
 import engine.save.DataList;
 import engine.save.DataTag;
 import engine.window.GamePanel;
@@ -472,8 +473,11 @@ public class World extends GameWorld{
 
 	private void consoleCommands(String cmd){
 
+		if(cmd.equals("mute")){
+			Music.toggleMute();
+		}
 
-		if(cmd.equals("kill")){
+		else if(cmd.equals("kill")){
 			for(MapObject mo : listWithMapObjects){
 				if(mo instanceof EntityLiving)
 					mo.remove = true;
