@@ -75,7 +75,27 @@ public class Music {
 		clips.get(s).loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
-	public static void play(String s) {
+	public static void play(final String s){
+		new Thread(
+				new Runnable() {
+					@Override
+					public void run() {
+						playMusic(s);	
+					}
+				}).start();
+	}
+	
+	public static void play(final String s, final int gap){
+		new Thread(
+				new Runnable() {
+					@Override
+					public void run() {
+						playMusic(s, gap);	
+					}
+				}).start();
+	}
+
+	private static void playMusic(String s) {
 		if(!clips.containsKey(s)){
 			System.out.println("the key " + s + " for sounds does not exist");
 			return;
@@ -89,22 +109,31 @@ public class Music {
 		}
 	}
 
-	public static void play(String s, int i) {
+	private static void playMusic(String s, int i) {
+		
+		if(!clips.containsKey(s)){
+			System.out.println("the key " + s + " for sounds does not exist");
+			return;
+		}
+		
 		try {
-			
+
 			if (mute)
 				return;
+
 			final Clip c = clips.get(s);
+
 			if (c == null)
 				return;
+
 			if (c.isRunning())
 				c.stop();
-			
+
 			c.setFramePosition(i);
-			
+
 			while (!c.isRunning())
 				c.start();
-			
+
 		} catch (Exception e) {
 			System.out.println("An error occured trying to play a sound file !");
 			e.printStackTrace();
@@ -128,6 +157,11 @@ public class Music {
 			return;
 		if (clips.get(s).isRunning())
 			clips.get(s).stop();
+	}
+
+	/**toggles mute on or off*/
+	public static void toggleMute(){
+		mute = !mute;
 	}
 
 }
