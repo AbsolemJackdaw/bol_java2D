@@ -435,4 +435,24 @@ public class Loading {
 		maps = tag.readInt("mapNumber");
 		//		tutorial = tag.readBoolean("tutorialPlayed");
 	}
+	
+//	private static Thread loadIcon;
+//	private volatile boolean isRunning = false;
+//	
+//	public static void startLoadingIcon(){
+//		loadIcon = new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				
+//			}
+//		});
+//		
+//		loadIcon.start();
+//	}
+//	
+//	public static void stopLoadingIcon(){
+//		if(loadIcon != null)
+//			loadIcon.;
+//	}
 }

@@ -80,7 +80,7 @@ public class Player extends EntityLiving implements IInventory{
 	protected List<MapObject> collidingEntities = new ArrayList<MapObject>();
 
 	public boolean flyCheat;
-	
+
 	// for every animation, add the number of frames here
 	// sample : 2,5,8,4 (2 for idle 0, 5 for walking 1, etc.
 	//public static final int[] numFrames = {20, 10, 1, 1, 3 };
@@ -186,10 +186,10 @@ public class Player extends EntityLiving implements IInventory{
 			BufferedImage weapon = invArmor.getWeapon().getItem().getTexture();
 
 			AffineTransform tx = new AffineTransform();
-			tx.rotate(Math.toRadians(weaponRotation), weapon.getWidth() / 2, weapon.getHeight() / 2);
-
-			AffineTransformOp op = new AffineTransformOp(tx,
-					AffineTransformOp.TYPE_BILINEAR);
+			
+			tx.setToRotation(Math.toRadians(weaponRotation), weapon.getWidth()/2, weapon.getHeight()/2); //
+			
+			AffineTransformOp op = new AffineTransformOp(tx,AffineTransformOp.TYPE_BILINEAR);
 			weapon = op.filter(weapon, null);
 
 			if (facingRight)
@@ -314,7 +314,7 @@ public class Player extends EntityLiving implements IInventory{
 		if (currentAction == ACTION_ATTACK){
 
 			if(this.invArmor.getWeapon() != null){
-				weaponRotation += 30;
+				weaponRotation += 2;
 				if(weaponRotation >= 360){
 					attacking = false;
 					weaponRotation = 0;
