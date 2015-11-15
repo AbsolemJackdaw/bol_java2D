@@ -451,4 +451,11 @@ public abstract class MapObject {
 	public EntityDeathAnim getDeathAnimation() {
 		return new EntityDeathAnim(tileMap, (World) world, Entity.DEATHANIM_MEAT);
 	}
+	
+	/**
+	 * Wether the entity should continue updating outside of the player's rendering range 
+	 */
+	public boolean persistantUpdate(){
+		return false;
+	}
 }

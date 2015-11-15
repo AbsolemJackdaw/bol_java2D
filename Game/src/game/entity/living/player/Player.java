@@ -35,18 +35,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import engine.game.MapObject;
-import engine.game.entity.EntityLiving;
-import engine.game.entity.EntityMovement;
 import engine.image.Images;
 import engine.imaging.Animation;
 import engine.keyhandlers.KeyHandler;
 import engine.keyhandlers.XboxController;
 import engine.map.TileMap;
+import engine.music.Music;
 import engine.save.DataList;
 import engine.save.DataTag;
 import game.World;
 import game.content.Loading;
 import game.content.WorldTask;
+import game.entity.EntityLiving;
+import game.entity.EntityMovement;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.inventory.IInventory;
 import game.item.Item;
@@ -78,6 +79,8 @@ public class Player extends EntityLiving implements IInventory{
 
 	protected List<MapObject> collidingEntities = new ArrayList<MapObject>();
 
+	public boolean flyCheat;
+	
 	// for every animation, add the number of frames here
 	// sample : 2,5,8,4 (2 for idle 0, 5 for walking 1, etc.
 	//public static final int[] numFrames = {20, 10, 1, 1, 3 };
@@ -214,11 +217,12 @@ public class Player extends EntityLiving implements IInventory{
 				dy = jumpStart/2;
 			}
 			//fly mechanics ! :D
-			//			if(!jumping && falling)
-			//				if(KeyHandler.isPressed(KeyHandler.UP)){
-			//					dy=jumpStart;
-			//					setJumping(true);
-			//				}
+			if(flyCheat)
+				if(!jumping && falling)
+					if(KeyHandler.isPressed(KeyHandler.UP)){
+						dy=jumpStart;
+						setJumping(true);
+					}
 		}
 
 		else{
@@ -640,6 +644,10 @@ public class Player extends EntityLiving implements IInventory{
 			wasInwater = false;
 
 		if(tileMap.getBlockID(currentRow, currentColumn) == 10 || tileMap.getBlockID(currentRow, currentColumn) == 9){
+
+			if(!inWater)
+				Music.play("splash");
+
 			inWater = true;
 		}else{
 

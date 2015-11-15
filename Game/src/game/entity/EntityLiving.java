@@ -1,4 +1,4 @@
-package engine.game.entity;
+package game.entity;
 
 import java.awt.Graphics2D;
 
@@ -152,6 +152,11 @@ public class EntityLiving extends MapObject{
 
 	@Override
 	public boolean hasAnimation() {
+		return true;
+	}
+	
+	@Override
+	public boolean persistantUpdate() {
 		return true;
 	}
 }

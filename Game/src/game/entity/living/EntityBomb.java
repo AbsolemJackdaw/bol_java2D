@@ -4,11 +4,11 @@ import java.awt.Graphics2D;
 
 import engine.game.GameWorld;
 import engine.game.MapObject;
-import engine.game.entity.EntityLiving;
 import engine.image.Images;
 import engine.map.TileMap;
 import engine.music.Music;
 import game.World;
+import game.entity.EntityLiving;
 import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.environement.EntityExplosion;
 import game.entity.living.player.Player;

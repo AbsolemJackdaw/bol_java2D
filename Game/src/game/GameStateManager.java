@@ -9,6 +9,7 @@ public class GameStateManager extends GameStateManagerBase{
 	public static final int HELP = 2;
 	public static final int GAME = 3;
 	public static final int LOADING = 4;
+	public static final int TUTORIAL = 5;
 
 	public GameStateManager() {
 		super();
@@ -31,6 +32,9 @@ public class GameStateManager extends GameStateManagerBase{
 			break;
 		case LOADING:
 			gameStates[state] = new LoadingScreen(this);
+			break;
+		case TUTORIAL:
+			gameStates[state] = new TutorialGui(this);
 			break;
 		}
 	}

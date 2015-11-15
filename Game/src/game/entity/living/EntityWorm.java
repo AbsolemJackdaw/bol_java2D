@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import engine.game.GameWorld;
-import engine.game.entity.EntityLiving;
 import engine.image.Images;
 import engine.imaging.Animation;
 import engine.map.TileMap;
 import game.entity.EntityAI;
+import game.entity.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.Items;

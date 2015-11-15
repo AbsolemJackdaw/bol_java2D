@@ -34,7 +34,7 @@ public class BlockOven extends BlockBreakable implements IInventory{
 
 		fire.setFrames(Images.loadMultiImage("/blocks/ovenFire.png", 32, 0, 4));
 		fire.setDelay(50);
-		
+
 		blockInfo.add(getKeyName(INTERACT) + " to interact");
 	}
 
@@ -251,5 +251,10 @@ public class BlockOven extends BlockBreakable implements IInventory{
 
 	public int getRadius(){
 		return 150;
+	}
+
+	@Override
+	public boolean persistantUpdate() {
+		return true;
 	}
 }

@@ -2,11 +2,11 @@ package game.entity.living;
 
 import java.awt.Graphics2D;
 
-import engine.game.entity.EntityLiving;
 import engine.image.Images;
 import engine.map.TileMap;
 import game.World;
 import game.entity.EntityAI;
+import game.entity.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.Items;

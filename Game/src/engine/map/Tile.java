@@ -36,5 +36,4 @@ public class Tile {
 	public int getID(){
 		return tileID;
 	}
-
 }

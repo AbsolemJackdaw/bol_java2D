@@ -43,7 +43,9 @@ public class WorldTask {
 		return 
 				taskType == EnumTask.ACTION ? 
 						object+", " + count + "/" +totalCount : 
-							"Collect " + object+", " + count + "/" +totalCount;
+							taskType == EnumTask.COLLECTIBLE ? 
+							"Collect " + object+", " + count + "/" +totalCount :
+								"Craft " + object + ", " + count + "/" + totalCount;
 	}
 
 	/**
@@ -63,6 +65,7 @@ public class WorldTask {
 
 	public enum EnumTask{
 		COLLECTIBLE,
-		ACTION
+		ACTION,
+		CRAFT
 	}
 }

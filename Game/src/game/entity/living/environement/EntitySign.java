@@ -1,8 +1,8 @@
 package game.entity.living.environement;
 
 import engine.game.GameWorld;
-import engine.game.entity.EntityLiving;
 import engine.map.TileMap;
+import game.entity.EntityLiving;
 import game.entity.living.player.Player;
 
 public class EntitySign extends EntityLiving {

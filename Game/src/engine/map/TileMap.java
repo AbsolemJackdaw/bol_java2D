@@ -48,7 +48,7 @@ public class TileMap {
 	private Tile[][] tiles;
 
 	public static final int AIR = 0;
-	
+
 	public TileMap(int tileSize) {
 		this.tileSize = tileSize;
 		tween = 0.5;
@@ -61,7 +61,7 @@ public class TileMap {
 
 		int screenX = Window.getWidth()/(tileSize*(int)GamePanel.SCALE);
 		int screenY = Window.getHeight()/(tileSize*(int)GamePanel.SCALE);
-		
+
 		int arroundX = screenX + 3; // + 3 is error margin
 		int arroundY = screenY + 3;
 
@@ -140,18 +140,18 @@ public class TileMap {
 
 	/**x, y being the coords of the block in rows and collumns*/
 	public int getBlockID(int x, int y){
-		
+
 		if(x >=0 && y >=0 && x < mapXRows && y < mapYRows){
 			int rc = map[y][x];
 			int r = rc / numTilesAcross;
 			int c = rc % numTilesAcross;
 			return tiles[r][c].getID();
 		}
-		
-		System.out.println("Entity was out of map ? Returned a solid block to prevent crash.");
-		return 21;
+
+		System.out.println("Coordinates were out of map bounds ! Returned a solid block to prevent crash.");
+		return numTilesAcross + 1;
 	}
-	
+
 	/**x and y are the rows of the map. returns either 0 or 1, for solid or ghost blocks*/
 	public int getType(int y, int x) {
 
@@ -258,5 +258,17 @@ public class TileMap {
 
 	public void setTween(double d) {
 		tween = d;
+	}
+
+	public BufferedImage getTileTexture(int tileID){
+
+		Tile tile = null;
+
+		if(tileID > numTilesAcross)
+			tile = tiles[1][tileID-numTilesAcross];
+		else
+			tile = tiles[0][tileID];
+
+		return tile.getImage();
 	}
 }

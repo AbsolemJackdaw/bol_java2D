@@ -1,4 +1,4 @@
-package engine.game.entity;
+package game.entity;
 
 import game.entity.living.player.Player;
 

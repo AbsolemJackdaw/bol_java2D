@@ -50,6 +50,9 @@ public class MusicPanel implements Runnable{
 		loadMusic("/sounds/entity/player/crunch_small4.mp3", "crunch_4");
 		loadMusic("/sounds/entity/player/crunch_small5.mp3", "crunch_5");
 
+		loadMusic("/sounds/entity/player/splash.mp3", "splash");
+
+		
 		loadMusic("/sounds/entity/explosion/explode_0.mp3","explode_0");
 		loadMusic("/sounds/entity/explosion/explode_1.mp3","explode_1");
 		loadMusic("/sounds/entity/explosion/explode_2.mp3","explode_2");

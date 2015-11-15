@@ -3,10 +3,10 @@ package game.entity.living.enemy;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import engine.game.entity.EntityLiving;
 import engine.map.TileMap;
 import game.World;
 import game.entity.EntityAI;
+import game.entity.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.ItemTool;
 

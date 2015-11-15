@@ -48,14 +48,15 @@ public class Save {
 		write("misc/randData", tag);
 	}
 	
-	public static void readRandomParts(){
+	public static boolean readRandomParts(){
 		Object obj = read("misc/randData");
 		if(obj == null)
-			return;
+			return false;
 		JSONObject data = (JSONObject) obj;
 		DataTag d = new DataTag(data);
 		
 		Loading.readRandomParts(d);
+		return true;
 	}
 
 	public static void writeKeyBinds(){

@@ -2,11 +2,10 @@ package game.content;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Random;
 
-import engine.game.entity.EntityLiving;
 import engine.gamestate.GameStateManagerBase;
 import engine.keyhandlers.KeyHandler;
+import engine.map.Tile;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import game.GameStateManager;
@@ -14,6 +13,7 @@ import game.World;
 import game.content.WorldTask.EnumTask;
 import game.content.save.Save;
 import game.entity.Entity;
+import game.entity.EntityLiving;
 import game.entity.block.Blocks;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.block.breakable.BlockRock;
@@ -21,6 +21,7 @@ import game.entity.block.breakable.BlockWood;
 import game.entity.block.environement.BlockInfoPane;
 import game.entity.living.player.Player;
 import game.item.Items;
+import game.util.Constants;
 
 
 public class Loading {
@@ -34,6 +35,9 @@ public class Loading {
 	/**increases and decreases. tracks the player's current map*/
 	public static int index = 0;
 
+	//	/**set to false once the tutorial has been skipped or played*/
+	//	public static boolean tutorial = true;
+
 	/**
 	 *Provides a random new map between map #2 and #max_total of maps 
 	 */
@@ -41,8 +45,9 @@ public class Loading {
 
 		//skip map x_1, so that map is used only in the very beginning
 		// x1 + x2 is max_total maps, where map min is 2
-		int i = new Random().nextInt(5)+2;
-		String s = "/maps/maps/map/Map" + i + ".map";
+		int i = Constants.RANDOM.nextInt(2)+1;
+		i = 1;
+		String s = "/maps/map_" + i;
 		System.out.println(s);
 		return s;
 	}
@@ -72,10 +77,9 @@ public class Loading {
 			newWorld.loadMap(s);
 			newWorld.init();
 			maps++;
-			generateRandomTree(newWorld);
-			generateRandomOre(newWorld, Blocks.IRON, 7);
-			generateRandomOre(newWorld, Blocks.ROCK, 20);
-			populateEntities(newWorld, Entity.PIG, 10);
+
+			populateWorld(newWorld);
+
 			//set gametime to continue counting
 			newWorld.gametime.writeCurrentGameTime(time);
 			newWorld.nightAlhpa = nightShade;
@@ -94,10 +98,10 @@ public class Loading {
 
 		Save.writeRandomParts();
 
-		for(int i = 0; i < newWorld.tileMap.getXRows(); i++)
-			for(int j = 0; j < newWorld.tileMap.getYRows(); j++){
-				if(newWorld.tileMap.getBlockID(i, j) == 7)
-					newWorld.getPlayer().setPosition(i*32 + 32+16, j*32);
+		for(int x = 0; x < newWorld.tileMap.getXRows(); x++)
+			for(int y = 0; y < newWorld.tileMap.getYRows(); y++){
+				if(newWorld.tileMap.getBlockID(x, y) == 7)
+					newWorld.getPlayer().setPosition(x+1, y);
 			}
 
 		//save the new world as well > this prevents bugs/glitches if closed without saving !
@@ -110,7 +114,7 @@ public class Loading {
 
 		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
-		if(index == 0){
+		if(index == 0 || index == 1 && Save.getWorldData(0)!= null && Save.getWorldData(0).readString("map").equals("/maps/tutorial_island")){
 			currentWorld.getPlayer().setVector(4, 0);
 			return;
 		}
@@ -144,8 +148,9 @@ public class Loading {
 		for(int i = 0; i < newWorld.tileMap.getXRows(); i++)
 			for(int j = 0; j < newWorld.tileMap.getYRows(); j++){
 				if(newWorld.tileMap.getBlockID(i, j) == 6){
-					newWorld.getPlayer().setPosition(i*32 - 16, j*32);
+					newWorld.getPlayer().setPosition(i-1, j);
 					newWorld.getPlayer().facingRight = false;
+					break;
 				}
 			}
 		Save.writeRandomParts();
@@ -155,6 +160,23 @@ public class Loading {
 		Save.writePlayerData(newWorld.getPlayer());
 	}
 
+	/**loads a level to skip the tutorial.*/
+	public static void loadFirstLevel(GameStateManagerBase gsm){
+
+		World world = (World)gsm.getGameState(gsm.getCurrentState());
+		Player player = world.getPlayer();
+
+		for(int x = 0; x < world.tileMap.getXRows(); x++)
+			for(int y = 0; y < world.tileMap.getYRows(); y++){
+				if(world.tileMap.getBlockID(x, y) == 7)
+					player.setPosition(x+1, y);
+			}
+
+		populateWorld(world);
+
+	}
+
+	/**load tutorial level if no saves are found, and the player chooses to play the tutorial*/
 	public static void loadTutorialLevel(GameStateManagerBase gsm){
 
 		World world = (World)gsm.getGameState(gsm.getCurrentState());
@@ -162,11 +184,10 @@ public class Loading {
 		Player player = world.getPlayer();
 		player.setPosition(66, 63);
 
-		world.tasks.add(new WorldTask(WorldTask.JUMP, 1, EnumTask.ACTION));
-		world.tasks.add(new WorldTask(WorldTask.WALK, 1, EnumTask.ACTION));
 		world.tasks.add(new WorldTask(WorldTask.SWIM, 1, EnumTask.ACTION));
 		world.tasks.add(new WorldTask(Items.woodChip.getDisplayName(), 10, EnumTask.COLLECTIBLE));
 		world.tasks.add(new WorldTask(Items.rock.getDisplayName(), 5, EnumTask.COLLECTIBLE));
+		world.tasks.add(new WorldTask(Items.craftTable.getDisplayName(), 1, EnumTask.CRAFT));
 
 		BlockInfoPane pane = null;
 		ArrayList<String> text = null;
@@ -231,9 +252,9 @@ public class Loading {
 
 		pane = new BlockInfoPane(world, Blocks.SIGN);
 		text = new ArrayList<String>();
-		text.add("Inventory :" );
-		text.add("Open with " + KeyHandler.getKeyName(KeyHandler.INVENTORY).toLowerCase());
-		text.add("Navigate with arrow keys.");
+		text.add("Every level has goals," );
+		text.add("they are drawn in the top left corner.");
+		text.add("Completete all of them to go on ! ");
 		pane.setText(text);
 		pane.setPosition(83, 48);
 		world.listWithMapObjects.add(pane);
@@ -241,7 +262,7 @@ public class Loading {
 		pane = new BlockInfoPane(world, Blocks.SIGN);
 		text = new ArrayList<String>();
 		text.add("Have you tried making a work desk ?");
-		text.add("Make some sticks in your inventory !");
+		text.add("Make some sticks in your inventory ! ("+ KeyHandler.getKeyName(KeyHandler.INVENTORY)+")");
 		text.add("Place down the desk with the number in the hotbar.");
 		pane.setText(text);
 		pane.setPosition(102, 22);
@@ -264,6 +285,14 @@ public class Loading {
 
 		rock = new BlockRock(world);
 		rock.setPosition(73, 28);
+		world.listWithMapObjects.add(rock);
+
+		rock = new BlockRock(world);
+		rock.setPosition(85, 39);
+		world.listWithMapObjects.add(rock);
+
+		rock = new BlockRock(world);
+		rock.setPosition(91, 30);
 		world.listWithMapObjects.add(rock);
 
 		BlockWood wood;
@@ -292,6 +321,12 @@ public class Loading {
 			world.listWithMapObjects.add(wood);
 		}
 
+		for(int i = 0; i < 4; i++){
+			wood = new BlockWood(world, i == 3);
+			wood.setPosition(98, 30+i);
+			world.listWithMapObjects.add(wood);
+		}
+
 	}
 
 	public static void startAtLastSavedLevel(GameStateManagerBase gsm){
@@ -303,45 +338,43 @@ public class Loading {
 		}
 	}
 
-	private static void generateRandomTree(World world){
-		BlockWood b = null;
+	private static void generateRandomTree(World world, int x, int y){
+		BlockWood vine = null;
 
 		TileMap tm = world.tileMap;
+		int numLogs = 3 + Constants.RANDOM.nextInt(2);
 
-		for(int numTrees = 0; numTrees < 5; numTrees++){
+		if(tm.getBlockID(x, y) == 0 && tm.getType(y-1, x) == Tile.SOLID){
 
-			int x = new Random().nextInt(tm.getXRows());
-			int y = new Random().nextInt(tm.getYRows());
+			boolean flag = false; 
 
-			for(int numLogs = 0; numLogs < 3; numLogs++){
+			for(int i = 0; i < numLogs; i++)
+				if(tm.getBlockID(x, y+i) != 0)
+					flag = true;
 
-				if(y - numLogs > 0)
-					if(world.tileMap.isAir(x, (y-numLogs))){
-						b = new BlockWood(world);
-						b.setPosition(x, (y-numLogs));
-						world.listWithMapObjects.add(b);
-						System.out.println("added block at " + x + " " + (y-numLogs));
-					}
+			if(!flag){
+				for(int i = 0; i < numLogs; i++){
+					vine = new BlockWood(world, i == numLogs-1);
+					vine.setPosition(x, y+i);
+					world.listWithMapObjects.add(vine);
+				}
 			}
+
 		}
 	}
 
-	private static void generateRandomOre(World world, String block, int loops){
+	private static void generateRandomOre(World world, String block, int x, int y, int rarity){
+
+		if(Constants.RANDOM.nextInt(rarity) > 0)
+			return;
+
 		TileMap tm = world.tileMap;
 
-		for(int i = 0; i < loops; i++){
-			BlockBreakable b = (BlockBreakable) Blocks.loadMapObjectFromString(block, world);
+		BlockBreakable b = (BlockBreakable) Blocks.loadMapObjectFromString(block, world);
 
-			int x = new Random().nextInt(tm.getXRows());
-			int y = new Random().nextInt(tm.getYRows());
-
-			if(y+1 < tm.getYRows())
-				if(world.tileMap.getBlockID(x, y) == 0){
-					if(world.tileMap.getBlockID(x, y+1) > 0){
-						b.setPosition(x, y);
-						world.listWithMapObjects.add(b);
-					}
-				}
+		if(tm.isAir(x, y) && tm.getType(y+1, x) == Tile.SOLID){
+			b.setPosition(x, y);
+			world.listWithMapObjects.add(b);
 		}
 	}
 
@@ -352,8 +385,8 @@ public class Loading {
 		for(int i = 0; i < loops; i++){
 			EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(uin, tm, world);
 
-			int x = new Random().nextInt(tm.getXRows());
-			int y = new Random().nextInt(tm.getYRows());
+			int x = Constants.RANDOM.nextInt(tm.getXRows());
+			int y = Constants.RANDOM.nextInt(tm.getYRows());
 
 			if(y+1 < tm.getYRows())
 				if(world.tileMap.getBlockID(x, y) == 0){
@@ -367,13 +400,39 @@ public class Loading {
 		}
 	}
 
+	private static void populateWorld(World world){
+
+		int x = world.tileMap.getXRows();
+		int y = world.tileMap.getYRows();
+
+		int airBlocks = 0;
+
+		for(int i = 0; i < x; i++){
+			for(int j = 0; j < y; j++){
+				if(world.tileMap.getBlockID(i, j) == 0){
+					airBlocks++;
+				}
+			}
+		}
+		
+		System.out.println(airBlocks/10);
+		
+		for(int i = 0; i < airBlocks/10; i++){
+			generateRandomTree(world, Constants.RANDOM.nextInt(x),  Constants.RANDOM.nextInt(y));
+			generateRandomOre(world, Blocks.ROCK, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 3);
+			generateRandomOre(world, Blocks.IRON, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 10);
+		}
+	}
+
 	public static void writeRandomParts(DataTag tag){
 		tag.writeInt("worldIndex", Loading.index);
 		tag.writeInt("mapNumber", Loading.maps);
+		//		tag.writeBoolean("tutorialPlayed", Loading.tutorial);
 	}
 
 	public static void readRandomParts(DataTag tag){
 		index = tag.readInt("worldIndex");
 		maps = tag.readInt("mapNumber");
+		//		tutorial = tag.readBoolean("tutorialPlayed");
 	}
 }

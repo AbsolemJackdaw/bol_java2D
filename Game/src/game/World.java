@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import engine.game.GameWorld;
 import engine.game.MapObject;
-import engine.game.entity.EntityLiving;
 import engine.gamestate.GameStateManagerBase;
 import engine.imaging.Background;
 import engine.keyhandlers.KeyHandler;
@@ -31,6 +30,7 @@ import game.content.SpawningLogic;
 import game.content.WorldTask;
 import game.content.save.Save;
 import game.entity.Entity;
+import game.entity.EntityLiving;
 import game.entity.block.Blocks;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.block.breakable.BlockLight;
@@ -88,13 +88,16 @@ public class World extends GameWorld{
 
 		this.player = new Player(tileMap, this);
 
-		if(firstGame){
+		//init if no saves are found, and the player wants to play the tutorial
+		if(Save.getWorldData(0) == null)
+			if(resourceMapPath.equals("/maps/tutorial_island")){
+				Loading.loadTutorialLevel(gsm);
+			}else{
+				Loading.loadFirstLevel(gsm);
+			}
 
-			Loading.loadTutorialLevel(gsm);
-
-		}else
-			if(Save.getPlayerData() != null)
-				player.readFromSave(Save.getPlayerData());
+		if(Save.getPlayerData() != null)
+			player.readFromSave(Save.getPlayerData());
 
 		displayGui(new GuiHud(this, player));
 
@@ -218,17 +221,17 @@ public class World extends GameWorld{
 	public void update(){
 
 		double randOff = 0;
-		
+
 		if(offset > 0){
 			if(Constants.RANDOM.nextInt(3) == 0){
 				randOff = offset;
-				
+
 				if(Constants.RANDOM.nextInt(2)==0){
 					randOff /= -1;
 				}
 			}
 		}
-		
+
 		//move tilemap around 
 		tileMap.setPosition(((WIDTH / 2) - player.getScreenXpos()) + offset, ((HEIGHT / 2) - player.getScreenYpos()+randOff));
 
@@ -260,7 +263,8 @@ public class World extends GameWorld{
 				offset = 0;
 			}
 
-			gametime.updateTime();
+			//TODO game time re implement
+			//gametime.updateTime();
 
 			if(hasCreaturesSpawned)
 				if(!isNightTime())
@@ -281,41 +285,43 @@ public class World extends GameWorld{
 
 			for(MapObject obj : listWithMapObjects){
 
-				obj.update();
+				if(!isOutOfBounds(obj) || obj.persistantUpdate()){
+					obj.update();
 
-				Rectangle playerRectangleExtra = new Rectangle(player.getRectangle().x, player.getRectangle().y, player.getRectangle().width, player.getRectangle().height);
+					Rectangle playerRectangleExtra = new Rectangle(player.getRectangle().x, player.getRectangle().y, player.getRectangle().width, player.getRectangle().height);
 
-				if(obj instanceof BlockBreakable) // extend bounding box for breakable blocks so you can stand slightly further away
-					//i just like to add this. i forgot the point ...
-					playerRectangleExtra = new Rectangle(player.getRectangle().x - 10, player.getRectangle().y, player.getRectangle().width + 20, player.getRectangle().height);
+					if(obj instanceof BlockBreakable) // extend bounding box for breakable blocks so you can stand slightly further away
+						//i just like to add this. i forgot the point ...
+						playerRectangleExtra = new Rectangle(player.getRectangle().x - 10, player.getRectangle().y, player.getRectangle().width + 20, player.getRectangle().height);
 
-				if(playerRectangleExtra.intersects(obj.getRectangle())){
-					if(!player.getCollidingMapObjects().contains(obj)){
-						player.setCollidingMapObjects(obj);
-						player.isCollidingWithBlock = true;
-					}
-
-				}else{
-					player.getCollidingMapObjects().remove(obj);
-					if(player.getCollidingMapObjects().isEmpty())
-						player.isCollidingWithBlock = false;
-				}
-
-				if(obj.remove){
-
-					if(player.getCollidingMapObjects().contains(obj))
-						player.getCollidingMapObjects().remove(obj);
-
-					listWithMapObjects.remove(obj);
-
-					if(obj instanceof EntityLiving){
-						if(((EntityLiving) obj).canPlayDeathAnimation()){
-							EntityDeathAnim anim = obj.getDeathAnimation();
-							anim.setPosition(obj.getScreenXpos(), obj.getScreenYpos());
-							listWithMapObjects.add(anim);
+					if(playerRectangleExtra.intersects(obj.getRectangle())){
+						if(!player.getCollidingMapObjects().contains(obj)){
+							player.setCollidingMapObjects(obj);
+							player.isCollidingWithBlock = true;
 						}
+
+					}else{
+						player.getCollidingMapObjects().remove(obj);
+						if(player.getCollidingMapObjects().isEmpty())
+							player.isCollidingWithBlock = false;
 					}
-					break;
+
+					if(obj.remove){
+
+						if(player.getCollidingMapObjects().contains(obj))
+							player.getCollidingMapObjects().remove(obj);
+
+						listWithMapObjects.remove(obj);
+
+						if(obj instanceof EntityLiving){
+							if(((EntityLiving) obj).canPlayDeathAnimation()){
+								EntityDeathAnim anim = obj.getDeathAnimation();
+								anim.setPosition(obj.getScreenXpos(), obj.getScreenYpos());
+								listWithMapObjects.add(anim);
+							}
+						}
+						break;
+					}
 				}
 			}
 		}
@@ -473,7 +479,10 @@ public class World extends GameWorld{
 
 	private void consoleCommands(String cmd){
 
-		if(cmd.equals("mute")){
+		if(cmd.equals("upupandaway")){
+			player.flyCheat = !player.flyCheat;
+		}
+		else if(cmd.equals("mute")){
 			Music.toggleMute();
 		}
 
@@ -637,6 +646,5 @@ public class World extends GameWorld{
 
 	public void shakeWorld(){
 		shake = true;
-		//		shakeTimer = shakeTimerMax;
 	}
 }

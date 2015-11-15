@@ -173,7 +173,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				nextTime += delta;
 
 				update();
-
+				
 				if((currTime < nextTime) || (skippedFrames > maxSkippedFrames))
 				{
 					draw();

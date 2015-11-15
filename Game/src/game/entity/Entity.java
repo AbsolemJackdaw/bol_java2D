@@ -1,7 +1,6 @@
 package game.entity;
 
 import engine.game.GameWorld;
-import engine.game.entity.EntityLiving;
 import engine.map.TileMap;
 import game.World;
 import game.entity.living.EntityBat;

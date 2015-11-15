@@ -122,23 +122,27 @@ public class DataTag {
 
 	@SuppressWarnings("unchecked")
 	public void writeBoolean(String tag, boolean flag){
-		byte b;
+		Byte b;
 		if(flag)
 			b = 1;
 		else
-			b =0;
+			b = 0;
 		
 		data.put(tag, b);
 	}
 	
 	public boolean readBoolean(String tag){
+
 		Object o = data.get(tag);
 		
-		byte b = 0;
+		System.out.println(o + " read boolean" + o.toString());
 		
-		if(o instanceof Byte)
-			b = (byte)o;
+		if(o instanceof Byte){
+			Byte b = (Byte)o;
+			
+			return b == 0 ? false : true;
+		}
 		
-		return b == 1 ? true : false;
+		return o.toString().equals("0") ? false : true;
 	}
 }

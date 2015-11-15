@@ -1,6 +1,5 @@
 package game.entity;
 
-import engine.game.entity.EntityLiving;
 import game.World;
 import game.entity.living.player.Player;
 import game.util.Constants;

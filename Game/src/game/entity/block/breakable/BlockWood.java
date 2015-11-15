@@ -2,6 +2,7 @@ package game.entity.block.breakable;
 
 import engine.game.MapObject;
 import engine.image.Images;
+import engine.save.DataTag;
 import game.World;
 import game.entity.block.Blocks;
 import game.entity.living.player.Player;
@@ -19,12 +20,6 @@ public class BlockWood extends BlockBreakable{
 
 	public BlockWood(World world, boolean b) {
 		this(world);
-//		if(b){
-//			entitySizeY = height = 24;
-//		}else{
-//			entitySizeY = height = 32;
-//		}
-		
 		setEndBlock(b);
 	}
 
@@ -55,7 +50,7 @@ public class BlockWood extends BlockBreakable{
 	public ItemStack getDrop() {
 		return new ItemStack(Items.woodChip, 1);
 	}
-
+	
 	@Override
 	public void update() {
 		super.update();
@@ -93,5 +88,18 @@ public class BlockWood extends BlockBreakable{
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void writeToSave(DataTag data) {
+		super.writeToSave(data);
+		data.writeBoolean("endBlock", isEndBlock);
+		System.out.println(isEndBlock);
+	}
+
+	@Override
+	public void readFromSave(DataTag data) {
+		super.readFromSave(data);
+		setEndBlock(data.readBoolean("endBlock"));
 	}
 }
