@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import javax.swing.SwingWorker;
+
 import engine.gamestate.GameState;
 import engine.keyhandlers.KeyHandler;
 import engine.window.GamePanel;
@@ -74,22 +76,33 @@ public class TutorialGui extends GameState{
 
 	private void select() {
 
-		gsm.setState(GameStateManager.GAME);
+		Util.startLoadIcon();
 
-		//new blank world
-		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+		new SwingWorker<Void, Integer>() {
+			@Override
+			protected Void doInBackground() throws Exception {
 
-		//no need to read any saves here !
-		//this screen pops up when no game has been played yet
-		//or no saves have been found
+				gsm.setState(GameStateManager.GAME);
 
-		if(currentChoice == 1) // 'No' option
-			currentWorld.loadMap(Loading.newMap());
-		else // 'Yes' option
-			currentWorld.loadMap("/maps/tutorial_island");
+				//new blank world
+				World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
-		//initiate current world. sets new player 
-		currentWorld.init();
+				//no need to read any saves here !
+				//this screen pops up when no game has been played yet
+				//or no saves have been found
 
+				if(currentChoice == 1) // 'No' option
+					currentWorld.loadMap(Loading.newMap());
+				else // 'Yes' option
+					currentWorld.loadMap("/maps/tutorial_island");
+
+				//initiate current world. sets new player 
+				currentWorld.init();
+
+				Util.stopLoadIcon();
+				
+				return null;
+			}
+		}.execute();
 	}
 }

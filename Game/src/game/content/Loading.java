@@ -1,8 +1,5 @@
 package game.content;
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
 import engine.gamestate.GameStateManagerBase;
 import engine.keyhandlers.KeyHandler;
 import engine.map.Tile;
@@ -22,6 +19,12 @@ import game.entity.block.environement.BlockInfoPane;
 import game.entity.living.player.Player;
 import game.item.Items;
 import game.util.Constants;
+import game.util.Util;
+
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import javax.swing.SwingWorker;
 
 
 public class Loading {
@@ -52,281 +55,327 @@ public class Loading {
 		return s;
 	}
 
-	public static void gotoNextLevel(GameStateManagerBase gsm){
+	public static void gotoNextLevel(final GameStateManagerBase gsm){
 
-		//save world we are currently in
-		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
-		Save.writeWorld(currentWorld, index);
-		Save.writePlayerData(currentWorld.getPlayer());
+		Util.startLoadIcon();
 
-		//get gametime to transfer to the new world and continue counting
-		int time = currentWorld.gametime.getCurrentTime();
-		float nightShade = currentWorld.nightAlhpa;
+		new SwingWorker<Void, Integer>(){
+			@Override
+			protected Void doInBackground() throws Exception {
 
-		//set a new world
-		gsm.setState(GameStateManager.GAME);
+				//save world we are currently in
+				World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+				Save.writeWorld(currentWorld, index);
+				Save.writePlayerData(currentWorld.getPlayer());
 
-		//increase index to indicate the new world's index
-		index++;
-		World newWorld = (World)gsm.getGameState(gsm.getCurrentState());
+				//get gametime to transfer to the new world and continue counting
+				int time = currentWorld.gametime.getCurrentTime();
+				float nightShade = currentWorld.nightAlhpa;
 
-		//if its a new map
-		if(index == maps){
+				//set a new world
+				gsm.setState(GameStateManager.GAME);
 
-			String s = newMap();
-			newWorld.loadMap(s);
-			newWorld.init();
-			maps++;
+				//increase index to indicate the new world's index
+				index++;
+				World newWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
-			populateWorld(newWorld);
+				//if its a new map
+				if(index == maps){
 
-			//set gametime to continue counting
-			newWorld.gametime.writeCurrentGameTime(time);
-			newWorld.nightAlhpa = nightShade;
+					String s = newMap();
+					newWorld.loadMap(s);
+					newWorld.init();
+					maps++;
 
-			if(newWorld.isNightTime()){
-				SpawningLogic.spawnNightCreatures(newWorld, true);
+					populateWorld(newWorld);
+
+					//set gametime to continue counting
+					newWorld.gametime.writeCurrentGameTime(time);
+					newWorld.nightAlhpa = nightShade;
+
+					if(newWorld.isNightTime()){
+						SpawningLogic.spawnNightCreatures(newWorld, true);
+					}
+
+				}else{
+					newWorld.readFromSave(Save.getWorldData(index));
+					//set gametime to continue counting
+					newWorld.gametime.writeCurrentGameTime(time);
+					newWorld.nightAlhpa = nightShade;
+					newWorld.init();
+				}
+
+				Save.writeRandomParts();
+
+				for(int x = 0; x < newWorld.tileMap.getXRows(); x++)
+					for(int y = 0; y < newWorld.tileMap.getYRows(); y++){
+						if(newWorld.tileMap.getBlockID(x, y) == 7)
+							newWorld.getPlayer().setPosition(x+1, y);
+					}
+
+				//save the new world as well > this prevents bugs/glitches if closed without saving !
+				Save.writeWorld(newWorld, index);
+				Save.writePlayerData(newWorld.getPlayer());
+
+				Util.stopLoadIcon();
+
+				return null;
 			}
-
-		}else{
-			newWorld.readFromSave(Save.getWorldData(index));
-			//set gametime to continue counting
-			newWorld.gametime.writeCurrentGameTime(time);
-			newWorld.nightAlhpa = nightShade;
-			newWorld.init();
-		}
-
-		Save.writeRandomParts();
-
-		for(int x = 0; x < newWorld.tileMap.getXRows(); x++)
-			for(int y = 0; y < newWorld.tileMap.getYRows(); y++){
-				if(newWorld.tileMap.getBlockID(x, y) == 7)
-					newWorld.getPlayer().setPosition(x+1, y);
-			}
-
-		//save the new world as well > this prevents bugs/glitches if closed without saving !
-		Save.writeWorld(newWorld, index);
-		Save.writePlayerData(newWorld.getPlayer());
-
+		}.execute();
 	}
 
-	public static void gotoPreviousLevel(GameStateManagerBase gsm){
+	public static void gotoPreviousLevel(final GameStateManagerBase gsm){
 
-		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+		Util.startLoadIcon();
 
-		if(index == 0 || index == 1 && Save.getWorldData(0)!= null && Save.getWorldData(0).readString("map").equals("/maps/tutorial_island")){
-			currentWorld.getPlayer().setVector(4, 0);
-			return;
-		}
+		new SwingWorker<Void, Integer>() {
+			@Override
+			protected Void doInBackground() throws Exception {
 
-		//save world we are currently in
-		Save.writeWorld(currentWorld, index);
-		Save.writePlayerData(currentWorld.getPlayer());
+				World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
-		//get gametime to transfer to the new world and continue counting
-		int time = currentWorld.gametime.getCurrentTime();
-		float nightShade = currentWorld.nightAlhpa;
-		//set a new world
-		gsm.setState(GameStateManager.GAME);
-
-		//increase index to indicate the new world's index
-		index--;
-		World newWorld = (World)gsm.getGameState(gsm.getCurrentState());
-
-		newWorld.readFromSave(Save.getWorldData(index));
-
-		newWorld.init();
-
-		//set gametime to continue counting
-		newWorld.gametime.writeCurrentGameTime(time);
-		newWorld.nightAlhpa = nightShade;
-
-		if(!newWorld.hasCreaturesSpawned){
-			SpawningLogic.spawnNightCreatures(newWorld, true);
-		}
-
-		for(int i = 0; i < newWorld.tileMap.getXRows(); i++)
-			for(int j = 0; j < newWorld.tileMap.getYRows(); j++){
-				if(newWorld.tileMap.getBlockID(i, j) == 6){
-					newWorld.getPlayer().setPosition(i-1, j);
-					newWorld.getPlayer().facingRight = false;
-					break;
+				if(index == 0 || index == 1 && Save.getWorldData(0)!= null && Save.getWorldData(0).readString("map").equals("/maps/tutorial_island")){
+					currentWorld.getPlayer().setVector(4, 0);
+					return null;
 				}
-			}
-		Save.writeRandomParts();
 
-		//save world we went to, this prevents bugs/glitches if closed without saving !
-		Save.writeWorld(newWorld, index);
-		Save.writePlayerData(newWorld.getPlayer());
+				//save world we are currently in
+				Save.writeWorld(currentWorld, index);
+				Save.writePlayerData(currentWorld.getPlayer());
+
+				//get gametime to transfer to the new world and continue counting
+				int time = currentWorld.gametime.getCurrentTime();
+				float nightShade = currentWorld.nightAlhpa;
+				//set a new world
+				gsm.setState(GameStateManager.GAME);
+
+				//increase index to indicate the new world's index
+				index--;
+				World newWorld = (World)gsm.getGameState(gsm.getCurrentState());
+
+				newWorld.readFromSave(Save.getWorldData(index));
+
+				newWorld.init();
+
+				//set gametime to continue counting
+				newWorld.gametime.writeCurrentGameTime(time);
+				newWorld.nightAlhpa = nightShade;
+
+				if(!newWorld.hasCreaturesSpawned){
+					SpawningLogic.spawnNightCreatures(newWorld, true);
+				}
+
+				for(int i = 0; i < newWorld.tileMap.getXRows(); i++)
+					for(int j = 0; j < newWorld.tileMap.getYRows(); j++){
+						if(newWorld.tileMap.getBlockID(i, j) == 6){
+							newWorld.getPlayer().setPosition(i-1, j);
+							newWorld.getPlayer().facingRight = false;
+							break;
+						}
+					}
+				Save.writeRandomParts();
+
+				//save world we went to, this prevents bugs/glitches if closed without saving !
+				Save.writeWorld(newWorld, index);
+				Save.writePlayerData(newWorld.getPlayer());
+
+				Util.stopLoadIcon();
+
+				return null;
+			}
+		}.execute();
 	}
 
 	/**loads a level to skip the tutorial.*/
-	public static void loadFirstLevel(GameStateManagerBase gsm){
+	public static void loadFirstLevel(final GameStateManagerBase gsm){
 
-		World world = (World)gsm.getGameState(gsm.getCurrentState());
-		Player player = world.getPlayer();
+		Util.startLoadIcon();
 
-		for(int x = 0; x < world.tileMap.getXRows(); x++)
-			for(int y = 0; y < world.tileMap.getYRows(); y++){
-				if(world.tileMap.getBlockID(x, y) == 7)
-					player.setPosition(x+1, y);
+		new SwingWorker<Void, Integer>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+
+				World world = (World)gsm.getGameState(gsm.getCurrentState());
+				Player player = world.getPlayer();
+
+				for(int x = 0; x < world.tileMap.getXRows(); x++)
+					for(int y = 0; y < world.tileMap.getYRows(); y++){
+						if(world.tileMap.getBlockID(x, y) == 7)
+							player.setPosition(x+1, y);
+					}
+
+				populateWorld(world);
+
+				Util.stopLoadIcon();
+
+				return null;
 			}
-
-		populateWorld(world);
+		}.execute();
 
 	}
 
 	/**load tutorial level if no saves are found, and the player chooses to play the tutorial*/
-	public static void loadTutorialLevel(GameStateManagerBase gsm){
+	public static void loadTutorialLevel(final GameStateManagerBase gsm){
+		
+		Util.startLoadIcon();
 
-		World world = (World)gsm.getGameState(gsm.getCurrentState());
+		new SwingWorker<Void, Integer>(){
+			@Override
+			protected Void doInBackground() throws Exception {
 
-		Player player = world.getPlayer();
-		player.setPosition(66, 63);
+				World world = (World)gsm.getGameState(gsm.getCurrentState());
 
-		world.tasks.add(new WorldTask(WorldTask.SWIM, 1, EnumTask.ACTION));
-		world.tasks.add(new WorldTask(Items.woodChip.getDisplayName(), 10, EnumTask.COLLECTIBLE));
-		world.tasks.add(new WorldTask(Items.rock.getDisplayName(), 5, EnumTask.COLLECTIBLE));
-		world.tasks.add(new WorldTask(Items.craftTable.getDisplayName(), 1, EnumTask.CRAFT));
+				Player player = world.getPlayer();
+				player.setPosition(66, 63);
 
-		BlockInfoPane pane = null;
-		ArrayList<String> text = null;
+				world.tasks.add(new WorldTask(WorldTask.SWIM, 1, EnumTask.ACTION));
+				world.tasks.add(new WorldTask(Items.woodChip.getDisplayName(), 10, EnumTask.COLLECTIBLE));
+				world.tasks.add(new WorldTask(Items.rock.getDisplayName(), 5, EnumTask.COLLECTIBLE));
+				world.tasks.add(new WorldTask(Items.craftTable.getDisplayName(), 1, EnumTask.CRAFT));
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add("WELCOME!");
-		text.add("to Tutorial Island.");
-		text.add(KeyHandler.getKeyName(KeyHandler.UP).toLowerCase() + KeyHandler.getKeyName(KeyHandler.LEFT).toLowerCase() +
-				KeyHandler.getKeyName(KeyHandler.DOWN).toLowerCase() +KeyHandler.getKeyName(KeyHandler.RIGHT).toLowerCase() +
-				" to move.");
-		pane.setText(text);
-		pane.setPosition(66,63);
-		world.listWithMapObjects.add(pane);
+				BlockInfoPane pane = null;
+				ArrayList<String> text = null;
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add("Or arrow Keys, whatever...");
-		pane.setText(text);
-		pane.setPosition(69,63);
-		world.listWithMapObjects.add(pane);
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add("WELCOME!");
+				text.add("to Tutorial Island.");
+				text.add(KeyHandler.getKeyName(KeyHandler.UP).toLowerCase() + KeyHandler.getKeyName(KeyHandler.LEFT).toLowerCase() +
+						KeyHandler.getKeyName(KeyHandler.DOWN).toLowerCase() +KeyHandler.getKeyName(KeyHandler.RIGHT).toLowerCase() +
+						" to move.");
+				pane.setText(text);
+				pane.setPosition(66,63);
+				world.listWithMapObjects.add(pane);
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add(KeyHandler.getKeyName(KeyHandler.UP).toLowerCase() + " to jump up ! ^" );
-		pane.setText(text);
-		pane.setPosition(74,63);
-		world.listWithMapObjects.add(pane);
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add("Or arrow Keys, whatever...");
+				pane.setText(text);
+				pane.setPosition(69,63);
+				world.listWithMapObjects.add(pane);
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add("Lets take a dip in the" );
-		text.add("strawberry river !");
-		pane.setText(text);
-		pane.setPosition(78,63);
-		world.listWithMapObjects.add(pane);
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add(KeyHandler.getKeyName(KeyHandler.UP).toLowerCase() + " to jump up ! ^" );
+				pane.setText(text);
+				pane.setPosition(74,63);
+				world.listWithMapObjects.add(pane);
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add("I lied..." );
-		text.add("This is just a pond of water.");
-		text.add("Lets get to the other side !");
-		pane.setText(text);
-		pane.setPosition(81,63);
-		world.listWithMapObjects.add(pane);
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add("Lets take a dip in the" );
+				text.add("strawberry river !");
+				pane.setText(text);
+				pane.setPosition(78,63);
+				world.listWithMapObjects.add(pane);
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add("SPLISH SPLASH," );
-		text.add("YOU ARE TAKING A BATH !");
-		pane.setText(text);
-		pane.setPosition(104,64);
-		world.listWithMapObjects.add(pane);
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add("I lied..." );
+				text.add("This is just a pond of water.");
+				text.add("Lets get to the other side !");
+				pane.setText(text);
+				pane.setPosition(81,63);
+				world.listWithMapObjects.add(pane);
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add("Your adventure is about to start..." );
-		text.add("Just keep hopping up !");
-		pane.setText(text);
-		pane.setPosition(116, 59);
-		world.listWithMapObjects.add(pane);
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add("SPLISH SPLASH," );
+				text.add("YOU ARE TAKING A BATH !");
+				pane.setText(text);
+				pane.setPosition(104,64);
+				world.listWithMapObjects.add(pane);
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add("Every level has goals," );
-		text.add("they are drawn in the top left corner.");
-		text.add("Completete all of them to go on ! ");
-		pane.setText(text);
-		pane.setPosition(83, 48);
-		world.listWithMapObjects.add(pane);
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add("Your adventure is about to start..." );
+				text.add("Just keep hopping up !");
+				pane.setText(text);
+				pane.setPosition(116, 59);
+				world.listWithMapObjects.add(pane);
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add("Have you tried making a work desk ?");
-		text.add("Make some sticks in your inventory ! ("+ KeyHandler.getKeyName(KeyHandler.INVENTORY)+")");
-		text.add("Place down the desk with the number in the hotbar.");
-		pane.setText(text);
-		pane.setPosition(102, 22);
-		world.listWithMapObjects.add(pane);
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add("Every level has goals," );
+				text.add("they are drawn in the top left corner.");
+				text.add("Completete all of them to go on ! ");
+				pane.setText(text);
+				pane.setPosition(83, 48);
+				world.listWithMapObjects.add(pane);
 
-		pane = new BlockInfoPane(world, Blocks.SIGN);
-		text = new ArrayList<String>();
-		text.add("Try fiddling with the numbers while");
-		text.add("in the inventory to move around items.");
-		text.add("You're ready for adventure... Have fun !");
-		pane.setText(text);
-		pane.setPosition(115, 22);
-		world.listWithMapObjects.add(pane);
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add("Have you tried making a work desk ?");
+				text.add("Make some sticks in your inventory ! ("+ KeyHandler.getKeyName(KeyHandler.INVENTORY)+")");
+				text.add("Place down the desk with the number in the hotbar.");
+				pane.setText(text);
+				pane.setPosition(102, 22);
+				world.listWithMapObjects.add(pane);
 
-		BlockRock rock ;
+				pane = new BlockInfoPane(world, Blocks.SIGN);
+				text = new ArrayList<String>();
+				text.add("Try fiddling with the numbers while");
+				text.add("in the inventory to move around items.");
+				text.add("You're ready for adventure... Have fun !");
+				pane.setText(text);
+				pane.setPosition(115, 22);
+				world.listWithMapObjects.add(pane);
 
-		rock = new BlockRock(world);
-		rock.setPosition(67, 48);
-		world.listWithMapObjects.add(rock);
+				BlockRock rock ;
 
-		rock = new BlockRock(world);
-		rock.setPosition(73, 28);
-		world.listWithMapObjects.add(rock);
+				rock = new BlockRock(world);
+				rock.setPosition(67, 48);
+				world.listWithMapObjects.add(rock);
 
-		rock = new BlockRock(world);
-		rock.setPosition(85, 39);
-		world.listWithMapObjects.add(rock);
+				rock = new BlockRock(world);
+				rock.setPosition(73, 28);
+				world.listWithMapObjects.add(rock);
 
-		rock = new BlockRock(world);
-		rock.setPosition(91, 30);
-		world.listWithMapObjects.add(rock);
+				rock = new BlockRock(world);
+				rock.setPosition(85, 39);
+				world.listWithMapObjects.add(rock);
 
-		BlockWood wood;
-		for(int i = 0; i < 3; i++){
-			wood = new BlockWood(world, i == 2);
-			wood.setPosition(75, 39+i);
-			world.listWithMapObjects.add(wood);
-		}
+				rock = new BlockRock(world);
+				rock.setPosition(91, 30);
+				world.listWithMapObjects.add(rock);
 
-		for(int i = 0; i < 4; i++){
-			wood = new BlockWood(world, i == 3);
-			wood.setPosition(68, 39+i);
-			world.listWithMapObjects.add(wood);
-		}
+				BlockWood wood;
+				for(int i = 0; i < 3; i++){
+					wood = new BlockWood(world, i == 2);
+					wood.setPosition(75, 39+i);
+					world.listWithMapObjects.add(wood);
+				}
 
-		for(int i = 0; i < 3; i++){
-			wood = new BlockWood(world, i == 2);
-			wood.setPosition(81, 26+i);
-			world.listWithMapObjects.add(wood);
-		}
+				for(int i = 0; i < 4; i++){
+					wood = new BlockWood(world, i == 3);
+					wood.setPosition(68, 39+i);
+					world.listWithMapObjects.add(wood);
+				}
+
+				for(int i = 0; i < 3; i++){
+					wood = new BlockWood(world, i == 2);
+					wood.setPosition(81, 26+i);
+					world.listWithMapObjects.add(wood);
+				}
 
 
-		for(int i = 0; i < 3; i++){
-			wood = new BlockWood(world, i == 2);
-			wood.setPosition(70, 31+i);
-			world.listWithMapObjects.add(wood);
-		}
+				for(int i = 0; i < 3; i++){
+					wood = new BlockWood(world, i == 2);
+					wood.setPosition(70, 31+i);
+					world.listWithMapObjects.add(wood);
+				}
 
-		for(int i = 0; i < 4; i++){
-			wood = new BlockWood(world, i == 3);
-			wood.setPosition(98, 30+i);
-			world.listWithMapObjects.add(wood);
-		}
+				for(int i = 0; i < 4; i++){
+					wood = new BlockWood(world, i == 3);
+					wood.setPosition(98, 30+i);
+					world.listWithMapObjects.add(wood);
+				}
 
+				Util.stopLoadIcon();
+
+				return null;
+			}
+		}.execute();
 	}
 
 	public static void startAtLastSavedLevel(GameStateManagerBase gsm){
@@ -414,9 +463,9 @@ public class Loading {
 				}
 			}
 		}
-		
+
 		System.out.println(airBlocks/10);
-		
+
 		for(int i = 0; i < airBlocks/10; i++){
 			generateRandomTree(world, Constants.RANDOM.nextInt(x),  Constants.RANDOM.nextInt(y));
 			generateRandomOre(world, Blocks.ROCK, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 3);
@@ -435,24 +484,5 @@ public class Loading {
 		maps = tag.readInt("mapNumber");
 		//		tutorial = tag.readBoolean("tutorialPlayed");
 	}
-	
-//	private static Thread loadIcon;
-//	private volatile boolean isRunning = false;
-//	
-//	public static void startLoadingIcon(){
-//		loadIcon = new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				
-//			}
-//		});
-//		
-//		loadIcon.start();
-//	}
-//	
-//	public static void stopLoadingIcon(){
-//		if(loadIcon != null)
-//			loadIcon.;
-//	}
+
 }

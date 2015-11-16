@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import javax.swing.SwingWorker;
+
 import engine.gamestate.GameState;
 import engine.gamestate.GameStateManagerBase;
 import engine.keyhandlers.KeyHandler;
@@ -22,7 +24,7 @@ import game.util.Util;
 
 public class Menu extends GameState{
 
-//	private Color clr = new Color(0xcfd9e7);
+	//	private Color clr = new Color(0xcfd9e7);
 
 	private int currentChoice = 0;
 	private final String[] options = { "Start", "Options", "Quit" };
@@ -86,27 +88,40 @@ public class Menu extends GameState{
 
 	private void select() {
 		if (currentChoice == 0){
-			
+
 			//any save check. i chose random parts
 			if(!Save.readRandomParts()){ // if no save is found
-				
+
 				gsm.setState(GameStateManager.TUTORIAL);
-				
+
 			}else{ //read saves and continue playing
-				
-				gsm.setState(GameStateManager.GAME);
 
-				//new blank world
-				World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+				Util.startLoadIcon();
 
-				//read map index
-				Save.readRandomParts();
+				new SwingWorker<Void, Integer>() {
+					@Override
+					protected Void doInBackground() throws Exception {
 
-				//load saves from world. if none, the basic map will be loaded 
-				Loading.startAtLastSavedLevel(gsm);
+						gsm.setState(GameStateManager.GAME);
 
-				//initiate current world. sets new player 
-				currentWorld.init();
+						
+						//new blank world
+						World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+
+						//read map index
+						Save.readRandomParts();
+
+						//load saves from world. if none, the basic map will be loaded 
+						Loading.startAtLastSavedLevel(gsm);
+
+						//initiate current world. sets new player 
+						currentWorld.init();
+						
+						Util.stopLoadIcon();
+
+						return null;
+					}
+				}.execute();
 			}
 		}
 		if (currentChoice == 1)
