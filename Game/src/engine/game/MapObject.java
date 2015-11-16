@@ -119,11 +119,11 @@ public abstract class MapObject {
 	public boolean remove;
 
 	// constructor
-	public MapObject(TileMap tm, GameWorld world, String uin) {
+	public MapObject(GameWorld world, String uin) {
 		UIN = uin;
 
-		tileMap = tm;
-		tileSize = tm.getTileSize();
+		tileMap = world.tileMap;
+		tileSize = tileMap.getTileSize();
 		this.world = world;
 		currentAction = -1;
 
@@ -449,7 +449,7 @@ public abstract class MapObject {
 	}
 
 	public EntityDeathAnim getDeathAnimation() {
-		return new EntityDeathAnim(tileMap, (World) world, Entity.DEATHANIM_MEAT);
+		return new EntityDeathAnim((World) world, Entity.DEATHANIM_MEAT);
 	}
 	
 	/**

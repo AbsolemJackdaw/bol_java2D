@@ -24,7 +24,7 @@ public class Block extends MapObject{
 	protected List<String> blockInfo = new ArrayList<String>();
 	
 	public Block(World world, String uin) {
-		super(world.tileMap, world, uin);
+		super(world, uin);
 		width = 32;
 		height = 32;
 

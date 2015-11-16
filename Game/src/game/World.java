@@ -86,7 +86,7 @@ public class World extends GameWorld{
 
 		super.init();
 
-		this.player = new Player(tileMap, this);
+		this.player = new Player(this);
 
 		//init if no saves are found, and the player wants to play the tutorial
 		if(Save.getWorldData(0) == null)

@@ -1,6 +1,5 @@
 package game.entity.living.enemy;
 
-import engine.map.TileMap;
 import game.World;
 import game.entity.EntityAI;
 import game.entity.EntityLiving;
@@ -25,8 +24,8 @@ public class EntityEnemy extends EntityLiving {
 
 	EntityAI ai = new EntityAI();
 
-	public EntityEnemy(TileMap tm, World world, String uin) {
-		super(tm, world, uin);
+	public EntityEnemy(World world, String uin) {
+		super(world, uin);
 
 		moveSpeed = 0.2; // inital walking speed. you speed up as you walk
 		maxSpeed = 0.5; // change to jump farther and walk faster

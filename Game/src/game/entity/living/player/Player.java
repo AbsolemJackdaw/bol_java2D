@@ -31,7 +31,6 @@ import engine.image.Images;
 import engine.imaging.Animation;
 import engine.keyhandlers.KeyHandler;
 import engine.keyhandlers.XboxController;
-import engine.map.TileMap;
 import engine.music.Music;
 import engine.save.DataList;
 import engine.save.DataTag;
@@ -115,8 +114,8 @@ public class Player extends EntityLiving implements IInventory{
 	private boolean inWater;
 	private boolean wasInwater;
 
-	public Player(TileMap tm, World world) {
-		super(tm, world, "player");
+	public Player(World world) {
+		super(world, "player");
 
 		width = 32;
 		height = 32;

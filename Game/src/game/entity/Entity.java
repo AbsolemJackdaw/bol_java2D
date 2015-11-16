@@ -23,17 +23,17 @@ public class Entity {
 
 		switch (s) {
 		case PIG:
-			return new EntityPig(tm, (World)world, PIG);
+			return new EntityPig((World)world, PIG);
 		case DEATHANIM_MEAT :
-			return new EntityDeathAnim(tm, (World)world, DEATHANIM_MEAT);
+			return new EntityDeathAnim((World)world, DEATHANIM_MEAT);
 		case BAT :
-			return new EntityBat(tm, (World)world, BAT);
+			return new EntityBat((World)world, BAT);
 		case WORM :
-			return new EntityWorm(tm, (World)world, WORM);
+			return new EntityWorm((World)world, WORM);
 		case BOMB:
-			return new EntityBomb(tm, (World) world, BOMB);
+			return new EntityBomb((World) world, BOMB);
 		case DEATHANIM_EXPLOSION :
-			return new EntityExplosion(tm, (World)world);
+			return new EntityExplosion((World)world);
 		}
 
 		return null;

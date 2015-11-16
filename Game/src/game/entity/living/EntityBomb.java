@@ -3,7 +3,6 @@ package game.entity.living;
 import engine.game.GameWorld;
 import engine.game.MapObject;
 import engine.image.Images;
-import engine.map.TileMap;
 import engine.music.Music;
 import game.World;
 import game.entity.EntityLiving;
@@ -18,8 +17,8 @@ public class EntityBomb extends EntityLiving {
 	private int blastPower;
 	private int blastRadius;
 
-	public EntityBomb(TileMap tm, GameWorld world, String uin) {
-		super(tm, world, uin);
+	public EntityBomb(GameWorld world, String uin) {
+		super(world, uin);
 
 		initHealth(8f);
 
@@ -100,7 +99,7 @@ public class EntityBomb extends EntityLiving {
 	@Override
 	public EntityDeathAnim getDeathAnimation() {
 
-		EntityExplosion explosion = new EntityExplosion(tileMap, (World) world, getBlastRadius());
+		EntityExplosion explosion = new EntityExplosion((World) world, getBlastRadius());
 		return explosion ;
 	}
 

@@ -1,7 +1,6 @@
 package game.entity.living;
 
 import engine.image.Images;
-import engine.map.TileMap;
 import engine.music.Music;
 import game.World;
 import game.entity.EntityAI;
@@ -16,8 +15,8 @@ import java.awt.Graphics2D;
 
 public class EntityBat extends EntityEnemy {
 
-	public EntityBat(TileMap tm, World world, String uin) {
-		super(tm, world, uin);
+	public EntityBat(World world, String uin) {
+		super(world, uin);
 
 		initHealth(12f);
 

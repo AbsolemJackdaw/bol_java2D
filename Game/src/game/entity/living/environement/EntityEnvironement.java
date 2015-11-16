@@ -1,7 +1,6 @@
 package game.entity.living.environement;
 
 import engine.game.GameWorld;
-import engine.map.TileMap;
 import engine.save.DataTag;
 import game.entity.EntityLiving;
 import game.entity.living.player.Player;
@@ -10,8 +9,8 @@ import java.awt.Graphics2D;
 
 public class EntityEnvironement extends EntityLiving{
 
-	public EntityEnvironement(TileMap tm, GameWorld world, String uin) {
-		super(tm, world, uin);
+	public EntityEnvironement(GameWorld world, String uin) {
+		super(world, uin);
 
 		entitySizeX = 32;
 		entitySizeY = 32;

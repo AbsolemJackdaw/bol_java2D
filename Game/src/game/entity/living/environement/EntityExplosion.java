@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 
 import engine.image.Images;
 import engine.imaging.Animation;
-import engine.map.TileMap;
 import game.World;
 import game.entity.Entity;
 
@@ -14,14 +13,14 @@ public class EntityExplosion extends EntityDeathAnim {
 
 	BufferedImage[] img = Images.loadMultiImage("/entity/explosion.png", 32, 0, 11);
 	
-	public EntityExplosion(TileMap tm, World world) {
-		this(tm, world, 32);
+	public EntityExplosion(World world) {
+		this(world, 32);
 	}
 	
 	private int size;
 	
-	public EntityExplosion(TileMap tm, World world, int explosionRadius) {
-		super(tm, world, Entity.DEATHANIM_EXPLOSION);
+	public EntityExplosion(World world, int explosionRadius) {
+		super(world, Entity.DEATHANIM_EXPLOSION);
 		
 		size = explosionRadius;
 

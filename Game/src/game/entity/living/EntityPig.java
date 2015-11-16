@@ -1,7 +1,6 @@
 package game.entity.living;
 
 import engine.image.Images;
-import engine.map.TileMap;
 import game.World;
 import game.entity.EntityAI;
 import game.entity.EntityLiving;
@@ -19,8 +18,8 @@ public class EntityPig extends EntityLiving{
 	private double defMaxSpeed;
 	private double defMoveSpeed;
 
-	public EntityPig(TileMap tm, World world, String uin) {
-		super(tm, world, uin);
+	public EntityPig(World world, String uin) {
+		super(world, uin);
 
 		initHealth(8f);
 

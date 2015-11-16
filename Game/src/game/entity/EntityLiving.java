@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 
 import engine.game.GameWorld;
 import engine.game.MapObject;
-import engine.map.TileMap;
 import engine.music.Music;
 import engine.save.DataTag;
 import game.entity.living.player.Player;
@@ -19,8 +18,8 @@ public class EntityLiving extends MapObject{
 	private boolean flicker;
 	private int flickerTimer = 100;
 
-	public EntityLiving(TileMap tm, GameWorld world, String uin) {
-		super(tm, world, uin);
+	public EntityLiving(GameWorld world, String uin) {
+		super(world, uin);
 
 		health = maxHealth;
 	}

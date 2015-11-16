@@ -1,14 +1,13 @@
 package game.entity.living.environement;
 
 import engine.game.GameWorld;
-import engine.map.TileMap;
 import game.entity.EntityLiving;
 import game.entity.living.player.Player;
 
 public class EntitySign extends EntityLiving {
 
-	public EntitySign(TileMap tm, GameWorld world, String uin) {
-		super(tm, world, uin);
+	public EntitySign(GameWorld world, String uin) {
+		super(world, uin);
 	}
 
 	//keep onEntityHit methods empty. 
