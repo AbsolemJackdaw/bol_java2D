@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 	// image
 	private BufferedImage image;
-	private Graphics2D g;
+	protected Graphics2D g;
 
 	// game state manager
 	protected GameStateManagerBase gsm;
@@ -90,7 +90,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	/**
 	 * Draws world to the game
 	 */
-	private void draw() {
+	protected void draw() {
 		gsm.draw(g);
 	}
 
@@ -206,7 +206,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		}
 	}
 
-	private void update() {
+	protected void update() {
 		gsm.update();
 		KeyHandler.update();
 	}
