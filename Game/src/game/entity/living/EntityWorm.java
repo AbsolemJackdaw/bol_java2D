@@ -1,8 +1,5 @@
 package game.entity.living;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-
 import engine.game.GameWorld;
 import engine.image.Images;
 import engine.imaging.Animation;
@@ -12,6 +9,9 @@ import game.entity.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.Items;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 public class EntityWorm extends EntityLiving {
 

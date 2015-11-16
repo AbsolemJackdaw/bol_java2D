@@ -2,7 +2,6 @@ package game.entity.block.breakable;
 
 import engine.music.Music;
 import engine.save.DataTag;
-import engine.window.MusicPanel;
 import game.World;
 import game.entity.block.Block;
 import game.entity.living.player.Player;

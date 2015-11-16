@@ -1,7 +1,5 @@
 package game.entity.living;
 
-import java.awt.Graphics2D;
-
 import engine.game.GameWorld;
 import engine.game.MapObject;
 import engine.image.Images;
@@ -12,6 +10,8 @@ import game.entity.EntityLiving;
 import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.environement.EntityExplosion;
 import game.entity.living.player.Player;
+
+import java.awt.Graphics2D;
 
 public class EntityBomb extends EntityLiving {
 

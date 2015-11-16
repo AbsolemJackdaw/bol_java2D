@@ -1,14 +1,14 @@
 package game.entity.living.enemy;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 import engine.map.TileMap;
 import game.World;
 import game.entity.EntityAI;
 import game.entity.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.ItemTool;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 
 public class EntityEnemy extends EntityLiving {

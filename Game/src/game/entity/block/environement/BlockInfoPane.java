@@ -1,14 +1,13 @@
 package game.entity.block.environement;
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
-
 import engine.image.Images;
-import engine.map.TileMap;
 import engine.save.DataList;
 import engine.save.DataTag;
 import game.World;
+
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockInfoPane extends BlockEnvironement {
 

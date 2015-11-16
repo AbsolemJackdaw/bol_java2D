@@ -1,12 +1,12 @@
 package game.entity.living.environement;
 
-import java.awt.Graphics2D;
-
 import engine.game.GameWorld;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import game.entity.EntityLiving;
 import game.entity.living.player.Player;
+
+import java.awt.Graphics2D;
 
 public class EntityEnvironement extends EntityLiving{
 
