@@ -135,8 +135,6 @@ public class DataTag {
 
 		Object o = data.get(tag);
 		
-		System.out.println(o + " read boolean" + o.toString());
-		
 		if(o instanceof Byte){
 			Byte b = (Byte)o;
 			
