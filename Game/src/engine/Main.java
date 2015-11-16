@@ -3,29 +3,35 @@ package engine;
 import java.awt.Container;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import engine.window.gameAid.Window;
 
 public class Main {
 
-
-
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
-		new Window();
-		
-		final JFrame window = new JFrame(args[0]);
-		window.setContentPane(getContainerClass(args[1]));
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setUndecorated(true);
-		window.setResizable(false);
-		window.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		window.pack();
-		window.setVisible(true);
-		window.setLocationRelativeTo(null);
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				new Window();
+				
+				final JFrame window = new JFrame(args[0]);
+				window.setContentPane(getContainerClass(args[1]));
+				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				window.setUndecorated(true);
+				window.setResizable(false);
+				window.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+				window.pack();
+				window.setVisible(true);
+				window.setLocationRelativeTo(null);				
+			}
+		});
 
 	}
 
