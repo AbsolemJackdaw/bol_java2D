@@ -3,6 +3,7 @@ package game.util;
 import engine.window.GamePanel;
 import engine.window.gameAid.Utility;
 import engine.window.gameAid.Window;
+import game.GamePanelExtended;
 import game.content.Loading;
 import game.entity.block.Block;
 import game.entity.inventory.IInventory;
@@ -133,4 +134,62 @@ public class Util {
 
 		return img;
 	}
+	
+	/**
+	 * rotates a bufferedimage.
+	 * 
+	 * returns the rotated instance
+	 * 
+	 * image has to be square
+	 */
+	public static BufferedImage rotateImage(BufferedImage item, double rotation){
+		
+		int size = item.getWidth() + 20;
+		
+		//create blank canvas that is bigger the the image drawn.
+		BufferedImage canvas = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+		
+		//get grapchics from the canvas
+		Graphics2D g2d = (Graphics2D) canvas.getGraphics();
+		
+//		g2d.setColor(new Color(0,0,1,0.5f));
+//		g2d.fillRect(0, 0, size, size);
+
+		//rotate canvas internally
+		g2d.rotate(Math.toRadians(rotation), size/2, size/2);
+		
+//		g2d.setColor(new Color(0,1,0,0.5f));
+//		g2d.fillRect(0, 0, size, size);
+//		
+//		g2d.drawRect(0, size/2, size, 1);
+//		g2d.drawRect(size/2, 0, 1, size);
+
+		//draw image centered, extra/2
+		g2d.drawImage(item, 10, 10, null);
+		
+		return canvas;
+	}
+	
+//	private static Thread load;
+//	private static LoadingIcon loading;
+	
+	public static void startLoadIcon(){
+		
+		GamePanelExtended.drawLoadingIcon = true;
+		
+//		loading = new LoadingIcon();
+//		loading.start();
+//
+//		load = new Thread(loading);
+//		load.start();
+		
+	}
+	
+	public static void stopLoadIcon(){
+		GamePanelExtended.drawLoadingIcon = false;
+
+//		loading.stop();
+	}
+	
+	
 }

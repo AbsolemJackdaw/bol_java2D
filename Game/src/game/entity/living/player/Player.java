@@ -26,14 +26,6 @@ import static game.util.Constants.LEGS_IDLE;
 import static game.util.Constants.LEGS_RUN;
 import static game.util.Constants.LEG_JUMP;
 import static game.util.Constants.hotBarKeys;
-
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
-
 import engine.game.MapObject;
 import engine.image.Images;
 import engine.imaging.Animation;
@@ -57,6 +49,12 @@ import game.item.ItemBlock;
 import game.item.ItemStack;
 import game.item.ItemTool;
 import game.item.Items;
+import game.util.Util;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends EntityLiving implements IInventory{
 
@@ -180,23 +178,16 @@ public class Player extends EntityLiving implements IInventory{
 				super.draw(g, armor_extra);
 		}
 
-
-
 		if(invArmor.getWeapon() != null){
+			
 			BufferedImage weapon = invArmor.getWeapon().getItem().getTexture();
 
-			AffineTransform tx = new AffineTransform();
+			BufferedImage canvas = Util.rotateImage(weapon, weaponRotation);
 			
-			tx.setToRotation(Math.toRadians(weaponRotation), weapon.getWidth()/2, weapon.getHeight()/2); //
-			
-			AffineTransformOp op = new AffineTransformOp(tx,AffineTransformOp.TYPE_BILINEAR);
-			weapon = op.filter(weapon, null);
-
 			if (facingRight)
-				g.drawImage(weapon, posX()+10, posY()+5, 24, 24, null);
+				g.drawImage(canvas, posX()+5, posY()-15, canvas.getWidth(), canvas.getHeight(), null);
 			else
-				g.drawImage(weapon, posX()+10, posY()+5, -24, 24, null);
-
+				g.drawImage(canvas, posX()+19, posY()-15, -canvas.getWidth() , canvas.getHeight(), null);
 		}
 
 	}
@@ -314,7 +305,7 @@ public class Player extends EntityLiving implements IInventory{
 		if (currentAction == ACTION_ATTACK){
 
 			if(this.invArmor.getWeapon() != null){
-				weaponRotation += 2;
+				weaponRotation += 30;
 				if(weaponRotation >= 360){
 					attacking = false;
 					weaponRotation = 0;
