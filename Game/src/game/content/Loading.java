@@ -49,7 +49,6 @@ public class Loading {
 		//skip map x_1, so that map is used only in the very beginning
 		// x1 + x2 is max_total maps, where map min is 2
 		int i = Constants.RANDOM.nextInt(2)+1;
-		i = 1;
 		String s = "/maps/map_" + i;
 		System.out.println(s);
 		return s;
