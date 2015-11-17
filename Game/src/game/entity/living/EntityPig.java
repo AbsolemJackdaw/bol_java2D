@@ -63,6 +63,7 @@ public class EntityPig extends EntityLiving{
 
 	private ItemStack[] drops = new ItemStack[2];
 
+	@Override
 	public ItemStack[] getDrops() {
 		drops[0] = new ItemStack(Items.meat_pig_raw, rand.nextInt(2)+1);
 		drops[1] = new ItemStack(Items.leather, rand.nextInt(3)+1);

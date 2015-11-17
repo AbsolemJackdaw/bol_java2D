@@ -145,14 +145,22 @@ public class EntityLiving extends MapObject{
 	 * Player can be null !!
 	 */
 	public void kill(Player player){
-
+		
 		if(player!= null)
-			if(getDrops() != null)
-				if(player.setStackInNextAvailableSlot(getDrops()[rand.nextInt(getDrops().length)])){
+			if(getDrops() != null){
+				int index;
+				
+				if(getDrops().length == 1)
+					index = 0;
+				else
+					index = rand.nextInt(getDrops().length);
+				
+				if(player.setStackInNextAvailableSlot(getDrops()[index])){
 					this.remove = true;
 				}else{
 					health = maxHealth;
 				}
+			}
 			else
 				;
 		else

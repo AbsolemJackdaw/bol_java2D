@@ -2,6 +2,7 @@ package game.entity.living.water;
 
 import engine.game.GameWorld;
 import game.entity.EntityLiving;
+import game.entity.living.player.Player;
 
 public class EntityWaterCreature extends EntityLiving {
 
@@ -132,6 +133,11 @@ public class EntityWaterCreature extends EntityLiving {
 		topRight = tr < 9 || tr > 10;
 		bottomLeft = bl < 9 || bl > 10;
 		bottomRight = br < 9 || br > 10;
+	}
+	
+	@Override
+	public void onEntityHit(Player player) {
+		super.onEntityHit(player);
 	}
 
 }

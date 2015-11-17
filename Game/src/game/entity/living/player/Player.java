@@ -315,19 +315,16 @@ public class Player extends EntityLiving implements IInventory{
 		}
 
 		if(attacking && (currentAction != ACTION_ATTACK)) {
+			
 			for(MapObject obj : collidingEntities){
 
-				// entitySizeX += 5; obsolete. entities that are colliding are set somewhere else
 				matchTool(obj);
 				if(obj.getScreenXpos() > getScreenXpos() && facingRight)
 					obj.onEntityHit(this);
 				else if( obj.getScreenXpos() < getScreenXpos() && !facingRight)
 					obj.onEntityHit(this);
 
-				// entitySizeX -= 5;
 			}
-
-
 		}
 
 		//remove weapon if broken after attacking

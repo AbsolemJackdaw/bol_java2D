@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import engine.game.GameWorld;
 import engine.image.Images;
 import engine.save.DataTag;
+import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.Items;
 
@@ -77,5 +78,10 @@ public class EntityFish extends EntityWaterCreature {
 	@Override
 	public ItemStack[] getDrops() {
 		return new ItemStack[]{new ItemStack(Items.meat_fish_raw, 1)};
+	}
+	
+	@Override
+	public void kill(Player player) {
+		super.kill(player);
 	}
 }
