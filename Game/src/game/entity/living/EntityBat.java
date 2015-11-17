@@ -29,7 +29,6 @@ public class EntityBat extends EntityEnemy {
 		width = 32;
 		height = 32;
 
-
 		moveSpeed = defMoveSpeed = 0.05 + rand.nextDouble();  // inital walking speed. you speed up as you walk
 		maxSpeed = defMaxSpeed = 0.5 + rand.nextDouble(); // change to jump farther and walk faster
 		stopSpeed = 0.1;
