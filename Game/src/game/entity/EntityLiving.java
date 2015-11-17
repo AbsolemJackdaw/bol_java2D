@@ -33,10 +33,13 @@ public class EntityLiving extends MapObject{
 
 	}
 
-	public void hurtEntity(float f){
+	public void hurtEntity(float f, Player player){
 		health -= f;
-		if(health <=0)
+		if(health <=0){
+			Music.play(getEntityHitSound());
 			this.remove=true;
+			kill(player);
+		}
 		if(health > maxHealth)
 			health = maxHealth;
 	}
@@ -102,12 +105,7 @@ public class EntityLiving extends MapObject{
 
 	@Override
 	public void onEntityHit(float damage) {
-		hurtEntity(damage);
-
-		Music.play(getEntityHitSound());
-
-		if(health < 0)
-			kill(null);
+		hurtEntity(damage, null);
 	}
 
 	@Override
@@ -129,12 +127,7 @@ public class EntityLiving extends MapObject{
 			wep.damageStack(1);
 		}
 
-		hurtEntity(wepDmg + dmg);
-
-		Music.play(getEntityHitSound());
-
-		if(health < 0)
-			kill(p);
+		hurtEntity(wepDmg + dmg, p );
 	}
 
 
@@ -145,6 +138,8 @@ public class EntityLiving extends MapObject{
 	 * Player can be null !!
 	 */
 	public void kill(Player player){
+		
+		System.out.println("kill entityliving");
 		
 		if(player!= null)
 			if(getDrops() != null){
@@ -162,7 +157,7 @@ public class EntityLiving extends MapObject{
 				}
 			}
 			else
-				;
+				remove = true;
 		else
 			this.remove = true;
 	}

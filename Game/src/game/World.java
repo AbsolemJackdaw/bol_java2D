@@ -495,7 +495,7 @@ public class World extends GameWorld{
 		else if(cmd.startsWith("hurt")){
 			String [] split = cmd.split("\\s+");
 			if(split.length == 2)
-				player.hurtEntity(Float.valueOf(split[1]));
+				player.hurtEntity(Float.valueOf(split[1]), null);
 		}
 
 		else if(cmd.equals("heal")){

@@ -78,7 +78,7 @@ public class EntityEnemy extends EntityLiving {
 			flinching = true;
 		}
 
-		hurtEntity(p.getAttackDamage() + bonus);
+		hurtEntity(p.getAttackDamage() + bonus, p);
 
 	}
 
@@ -93,19 +93,9 @@ public class EntityEnemy extends EntityLiving {
 			Player p = this.getWorld().getPlayer();
 			if(getRectangle().intersects(p.getRectangle())){
 				//TODO implement correctly !
-				p.hurtEntity(0);
-			
+				p.hurtEntity(0, null);
 			}
 		}
-
-//		if(!getWorld().isNightTime()){
-//			if(rand.nextInt(100) == 0)
-//				if(!flinching){
-//					health--;
-//					Music.play(getEntityHitSound());
-//					flinching = true;
-//				}
-//		}
 
 		if(followTimer > 0){
 			ai.setPathToPlayer(this);

@@ -25,7 +25,7 @@ public class EntityFish extends EntityWaterCreature {
 		//reload texture as the meta is set afterwards
 		BufferedImage[] img = new BufferedImage[]{getEntityTexture()};
 		animation.setFrames(img);
-		
+
 		initHealth(3);
 
 	}
@@ -34,7 +34,7 @@ public class EntityFish extends EntityWaterCreature {
 	protected BufferedImage getEntityTexture() {
 
 		BufferedImage img = null;
-		
+
 		if(meta == 0)
 			img = Images.loadImage("/entity/fish/honorfish.png");
 		else
@@ -74,14 +74,42 @@ public class EntityFish extends EntityWaterCreature {
 		super.writeToSave(data);
 		data.writeInt("meta", meta);
 	}
-	
+
 	@Override
 	public ItemStack[] getDrops() {
 		return new ItemStack[]{new ItemStack(Items.meat_fish_raw, 1)};
 	}
-	
+
 	@Override
 	public void kill(Player player) {
-		super.kill(player);
+		System.out.println("kill entityfish");
+
+		if(player!= null)
+			if(getDrops() != null){
+				int index;
+
+				if(getDrops().length == 1)
+					index = 0;
+				else
+					index = rand.nextInt(getDrops().length);
+
+				if(player.setStackInNextAvailableSlot(getDrops()[index])){
+					this.remove = true;
+				}else{
+					health = maxHealth;
+				}
+			}
+			else
+				;
+		else
+			this.remove = true;
 	}
+
+	@Override
+	public void onEntityHit(Player player) {
+		super.onEntityHit(player);
+		
+		System.out.println("in the fish face !");
+	}
+	
 }

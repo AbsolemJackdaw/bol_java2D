@@ -61,6 +61,7 @@ public class EntityWorm extends EntityLiving {
 
 	}
 
+	@Override
 	public void kill(Player p)
 	{
 		if(p != null)

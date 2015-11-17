@@ -144,10 +144,10 @@ public class Player extends EntityLiving implements IInventory{
 	}
 
 	@Override
-	public void hurtEntity(float f) {
+	public void hurtEntity(float f, Player p) {
 
 		if(!flinching){
-			super.hurtEntity(f);
+			super.hurtEntity(f, p);
 			flinching = true;
 		}
 	}
@@ -158,8 +158,8 @@ public class Player extends EntityLiving implements IInventory{
 		if(health > getMaxHealth())
 			health = getMaxHealth();
 
-		if(health <=0)
-			this.remove=true;
+//		if(health <=0)
+//			this.remove=true;
 	}
 
 	@Override
