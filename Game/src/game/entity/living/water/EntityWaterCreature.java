@@ -2,7 +2,6 @@ package game.entity.living.water;
 
 import engine.game.GameWorld;
 import game.entity.EntityLiving;
-import game.entity.living.player.Player;
 
 public class EntityWaterCreature extends EntityLiving {
 
