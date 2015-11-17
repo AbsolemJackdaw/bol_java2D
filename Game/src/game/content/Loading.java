@@ -382,9 +382,13 @@ public class Loading {
 					world.listWithMapObjects.add(wood);
 				}
 
-				Util.stopLoadIcon();
-
 				return null;
+			}
+			
+			@Override
+			protected void done() {
+				super.done();
+				Util.stopLoadIcon();
 			}
 		}.execute();
 	}

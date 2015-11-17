@@ -117,9 +117,13 @@ public class Menu extends GameState{
 						//initiate current world. sets new player 
 						currentWorld.init();
 						
-						Util.stopLoadIcon();
-
 						return null;
+					}
+					
+					@Override
+					protected void done() {
+						super.done();
+						Util.stopLoadIcon();
 					}
 				}.execute();
 			}
