@@ -20,7 +20,7 @@ public class ItemBomb extends Item {
 	@Override
 	public void useItem(ItemStack item, TileMap map, World world, Player player, int key) {
 
-		EntityLiving entity = Entity.createEntityFromUIN(Entity.BOMB, map, world);
+		EntityLiving entity = Entity.createEntityFromUIN(Entity.BOMB, world);
 
 		if(entity instanceof EntityBomb){
 			EntityBomb bomb = (EntityBomb)entity;

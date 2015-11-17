@@ -1,7 +1,6 @@
 package game.entity;
 
 import engine.game.GameWorld;
-import engine.map.TileMap;
 import game.World;
 import game.entity.living.EntityBat;
 import game.entity.living.EntityBomb;
@@ -21,7 +20,7 @@ public class Entity {
 	public static final String BOMB = "bomb";
 	public static final String FISH = "fish";
 
-	public static EntityLiving createEntityFromUIN(String s, TileMap tm, GameWorld world){
+	public static EntityLiving createEntityFromUIN(String s, GameWorld world){
 
 		switch (s) {
 		case PIG:

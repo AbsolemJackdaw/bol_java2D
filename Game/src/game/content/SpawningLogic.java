@@ -21,8 +21,7 @@ public class SpawningLogic {
 			int r = rand.nextInt(9) + 2; // min 2, max 10
 
 			for (int i = 0; i < r; i++) {
-				EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(
-						Entity.BAT, world.tileMap, world);
+				EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(Entity.BAT,  world);
 
 				int x = new Random().nextInt(world.tileMap.getXRows());
 				int y = new Random().nextInt(world.tileMap.getYRows());

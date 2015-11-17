@@ -418,7 +418,7 @@ public class World extends GameWorld{
 			MapObject mo = Blocks.loadMapObjectFromString(uin, this);
 
 			if(mo == null)
-				mo = Entity.createEntityFromUIN(uin, tileMap, this);
+				mo = Entity.createEntityFromUIN(uin, this);
 			if(mo != null){
 				mo.readFromSave(dt);
 				listWithMapObjects.add(mo);
@@ -520,7 +520,7 @@ public class World extends GameWorld{
 		}else if(cmd.startsWith("spawn")){
 			String [] split = cmd.split("\\s+") ;
 			if(split.length == 2){
-				EntityLiving entity = Entity.createEntityFromUIN(split[1], tileMap, this);
+				EntityLiving entity = Entity.createEntityFromUIN(split[1], this);
 				if(entity != null){
 					entity.setPosition(player.getScreenXpos(), player.getScreenYpos());
 					listWithMapObjects.add(entity);
@@ -529,7 +529,7 @@ public class World extends GameWorld{
 			else if(split.length == 3){
 				int loop = Integer.parseInt(split[2]);
 				for(int i = 0; i < loop; i ++){
-					EntityLiving entity = Entity.createEntityFromUIN(split[1], tileMap, this);
+					EntityLiving entity = Entity.createEntityFromUIN(split[1], this);
 					if(entity != null){
 						entity.setPosition(player.getScreenXpos(), player.getScreenYpos());
 						listWithMapObjects.add(entity);

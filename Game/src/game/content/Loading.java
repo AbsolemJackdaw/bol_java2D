@@ -116,9 +116,12 @@ public class Loading {
 				Save.writeWorld(newWorld, index);
 				Save.writePlayerData(newWorld.getPlayer());
 
-				Util.stopLoadIcon();
-
 				return null;
+			}
+			@Override
+			protected void done() {
+				super.done();
+				Util.stopLoadIcon();
 			}
 		}.execute();
 	}
@@ -178,10 +181,15 @@ public class Loading {
 				Save.writeWorld(newWorld, index);
 				Save.writePlayerData(newWorld.getPlayer());
 
-				Util.stopLoadIcon();
-
 				return null;
 			}
+			
+			@Override
+			protected void done() {
+				super.done();
+				Util.stopLoadIcon();
+			}
+			
 		}.execute();
 	}
 
@@ -207,7 +215,7 @@ public class Loading {
 
 				return null;
 			}
-			
+
 			@Override
 			protected void done() {
 				super.done();
@@ -219,7 +227,7 @@ public class Loading {
 
 	/**load tutorial level if no saves are found, and the player chooses to play the tutorial*/
 	public static void loadTutorialLevel(final GameStateManagerBase gsm){
-		
+
 		Util.startLoadIcon();
 
 		new SwingWorker<Void, Integer>(){
@@ -430,26 +438,30 @@ public class Loading {
 		}
 	}
 
-	private static void populateEntities(World world, String uin, int loops){
+	private static void populateEntities(World world, String uin){
 
 		TileMap tm = world.tileMap;
 
-		for(int i = 0; i < loops; i++){
-			EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(uin, tm, world);
+		EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(uin, world);
 
-			int x = Constants.RANDOM.nextInt(tm.getXRows());
-			int y = Constants.RANDOM.nextInt(tm.getYRows());
+		int x = Constants.RANDOM.nextInt(tm.getXRows());
+		int y = Constants.RANDOM.nextInt(tm.getYRows());
 
-			if(y+1 < tm.getYRows())
-				if(world.tileMap.getBlockID(x, y) == 0){
-					if(world.tileMap.getBlockID(x, y+1) > 0){
-						el.setPosition(x, y);
-						world.listWithMapObjects.add(el);
-						System.out.println("added pig at " + x + " " + (y));
+		if(y+1 < tm.getYRows())
+			if(world.tileMap.getBlockID(x, y) == 0){
+				if(world.tileMap.getBlockID(x, y+1) > 0){
+					el.setPosition(x, y);
+					world.listWithMapObjects.add(el);
 
-					}
 				}
-		}
+			}
+	}
+	
+	private static void populateWaterEntities(World world, String uin, int x, int y){
+
+		EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(uin, world);
+		el.setPosition(x, y);
+		world.listWithMapObjects.add(el);
 	}
 
 	private static void populateWorld(World world){
@@ -463,6 +475,17 @@ public class Loading {
 			for(int j = 0; j < y; j++){
 				if(world.tileMap.getBlockID(i, j) == 0){
 					airBlocks++;
+				}
+
+				//full water block
+				if(world.tileMap.getBlockID(i, j) == 10){
+					if(Constants.RANDOM.nextInt(20) == 0){
+						int fish = Constants.RANDOM.nextInt(4)+1;
+						while(fish > 0){
+							populateWaterEntities(world, Entity.FISH, i, j);
+							fish--;
+						}
+					}
 				}
 			}
 		}
@@ -479,7 +502,6 @@ public class Loading {
 	public static void writeRandomParts(DataTag tag){
 		tag.writeInt("worldIndex", Loading.index);
 		tag.writeInt("mapNumber", Loading.maps);
-		//		tag.writeBoolean("tutorialPlayed", Loading.tutorial);
 	}
 
 	public static void readRandomParts(DataTag tag){
