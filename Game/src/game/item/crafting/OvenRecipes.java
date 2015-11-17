@@ -13,9 +13,11 @@ public class OvenRecipes {
 		if(input.getItem().getUIN().equals(Items.iron.getUIN())){
 			return new ItemStack(Items.ingot,1);
 		}
-		else if(input.getItem().getUIN().equals(Items.meat_pig_raw.getUIN()))
-		{
+		else if(input.getItem().getUIN().equals(Items.meat_pig_raw.getUIN())){
 			return new ItemStack(Items.meat_pig, 1);
+		}
+		else if(input.getItem().getUIN().equals(Items.meat_fish_raw.getUIN())){
+			return new ItemStack(Items.meat_fish, 1);
 		}
 		
 		return null;
