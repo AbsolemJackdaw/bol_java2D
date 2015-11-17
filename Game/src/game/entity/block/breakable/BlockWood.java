@@ -94,7 +94,6 @@ public class BlockWood extends BlockBreakable{
 	public void writeToSave(DataTag data) {
 		super.writeToSave(data);
 		data.writeBoolean("endBlock", isEndBlock);
-		System.out.println(isEndBlock);
 	}
 
 	@Override

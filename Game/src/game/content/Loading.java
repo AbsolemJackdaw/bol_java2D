@@ -438,8 +438,11 @@ public class Loading {
 		}
 	}
 
-	private static void populateEntities(World world, String uin){
+	private static void populateEntities(World world, String uin, int rarity){
 
+		if(Constants.RANDOM.nextInt(rarity) > 0)
+			return;
+		
 		TileMap tm = world.tileMap;
 
 		EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(uin, world);
@@ -496,6 +499,8 @@ public class Loading {
 			generateRandomTree(world, Constants.RANDOM.nextInt(x),  Constants.RANDOM.nextInt(y));
 			generateRandomOre(world, Blocks.ROCK, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 3);
 			generateRandomOre(world, Blocks.IRON, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 10);
+			
+			populateEntities(world, Entity.PIG, 20);
 		}
 	}
 

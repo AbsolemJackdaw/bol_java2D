@@ -31,7 +31,6 @@ public class SpawningLogic {
 						if (world.tileMap.getBlockID(x, y + 1) > 0) {
 							el.setPosition(x, y);
 							world.listWithMapObjects.add(el);
-							System.out.println("added bat at " + x + " " + (y));
 						}
 					}
 			}
