@@ -108,8 +108,10 @@ public class Loading {
 
 				for(int x = 0; x < newWorld.tileMap.getXRows(); x++)
 					for(int y = 0; y < newWorld.tileMap.getYRows(); y++){
-						if(newWorld.tileMap.getBlockID(x, y) == 7)
+						if(newWorld.tileMap.getBlockID(x, y) == 7){
 							newWorld.getPlayer().setPosition(x+1, y);
+							break;
+						}
 					}
 
 				//save the new world as well > this prevents bugs/glitches if closed without saving !
