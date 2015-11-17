@@ -220,6 +220,12 @@ public class World extends GameWorld{
 	@Override
 	public void update(){
 
+		//failsafe check. sometimes guiDisplaying is null ?
+		// i need a better fix for this i.m.o
+		if(guiDisplaying == null){
+			guiDisplaying = new GuiHud(this, player);
+		}
+		
 		double randOff = 0;
 
 		if(offset > 0){
