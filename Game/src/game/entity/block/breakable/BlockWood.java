@@ -63,8 +63,7 @@ public class BlockWood extends BlockBreakable{
 
 	public void setEndBlock(boolean isEndBlock) {
 		this.isEndBlock = isEndBlock;
-		//update texture as it is set only once
-		getAnimation().setFrames(new BufferedImage[]{getEntityTexture()});
+		reloadTexture();
 	}
 
 	@Override

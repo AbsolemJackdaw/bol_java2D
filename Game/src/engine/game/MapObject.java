@@ -457,4 +457,15 @@ public abstract class MapObject {
 	public boolean persistantUpdate(){
 		return false;
 	}
+
+	/**
+	 * forces a reload on the entity texture, which might sometimes be needed due to it needing multiple 
+	 * circumstances to 'be'.
+	 */
+	public void reloadTexture(){
+		//reload texture as the meta is set afterwards
+		BufferedImage[] img = new BufferedImage[]{getEntityTexture()};
+		animation.setFrames(img);
+	}
+
 }

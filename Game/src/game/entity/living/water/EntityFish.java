@@ -12,20 +12,15 @@ import game.item.Items;
 
 public class EntityFish extends EntityWaterCreature {
 
-	private int meta;
+	private int meta = -1;
 
 	public EntityFish(GameWorld world, String uin) {
 		super(world, uin);
 
 		meta = rand.nextInt(5);
-
-		entitySizeX = width = getEntitySize().width;
-		entitySizeY = height = getEntitySize().height;
-
-		//reload texture as the meta is set afterwards
-		BufferedImage[] img = new BufferedImage[]{getEntityTexture()};
-		animation.setFrames(img);
-
+		
+		initFish();
+		
 		initHealth(3);
 
 	}
@@ -67,6 +62,7 @@ public class EntityFish extends EntityWaterCreature {
 	public void readFromSave(DataTag data) {
 		super.readFromSave(data);
 		meta = data.readInt("meta");
+		initFish();
 	}
 
 	@Override
@@ -105,11 +101,10 @@ public class EntityFish extends EntityWaterCreature {
 			this.remove = true;
 	}
 
-	@Override
-	public void onEntityHit(Player player) {
-		super.onEntityHit(player);
-		
-		System.out.println("in the fish face !");
+	private void initFish(){
+		entitySizeX = width = getEntitySize().width;
+		entitySizeY = height = getEntitySize().height;
+
+		reloadTexture();
 	}
-	
 }

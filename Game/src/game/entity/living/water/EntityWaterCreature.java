@@ -134,10 +134,4 @@ public class EntityWaterCreature extends EntityLiving {
 		bottomLeft = bl < 9 || bl > 10;
 		bottomRight = br < 9 || br > 10;
 	}
-	
-	@Override
-	public void onEntityHit(Player player) {
-		super.onEntityHit(player);
-	}
-
 }
