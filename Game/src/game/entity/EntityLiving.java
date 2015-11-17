@@ -139,8 +139,6 @@ public class EntityLiving extends MapObject{
 	 */
 	public void kill(Player player){
 		
-		System.out.println("kill entityliving");
-		
 		if(player!= null)
 			if(getDrops() != null){
 				int index;
