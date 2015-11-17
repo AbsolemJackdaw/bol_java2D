@@ -127,10 +127,9 @@ public abstract class MapObject {
 		this.world = world;
 		currentAction = -1;
 
-		if(hasAnimation()){
-			animation = new Animation();
-		}else{
-			animation = new Animation();
+		animation = new Animation();
+
+		if(!hasAnimation()){
 			BufferedImage[] bi = new BufferedImage[]{getEntityTexture()};
 			animation.setFrames(bi);
 			animation.setDelay(Animation.NONE);
@@ -358,7 +357,7 @@ public abstract class MapObject {
 		this.xScreen = x;
 		this.yScreen = y;
 	}
-	
+
 	/**
 	 * Sets the map object to the row and collumn
 	 */
@@ -451,7 +450,7 @@ public abstract class MapObject {
 	public EntityDeathAnim getDeathAnimation() {
 		return new EntityDeathAnim((World) world, Entity.DEATHANIM_MEAT);
 	}
-	
+
 	/**
 	 * Wether the entity should continue updating outside of the player's rendering range 
 	 */

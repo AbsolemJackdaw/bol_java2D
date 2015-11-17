@@ -69,18 +69,6 @@ public class EntityPig extends EntityLiving{
 		return drops;
 	}
 
-	public void kill(Player p)
-	{
-		if(p!= null)
-			if(p.setStackInNextAvailableSlot(getDrops()[rand.nextInt(drops.length)])){
-				this.remove = true;
-			}else{
-				health = maxHealth;
-			}
-		else
-			super.kill(p);
-	}
-
 	/**gets the entity's speed back to normal after it panics (/gets hit by the player)*/
 	private void calmDown(){
 

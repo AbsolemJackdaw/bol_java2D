@@ -205,9 +205,13 @@ public class Loading {
 
 				populateWorld(world);
 
-				Util.stopLoadIcon();
-
 				return null;
+			}
+			
+			@Override
+			protected void done() {
+				super.done();
+				Util.stopLoadIcon();
 			}
 		}.execute();
 

@@ -718,14 +718,19 @@ public class Player extends EntityLiving implements IInventory{
 
 	@Override
 	public boolean setStackInNextAvailableSlot(ItemStack item) {
+		
+		if(item == null)
+			return true;
+		
 		int extra = 0;
+		
 		if(armorItems[ItemArmor.EXTRA] != null){
 			ItemStack is = armorItems[ItemArmor.EXTRA];
 			Item i = is.getItem();
 			if(i instanceof ItemBelt)
 				extra = ((ItemBelt)i).getInventorySlots();
 		}
-
+		
 		for(int i = 0; i < 10+extra; i++)
 			if(getStackInSlot(i) != null){
 				if (inventory[i].getItem().getUIN().equals(item.getItem().getUIN()) && inventory[i].getItem().isStackable()){

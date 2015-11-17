@@ -21,7 +21,6 @@ public class EntityLiving extends MapObject{
 	public EntityLiving(GameWorld world, String uin) {
 		super(world, uin);
 
-		health = maxHealth;
 	}
 
 	@Override
@@ -146,14 +145,29 @@ public class EntityLiving extends MapObject{
 	 * Player can be null !!
 	 */
 	public void kill(Player player){
-		this.remove = true;
+
+		if(player!= null)
+			if(getDrops() != null)
+				if(player.setStackInNextAvailableSlot(getDrops()[rand.nextInt(getDrops().length)])){
+					this.remove = true;
+				}else{
+					health = maxHealth;
+				}
+			else
+				;
+		else
+			this.remove = true;
+	}
+
+	public ItemStack[] getDrops() {
+		return null;
 	}
 
 	@Override
 	public boolean hasAnimation() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean persistantUpdate() {
 		return true;
