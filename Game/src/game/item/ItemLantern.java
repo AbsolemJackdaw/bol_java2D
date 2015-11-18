@@ -104,14 +104,14 @@ public class ItemLantern extends Item implements IInventory {
 	public void writeToSave(DataTag tag) {
 		super.writeToSave(tag);
 		tag.writeInt("burntime", burnTime);
-		tag.writeInt("isLit", isLit() ? 1 : 0);
+		tag.writeBoolean("isLit", isLit());
 	}
 
 	@Override
 	public void readFromSave(DataTag tag) {
 		super.readFromSave(tag);
 		burnTime = tag.readInt("burntime");
-		setLit(tag.readInt("isLit") == 0 ? false : true);
+		setLit(tag.readBoolean("isLit"));
 	}
 
 	public boolean isLit() {

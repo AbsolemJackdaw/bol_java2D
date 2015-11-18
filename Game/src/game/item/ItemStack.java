@@ -52,6 +52,11 @@ public class ItemStack
 	public static ItemStack createFromSave(DataTag data){
 		String s = data.readString("uniqueItemName");
 		Item item = Items.getItemFromUIN(s);
+		
+		if(item == null){
+			System.out.println("the loaded itemstack was errored. " + s + " is not an item !");
+			return null;
+		}
 		int size = data.readInt("stacksize");
 		int dmg = data.readInt("dmg");
 		item.readFromSave(data);
