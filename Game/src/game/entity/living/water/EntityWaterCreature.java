@@ -13,12 +13,6 @@ public class EntityWaterCreature extends EntityLiving {
 	public EntityWaterCreature(GameWorld world, String uin) {
 		super(world, uin);
 		
-		entitySizeX = 32;
-		entitySizeY = 32;
-
-		width = 32;
-		height = 32;
-
 		moveSpeed = 0.07 + rand.nextDouble()/10;
 		maxSpeed = 0.4 + rand.nextDouble(); 
 		stopSpeed = 0.14;

@@ -102,20 +102,27 @@ public class Menu extends GameState{
 					@Override
 					protected Void doInBackground() throws Exception {
 
-						gsm.setState(GameStateManager.GAME);
+						try {
+							gsm.setState(GameStateManager.GAME);
+							
+							//new blank world
+							World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
-						
-						//new blank world
-						World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+							//read map index
+							Save.readRandomParts();
 
-						//read map index
-						Save.readRandomParts();
+							//load saves from world. if none, the basic map will be loaded 
+							Loading.startAtLastSavedLevel(gsm);
 
-						//load saves from world. if none, the basic map will be loaded 
-						Loading.startAtLastSavedLevel(gsm);
-
-						//initiate current world. sets new player 
-						currentWorld.init();
+							//initiate current world. sets new player 
+							currentWorld.init();
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+							System.out.println("an exception was cought trying to start up the game");
+							System.out.println("Exiting game");
+							System.exit(0);
+						}
 						
 						return null;
 					}

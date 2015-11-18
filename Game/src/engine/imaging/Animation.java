@@ -13,7 +13,7 @@ public class Animation {
 	private long delay;
 
 	private boolean playedOnce;
-	
+
 	public static final int NONE = -1;
 
 	private BufferedImage[] defaultAnim = Images.loadMultiImage("/images/default.png", 32, 0, 5);
@@ -24,11 +24,11 @@ public class Animation {
 		setFrames(defaultAnim);
 		setDelay(100);
 	}
-	
+
 	public BufferedImage[] getDefaultAnimation(){
 		return defaultAnim;
 	}
-	
+
 	public boolean hasFrames(){
 		return frames != null;
 	}
@@ -57,11 +57,17 @@ public class Animation {
 		currentFrame = i;
 	}
 
+	/**
+	 * Should be called only once !
+	 * contains a failsafe check anyway to enable image changing updates (like bats)
+	 */
 	public void setFrames(BufferedImage[] frames) {
-		this.frames = frames;
-		currentFrame = 0;
-		startTime = System.nanoTime();
-		playedOnce = false;
+		if(this.frames == null || this.frames != null && !this.frames.equals(frames)){
+			this.frames = frames;
+			currentFrame = 0;
+			startTime = System.nanoTime();
+			playedOnce = false;
+		}
 	}
 
 	@Override

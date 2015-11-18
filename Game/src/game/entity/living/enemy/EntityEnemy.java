@@ -123,7 +123,7 @@ public class EntityEnemy extends EntityLiving {
 		flinching = true;
 	}
 	
-	public int getAttackDamage(){
+	public float getAttackDamage(){
 		return 1;
 	}
 	

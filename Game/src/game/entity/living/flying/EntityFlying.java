@@ -13,12 +13,6 @@ public class EntityFlying extends EntityLiving {
 	public EntityFlying(GameWorld world, String uin) {
 		super(world, uin);
 		
-		entitySizeX = 32;
-		entitySizeY = 32;
-
-		width = 32;
-		height = 32;
-
 		moveSpeed = 0.07 + rand.nextDouble()/10;
 		maxSpeed = 0.4 + rand.nextDouble(); 
 		stopSpeed = 0.14;
@@ -39,7 +33,7 @@ public class EntityFlying extends EntityLiving {
 	public void update() {
 		super.update();
 		
-		if(tileMap.getBlockID(currentRow, currentColumn) == 1){
+		if(tileMap.getBlockID(currentRow, currentColumn) < 6){
 			
 			if(dy == 0){
 				if(moveTimerYCalculator == 0){
@@ -99,14 +93,33 @@ public class EntityFlying extends EntityLiving {
 		
 		super.getNextPosition();
 		
-		if(up && rand.nextInt(50) == 0){
+		if(up && rand.nextInt(20) == 0){
 			dy -= moveSpeed;
 			if(dy < -maxSpeed)
 				dy = -maxSpeed;
-		}else if (down && rand.nextInt(50) == 0){
+		}else if (down && rand.nextInt(20) == 0){
 			dy += moveSpeed;
 			if(dy > maxSpeed)
 				dy = maxSpeed;
 		}
+	}
+	
+	@Override
+	public void calculateCorners(double x, double y) {
+
+		final int leftTile = (int) (x - (entitySizeX / 2)) / tileSize;
+		final int rightTile = (int) ((x + (entitySizeX / 2)) - 1) / tileSize;
+		final int topTile =  (int) (y - (entitySizeY / 2)) / tileSize;
+		final int bottomTile = (int) ((y + (entitySizeY / 2)) - 1) / tileSize;
+
+		final int tl = tileMap.getBlockID(leftTile, topTile);
+		final int tr = tileMap.getBlockID(rightTile, topTile);
+		final int bl = tileMap.getBlockID(leftTile, bottomTile);
+		final int br = tileMap.getBlockID(rightTile, bottomTile);
+
+		topLeft = tl > 6 ;
+		topRight = tr > 6;
+		bottomLeft = bl > 6;
+		bottomRight = br > 6;
 	}
 }
