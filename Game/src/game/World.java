@@ -102,7 +102,7 @@ public class World extends GameWorld{
 
 		displayGui(new GuiHud(this, player));
 
-		int mapHeight = (int)(tileMap.getYRows() * 32);
+//		int mapHeight = (int)(tileMap.getYRows() * 32);
 
 		backGrounds = new ArrayList<Background>();
 
