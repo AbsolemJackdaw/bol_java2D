@@ -13,8 +13,6 @@ import java.awt.image.BufferedImage;
 
 public class EntityBat extends EntityFlying {
 
-	private BufferedImage[] eye_LU;
-	private BufferedImage[] eye_LD;
 	private BufferedImage[] eye_RU;
 	private BufferedImage[] eye_RD;
 	private Animation eye;
@@ -22,8 +20,6 @@ public class EntityBat extends EntityFlying {
 	public EntityBat(World world, String uin) {
 		super(world, uin);
 
-		eye_LU = Images.loadMultiImage("/entity/bat/bat_eye_LU.png", 32, 0, 4);
-		eye_LD = Images.loadMultiImage("/entity/bat/bat_eye_LD.png", 32, 0, 4);
 		eye_RU = Images.loadMultiImage("/entity/bat/bat_eye_RU.png", 32, 0, 4);
 		eye_RD = Images.loadMultiImage("/entity/bat/bat_eye_RD.png", 32, 0, 4);
 
@@ -53,13 +49,9 @@ public class EntityBat extends EntityFlying {
 	public void update() {
 		super.update();
 
-		if(up && left)
-			eye.setFrames(eye_LU);
-		if(up && right)
+		if(up && right || up && left)
 			eye.setFrames(eye_RU);
-		if(down && left)
-			eye.setFrames(eye_LD);
-		if(down && right)
+		if(down && right || down && left)
 			eye.setFrames(eye_RD);
 
 		eye.setFrame(getAnimation().getFrame());

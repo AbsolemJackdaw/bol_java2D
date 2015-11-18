@@ -17,7 +17,7 @@ public class EntityFish extends EntityWaterCreature {
 	public EntityFish(GameWorld world, String uin) {
 		super(world, uin);
 
-		meta = rand.nextInt(5);
+		meta = rand.nextInt(7);
 		
 		initFish();
 		
@@ -53,6 +53,10 @@ public class EntityFish extends EntityWaterCreature {
 			return new Dimension(26, 16);
 		case 4:
 			return new Dimension(21, 11);
+		case 5:
+			return new Dimension(21, 19);
+		case 6:
+			return new Dimension(32, 13);
 		}
 
 		return new Dimension(16, 16);

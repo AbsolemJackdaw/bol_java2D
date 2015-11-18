@@ -1,5 +1,6 @@
 package game.util;
 
+import engine.image.Images;
 import engine.window.GamePanel;
 import engine.window.gameAid.Utility;
 import engine.window.gameAid.Window;
@@ -93,7 +94,7 @@ public class Util {
 		Graphics2D g = img.createGraphics();
 
 		g.setColor(Color.red);
-		
+
 		for(int i = 0; i < max; i++){
 			BufferedImage theImg = Loading.stalactites[new Random().nextInt(Loading.stalactites.length)];
 			g.drawImage(theImg, (int) (width*i), 0, null);
@@ -106,8 +107,31 @@ public class Util {
 
 		return img;
 	}
-	
-	
+
+	/**
+	 * @return Bufferedimage with a height size of the tile map, and a screensize width.
+	 * @param y : height of the tilemap
+	 */
+	public static BufferedImage generateGeneralBackground(){
+
+		double width = 32;
+		double maxX = (Window.getWidth() / width) + 2; //+2 is error margin
+		double maxY = (Window.getHeight() / width) + 2; //+2 is error margin
+
+		BufferedImage img = new BufferedImage(GamePanel.WIDTH, GamePanel.HEIGHT, BufferedImage.TYPE_INT_ARGB);
+
+		BufferedImage tile = Images.loadImage("/background/cave_bg_tile.png");
+
+		Graphics2D g = img.createGraphics();
+
+		for(int j = 0; j < maxY; j++)
+			for(int i = 0; i < maxX; i++){
+				g.drawImage(tile, (int) (width*i), (int)(width*j), null);
+			}
+
+		return img;
+	}
+
 	/**
 	 * @return Bufferedimage with a height size of the tile map, and a screensize width.
 	 * @param y : height of the tilemap
@@ -121,7 +145,7 @@ public class Util {
 		BufferedImage img = new BufferedImage(GamePanel.WIDTH, y, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g = img.createGraphics();
-		
+
 		for(int i = 0; i < max; i++){
 			BufferedImage theImg = Loading.stalactites[new Random().nextInt(Loading.stalactites.length)];
 			g.drawImage(theImg, (int) (width*i), 0, null);
@@ -134,7 +158,7 @@ public class Util {
 
 		return img;
 	}
-	
+
 	/**
 	 * rotates a bufferedimage.
 	 * 
@@ -143,53 +167,40 @@ public class Util {
 	 * image has to be square
 	 */
 	public static BufferedImage rotateImage(BufferedImage item, double rotation){
-		
+
 		int size = item.getWidth() + 20;
-		
+
 		//create blank canvas that is bigger the the image drawn.
 		BufferedImage canvas = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-		
+
 		//get grapchics from the canvas
 		Graphics2D g2d = (Graphics2D) canvas.getGraphics();
-		
-//		g2d.setColor(new Color(0,0,1,0.5f));
-//		g2d.fillRect(0, 0, size, size);
+
+		//		g2d.setColor(new Color(0,0,1,0.5f));
+		//		g2d.fillRect(0, 0, size, size);
 
 		//rotate canvas internally
 		g2d.rotate(Math.toRadians(rotation), size/2, size/2);
-		
-//		g2d.setColor(new Color(0,1,0,0.5f));
-//		g2d.fillRect(0, 0, size, size);
-//		
-//		g2d.drawRect(0, size/2, size, 1);
-//		g2d.drawRect(size/2, 0, 1, size);
+
+		//		g2d.setColor(new Color(0,1,0,0.5f));
+		//		g2d.fillRect(0, 0, size, size);
+		//		
+		//		g2d.drawRect(0, size/2, size, 1);
+		//		g2d.drawRect(size/2, 0, 1, size);
 
 		//draw image centered, extra/2
 		g2d.drawImage(item, 10, 10, null);
-		
+
 		return canvas;
 	}
-	
-//	private static Thread load;
-//	private static LoadingIcon loading;
-	
+
 	public static void startLoadIcon(){
-		
 		GamePanelExtended.drawLoadingIcon = true;
-		
-//		loading = new LoadingIcon();
-//		loading.start();
-//
-//		load = new Thread(loading);
-//		load.start();
-		
 	}
-	
+
 	public static void stopLoadIcon(){
 		GamePanelExtended.drawLoadingIcon = false;
-
-//		loading.stop();
 	}
-	
-	
+
+
 }

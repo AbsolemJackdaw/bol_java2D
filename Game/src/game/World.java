@@ -105,6 +105,7 @@ public class World extends GameWorld{
 
 		backGrounds = new ArrayList<Background>();
 
+		backGrounds.add(new Background(Util.generateGeneralBackground()));
 		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 30), 2, 9, false, 10));
 		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 20), 5, 9, false, 10));
 		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 0), 9, 9, false, 10));
