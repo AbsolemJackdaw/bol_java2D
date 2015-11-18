@@ -120,7 +120,7 @@ public class World extends GameWorld{
 		bg = Util.generateStalactiteBackGround();
 		rescaleOp = new RescaleOp(0.4f, 15, null);
 		rescaleOp.filter(bg, bg);
-		backGrounds.add(new Background(bg, 0.3, 0, false, 10));
+		backGrounds.add(new Background(bg, 0.3, 0, false, 6));
 	}
 
 	BufferedImage lighting = null;
@@ -130,8 +130,12 @@ public class World extends GameWorld{
 	@Override
 	public void draw(Graphics2D g){
 
-		g.setColor(Color.gray.darker());
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		//no mroe need for these ? because the background is a custom image.
+		//no free space is left
+//		g.setColor(Color.gray.darker());
+//		g.fillRect(0, 0, WIDTH, HEIGHT);
+		
+		
 		g.setFont(Constants.FONT_ITEMS);
 
 		//draw backgrounds first. all other pictures will be drawn in front of it
