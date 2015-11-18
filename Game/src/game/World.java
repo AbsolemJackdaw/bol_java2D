@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 
 import engine.game.GameWorld;
@@ -106,9 +107,20 @@ public class World extends GameWorld{
 		backGrounds = new ArrayList<Background>();
 
 		backGrounds.add(new Background(Util.generateGeneralBackground()));
-		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 30), 2, 9, false, 10));
-		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 20), 5, 9, false, 10));
-		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 0), 9, 9, false, 10));
+//		backGrounds.add(new Background(Util.generateStalactiteBackGround(), 0.1, 0, false, 1));
+//		backGrounds.add(new Background(Util.generateStalactiteBackGround(), 0.3, 0, false, 10));
+		//		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 0), 1, 0, false, 10));
+
+		BufferedImage bg = Util.generateStalactiteBackGround();
+		
+		RescaleOp rescaleOp = new RescaleOp(0.5f, 15, null);
+		rescaleOp.filter(bg, bg);
+		backGrounds.add(new Background(bg, 0.1, 0, false, 1));
+		
+		bg = Util.generateStalactiteBackGround();
+		rescaleOp = new RescaleOp(0.4f, 15, null);
+		rescaleOp.filter(bg, bg);
+		backGrounds.add(new Background(bg, 0.3, 0, false, 10));
 	}
 
 	BufferedImage lighting = null;
@@ -226,7 +238,7 @@ public class World extends GameWorld{
 		if(guiDisplaying == null){
 			guiDisplaying = new GuiHud(this, player);
 		}
-		
+
 		double randOff = 0;
 
 		if(offset > 0){

@@ -41,7 +41,6 @@ public class Menu extends GameState{
 	@Override
 	public void draw(Graphics2D g){
 
-
 		g.setColor(Color.black);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 

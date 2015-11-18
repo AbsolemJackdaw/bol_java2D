@@ -22,9 +22,6 @@ public class GuiKeyBinds extends Gui {
 	@Override
 	public void draw(Graphics2D g) {
 
-//		g.setColor(Color.black);
-//		g.fillRect(0, 0, WIDTH, HEIGHT);
-
 		g.setFont(Constants.FONT_HEADER_SMALL);
 
 		g.setColor(Constants.COLOR_GENERAL);

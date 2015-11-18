@@ -29,7 +29,7 @@ import javax.swing.SwingWorker;
 
 public class Loading {
 
-	public static BufferedImage[] stalactites = new BufferedImage[5];
+	public static BufferedImage[] stalactites = new BufferedImage[14];
 
 	//both ints are saved in World
 	/**always increases. tracks the number of unlocked maps*/
