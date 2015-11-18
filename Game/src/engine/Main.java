@@ -14,11 +14,6 @@ public class Main {
 	 */
 	public static void main(final String[] args) {
 
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				
 				new Window();
 				
 				final JFrame window = new JFrame(args[0]);
@@ -30,9 +25,6 @@ public class Main {
 				window.pack();
 				window.setVisible(true);
 				window.setLocationRelativeTo(null);				
-			}
-		});
-
 	}
 
 	private static Container getContainerClass(String path){
