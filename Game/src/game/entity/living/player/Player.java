@@ -747,9 +747,9 @@ public class Player extends EntityLiving implements IInventory{
 
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack) {
-		if(inventory[slot] == null)
+		if(inventory[slot] == null && stack != null)
 			inventory[slot] = stack.copy();
-		else if (stack == null ){ //implies && inventory[slot] != null, because its an else statement
+		else if (stack == null ){
 			inventory[slot] = null;
 			return;
 		}

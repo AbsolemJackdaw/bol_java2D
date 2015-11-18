@@ -78,7 +78,8 @@ public class Items {
 			registerItem(bomb);
 			registerItem(bomb_better);
 			registerItem(bomb_ultra);
-
+			registerItem(meat_fish_raw);
+			registerItem(meat_fish);
 
 	}
 
