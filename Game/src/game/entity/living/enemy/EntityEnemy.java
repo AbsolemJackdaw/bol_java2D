@@ -1,133 +1,69 @@
 package game.entity.living.enemy;
 
 import game.World;
-import game.entity.EntityAI;
 import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
-import game.item.ItemTool;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 
 public class EntityEnemy extends EntityLiving {
-
-	BufferedImage[] entityTexture;
-
-	private boolean flinching;
-	private int flinchTimer = 100;
 
 	private int attackTimer;
 
 	/**set when attacked*/
 	private int followTimer;
 
-	EntityAI ai = new EntityAI();
+	protected boolean isHit;
+
+	protected int endAgressionChance;
 
 	public EntityEnemy(World world, String uin) {
 		super(world, uin);
 
-		moveSpeed = 0.2; // inital walking speed. you speed up as you walk
-		maxSpeed = 0.5; // change to jump farther and walk faster
-		stopSpeed = 0.4;
-		fallSpeed = 0.085; // affects falling and jumping
-		maxFallSpeed = 4.0;
-		jumpStart = -4.8;
-		stopJumpSpeed = 0.3;
-
-		width = 32;
-		height = 32;
-		entitySizeX = 20;
-		entitySizeY = 32;
-		right = true;
-	}
-
-	public EntityEnemy setTexture(BufferedImage[] texture){
-		entityTexture = texture;
-		return this;
+		endAgressionChance = 200;
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		if(flinching)
-			flinchTimer++;
-		if(flinchTimer > 50){
-			flinchTimer = 0;
-			flinching = false;
-		}
-		if(flinchTimer % 5 == 0)
-		{
-			super.draw(g);
-		}
+		super.draw(g);
 	}
 
 	@Override
 	public void onEntityHit(Player player){
+		if(endAgressionChance > 0)
+			isHit = true;
 
-		if(player != null){
-			
-		}
-		
-		Player p = (Player)player;
-		
-		int bonus = 0;
-		if(p.invArmor.getWeapon() != null && p.invArmor.getWeapon().getItem() instanceof ItemTool){
-			ItemTool weapon = (ItemTool) p.invArmor.getStackInSlot(3).getItem();
-			bonus = weapon.getAttackDamage();
-			p.invArmor.getWeapon().damageStack(1);
-			flinching = true;
-		}
-
-		hurtEntity(p.getAttackDamage() + bonus, p);
-
+		super.onEntityHit(player);
 	}
 
 	@Override
 	public void update() {
 		super.update();
 
-		if(followPlayer())
+		if(isHit)
 			attackTimer++;
+		else
+			attackTimer = 0;
 
-		if(attackTimer % 300 == 0){ //5 seconds
-			Player p = this.getWorld().getPlayer();
-			if(getRectangle().intersects(p.getRectangle())){
-				//TODO implement correctly !
-				p.hurtEntity(0, null);
+		if(isAgressive()){
+			AI.setPathToPlayer(this);
+			
+			if(attackTimer % 300 == 0){ //5 seconds
+				Player p = getWorld().getPlayer();
+				if(getRectangle().intersects(p.getRectangle())){
+					//TODO implement correctly !
+					p.hurtEntity(0, null);
+				}
 			}
-		}
-
-		if(followTimer > 0){
-			ai.setPathToPlayer(this);
-			followTimer--;
-		}
-
-		if(health <= 0){
-			this.remove = true;
 		}
 	}
 
 	public boolean isAgressive(){
-		return false;
+		return isHit;
 	}
 
-	protected boolean followPlayer(){
-		return followTimer > 0;
-	}
-
-	protected void setFollowing(int followTimer){
-		this.followTimer = followTimer;
-	}
-
-	protected void setFlinching() {
-		flinching = true;
-	}
-	
 	public float getAttackDamage(){
 		return 1;
-	}
-	
-	public World getWorld(){
-		return (World)this.world;
 	}
 }

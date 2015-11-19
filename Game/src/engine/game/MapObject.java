@@ -337,10 +337,6 @@ public abstract class MapObject {
 				|| (((yScreen + ymap) - height) > GamePanel.HEIGHT);
 	}
 
-	public void setDown(boolean b) {
-		down = b;
-	}
-
 	public void setJumping(boolean b) {
 		jumping = b;
 	}
@@ -369,7 +365,7 @@ public abstract class MapObject {
 	//facing has to be set manually in the entity class
 	public void setLeft(boolean b) {
 		left = b;
-		
+
 		if(right) 
 			right = !b;
 	}
@@ -382,6 +378,14 @@ public abstract class MapObject {
 
 	public void setUp(boolean b) {
 		up = b;
+		if(down)
+			down = !b;
+	}
+	
+	public void setDown(boolean b) {
+		down = b;
+		if(up)
+			up = !b;
 	}
 
 	public void setVector(double dx, double dy) {

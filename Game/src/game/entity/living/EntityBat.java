@@ -3,8 +3,7 @@ package game.entity.living;
 import engine.image.Images;
 import engine.imaging.Animation;
 import game.World;
-import game.entity.living.enemy.IEnemy;
-import game.entity.living.flying.EntityFlying;
+import game.entity.living.enemy.EntityEnemy;
 import game.item.ItemStack;
 import game.item.Items;
 
@@ -12,7 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 
-public class EntityBat extends EntityFlying implements IEnemy{
+public class EntityBat extends EntityEnemy{
 
 	private BufferedImage[] eye_RU;
 	private BufferedImage[] eye_RD;
@@ -38,6 +37,21 @@ public class EntityBat extends EntityFlying implements IEnemy{
 		width = 32;
 		height = 32;
 
+		moveSpeed = 0.07 + rand.nextDouble()/10;
+		maxSpeed = 0.4 + rand.nextDouble(); 
+		stopSpeed = 0.14;
+		fallSpeed = 0.0; 
+		maxFallSpeed = 0.0;
+		jumpStart = 0;
+		stopJumpSpeed = 0;
+
+		boolean b = rand.nextBoolean();
+		facingRight = b;
+		right = b;
+		left = !b;
+		up = b;
+		down = !b;
+
 	}
 
 	@Override
@@ -50,26 +64,52 @@ public class EntityBat extends EntityFlying implements IEnemy{
 	public void update() {
 		super.update();
 
+		System.out.println(isAgressive() + " " + facingRight);
+		System.out.println(right + " " + left + " " + up + " " + down);
+		System.out.println(knockBack + " " + isKnockedBack());
+		
+		if(tileMap.getBlockID(currentRow, currentColumn) < 6 && !isAgressive())
+			AI.swimOrFly(this);
+
 		if(up && right || up && left)
 			eye.setFrames(eye_RU);
 		if(down && right || down && left)
 			eye.setFrames(eye_RD);
 
 		eye.setFrame(getAnimation().getFrame());
+	}
+
+	@Override
+	public void getNextPosition() {
+		super.getNextPosition();
 		
-		if(isHit)
-			if(rand.nextInt(200) == 0)
-				isHit = false;
+		AI.getNextPositionFlying(this, 20);
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		super.draw(g);
-		super.draw(g, eye);
+		
+		if(getHurtTimer()%5 == 0)
+			super.draw(g, eye);
 	}
 
 	@Override
-	public boolean isAggressive() {
-		return isHit;
+	public void calculateCorners(double x, double y) {
+
+		final int leftTile = (int) (x - (entitySizeX / 2)) / tileSize;
+		final int rightTile = (int) ((x + (entitySizeX / 2)) - 1) / tileSize;
+		final int topTile =  (int) (y - (entitySizeY / 2)) / tileSize;
+		final int bottomTile = (int) ((y + (entitySizeY / 2)) - 1) / tileSize;
+
+		final int tl = tileMap.getBlockID(leftTile, topTile);
+		final int tr = tileMap.getBlockID(rightTile, topTile);
+		final int bl = tileMap.getBlockID(leftTile, bottomTile);
+		final int br = tileMap.getBlockID(rightTile, bottomTile);
+
+		topLeft = tl > 6 ;
+		topRight = tr > 6;
+		bottomLeft = bl > 6;
+		bottomRight = br > 6;
 	}
 }

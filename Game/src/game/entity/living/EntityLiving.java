@@ -8,7 +8,6 @@ import engine.music.Music;
 import engine.save.DataTag;
 import game.World;
 import game.entity.EntityMovement;
-import game.entity.living.enemy.IEnemy;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.ItemTool;
@@ -21,8 +20,8 @@ public class EntityLiving extends MapObject{
 	private boolean flicker;
 	private int flickerTimer = 100;
 
-
-	private double knockBackStart = 20;
+	private double knockBackStart = 10;
+	
 	/**
 	 * counter set by knockbackstart that counts down to how long this entity is knocked back.
 	 * while this happens, the moveSpeed is replaced by knockBackForce
@@ -36,37 +35,29 @@ public class EntityLiving extends MapObject{
 	private double defMaxSpeed;
 	private double defMoveSpeed;
 
-	private	final IEnemy enemy;
-	
-	protected EntityMovement AI = new EntityMovement();
-
-	protected boolean isHit;
+	protected EntityMovement AI;
 
 	public EntityLiving(GameWorld world, String uin) {
 		super(world, uin);
 
 		knockBackForce = 3d;
-		
-		EntityLiving el = this;
-		if(el instanceof IEnemy)
-			enemy = (IEnemy)el;
-		else
-			enemy = null;
+		AI = new EntityMovement();
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 
-		if(flickerTimer % 5 == 0)
-		{
+		if(flickerTimer % 5 == 0){
 			super.draw(g);
 		}
 	}
 
+	protected int getHurtTimer(){
+		return flickerTimer;
+	}
+	
 	public void hurtEntity(float f, Player player){
 
-		isHit = true;
-		
 		Music.play(getEntityHitSound());
 
 		health -= f;
@@ -162,11 +153,6 @@ public class EntityLiving extends MapObject{
 				knockBack = 0;
 			}
 
-		if(isEnemy()){
-			if(enemy.isAggressive())
-				AI.setPathToPlayer(this);
-		}
-
 	}
 
 	public void initMaxSpeed(double speed){
@@ -252,14 +238,14 @@ public class EntityLiving extends MapObject{
 
 	public void knockBack(){
 		knockedBack = true;
-		knockBack = 10; 
+		knockBack = knockBackStart; 
 	}
 
 	public boolean isKnockedBack(){
 		return knockedBack;
 	}
 	
-	public boolean isEnemy(){
-		return enemy != null;
+	public World getWorld() {
+		return (World)super.getWorld();
 	}
 }
