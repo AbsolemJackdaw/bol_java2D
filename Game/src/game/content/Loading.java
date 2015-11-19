@@ -10,12 +10,12 @@ import game.World;
 import game.content.WorldTask.EnumTask;
 import game.content.save.Save;
 import game.entity.Entity;
-import game.entity.EntityLiving;
 import game.entity.block.Blocks;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.block.breakable.BlockRock;
 import game.entity.block.breakable.BlockWood;
 import game.entity.block.environement.BlockInfoPane;
+import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.Items;
 import game.util.Constants;
@@ -130,6 +130,13 @@ public class Loading {
 
 	public static void gotoPreviousLevel(final GameStateManagerBase gsm){
 
+		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+		if(true){
+			currentWorld.getPlayer().setVector(7, -3);
+			return;
+		}
+		
+		
 		Util.startLoadIcon();
 
 		new SwingWorker<Void, Integer>() {
@@ -384,13 +391,14 @@ public class Loading {
 					world.listWithMapObjects.add(wood);
 				}
 
+				Util.stopLoadIcon();
+				
 				return null;
 			}
 			
 			@Override
 			protected void done() {
 				super.done();
-				Util.stopLoadIcon();
 			}
 		}.execute();
 	}

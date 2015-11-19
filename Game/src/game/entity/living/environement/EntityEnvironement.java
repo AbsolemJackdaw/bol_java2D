@@ -2,7 +2,7 @@ package game.entity.living.environement;
 
 import engine.game.GameWorld;
 import engine.save.DataTag;
-import game.entity.EntityLiving;
+import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 
 import java.awt.Graphics2D;

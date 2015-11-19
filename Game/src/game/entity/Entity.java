@@ -4,6 +4,7 @@ import engine.game.GameWorld;
 import game.World;
 import game.entity.living.EntityBat;
 import game.entity.living.EntityBomb;
+import game.entity.living.EntityLiving;
 import game.entity.living.EntityPig;
 import game.entity.living.EntityWorm;
 import game.entity.living.environement.EntityDeathAnim;

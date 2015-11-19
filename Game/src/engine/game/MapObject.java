@@ -369,6 +369,7 @@ public abstract class MapObject {
 	//facing has to be set manually in the entity class
 	public void setLeft(boolean b) {
 		left = b;
+		
 		if(right) 
 			right = !b;
 	}

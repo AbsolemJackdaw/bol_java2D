@@ -37,10 +37,10 @@ import engine.save.DataTag;
 import game.World;
 import game.content.Loading;
 import game.content.WorldTask;
-import game.entity.EntityLiving;
 import game.entity.EntityMovement;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.inventory.IInventory;
+import game.entity.living.EntityLiving;
 import game.item.Item;
 import game.item.ItemArmor;
 import game.item.ItemBelt;
@@ -247,7 +247,7 @@ public class Player extends EntityLiving implements IInventory{
 			setJumping(KeyHandler.isUpKeyPressed());
 			if (KeyHandler.isPressed(KeyHandler.SPACE))
 				setAttacking();
-			//TODO implement a x tick delay ?
+
 			if(KeyHandler.isHeldDown(KeyHandler.SPACE)){
 
 				if(delay <= 0){

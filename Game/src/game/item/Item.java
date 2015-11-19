@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import engine.keyhandlers.KeyHandler;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import game.World;
@@ -33,6 +34,7 @@ public class Item {
 		this.displayName = displayName;
 		tooltipList = new ArrayList<String>();
 		tooltipList.add(getDisplayName());
+		tooltipList.add(KeyHandler.getKeyName(KeyHandler.JUNK) + " to discard.");
 	}
 
 	public Item setItemDamage(int i){

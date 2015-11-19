@@ -4,7 +4,6 @@ import engine.game.GameWorld;
 import engine.image.Images;
 import engine.imaging.Animation;
 import game.entity.EntityAI;
-import game.entity.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.Items;

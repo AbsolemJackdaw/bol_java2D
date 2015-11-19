@@ -1,4 +1,4 @@
-package game.entity;
+package game.entity.living;
 
 import java.awt.Graphics2D;
 
@@ -6,6 +6,8 @@ import engine.game.GameWorld;
 import engine.game.MapObject;
 import engine.music.Music;
 import engine.save.DataTag;
+import game.World;
+import game.entity.living.enemy.IEnemy;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.ItemTool;
@@ -18,9 +20,25 @@ public class EntityLiving extends MapObject{
 	private boolean flicker;
 	private int flickerTimer = 100;
 
+
+	private double knockBackStart = 20;
+	/**
+	 * counter set by knockbackstart that counts down to how long this entity is knocked back.
+	 * while this happens, the moveSpeed is replaced by knockBackForce
+	 */
+	protected double knockBack;
+	private boolean knockedBack;
+
+	/**how hard the entity is knocked back*/
+	protected double knockBackForce;
+
+	private double defMaxSpeed;
+	private double defMoveSpeed;
+
 	public EntityLiving(GameWorld world, String uin) {
 		super(world, uin);
 
+		knockBackForce = 3d;
 	}
 
 	@Override
@@ -30,13 +48,14 @@ public class EntityLiving extends MapObject{
 		{
 			super.draw(g);
 		}
-
 	}
 
 	public void hurtEntity(float f, Player player){
+
+		Music.play(getEntityHitSound());
+
 		health -= f;
 		if(health <=0){
-			Music.play(getEntityHitSound());
 			this.remove=true;
 			kill(player);
 		}
@@ -101,6 +120,46 @@ public class EntityLiving extends MapObject{
 			flickerTimer = 0;
 			flicker = false;
 		}
+
+		if(knockedBack){
+			maxSpeed = knockBackForce;
+			moveSpeed = knockBackForce/5;
+			// if the player is looking left, knock the entity to the left
+			if(((World)world).getPlayer().facingRight){
+				setVector(5, -2);
+				setRight(true);
+				facingRight = true;
+			}
+			else{ 
+				setVector(-5, -2);
+				setLeft(true);
+				facingRight = false;
+			}
+		}
+
+		if(knockedBack)
+			if(knockBack > 0)
+				knockBack -= 0.5d;
+			else{
+				maxSpeed = defMaxSpeed;
+				moveSpeed = defMoveSpeed;
+				knockedBack = false;
+				knockBack = 0;
+			}
+		
+		EntityLiving living = this;
+		if(living instanceof IEnemy){
+			
+		}
+		
+	}
+
+	public void initMaxSpeed(double speed){
+		maxSpeed = defMaxSpeed = speed;
+	}
+
+	public void initMoveSpeed(double speed){
+		moveSpeed = defMoveSpeed = speed;
 	}
 
 	@Override
@@ -128,6 +187,8 @@ public class EntityLiving extends MapObject{
 		}
 
 		hurtEntity(wepDmg + dmg, p );
+
+		knockBack();
 	}
 
 
@@ -138,16 +199,16 @@ public class EntityLiving extends MapObject{
 	 * Player can be null !!
 	 */
 	public void kill(Player player){
-		
+
 		if(player!= null)
 			if(getDrops() != null){
 				int index;
-				
+
 				if(getDrops().length == 1)
 					index = 0;
 				else
 					index = rand.nextInt(getDrops().length);
-				
+
 				if(player.setStackInNextAvailableSlot(getDrops()[index])){
 					this.remove = true;
 				}else{
@@ -172,5 +233,14 @@ public class EntityLiving extends MapObject{
 	@Override
 	public boolean persistantUpdate() {
 		return true;
+	}
+
+	public void knockBack(){
+		knockedBack = true;
+		knockBack = 10; 
+	}
+
+	public boolean isKnockedBack(){
+		return knockedBack;
 	}
 }

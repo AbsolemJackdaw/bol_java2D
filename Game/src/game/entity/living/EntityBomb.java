@@ -5,7 +5,6 @@ import engine.game.MapObject;
 import engine.image.Images;
 import engine.music.Music;
 import game.World;
-import game.entity.EntityLiving;
 import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.environement.EntityExplosion;
 import game.entity.living.player.Player;

@@ -1,6 +1,7 @@
 package game.entity;
 
 import game.World;
+import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 import game.util.Constants;
 
@@ -20,7 +21,7 @@ public class EntityAI {
 			entityTimer++;
 		}
 
-		if(entityTimer > 250){
+		if(entityTimer > 50){
 			if(el.left){
 				el.left = false;
 				el.right = true;

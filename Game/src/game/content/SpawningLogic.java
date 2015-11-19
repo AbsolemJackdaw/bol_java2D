@@ -2,7 +2,7 @@ package game.content;
 
 import game.World;
 import game.entity.Entity;
-import game.entity.EntityLiving;
+import game.entity.living.EntityLiving;
 
 import java.util.Random;
 

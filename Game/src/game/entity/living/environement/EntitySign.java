@@ -1,7 +1,7 @@
 package game.entity.living.environement;
 
 import engine.game.GameWorld;
-import game.entity.EntityLiving;
+import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 
 public class EntitySign extends EntityLiving {

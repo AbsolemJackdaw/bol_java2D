@@ -3,8 +3,8 @@ package game.item;
 import engine.map.TileMap;
 import game.World;
 import game.entity.Entity;
-import game.entity.EntityLiving;
 import game.entity.living.EntityBomb;
+import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 import game.util.Util;
 

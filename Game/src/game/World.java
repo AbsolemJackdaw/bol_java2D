@@ -31,11 +31,11 @@ import game.content.SpawningLogic;
 import game.content.WorldTask;
 import game.content.save.Save;
 import game.entity.Entity;
-import game.entity.EntityLiving;
 import game.entity.block.Blocks;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.block.breakable.BlockLight;
 import game.entity.block.breakable.BlockOven;
+import game.entity.living.EntityLiving;
 import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.player.Player;
 import game.gui.Gui;
@@ -113,12 +113,12 @@ public class World extends GameWorld{
 
 		BufferedImage bg = Util.generateStalactiteBackGround();
 		
-		RescaleOp rescaleOp = new RescaleOp(0.5f, 15, null);
+		RescaleOp rescaleOp = new RescaleOp(0.4f, 15, null);
 		rescaleOp.filter(bg, bg);
 		backGrounds.add(new Background(bg, 0.1, 0, false, 1));
 		
 		bg = Util.generateStalactiteBackGround();
-		rescaleOp = new RescaleOp(0.4f, 15, null);
+		rescaleOp = new RescaleOp(0.5f, 15, null);
 		rescaleOp.filter(bg, bg);
 		backGrounds.add(new Background(bg, 0.3, 0, false, 6));
 	}

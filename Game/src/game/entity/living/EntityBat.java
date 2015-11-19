@@ -3,6 +3,7 @@ package game.entity.living;
 import engine.image.Images;
 import engine.imaging.Animation;
 import game.World;
+import game.entity.living.enemy.IEnemy;
 import game.entity.living.flying.EntityFlying;
 import game.item.ItemStack;
 import game.item.Items;
@@ -11,7 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 
-public class EntityBat extends EntityFlying {
+public class EntityBat extends EntityFlying implements IEnemy{
 
 	private BufferedImage[] eye_RU;
 	private BufferedImage[] eye_RD;

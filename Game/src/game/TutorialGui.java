@@ -82,23 +82,31 @@ public class TutorialGui extends GameState{
 			@Override
 			protected Void doInBackground() throws Exception {
 
-				gsm.setState(GameStateManager.GAME);
+				try {
 
-				//new blank world
-				World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+					gsm.setState(GameStateManager.GAME);
 
-				//no need to read any saves here !
-				//this screen pops up when no game has been played yet
-				//or no saves have been found
+					//new blank world
+					World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
-				if(currentChoice == 1) // 'No' option
-					currentWorld.loadMap(Loading.newMap());
-				else // 'Yes' option
-					currentWorld.loadMap("/maps/tutorial_island");
+					//no need to read any saves here !
+					//this screen pops up when no game has been played yet
+					//or no saves have been found
 
-				//initiate current world. sets new player 
-				currentWorld.init();
+					if(currentChoice == 1) // 'No' option
+						currentWorld.loadMap(Loading.newMap());
+					else // 'Yes' option
+						currentWorld.loadMap("/maps/tutorial_island");
 
+					//initiate current world. sets new player 
+					currentWorld.init();
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("an exception was cought trying to start up the game");
+					System.out.println("Exiting game");
+					System.exit(0);
+				}
 				return null;
 			}
 
