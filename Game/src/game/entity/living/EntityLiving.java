@@ -7,6 +7,7 @@ import engine.game.MapObject;
 import engine.music.Music;
 import engine.save.DataTag;
 import game.World;
+import game.entity.EntityMovement;
 import game.entity.living.enemy.IEnemy;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
@@ -35,10 +36,22 @@ public class EntityLiving extends MapObject{
 	private double defMaxSpeed;
 	private double defMoveSpeed;
 
+	private	final IEnemy enemy;
+	
+	protected EntityMovement AI = new EntityMovement();
+
+	protected boolean isHit;
+
 	public EntityLiving(GameWorld world, String uin) {
 		super(world, uin);
 
 		knockBackForce = 3d;
+		
+		EntityLiving el = this;
+		if(el instanceof IEnemy)
+			enemy = (IEnemy)el;
+		else
+			enemy = null;
 	}
 
 	@Override
@@ -52,6 +65,8 @@ public class EntityLiving extends MapObject{
 
 	public void hurtEntity(float f, Player player){
 
+		isHit = true;
+		
 		Music.play(getEntityHitSound());
 
 		health -= f;
@@ -146,12 +161,12 @@ public class EntityLiving extends MapObject{
 				knockedBack = false;
 				knockBack = 0;
 			}
-		
-		EntityLiving living = this;
-		if(living instanceof IEnemy){
-			
+
+		if(isEnemy()){
+			if(enemy.isAggressive())
+				AI.setPathToPlayer(this);
 		}
-		
+
 	}
 
 	public void initMaxSpeed(double speed){
@@ -193,7 +208,7 @@ public class EntityLiving extends MapObject{
 
 
 	/**
-	 * Method called when the entity has no mroe health left.
+	 * Method called when the entity has no more health left.
 	 * Use this method to set any drops in the player inventory.
 	 * if no super call is used, do not forget to set this.remove to true !
 	 * Player can be null !!
@@ -242,5 +257,9 @@ public class EntityLiving extends MapObject{
 
 	public boolean isKnockedBack(){
 		return knockedBack;
+	}
+	
+	public boolean isEnemy(){
+		return enemy != null;
 	}
 }

@@ -1,5 +1,7 @@
 package game.entity;
 
+import game.World;
+import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 
 
@@ -9,7 +11,7 @@ public class EntityMovement {
 	 * This is a helper class and methods can be used to implement some basic entity/player movement.
 	 */
 	public EntityMovement() {
-		
+
 	}
 
 	/**
@@ -55,7 +57,7 @@ public class EntityMovement {
 				player.dy = player.maxFallSpeed;
 		}
 	}
-	
+
 	public void doPlayerWaterMovement(Player player){
 		if (player.left) {
 			player.dx -= player.moveSpeed/2;
@@ -79,7 +81,7 @@ public class EntityMovement {
 			player.dy -= player.moveSpeed/2;
 			if (player.dy < -player.maxSpeed/2)
 				player.dy = -player.maxSpeed/2;
-			
+
 		} else if (!player.up && player.falling) {
 			player.dy += player.moveSpeed/2;
 			if (player.dy > player.maxSpeed/2)
@@ -95,4 +97,21 @@ public class EntityMovement {
 		}
 	}
 
+	public void setPathToPlayer(EntityLiving el){
+
+		World world = (World)el.getWorld();
+
+		Player p = world.getPlayer();
+
+		if(p.xScreen < el.xScreen)
+			el.dx-=el.moveSpeed;
+		else
+			el.dx+=el.moveSpeed;
+
+		if(p.yScreen < el.yScreen)
+			el.dy-=el.fallSpeed;
+		else
+			el.dy+= el.fallSpeed;
+
+	}
 }

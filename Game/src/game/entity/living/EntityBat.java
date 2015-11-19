@@ -56,11 +56,20 @@ public class EntityBat extends EntityFlying implements IEnemy{
 			eye.setFrames(eye_RD);
 
 		eye.setFrame(getAnimation().getFrame());
+		
+		if(isHit)
+			if(rand.nextInt(200) == 0)
+				isHit = false;
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		super.draw(g, eye);
+	}
+
+	@Override
+	public boolean isAggressive() {
+		return isHit;
 	}
 }

@@ -1,8 +1,6 @@
 package game.entity;
 
-import game.World;
 import game.entity.living.EntityLiving;
-import game.entity.living.player.Player;
 import game.util.Constants;
 
 
@@ -116,24 +114,6 @@ public class EntityAI {
 				el.right = false;
 				el.facingRight = false;
 			}
-
-	}
-
-	public void setPathToPlayer(EntityLiving el){
-
-		World world = (World)el.getWorld();
-
-		Player p = world.getPlayer();
-
-		if(p.xScreen < el.xScreen)
-			el.dx-=el.moveSpeed*1.5d;
-		else
-			el.dx+=el.moveSpeed*1.5d;
-
-		if(p.yScreen < el.yScreen)
-			el.dy-=el.fallSpeed*1.5d;
-		else
-			el.dy+= el.fallSpeed*1.5d;
 
 	}
 
