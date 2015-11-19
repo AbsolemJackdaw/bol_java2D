@@ -35,52 +35,7 @@ public class EntityWaterCreature extends EntityLiving {
 		
 		if(tileMap.getBlockID(currentRow, currentColumn) == 10 || tileMap.getBlockID(currentRow, currentColumn) == 9){
 			
-			if(dy == 0){
-				if(moveTimerYCalculator == 0){
-					moveTimerYCalculator = moveTimerY;
-				}
-				
-				if(moveTimerYCalculator - moveTimerY >= 20){
-					up = !up;
-					down = !down;
-					moveTimerYCalculator = 0;
-				}
-			}
-			
-			if(dx == 0){
-				if(moveTimerXCalculator == 0){
-					moveTimerXCalculator = moveTimerX;
-				}
-				
-				if(moveTimerXCalculator - moveTimerX >= 20){
-					left = !left;
-					right = facingRight = !right;
-					moveTimerXCalculator = 0;
-				}
-			}
-			
-			if(moveTimerY == 0){
-				moveTimerY = rand.nextInt(300) + 300;
-				
-				if(rand.nextInt(2) == 0){
-					up = !up;
-					down = !down;
-					moveTimerYCalculator = 0;
-				}
-			}
-			
-			if(moveTimerX == 0){
-				moveTimerX = rand.nextInt(400) + 200;
-				
-				if(rand.nextInt(2) == 0){
-					left = !left;
-					right = facingRight = !right;
-					moveTimerXCalculator = 0;
-				}
-			}
-			
-			moveTimerY--;
-			moveTimerX--;
+			AI.swimOrFly(this);
 			
 		}else{
 			

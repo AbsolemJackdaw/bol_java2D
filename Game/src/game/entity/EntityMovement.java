@@ -115,8 +115,6 @@ public class EntityMovement {
 		else
 			el.setDown(true);
 
-//		System.out.println(el.right + " " + el.left + " " + el.up + " " + el.down);
-
 	}
 
 	private int moveTimerY = 0;
@@ -175,7 +173,7 @@ public class EntityMovement {
 	}
 
 	public void getNextPositionFlying(EntityLiving el, int wait){
-		System.out.println(el.dy + el.dx);
+		System.out.println(el.dy + " " + el.dx);
 		if(el.up && Constants.RANDOM.nextInt(wait) == 0){
 			el.dy -= el.moveSpeed;
 			if(el.dy < -el.maxSpeed)

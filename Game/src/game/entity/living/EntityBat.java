@@ -37,8 +37,8 @@ public class EntityBat extends EntityEnemy{
 		width = 32;
 		height = 32;
 
-		moveSpeed = 0.07 + rand.nextDouble()/10;
-		maxSpeed = 0.4 + rand.nextDouble(); 
+		initMoveSpeed(0.07 + rand.nextDouble()/10);
+		initMaxSpeed(0.4 + rand.nextDouble());
 		stopSpeed = 0.14;
 		fallSpeed = 0.0; 
 		maxFallSpeed = 0.0;
@@ -64,11 +64,7 @@ public class EntityBat extends EntityEnemy{
 	public void update() {
 		super.update();
 
-		System.out.println(isAgressive() + " " + facingRight);
-		System.out.println(right + " " + left + " " + up + " " + down);
-		System.out.println(knockBack + " " + isKnockedBack());
-		
-		if(tileMap.getBlockID(currentRow, currentColumn) < 6 && !isAgressive())
+		if(tileMap.getBlockID(currentRow, currentColumn) < 6)
 			AI.swimOrFly(this);
 
 		if(up && right || up && left)
