@@ -80,4 +80,21 @@ public class ItemStack
 		
 		return stack;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(obj instanceof ItemStack){
+			ItemStack compared = (ItemStack)obj;
+			if(compared.item != null){
+				if(compared.item.getUIN().equals(item.getUIN())){
+					if(compared.damage == damage){
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
 }

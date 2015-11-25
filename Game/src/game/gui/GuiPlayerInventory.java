@@ -10,13 +10,16 @@ import game.item.ItemArmor;
 import game.item.ItemBelt;
 import game.item.ItemStack;
 import game.item.ItemTool;
-import game.item.Items;
 import game.item.crafting.Crafting;
 import game.util.Constants;
+import game.util.Util;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.List;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 
 public class GuiPlayerInventory extends GuiContainer {
@@ -25,6 +28,10 @@ public class GuiPlayerInventory extends GuiContainer {
 
 	private final int[] pos = new int[]{centerX + 72, centerY-4};
 
+	private int extra;
+
+	private ArrayList<String> text;
+
 	public GuiPlayerInventory(World world, Player p) {
 		super(world, p);
 
@@ -32,8 +39,19 @@ public class GuiPlayerInventory extends GuiContainer {
 
 		secondairyInventory = p.invArmor.getInventory();
 
-		buttonList.add(new Button(centerX - 50, centerY + 13, Items.craftTable.getTexture()));
-		buttonList.add(new Button(centerX - 18 - 50, centerY + 13, Items.stick.getTexture()));
+		//		buttonList.add(new Button(centerX - 50, centerY + 13, Items.craftTable.getTexture()));
+		//		buttonList.add(new Button(centerX - 18 - 50, centerY + 13, Items.stick.getTexture()));
+
+		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
+			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
+			Item i = is.getItem();
+			if(i instanceof ItemBelt){
+				int dex = ((ItemBelt)i).getInventorySlots();
+				extra = dex;
+			}
+		}
+
+		text  = new ArrayList<String>();
 	}
 
 	@Override
@@ -45,15 +63,6 @@ public class GuiPlayerInventory extends GuiContainer {
 		g.drawImage(player.playerSheet.get(2)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
 		g.drawImage(player.playerSheet.get(3)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
 
-		int extra = 0;
-		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
-			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
-			Item i = is.getItem();
-			if(i instanceof ItemBelt){
-				int dex = ((ItemBelt)i).getInventorySlots();
-				extra = dex;
-			}
-		}
 		if(extra == 5)
 			g.drawImage(img.getSubimage(79, 97, 102, 22), GamePanel.WIDTH/2 - 150/2 + 44, GamePanel.HEIGHT/2 - 75/2 +65 ,null);
 		if(extra == 10)
@@ -86,19 +95,13 @@ public class GuiPlayerInventory extends GuiContainer {
 			}
 		}
 
-		for(Button b : buttonList){
-			b.draw(g);
+		if(text.isEmpty()){
+			text.add(KeyHandler.getKeyName(KeyHandler.JUNK) + ":discard");
+			text.add(KeyHandler.getKeyName(KeyHandler.CRAFT) + ":craft");
 		}
 
-		if(currentContainer == 2){
-			int i = 0;
-			for(ItemStack stack : Crafting.getRecipe(slot_index)){
-				if(stack != null){
-					stack.getItem().draw(g, centerX + 75 + ((i%3)*getSlotSpacingX()), centerY - 27 + ((i/3)*getSlotSpacingY()), stack);
-					i++;
-				}
-			}
-		}
+		Util.drawToolTipText(g, text, new int[]{GamePanel.WIDTH/2 - 150/2 - 1, GamePanel.HEIGHT/2 - 75/2 + 46}, null, null);
+
 	}
 
 	@Override
@@ -131,8 +134,55 @@ public class GuiPlayerInventory extends GuiContainer {
 		return isNotPlayerInventory() ? 1 : 2+getExtraSlots();
 	}
 
+	private boolean crafting;
+	private ItemStack[] craftables = new ItemStack[2];
+	private int[] craftSlots = new int[2];
+	
 	@Override
 	public void handleGuiKeyInput() {
+
+		if(KeyHandler.isPressed(KeyHandler.CRAFT)){
+
+			if(player.getStackInSlot(slot_index) != null && !crafting){
+
+				crafting = true;
+				
+				text.clear();
+				text.add("Combine");
+				text.add("" + player.getStackInSlot(slot_index).getItem().getDisplayName());
+				text.add("with...");
+
+				craftables[0] = player.getStackInSlot(slot_index).copy();
+				craftSlots[0] = slot_index;
+			}
+			
+			else if(player.getStackInSlot(slot_index) != null && crafting){
+
+					crafting = false;
+
+					text.clear();
+					text.add(KeyHandler.getKeyName(KeyHandler.JUNK) + ":discard");
+					text.add(KeyHandler.getKeyName(KeyHandler.CRAFT) + ":craft");
+					
+					craftables[1] = player.getStackInSlot(slot_index).copy();
+					craftSlots[1] = slot_index;
+
+					craft();
+			}
+
+			else if(player.getStackInSlot(slot_index) == null && crafting){
+				
+				craftables = new ItemStack[2];
+				craftSlots = new int[2];
+				
+				text.clear();
+				text.add(KeyHandler.getKeyName(KeyHandler.JUNK) + ":discard");
+				text.add(KeyHandler.getKeyName(KeyHandler.CRAFT) + ":craft");
+				
+				crafting = false;
+			}
+		}
+
 
 		if(currentContainer != 2){
 			super.handleGuiKeyInput();
@@ -175,70 +225,70 @@ public class GuiPlayerInventory extends GuiContainer {
 									}
 								}
 							}
-
 						}
 			}
 
-//			if(KeyHandler.isPressed(KeyHandler.PLACE) && XboxController.controller != null || KeyHandler.isValidationKeyPressed()){
-//
-//				if(player.getStackInSlot(slot_index) != null){
-//
-//					if(player.getStackInSlot(slot_index).getItem() != null){
-//						//place down blocks
-//						if(player.getStackInSlot(slot_index).getItem() instanceof ItemBlock){
-//							ItemBlock ib = (ItemBlock)player.getStackInSlot(slot_index).getItem();
-//							ib.placeBlock(player.getWorld().tileMap, player.getWorld(), player);
-//
-//							Util.decreaseStack(playerInventory, slot_index, 1);
-//						}
-//					}
-//				}
-//			}
+			//			if(KeyHandler.isPressed(KeyHandler.PLACE) && XboxController.controller != null || KeyHandler.isValidationKeyPressed()){
+			//
+			//				if(player.getStackInSlot(slot_index) != null){
+			//
+			//					if(player.getStackInSlot(slot_index).getItem() != null){
+			//						//place down blocks
+			//						if(player.getStackInSlot(slot_index).getItem() instanceof ItemBlock){
+			//							ItemBlock ib = (ItemBlock)player.getStackInSlot(slot_index).getItem();
+			//							ib.placeBlock(player.getWorld().tileMap, player.getWorld(), player);
+			//
+			//							Util.decreaseStack(playerInventory, slot_index, 1);
+			//						}
+			//					}
+			//				}
+			//			}
 		}
 
-		if(slot_index == 5 && currentContainer != 2){
-			if(!isNotPlayerInventory() ){
-				if(KeyHandler.isLeftKeyHit()){
-					currentContainer = 2;
-					slotSelected.y = getFirstSlotLocationY();
-					slotSelected.x = getFirstSlotLocationX();
-					slotIndex[1] = 0;
-					slotIndex[0] = 1;
-				}
-			}
-		}
+		//		if(slot_index == 5 && currentContainer != 2){
+		//			if(!isNotPlayerInventory() ){
+		//				if(KeyHandler.isLeftKeyHit()){
+		//					currentContainer = 2;
+		//					slotSelected.y = getFirstSlotLocationY();
+		//					slotSelected.x = getFirstSlotLocationX();
+		//					slotIndex[1] = 0;
+		//					slotIndex[0] = 1;
+		//				}
+		//			}
+		//		}
 
-		else if(currentContainer == 2){
-			if(KeyHandler.isPressed(KeyHandler.ESCAPE)){
-				world.displayGui(null);
-			}
-
-			else if(KeyHandler.isLeftKeyHit()){
-				if(slotIndex[0] == 1){
-					slotSelected.x -=getSlotSpacingX();
-					slotIndex[0]--;
-				}
-			}
-
-			else if(KeyHandler.isRightKeyHit()){
-				if(slotIndex[0] == 0){
-					slotSelected.x +=getSlotSpacingX();
-					slotIndex[0]++;
-				}
-
-				else if(slotIndex[0] == 1){
-					currentContainer = PLAYER_INVENTORY;
-					slotSelected.y = getFirstSlotLocationY() + getSlotSpacingY();
-					slotSelected.x = getFirstSlotLocationX();
-					slotIndex[0] = 0;
-					slotIndex[1] = 1;
-
-				}
-			}
-
-			else if(KeyHandler.isValidationKeyPressed())
-				buttonClicked(slot_index);
-		}
+		//		//crafting
+		//		else if(currentContainer == 2){
+		//			if(KeyHandler.isPressed(KeyHandler.ESCAPE)){
+		//				world.displayGui(null);
+		//			}
+		//
+		//			else if(KeyHandler.isLeftKeyHit()){
+		//				if(slotIndex[0] == 1){
+		//					slotSelected.x -=getSlotSpacingX();
+		//					slotIndex[0]--;
+		//				}
+		//			}
+		//
+		//			else if(KeyHandler.isRightKeyHit()){
+		//				if(slotIndex[0] == 0){
+		//					slotSelected.x +=getSlotSpacingX();
+		//					slotIndex[0]++;
+		//				}
+		//
+		//				else if(slotIndex[0] == 1){
+		//					currentContainer = PLAYER_INVENTORY;
+		//					slotSelected.y = getFirstSlotLocationY() + getSlotSpacingY();
+		//					slotSelected.x = getFirstSlotLocationX();
+		//					slotIndex[0] = 0;
+		//					slotIndex[1] = 1;
+		//
+		//				}
+		//			}
+		//
+		//			else if(KeyHandler.isValidationKeyPressed())
+		//				buttonClicked(slot_index);
+		//		}
 	}
 
 	@Override
@@ -256,7 +306,7 @@ public class GuiPlayerInventory extends GuiContainer {
 								secondairyInventory.setStackInSlot(slot_index, null);
 					}else{
 						//check if any space is left within the reachable inventory
-						for(int i = 0; i < 10; i++){
+						for(int i = 0; i < 10 + extra; i++){
 							if(playerInventory.getStackInSlot(i) == null){
 								player.setStackInSlot(i, secondairyInventory.getStackInSlot(slot_index).copy());
 								secondairyInventory.setStackInSlot(slot_index, null);
@@ -322,17 +372,12 @@ public class GuiPlayerInventory extends GuiContainer {
 				}
 	}
 
-	private void buttonClicked(int id){
-		if(id == 0){
-			Crafting.craft(player, Crafting.Sticks, false);
-		}
-		if(id == 1){
-			Crafting.craft(player, Crafting.CraftTable, false);
-		}
-	}
-
 	@Override
 	public int[] getToolTipWindowPosition() {
 		return pos;
+	}
+	
+	private void craft(){
+		Crafting.craft(player, craftables, craftSlots);
 	}
 }

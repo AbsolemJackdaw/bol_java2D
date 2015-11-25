@@ -3,6 +3,7 @@ package game.item.crafting;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.Items;
+import game.util.Util;
 
 public class Crafting {
 
@@ -23,51 +24,48 @@ public class Crafting {
 	public static final int Lantern = 0;
 
 	public static ItemStack[] getRecipe(int i){
-		ItemStack[] is = new ItemStack[10];
+		ItemStack[] is = new ItemStack[2];
 
 		switch(i){
 		case Sticks:
 			is[0] = new ItemStack(Items.woodChip, 1);
-			break;
-		case CraftTable:
-			is[0] = new ItemStack(Items.stick, 12);
-			is[1] = new ItemStack(Items.woodChip, 4);
-			break;
-		case Pickaxe:
-			is[0] = new ItemStack(Items.stick, 2);
-			is[1] = new ItemStack(Items.rock, 6);
-			break;
-		case CampFire:
-			is[0] = new ItemStack(Items.woodChip, 4);
-			is[1] = new ItemStack(Items.rock, 8);
-			is[2] = new ItemStack(Items.stick, 4);
+			is[1] = new ItemStack(Items.woodChip, 1);
 			break;
 		case Sword:
-			is[0] = new ItemStack(Items.stick, 2);
-			is[1] = new ItemStack(Items.woodChip, 1);
-			is[2] = new ItemStack(Items.rock, 8);
+			is[0] = new ItemStack(Items.stick);
+			is[1] = new ItemStack(Items.rock);
 			break;
-		case Axe:
-			is[0] = new ItemStack (Items.stick , 2);
-			is[1] = new ItemStack(Items.rock, 3);
-			break;
-		case Oven:
-			is[0] = new ItemStack (Items.rock , 20);
-			break;
-		case Belt:
-			is[0] = new ItemStack(Items.leather, 12);
-			break;
-		case Pouch:
-			is[0] = new ItemStack(Items.leather, 5);
-			is[1] = new ItemStack(Items.ingot, 1);
-			is[2] = new ItemStack(Items.stick, 10);
-			break;
-		case CraftAdvanced:
-			is[0] = new ItemStack(Items.ingot,10);
-			is[1] = new ItemStack(Items.woodChip, 20);
-			is[2] = new ItemStack(Items.leather, 10);
-			is[3] = new ItemStack(Items.rock, 25);
-			break;
+			
+//		case Pickaxe:
+//			is[0] = new ItemStack(Items.stick, 2);
+//			is[1] = new ItemStack(Items.rock, 6);
+//			break;
+//		case Sword:
+//			is[0] = new ItemStack(Items.stick, 2);
+//			is[1] = new ItemStack(Items.woodChip, 1);
+//			is[2] = new ItemStack(Items.rock, 8);
+//			break;
+//		case Axe:
+//			is[0] = new ItemStack (Items.stick , 2);
+//			is[1] = new ItemStack(Items.rock, 3);
+//			break;
+//		case Oven:
+//			is[0] = new ItemStack (Items.rock , 20);
+//			break;
+//		case Belt:
+//			is[0] = new ItemStack(Items.leather, 12);
+//			break;
+//		case Pouch:
+//			is[0] = new ItemStack(Items.leather, 5);
+//			is[1] = new ItemStack(Items.ingot, 1);
+//			is[2] = new ItemStack(Items.stick, 10);
+//			break;
+//		case CraftAdvanced:
+//			is[0] = new ItemStack(Items.ingot,10);
+//			is[1] = new ItemStack(Items.woodChip, 20);
+//			is[2] = new ItemStack(Items.leather, 10);
+//			is[3] = new ItemStack(Items.rock, 25);
+//			break;
 		}
 		return is;
 	}
@@ -132,6 +130,64 @@ public class Crafting {
 		return is;
 	}
 
+	public static void craft(Player player, ItemStack[] stacks, int[] slots){
+
+		if(stacks[0] == null || stacks[1] == null)
+			return;
+		
+		if(stacks[0].equals(stacks[1]) && slots[0] == slots[1]){
+			if(stacks[0].stackSize <= 1){
+				
+				System.out.println("Cannot combine one item with itself !");
+				
+				return;	
+				//if both objects are the same, and come from the same slot,
+				//their stacksize has to be more then one to be able to be combined !
+			}
+		}
+
+		for(int i = 0 ; i < 10; i++){
+
+			ItemStack[] compare = getRecipe(i);
+
+			if(compare[0] == null || compare[1] == null)
+				continue;
+			
+			if(compare.length == 2){
+				//any match. does not allow for order based crafting
+				if(compare[0].equals(stacks[0]) && compare[1].equals(stacks[1]) || 
+						compare[1].equals(stacks[0]) && compare[0].equals(stacks[1])){
+
+					System.out.println("Recipe " + i + " was a match");
+					
+					boolean flag = false;
+					
+					for(int content = 0; content < player.getInventory().getMaxSlots(); content++){
+
+						if(player.getStackInSlot(content) == null ||
+								player.getStackInSlot(content) != null && player.getStackInSlot(content).getItem().getUIN().equals(result(i).getItem().getUIN())){
+
+							Util.decreaseStack(player, slots[0], 1);
+							Util.decreaseStack(player, slots[1], 1);
+							flag = true;
+							break;
+						}
+					}
+					
+					if(flag)
+						player.setStackInNextAvailableSlot(result(i));
+
+					
+				}else{
+					System.out.println("Recipe " + i + " did not match");
+				}
+			}else{
+				System.out.println("Recipe was longer then 2 !");
+				return;
+			}
+		}
+	}
+
 	public static void craft(Player player, int recipe, boolean advanced){
 
 		ItemStack[] input = null;
@@ -144,7 +200,7 @@ public class Crafting {
 			input = getRecipeAdvanced(recipe);
 			result = resultAdvanced(recipe);
 		}
-			
+
 		if(input == null)
 			return;
 		if(result == null)
@@ -194,7 +250,7 @@ public class Crafting {
 					player.getItems()[i] = null;
 			}
 		}
-		
+
 		player.setStackInNextAvailableSlot(result);
 
 	}

@@ -1,10 +1,11 @@
-package game.gui;
+package game.gui.game;
 
 import static game.util.Constants.COLOR_GENERAL;
 import engine.keyhandlers.KeyHandler;
 import game.World;
 import game.content.save.Save;
 import game.entity.living.player.Player;
+import game.gui.Gui;
 import game.util.Constants;
 
 import java.awt.Color;
@@ -49,20 +50,17 @@ public class GuiKeyBinds extends Gui {
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.INVENTORY]), 140, 115);
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.INTERACT]), 190, 115);
 
-		g.setColor(Color.red.darker().darker().darker());
-		g.drawString("Ctrl +" , 40, 175);
-		g.drawString("Shift", 40, 190);
-
 		g.setColor(COLOR_GENERAL);
+		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.CRAFT]), 40, 175);
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.B]), 90, 175);
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.QUICKSAVE]), 140, 175);
 		g.drawString(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.JUNK]), 190, 175);
 
 		int i = (selection[1]*4) + selection[0];
-		if(i == 8)
-			g.drawRect(37 + selection[0]*50,41 + selection[1]*60 ,48,30);
+		if(i == 4 || i == 5)
+			g.drawRect(37 + selection[0]*50,41 + selection[1]*60 , 48, 16);
 		else
-			g.drawRect(37 + selection[0]*50,41 + selection[1]*60 ,48,16);
+			g.drawRect(37 + selection[0]*50,41 + selection[1]*60 , 20, 16);
 
 
 	}

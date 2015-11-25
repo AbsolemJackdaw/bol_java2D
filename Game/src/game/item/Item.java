@@ -34,7 +34,6 @@ public class Item {
 		this.displayName = displayName;
 		tooltipList = new ArrayList<String>();
 		tooltipList.add(getDisplayName());
-		tooltipList.add(KeyHandler.getKeyName(KeyHandler.JUNK) + " to discard.");
 	}
 
 	public Item setItemDamage(int i){

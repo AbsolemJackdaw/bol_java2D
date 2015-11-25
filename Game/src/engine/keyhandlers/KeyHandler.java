@@ -29,10 +29,7 @@ public class KeyHandler {
 		KeyEvent.VK_E, //6 //inventory
 		KeyEvent.VK_F, //7 //interact
 
-		/**console has been invalidated and is opened with ctrl-shift
-		 * tab isn't recognized by swing. (this is normal)*/
-		KeyEvent.VK_TAB,//8 //for console shouldn't be changeable. maybe for talking later ?
-
+		KeyEvent.VK_C,//8 for crafting
 		KeyEvent.VK_B,//9 //for bounding boxes. shouldn't be changeable
 		KeyEvent.VK_F5, //10
 		KeyEvent.VK_A, //11
@@ -72,7 +69,7 @@ public class KeyHandler {
 	public static int INVENTORY = 6;
 	public static int INTERACT = 7;
 
-	public static int CONSOLE = 8;
+	public static int CRAFT = 8;
 	public static int B = 9;
 	public static int QUICKSAVE = 10;
 	public static int JUNK = 11;
@@ -207,8 +204,8 @@ public class KeyHandler {
 		else if (i == registeredKeys[ESCAPE])
 			keyState[ESCAPE] = b;
 
-		else if (i == registeredKeys[CONSOLE])
-			keyState[CONSOLE] = b;
+		else if (i == registeredKeys[CRAFT])
+			keyState[CRAFT] = b;
 
 		else if (i == registeredKeys[INVENTORY])
 			keyState[INVENTORY] = b;

@@ -47,6 +47,19 @@ public class Util {
 
 	}
 
+	public static void drawToolTipText(Graphics2D g, List<String> list, int pos[], Color top, Color shadow){
+		g.setFont(Constants.FONT_ITEMS);
+
+		if(top == null)
+			top = new Color(1f, 1f, 0.95f);
+		if(shadow == null)
+			shadow = new Color(0.2f, 0.2f, 0.2f);
+
+		for(int index = 0; index < list.size(); index++){
+			Utility.drawStringWithShadow(list.get(index), pos[0] + 5, pos[1] + 11 + (index * 10), g, top, shadow);
+		}
+	}
+
 	public static void drawToolTipText(Graphics2D g, ItemStack stack, int pos[]){
 
 		if(stack != null){

@@ -1,4 +1,4 @@
-package game.gui;
+package game.gui.game;
 
 import static game.util.Constants.*;
 
@@ -15,6 +15,7 @@ import game.World;
 import game.content.Loading;
 import game.content.save.Save;
 import game.entity.living.player.Player;
+import game.gui.Gui;
 import game.util.Util;
 
 

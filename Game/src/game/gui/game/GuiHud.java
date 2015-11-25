@@ -1,4 +1,4 @@
-package game.gui;
+package game.gui.game;
 
 import engine.game.MapObject;
 import engine.image.Images;
@@ -7,6 +7,7 @@ import game.World;
 import game.content.Loading;
 import game.entity.block.Block;
 import game.entity.living.player.Player;
+import game.gui.Gui;
 import game.item.ItemStack;
 import game.util.Util;
 
