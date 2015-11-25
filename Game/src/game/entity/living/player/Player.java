@@ -57,9 +57,6 @@ import java.util.List;
 
 public class Player extends EntityLiving implements IInventory{
 
-	private boolean flinching;
-	private long flinchTimer = 0;
-
 	private boolean attacking;
 
 	private Animation head = new Animation();
@@ -114,6 +111,8 @@ public class Player extends EntityLiving implements IInventory{
 	private boolean inWater;
 	private boolean wasInwater;
 
+	private float bufferHealth;
+	
 	public Player(World world) {
 		super(world, "player");
 
@@ -123,8 +122,9 @@ public class Player extends EntityLiving implements IInventory{
 		entitySizeX = 24;
 		entitySizeY = 30;
 
-		moveSpeed = 0.5;
-		maxSpeed = 3; 
+		initMoveSpeed(0.5);
+		initMaxSpeed(3);
+
 		stopSpeed = 0.4;
 		fallSpeed = 0.15;
 		maxFallSpeed = 4.0;
@@ -136,6 +136,8 @@ public class Player extends EntityLiving implements IInventory{
 		setPosition(5, 5);
 
 		initHealth(3f);
+		
+		knockBackForce = 2d;
 	}
 
 	@Override
@@ -146,9 +148,18 @@ public class Player extends EntityLiving implements IInventory{
 	@Override
 	public void hurtEntity(float f, Player p) {
 
-		if(!flinching){
-			super.hurtEntity(f, p);
-			flinching = true;
+		if(!isFlinching()){
+
+			bufferHealth += f;
+			float deducted = 0f;
+			
+			while(bufferHealth >= 0.5f){
+				bufferHealth -= 0.5f;
+				deducted += 0.5f;
+			}
+			
+			super.hurtEntity(deducted, p);
+
 		}
 	}
 
@@ -157,16 +168,12 @@ public class Player extends EntityLiving implements IInventory{
 
 		if(health > getMaxHealth())
 			health = getMaxHealth();
-
-//		if(health <=0)
-//			this.remove=true;
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 
-		if(flinchTimer % 5 == 0)
-		{
+		if(getHurtTimer()%5 == 0){
 			//Draw all parts here
 			super.draw(g);
 			super.draw(g, head);
@@ -175,14 +182,18 @@ public class Player extends EntityLiving implements IInventory{
 			//armor parts
 			if(armor_extra.hasFrames())
 				super.draw(g, armor_extra);
+			if(armor_head.hasFrames())
+				super.draw(g,armor_head);
+			if(armor_arms.hasFrames())
+				super.draw(g,armor_arms);
 		}
 
 		if(invArmor.getWeapon() != null){
-			
+
 			BufferedImage weapon = invArmor.getWeapon().getItem().getTexture();
 
 			BufferedImage canvas = Util.rotateImage(weapon, weaponRotation);
-			
+
 			if (facingRight)
 				g.drawImage(canvas, posX()+5, posY()-15, canvas.getWidth(), canvas.getHeight(), null);
 			else
@@ -216,14 +227,24 @@ public class Player extends EntityLiving implements IInventory{
 		}
 
 		else{
-
 			movement.doPlayerWaterMovement(this);
-
 		}
-
-
 	}
 
+	@Override
+	public void setRight(boolean b) {
+		super.setRight(b);
+		if(right)
+			facingRight = true;
+	}
+	
+	@Override
+	public void setLeft(boolean b) {
+		super.setLeft(b);
+		if(left)
+			facingRight = false;
+	}
+	
 	private int delay = 20;
 
 	public void handleInput(){
@@ -315,7 +336,7 @@ public class Player extends EntityLiving implements IInventory{
 		}
 
 		if(attacking && (currentAction != ACTION_ATTACK)) {
-			
+
 			for(MapObject obj : collidingEntities){
 
 				matchTool(obj);
@@ -334,22 +355,7 @@ public class Player extends EntityLiving implements IInventory{
 				//TODO break sound and or animation	
 			}
 
-		if(flinching)
-			flinchTimer++;
-		if(flinchTimer > 50){
-			flinchTimer = 0;
-			flinching = false;
-		}
-
 		updatePlayerAnimation();
-
-		// set direction
-		if (currentAction != ACTION_ATTACK) {
-			if (right)
-				facingRight = true;
-			if (left)
-				facingRight = false;
-		}
 
 		for(ItemStack stack : getInventory().getItems()){
 			if(stack != null){
@@ -715,19 +721,19 @@ public class Player extends EntityLiving implements IInventory{
 
 	@Override
 	public boolean setStackInNextAvailableSlot(ItemStack item) {
-		
+
 		if(item == null)
 			return true;
-		
+
 		int extra = 0;
-		
+
 		if(armorItems[ItemArmor.EXTRA] != null){
 			ItemStack is = armorItems[ItemArmor.EXTRA];
 			Item i = is.getItem();
 			if(i instanceof ItemBelt)
 				extra = ((ItemBelt)i).getInventorySlots();
 		}
-		
+
 		for(int i = 0; i < 10+extra; i++)
 			if(getStackInSlot(i) != null){
 				if (inventory[i].getItem().getUIN().equals(item.getItem().getUIN()) && inventory[i].getItem().isStackable()){
@@ -993,5 +999,25 @@ public class Player extends EntityLiving implements IInventory{
 	 */
 	public void setCollidingMapObjects(MapObject obj){
 		collidingEntities.add(obj);
+	}
+
+	@Override
+	protected void knockEntityBack() {
+
+		maxSpeed = knockBackForce;
+		moveSpeed = knockBackForce/5;
+
+		if(!facingRight){
+			setVector(3, -2);
+			left = true;
+		}
+		else{ 
+			setVector(-3, -2);
+			right = true;
+		}
+	}
+	
+	public boolean isDead(){
+		return health <= 0f;
 	}
 }

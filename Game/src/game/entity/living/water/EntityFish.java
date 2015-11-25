@@ -82,7 +82,6 @@ public class EntityFish extends EntityWaterCreature {
 
 	@Override
 	public void kill(Player player) {
-		System.out.println("kill entityfish");
 
 		if(player!= null)
 			if(getDrops() != null){

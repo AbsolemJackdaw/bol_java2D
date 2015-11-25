@@ -108,4 +108,9 @@ public class EntityBat extends EntityEnemy{
 		bottomLeft = bl > 6;
 		bottomRight = br > 6;
 	}
+	
+	@Override
+	public float getAttackDamage() {
+		return 0.5f;
+	}
 }

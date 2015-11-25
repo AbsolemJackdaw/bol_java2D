@@ -1,5 +1,8 @@
 package game.gui;
 
+import static game.util.Constants.COLOR_GENERAL;
+import static game.util.Constants.FONT_CHOICES;
+import static game.util.Constants.FONT_HEADER;
 import engine.keyhandlers.KeyHandler;
 import engine.window.GamePanel;
 import engine.window.gameAid.Utility;
@@ -10,14 +13,10 @@ import game.content.save.Save;
 import game.entity.living.player.Player;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 
 public class GuiPause extends Gui {
 
-	private Font font = new Font("Constantia", Font.PLAIN, 36);
-	private Font fontChoices = new Font("Arial", Font.PLAIN, 12);
-	private Color color = new Color(250, 231, 217);
 	private Color clr = new Color(0xcfd9e7);
 	private float alpha = 1.0F;
 
@@ -35,32 +34,32 @@ public class GuiPause extends Gui {
 	
 		super.draw(g);
 		
-		g.setFont(font);
-		g.setColor(color);
+		g.setFont(FONT_HEADER);
+		g.setColor(COLOR_GENERAL);
 		
-		Utility.drawCenteredString(g, "Pause", font, GamePanel.WIDTH/2, 175);
+		Utility.drawCenteredString(g, "Pause", FONT_HEADER, GamePanel.WIDTH/2, 175);
 
 		// Draw menu square
 		g.setColor(clr);
 		g.drawRoundRect((GamePanel.WIDTH / 2) - 28, GamePanel.HEIGHT - 150 + (currentChoice * 15) - 19, 55, 15, 5, 5);
 
 		// draw menu options
-		g.setFont(fontChoices);
+		g.setFont(FONT_CHOICES);
 		for (int i = 0; i < options.length; i++) {
 			if (i == currentChoice)
 				g.setColor(Color.black);
 			else
 				g.setColor(Color.red.darker());
 			
-			Utility.drawCenteredString(g, options[i], fontChoices, GamePanel.WIDTH / 2, GamePanel.HEIGHT - 150 + (i * 15));
+			Utility.drawCenteredString(g, options[i], FONT_CHOICES, GamePanel.WIDTH / 2, GamePanel.HEIGHT - 150 + (i * 15));
 			
 		}
 		
 		if(showMessageSaved){	
 			//set the opacity
-			g.setFont(font);
+			g.setFont(FONT_HEADER);
 			g.setColor(new Color(1f, 1f, 1f, alpha));
-			Utility.drawCenteredString(g, "Save Succesful", font, GamePanel.WIDTH / 2, GamePanel.HEIGHT / 2 + 30);
+			Utility.drawCenteredString(g, "Save Succesful", FONT_HEADER, GamePanel.WIDTH / 2, GamePanel.HEIGHT / 2 + 30);
 			alpha -= 0.01f;
 
 			//increase the opacity and repaint

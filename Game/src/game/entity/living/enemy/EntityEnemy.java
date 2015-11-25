@@ -11,9 +11,6 @@ public class EntityEnemy extends EntityLiving {
 
 	private int attackTimer;
 
-	/**set when attacked*/
-	private int followTimer;
-
 	protected boolean isHit;
 
 	protected int endAgressionChance;
@@ -53,7 +50,7 @@ public class EntityEnemy extends EntityLiving {
 				Player p = getWorld().getPlayer();
 				if(getRectangle().intersects(p.getRectangle())){
 					//TODO implement correctly !
-					p.hurtEntity(0, null);
+					p.hurtEntity(getAttackDamage(), null);
 				}
 			}
 		}
@@ -64,6 +61,6 @@ public class EntityEnemy extends EntityLiving {
 	}
 
 	public float getAttackDamage(){
-		return 1;
+		return 0f;
 	}
 }

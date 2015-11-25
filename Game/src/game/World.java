@@ -39,6 +39,7 @@ import game.entity.living.EntityLiving;
 import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.player.Player;
 import game.gui.Gui;
+import game.gui.GuiDeathScreen;
 import game.gui.GuiHud;
 import game.gui.GuiPause;
 import game.gui.GuiPlayerInventory;
@@ -102,14 +103,9 @@ public class World extends GameWorld{
 
 		displayGui(new GuiHud(this, player));
 
-//		int mapHeight = (int)(tileMap.getYRows() * 32);
-
 		backGrounds = new ArrayList<Background>();
 
 		backGrounds.add(new Background(Util.generateGeneralBackground()));
-//		backGrounds.add(new Background(Util.generateStalactiteBackGround(), 0.1, 0, false, 1));
-//		backGrounds.add(new Background(Util.generateStalactiteBackGround(), 0.3, 0, false, 10));
-		//		backGrounds.add(new Background(Util.generateStalactiteBackGround(mapHeight, 0), 1, 0, false, 10));
 
 		BufferedImage bg = Util.generateStalactiteBackGround();
 		
@@ -268,6 +264,18 @@ public class World extends GameWorld{
 
 		//process key input
 		handleInput();
+		
+		if(player.isDead() && !(guiDisplaying instanceof GuiDeathScreen)){
+			//TODO
+			//player.update for death animation here
+			
+			//if animation.playedOnce
+			
+			//then display death gui
+			guiDisplaying = new GuiDeathScreen(this, player);
+
+			return;
+		}
 
 		//update game logics only if displaying gui is HUD, or the gui doesnt pause the game aka, in world
 		if(guiDisplaying instanceof GuiHud || guiDisplaying != null && !guiDisplaying.pausesGame()){
@@ -361,7 +369,7 @@ public class World extends GameWorld{
 			return;
 		}
 
-		if(KeyHandler.isPressed(KeyHandler.QUICKSAVE)){
+		if(KeyHandler.isPressed(KeyHandler.QUICKSAVE) && guiDisplaying != null && guiDisplaying instanceof GuiHud){
 			Save.writePlayerData(player);
 			Save.writeWorld(this, Loading.index);
 			Save.writeRandomParts();
@@ -390,14 +398,14 @@ public class World extends GameWorld{
 			return;
 		}
 
-		if (player.getHealth() == 0)
-			return;
-
 		if(guiDisplaying != null && guiDisplaying.pausesGame()){
 			guiDisplaying.handleGuiKeyInput();
 			return;
 		}
 
+		if (player.getHealth() == 0)
+			return;
+		
 		player.handleInput();
 
 		if (KeyHandler.isPressed(KeyHandler.B))

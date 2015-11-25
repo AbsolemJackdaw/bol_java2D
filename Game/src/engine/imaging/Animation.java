@@ -18,11 +18,14 @@ public class Animation {
 
 	private BufferedImage[] defaultAnim = Images.loadMultiImage("/images/default.png", 32, 0, 5);
 
+	private boolean isDefault;
+	
 	public Animation() {
 		playedOnce = false;
 		//default animation image so no null pointer occurs when first initializing an animation
 		setFrames(defaultAnim);
 		setDelay(100);
+		isDefault = true;
 	}
 
 	public BufferedImage[] getDefaultAnimation(){
@@ -30,7 +33,7 @@ public class Animation {
 	}
 
 	public boolean hasFrames(){
-		return frames != null;
+		return frames != null && !isDefault;
 	}
 
 	public long getDelay(){
@@ -67,6 +70,7 @@ public class Animation {
 			currentFrame = 0;
 			startTime = System.nanoTime();
 			playedOnce = false;
+			isDefault = false;
 		}
 	}
 

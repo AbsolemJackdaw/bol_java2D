@@ -5,11 +5,6 @@ import game.entity.living.EntityLiving;
 
 public class EntityWaterCreature extends EntityLiving {
 
-	private int moveTimerY = 0;
-	private int moveTimerYCalculator = 0;
-	private int moveTimerX = 0;
-	private int moveTimerXCalculator = 0;
-
 	public EntityWaterCreature(GameWorld world, String uin) {
 		super(world, uin);
 		

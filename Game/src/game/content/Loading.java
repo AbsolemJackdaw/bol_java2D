@@ -130,13 +130,6 @@ public class Loading {
 
 	public static void gotoPreviousLevel(final GameStateManagerBase gsm){
 
-		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
-		if(true){
-			currentWorld.getPlayer().setVector(7, -3);
-			return;
-		}
-		
-		
 		Util.startLoadIcon();
 
 		new SwingWorker<Void, Integer>() {

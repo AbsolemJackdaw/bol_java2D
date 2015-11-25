@@ -173,7 +173,6 @@ public class EntityMovement {
 	}
 
 	public void getNextPositionFlying(EntityLiving el, int wait){
-		System.out.println(el.dy + " " + el.dx);
 		if(el.up && Constants.RANDOM.nextInt(wait) == 0){
 			el.dy -= el.moveSpeed;
 			if(el.dy < -el.maxSpeed)

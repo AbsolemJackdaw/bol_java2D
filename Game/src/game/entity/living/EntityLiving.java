@@ -21,7 +21,7 @@ public class EntityLiving extends MapObject{
 	private int flickerTimer = 100;
 
 	private double knockBackStart = 10;
-	
+
 	/**
 	 * counter set by knockbackstart that counts down to how long this entity is knocked back.
 	 * while this happens, the moveSpeed is replaced by knockBackForce
@@ -55,18 +55,24 @@ public class EntityLiving extends MapObject{
 	protected int getHurtTimer(){
 		return flickerTimer;
 	}
-	
+
 	public void hurtEntity(float f, Player player){
+
+		flicker = true;
 
 		Music.play(getEntityHitSound());
 
 		health -= f;
-		if(health <=0){
+		
+		if(health <= 0){
 			this.remove=true;
 			kill(player);
 		}
 		if(health > maxHealth)
 			health = maxHealth;
+
+		knockBack();
+
 	}
 
 	public EntityLiving initHealth(float health){
@@ -128,22 +134,7 @@ public class EntityLiving extends MapObject{
 		}
 
 		if(knockedBack){
-			maxSpeed = knockBackForce;
-			moveSpeed = knockBackForce/5;
-			// if the player is looking left, knock the entity to the left
-			if(((World)world).getPlayer().facingRight){
-				setVector(5, -2);
-				setRight(true);
-				facingRight = true;
-			}
-			else{ 
-				setVector(-5, -2);
-				setLeft(true);
-				facingRight = false;
-			}
-		}
-
-		if(knockedBack)
+			knockEntityBack();
 			if(knockBack > 0)
 				knockBack -= 0.5d;
 			else{
@@ -152,6 +143,7 @@ public class EntityLiving extends MapObject{
 				knockedBack = false;
 				knockBack = 0;
 			}
+		}
 
 	}
 
@@ -172,7 +164,6 @@ public class EntityLiving extends MapObject{
 	public void onEntityHit(Player player) {
 
 		Player p = (Player)player;
-		flicker = true;
 
 		int dmg = p.getAttackDamage();
 
@@ -188,8 +179,6 @@ public class EntityLiving extends MapObject{
 		}
 
 		hurtEntity(wepDmg + dmg, p );
-
-		knockBack();
 	}
 
 
@@ -236,7 +225,7 @@ public class EntityLiving extends MapObject{
 		return true;
 	}
 
-	public void knockBack(){
+	private void knockBack(){
 		knockedBack = true;
 		knockBack = knockBackStart; 
 	}
@@ -244,8 +233,31 @@ public class EntityLiving extends MapObject{
 	public boolean isKnockedBack(){
 		return knockedBack;
 	}
-	
+
 	public World getWorld() {
 		return (World)super.getWorld();
+	}
+
+	public boolean isFlinching(){
+		return flicker;
+	}
+
+	protected void knockEntityBack(){
+		maxSpeed = knockBackForce;
+		moveSpeed = knockBackForce/5;
+
+		Player p = ((World)world).getPlayer();
+
+		// if the player is looking left, knock the entity to the left
+		if(p.facingRight){
+			setVector(5, -2);
+			setRight(true);
+			facingRight = true;
+		}
+		else{ 
+			setVector(-5, -2);
+			setLeft(true);
+			facingRight = false;
+		}
 	}
 }
