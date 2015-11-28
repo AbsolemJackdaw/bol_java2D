@@ -62,15 +62,23 @@ public class Loading {
 			@Override
 			protected Void doInBackground() throws Exception {
 
-				//save world we are currently in
-				World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
-				Save.writeWorld(currentWorld, index);
-				Save.writePlayerData(currentWorld.getPlayer());
+				int time = 0;
+				float nightShade = 0;
+				
+				if(gsm.getGameState(gsm.getCurrentState()) instanceof World)
+				{
+					//save world we are currently in
+					World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+					
+					Save.writeWorld(currentWorld, index);
+					Save.writePlayerData(currentWorld.getPlayer());
 
-				//get gametime to transfer to the new world and continue counting
-				int time = currentWorld.gametime.getCurrentTime();
-				float nightShade = currentWorld.nightAlhpa;
-
+					//get gametime to transfer to the new world and continue counting
+					time = currentWorld.gametime.getCurrentTime();
+					nightShade = currentWorld.nightAlhpa;
+					
+				}
+				
 				//set a new world
 				gsm.setState(GameStateManager.GAME);
 
@@ -130,6 +138,14 @@ public class Loading {
 
 	public static void gotoPreviousLevel(final GameStateManagerBase gsm){
 
+		World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+	
+		//|| index == 1 && Save.getWorldData(0)!= null && Save.getWorldData(0).readString("map").equals("/maps/tutorial_island")
+		if(index == 1 ){
+			currentWorld.getPlayer().setVector(4, 0);
+			return;
+		}
+		
 		Util.startLoadIcon();
 
 		new SwingWorker<Void, Integer>() {
@@ -137,11 +153,6 @@ public class Loading {
 			protected Void doInBackground() throws Exception {
 
 				World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
-
-				if(index == 0 || index == 1 && Save.getWorldData(0)!= null && Save.getWorldData(0).readString("map").equals("/maps/tutorial_island")){
-					currentWorld.getPlayer().setVector(4, 0);
-					return null;
-				}
 
 				//save world we are currently in
 				Save.writeWorld(currentWorld, index);
@@ -185,46 +196,14 @@ public class Loading {
 
 				return null;
 			}
-			
-			@Override
-			protected void done() {
-				super.done();
-				Util.stopLoadIcon();
-			}
-			
-		}.execute();
-	}
-
-	/**loads a level to skip the tutorial.*/
-	public static void loadFirstLevel(final GameStateManagerBase gsm){
-
-		Util.startLoadIcon();
-
-		new SwingWorker<Void, Integer>(){
-			@Override
-			protected Void doInBackground() throws Exception {
-
-				World world = (World)gsm.getGameState(gsm.getCurrentState());
-				Player player = world.getPlayer();
-
-				for(int x = 0; x < world.tileMap.getXRows(); x++)
-					for(int y = 0; y < world.tileMap.getYRows(); y++){
-						if(world.tileMap.getBlockID(x, y) == 7)
-							player.setPosition(x+1, y);
-					}
-
-				populateWorld(world);
-
-				return null;
-			}
 
 			@Override
 			protected void done() {
 				super.done();
 				Util.stopLoadIcon();
 			}
-		}.execute();
 
+		}.execute();
 	}
 
 	/**load tutorial level if no saves are found, and the player chooses to play the tutorial*/
@@ -385,10 +364,10 @@ public class Loading {
 				}
 
 				Util.stopLoadIcon();
-				
+
 				return null;
 			}
-			
+
 			@Override
 			protected void done() {
 				super.done();
@@ -449,7 +428,7 @@ public class Loading {
 
 		if(Constants.RANDOM.nextInt(rarity) > 0)
 			return;
-		
+
 		TileMap tm = world.tileMap;
 
 		EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(uin, world);
@@ -466,7 +445,7 @@ public class Loading {
 				}
 			}
 	}
-	
+
 	private static void populateWaterEntities(World world, String uin, int x, int y){
 
 		EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(uin, world);
@@ -474,7 +453,7 @@ public class Loading {
 		world.listWithMapObjects.add(el);
 	}
 
-	private static void populateWorld(World world){
+	private static void populateWorld(final World world){
 
 		int x = world.tileMap.getXRows();
 		int y = world.tileMap.getYRows();
@@ -506,7 +485,7 @@ public class Loading {
 			generateRandomTree(world, Constants.RANDOM.nextInt(x),  Constants.RANDOM.nextInt(y));
 			generateRandomOre(world, Blocks.ROCK, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 3);
 			generateRandomOre(world, Blocks.IRON, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 10);
-			
+
 			populateEntities(world, Entity.PIG, 20);
 		}
 	}

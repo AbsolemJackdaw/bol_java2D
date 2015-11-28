@@ -94,8 +94,6 @@ public class World extends GameWorld{
 		if(Save.getWorldData(0) == null)
 			if(resourceMapPath.equals("/maps/tutorial_island")){
 				Loading.loadTutorialLevel(gsm);
-			}else{
-				Loading.loadFirstLevel(gsm);
 			}
 
 		if(Save.getPlayerData() != null)

@@ -76,45 +76,48 @@ public class TutorialGui extends GameState{
 
 	private void select() {
 
-		Util.startLoadIcon();
+		if(currentChoice == 1){
+			Loading.gotoNextLevel(gsm);
 
-		new SwingWorker<Void, Integer>() {
-			@Override
-			protected Void doInBackground() throws Exception {
+		}else{
 
-				try {
+			Util.startLoadIcon();
 
-					gsm.setState(GameStateManager.GAME);
+			new SwingWorker<Void, Integer>() {
+				@Override
+				protected Void doInBackground() throws Exception {
 
-					//new blank world
-					World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+					try {
 
-					//no need to read any saves here !
-					//this screen pops up when no game has been played yet
-					//or no saves have been found
+						gsm.setState(GameStateManager.GAME);
 
-					if(currentChoice == 1) // 'No' option
-						currentWorld.loadMap(Loading.newMap());
-					else // 'Yes' option
+						//new blank world
+						World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+
+						//no need to read any saves here !
+						//this screen pops up when no game has been played yet
+						//or no saves have been found
+
 						currentWorld.loadMap("/maps/tutorial_island");
 
-					//initiate current world. sets new player 
-					currentWorld.init();
+						//initiate current world. sets new player 
+						currentWorld.init();
 
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.out.println("an exception was cought trying to start up the game");
-					System.out.println("Exiting game");
-					System.exit(0);
+					} catch (Exception e) {
+						e.printStackTrace();
+						System.out.println("an exception was cought trying to start up the game");
+						System.out.println("Exiting game");
+						System.exit(0);
+					}
+					return null;
 				}
-				return null;
-			}
 
-			@Override
-			protected void done() {
-				super.done();
-				Util.stopLoadIcon();
-			}
-		}.execute();
+				@Override
+				protected void done() {
+					super.done();
+					Util.stopLoadIcon();
+				}
+			}.execute();
+		}
 	}
 }
