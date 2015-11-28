@@ -5,7 +5,6 @@ import static engine.keyhandlers.KeyHandler.getKeyName;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -65,12 +64,9 @@ public class Block extends MapObject{
 		//TODO falling needs tweeking for blocks only under his position
 		if(falling){
 			
-			Iterator<MapObject> it = getWorld().listWithMapObjects.iterator();
-			while(it.hasNext()){
-				MapObject obj = it.next();
-				
-				if(obj instanceof Block){
-					Block b = (Block)obj;
+			for(MapObject mo : getWorld().listWithMapObjects){
+				if(mo instanceof Block){
+					Block b = (Block)mo;
 
 					if(b != this){
 						if(this.currentRow == b.currentRow){

@@ -12,7 +12,6 @@ import game.item.tool.ItemTool;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
 
 
 public class BlockWood extends BlockBreakable{
@@ -76,9 +75,7 @@ public class BlockWood extends BlockBreakable{
 	public void informNeighbors(){
 		if(!isEndBlock){
 
-			Iterator<MapObject> it = world.listWithMapObjects.iterator();
-			while(it.hasNext()){
-				MapObject mo = it.next();
+			for(MapObject mo : getWorld().listWithMapObjects){
 				if(mo instanceof BlockWood){
 					if(mo.currentRow == currentRow){
 						if(mo.currentColumn == currentColumn+1){

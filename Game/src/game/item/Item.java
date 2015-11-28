@@ -1,5 +1,11 @@
 package game.item;
 
+import engine.map.TileMap;
+import engine.save.DataTag;
+import game.World;
+import game.entity.living.player.Player;
+import game.item.tool.ToolModifier;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -7,12 +13,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
-import engine.map.TileMap;
-import engine.save.DataTag;
-import game.World;
-import game.entity.living.player.Player;
-import game.item.tool.ToolModifier;
 
 
 public class Item {

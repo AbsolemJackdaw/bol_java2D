@@ -1,11 +1,11 @@
 package game.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import engine.save.DataList;
 import engine.save.DataTag;
 import game.item.tool.ToolModifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemStack
 {

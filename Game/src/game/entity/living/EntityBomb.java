@@ -1,7 +1,6 @@
 package game.entity.living;
 
 import java.awt.Graphics2D;
-import java.util.Iterator;
 
 import engine.game.GameWorld;
 import engine.game.MapObject;
@@ -88,9 +87,7 @@ public class EntityBomb extends EntityLiving {
 
 		this.entitySizeX = this.entitySizeY = getBlastRadius();
 
-		Iterator<MapObject> it = getWorld().listWithMapObjects.iterator();
-		while(it.hasNext()){
-			MapObject mo = it.next();
+		for(MapObject mo : getWorld().listWithMapObjects){
 			if(!(mo instanceof EntityDeathAnim  || mo instanceof EntityBomb))
 				if(this.getRectangle().intersects(mo.getRectangle())){
 					mo.onEntityHit(getBlastPower());

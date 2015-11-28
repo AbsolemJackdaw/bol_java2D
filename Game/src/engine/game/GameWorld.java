@@ -2,7 +2,6 @@ package engine.game;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import engine.gamestate.GameState;
 import engine.gamestate.GameStateManagerBase;
@@ -57,9 +56,7 @@ public class GameWorld extends GameState {
 
 		DataList list = new DataList();
 		
-		Iterator<MapObject> it = listWithMapObjects.iterator();
-		while(it.hasNext()){
-			MapObject mo = it.next();
+		for(MapObject mo : listWithMapObjects){
 			
 			DataTag dt = new DataTag();
 			mo.writeToSave(dt);

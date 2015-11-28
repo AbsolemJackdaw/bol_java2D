@@ -11,7 +11,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import engine.game.GameWorld;
 import engine.game.MapObject;
@@ -156,18 +155,15 @@ public class World extends GameWorld{
 
 		//Draw all objects/entities in the map here
 
-		Iterator<MapObject> it = listWithMapObjects.iterator();
-		while(it.hasNext()){
-			MapObject obj = it.next();
-
+		for(MapObject mo : listWithMapObjects){
 			//do not draw entities outside of the player's range
-			if(isOutOfBounds(obj))
+			if(isOutOfBounds(mo))
 				continue;
 
-			obj.draw(g);
+			mo.draw(g);
 
 			if(nightAlhpa > 0.1f && gbi != null)
-				cutoutLight(obj, gbi);
+				cutoutLight(mo, gbi);
 		}
 
 		//draw the player. draw it before the night shade !
@@ -319,43 +315,40 @@ public class World extends GameWorld{
 
 			player.update();
 
-			Iterator<MapObject> it = listWithMapObjects.iterator();
+			for(MapObject mo : listWithMapObjects){
 
-			while(it.hasNext()){
-				MapObject obj = it.next();
-
-				if(!isOutOfBounds(obj) || obj.persistantUpdate()){
-					obj.update();
+				if(!isOutOfBounds(mo) || mo.persistantUpdate()){
+					mo.update();
 
 					Rectangle playerRectangleExtra = new Rectangle(player.getRectangle().x, player.getRectangle().y, player.getRectangle().width, player.getRectangle().height);
 
-					if(obj instanceof BlockBreakable) // extend bounding box for breakable blocks so you can stand slightly further away
+					if(mo instanceof BlockBreakable) // extend bounding box for breakable blocks so you can stand slightly further away
 						//i just like to add this. i forgot the point ...
 						playerRectangleExtra = new Rectangle(player.getRectangle().x - 10, player.getRectangle().y, player.getRectangle().width + 20, player.getRectangle().height);
 
-					if(playerRectangleExtra.intersects(obj.getRectangle())){
-						if(!player.getCollidingMapObjects().contains(obj)){
-							player.setCollidingMapObjects(obj);
+					if(playerRectangleExtra.intersects(mo.getRectangle())){
+						if(!player.getCollidingMapObjects().contains(mo)){
+							player.setCollidingMapObjects(mo);
 							player.isCollidingWithBlock = true;
 						}
 
 					}else{
-						player.getCollidingMapObjects().remove(obj);
+						player.getCollidingMapObjects().remove(mo);
 						if(player.getCollidingMapObjects().isEmpty())
 							player.isCollidingWithBlock = false;
 					}
 
-					if(obj.remove){
+					if(mo.remove){
 
-						if(player.getCollidingMapObjects().contains(obj))
-							player.getCollidingMapObjects().remove(obj);
+						if(player.getCollidingMapObjects().contains(mo))
+							player.getCollidingMapObjects().remove(mo);
 
-						it.remove();
+						listWithMapObjects.remove(mo);
 
-						if(obj instanceof EntityLiving){
-							if(((EntityLiving) obj).canPlayDeathAnimation()){
-								EntityDeathAnim anim = obj.getDeathAnimation();
-								anim.setPosition(obj.getScreenXpos(), obj.getScreenYpos());
+						if(mo instanceof EntityLiving){
+							if(((EntityLiving) mo).canPlayDeathAnimation()){
+								EntityDeathAnim anim = mo.getDeathAnimation();
+								anim.setPosition(mo.getScreenXpos(), mo.getScreenYpos());
 								listWithMapObjects.add(anim);
 							}
 						}
@@ -518,9 +511,7 @@ public class World extends GameWorld{
 		}
 
 		else if(cmd.equals("kill")){
-			Iterator<MapObject> it = listWithMapObjects.iterator();
-			while(it.hasNext()){
-				MapObject mo = it.next();
+			for(MapObject mo : listWithMapObjects){
 				if(mo instanceof EntityLiving)
 					mo.remove = true;
 			}

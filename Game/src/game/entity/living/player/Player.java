@@ -53,7 +53,6 @@ import game.util.Util;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Player extends EntityLiving implements IInventory{
@@ -283,11 +282,9 @@ public class Player extends EntityLiving implements IInventory{
 
 		if(KeyHandler.isPressed(KeyHandler.INTERACT)){
 
-			Iterator<MapObject> it = getWorld().listWithMapObjects.iterator();
-			while(it.hasNext()){
-				MapObject o = it.next();
-				if(o.intersects(this))
-					o.interact(this);
+			for(MapObject mo : getWorld().listWithMapObjects){
+				if(mo.intersects(this))
+					mo.interact(this);
 			}
 
 			for(int key : hotBarKeys)
