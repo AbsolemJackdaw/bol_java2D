@@ -12,8 +12,8 @@ public class ItemPouch extends Item {
 	public ItemPouch(String uin,String displayName) {
 		super(uin, displayName);
 
-		tooltipList.add("Used to upgrade your Belt.");
-		tooltipList.add(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.SPACE]) + " to use");
+		info.add("Used to upgrade your Belt.");
+		info.add(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.SPACE]) + " to use");
 
 	}
 

@@ -4,8 +4,8 @@ import engine.image.Images;
 import game.World;
 import game.entity.block.Blocks;
 import game.item.ItemStack;
-import game.item.ItemTool;
 import game.item.Items;
+import game.item.tool.ItemTool;
 
 import java.awt.image.BufferedImage;
 import java.util.Random;

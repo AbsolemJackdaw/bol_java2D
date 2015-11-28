@@ -73,14 +73,14 @@ public class GuiContainer extends Gui implements Container{
 		if(currentContainer == PLAYER_INVENTORY)
 			if(playerInventory.getStackInSlot(slot_index) != null){
 				ItemStack stack = playerInventory.getStackInSlot(slot_index);
-				Util.drawToolTipWindow(g, getToolTipWindowPosition(), stack.getItem().getToolTip(stack));
+				Util.drawToolTipWindow(g, getToolTipWindowPosition(), stack.getToolTip());
 				Util.drawToolTipText(g, stack, getToolTipWindowPosition());
 			}
 
 		if(currentContainer == BLOCK_INVENTORY)
 			if(secondairyInventory.getStackInSlot(slot_index) != null){
 				ItemStack stack = secondairyInventory.getStackInSlot(slot_index);
-				Util.drawToolTipWindow(g, getToolTipWindowPosition(), stack.getItem().getToolTip(stack));
+				Util.drawToolTipWindow(g, getToolTipWindowPosition(), stack.getToolTip());
 
 				Util.drawToolTipText(g, stack, getToolTipWindowPosition());
 			}

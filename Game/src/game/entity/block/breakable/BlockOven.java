@@ -11,9 +11,9 @@ import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.GuiOven;
 import game.item.ItemStack;
-import game.item.ItemTool;
 import game.item.Items;
 import game.item.crafting.OvenRecipes;
+import game.item.tool.ItemTool;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

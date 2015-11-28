@@ -1,15 +1,11 @@
 package game.gui.game;
 
-import static game.util.Constants.*;
-
-import java.awt.Graphics2D;
-
-import javax.swing.SwingWorker;
-
+import static game.util.Constants.COLOR_GENERAL;
+import static game.util.Constants.FONT_CHOICES;
+import static game.util.Constants.FONT_HEADER;
 import engine.keyhandlers.KeyHandler;
 import engine.window.GamePanel;
 import engine.window.gameAid.Utility;
-
 import game.GameStateManager;
 import game.World;
 import game.content.Loading;
@@ -17,6 +13,10 @@ import game.content.save.Save;
 import game.entity.living.player.Player;
 import game.gui.Gui;
 import game.util.Util;
+
+import java.awt.Graphics2D;
+
+import javax.swing.SwingWorker;
 
 
 public class GuiDeathScreen extends Gui {

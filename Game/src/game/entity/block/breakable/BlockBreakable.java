@@ -6,7 +6,7 @@ import game.World;
 import game.entity.block.Block;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
-import game.item.ItemTool;
+import game.item.tool.ItemTool;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -94,14 +94,14 @@ public class BlockBreakable extends Block{
 
 		int wepDmg = 0;
 
-		ItemStack wep = player.invArmor.getWeapon();
+		ItemStack weaponStack = player.invArmor.getWeapon();
 		ItemTool tool = null;
 
-		if(wep != null && wep.getItem() instanceof ItemTool)
-			tool = ((ItemTool)wep.getItem());
+		if(weaponStack != null && weaponStack.getItem() instanceof ItemTool)
+			tool = ((ItemTool)weaponStack.getItem());
 
 		if(tool != null && effectiveTool == tool.getEffectiveness())
-			wepDmg = tool.getEffectiveDamage();
+			wepDmg = tool.getEffectiveDamage(weaponStack);
 
 		switch (getType()) {
 		case ROCK:

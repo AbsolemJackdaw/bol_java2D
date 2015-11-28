@@ -4,3 +4,9 @@ FIX:
 overwrite drawSprite and switch height and width with a personal integer 
 that reflects the hight/width of the explosion size AND texture size
 
+
+PROBLEM :
+tooltip keeps adding item info to the tooltip,
+giving never ending same tips
+FIX : 
+re-instantiate the list when calling the getInfo() method

@@ -14,5 +14,21 @@ thats how i'll solve it i think
 
 every level has a goal : x resources, or x this or x that to pass on to the next level
 
+__
 
 
+stick leather : sword handle
+swordhandle stone : sword (1 attack, 3 modifiers)
+modifiers can range up to any item. should be called with new method craftCallBack 
+(which lets you modify items, instead of creating new ones)
+
+stick stick : small handle
+stick wood : hard handle
+
+small handle stone : axe
+hard handle stone : pickaxe
+
+leather leather : fine leather
+
+fine leather ² : pouch
+fine leather iron : belt

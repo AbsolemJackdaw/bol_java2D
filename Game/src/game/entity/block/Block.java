@@ -5,6 +5,7 @@ import static engine.keyhandlers.KeyHandler.getKeyName;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -18,11 +19,11 @@ public class Block extends MapObject{
 	private int type;
 	public final static int ROCK = 0;
 	public final static int WOOD = 1;
-	
+
 	public Random rand = new Random();
 
 	protected List<String> blockInfo = new ArrayList<String>();
-	
+
 	public Block(World world, String uin) {
 		super(world, uin);
 		width = 32;
@@ -63,7 +64,11 @@ public class Block extends MapObject{
 
 		//TODO falling needs tweeking for blocks only under his position
 		if(falling){
-			for(MapObject obj : getWorld().listWithMapObjects){
+			
+			Iterator<MapObject> it = getWorld().listWithMapObjects.iterator();
+			while(it.hasNext()){
+				MapObject obj = it.next();
+				
 				if(obj instanceof Block){
 					Block b = (Block)obj;
 
@@ -99,7 +104,7 @@ public class Block extends MapObject{
 	public int getType(){
 		return type;
 	}
-	
+
 	public List<String> getBlockInfo(){
 		return blockInfo;
 	}

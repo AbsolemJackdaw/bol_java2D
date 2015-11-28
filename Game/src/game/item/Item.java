@@ -8,11 +8,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import engine.keyhandlers.KeyHandler;
 import engine.map.TileMap;
 import engine.save.DataTag;
 import game.World;
 import game.entity.living.player.Player;
+import game.item.tool.ToolModifier;
 
 
 public class Item {
@@ -25,24 +25,28 @@ public class Item {
 	private boolean cookable;
 	private boolean fuel;
 	private int fuelTimer;
-	private int itemDamage;
+	private int itemBaseDamage;
 
-	protected List <String> tooltipList;
+	protected List <String> info;
 
 	public Item(String uin, String displayName){
 		UIN = uin;
 		this.displayName = displayName;
-		tooltipList = new ArrayList<String>();
-		tooltipList.add(getDisplayName());
+		
+		info = new ArrayList<String>();
 	}
 
-	public Item setItemDamage(int i){
-		itemDamage = i;
+	public Item setBaseDamage(int i){
+		itemBaseDamage = i;
 		return this;
 	}
 
-	public int getItemDamage(){
-		return itemDamage;
+	public int getBaseDamage(){
+		return itemBaseDamage;
+	}
+	
+	public int getMaxDurability(ItemStack stack){
+		return itemBaseDamage + stack.getBonus(ToolModifier.DUR);
 	}
 
 	public Item setTexture(BufferedImage img){
@@ -153,17 +157,25 @@ public class Item {
 	public void inventoryCallBack(int slot, Player player){
 
 	}
-
-	public List<String> getToolTip(){
-
-		return tooltipList;
+	
+	/**
+	 * Called when player crafts an item and no crafting recipe matched the two used stacks.
+	 * The first stack is considered the item to be used on the second stack selected.
+	 * @param component : the first itemstack selected
+	 * @param base : the stack that can be changed
+	 */
+	public void craftingCallBack(ItemStack component, ItemStack base){
+		
 	}
 
 	/**
-	 * Allows for stack related info to be added to the tooltip
+	 * to read from tooltip, please acced ItemStack's tooltip !
 	 */
-	public List<String> getToolTip(ItemStack stack){
-
-		return tooltipList;
+	public List<String> getInfo(ItemStack stack){
+		return null;
+	}
+	
+	public boolean hasModifiers(){
+		return false;
 	}
 }

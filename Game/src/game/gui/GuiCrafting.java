@@ -145,7 +145,7 @@ public class GuiCrafting extends GuiContainer {
 	protected void drawToolTip(Graphics2D g) {
 		if(Crafting.result(slot_index) != null){
 			ItemStack stack = Crafting.result(slot_index);
-			Util.drawToolTipWindow(g, getToolTipWindowPosition(), stack.getItem().getToolTip(stack));
+			Util.drawToolTipWindow(g, getToolTipWindowPosition(), stack.getToolTip());
 			Util.drawToolTipText(g, stack, getToolTipWindowPosition());
 		}
 	}

@@ -10,7 +10,7 @@ import game.World;
 import game.entity.EntityMovement;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
-import game.item.ItemTool;
+import game.item.tool.ItemTool;
 
 public class EntityLiving extends MapObject{
 
@@ -173,7 +173,7 @@ public class EntityLiving extends MapObject{
 		if(wep != null && wep.getItem() instanceof ItemTool){
 			ItemTool tool = (ItemTool)wep.getItem();
 			if(ItemTool.SWORD == tool.getEffectiveness()){
-				wepDmg = ((ItemTool)wep.getItem()).getEffectiveDamage();
+				wepDmg = ((ItemTool)wep.getItem()).getEffectiveDamage(wep);
 			}
 			wep.damageStack(1);
 		}

@@ -16,7 +16,7 @@ public class ItemLantern extends Item implements IInventory {
 	public ItemLantern(String uin, String displayName) {
 		super(uin, displayName);
 		
-		this.tooltipList.add("A small light in the darkness ... ");
+		this.info.add("A small light in the darkness ... ");
 	}
 
 	@Override

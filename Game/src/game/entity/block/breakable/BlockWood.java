@@ -7,11 +7,12 @@ import game.World;
 import game.entity.block.Blocks;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
-import game.item.ItemTool;
 import game.item.Items;
+import game.item.tool.ItemTool;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 
 
 public class BlockWood extends BlockBreakable{
@@ -50,7 +51,7 @@ public class BlockWood extends BlockBreakable{
 	public ItemStack getDrop() {
 		return new ItemStack(Items.woodChip, 1);
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
@@ -75,7 +76,9 @@ public class BlockWood extends BlockBreakable{
 	public void informNeighbors(){
 		if(!isEndBlock){
 
-			for(MapObject mo : world.listWithMapObjects){
+			Iterator<MapObject> it = world.listWithMapObjects.iterator();
+			while(it.hasNext()){
+				MapObject mo = it.next();
 				if(mo instanceof BlockWood){
 					if(mo.currentRow == currentRow){
 						if(mo.currentColumn == currentColumn+1){
@@ -88,7 +91,7 @@ public class BlockWood extends BlockBreakable{
 			}
 		}
 	}
-	
+
 	@Override
 	public void writeToSave(DataTag data) {
 		super.writeToSave(data);

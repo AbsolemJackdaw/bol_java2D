@@ -11,6 +11,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import engine.game.GameWorld;
 import engine.game.MapObject;
@@ -108,11 +109,11 @@ public class World extends GameWorld{
 		backGrounds.add(new Background(Util.generateGeneralBackground()));
 
 		BufferedImage bg = Util.generateStalactiteBackGround();
-		
+
 		RescaleOp rescaleOp = new RescaleOp(0.4f, 15, null);
 		rescaleOp.filter(bg, bg);
 		backGrounds.add(new Background(bg, 0.1, 0, false, 1));
-		
+
 		bg = Util.generateStalactiteBackGround();
 		rescaleOp = new RescaleOp(0.5f, 15, null);
 		rescaleOp.filter(bg, bg);
@@ -128,10 +129,10 @@ public class World extends GameWorld{
 
 		//no mroe need for these ? because the background is a custom image.
 		//no free space is left
-//		g.setColor(Color.gray.darker());
-//		g.fillRect(0, 0, WIDTH, HEIGHT);
-		
-		
+		//		g.setColor(Color.gray.darker());
+		//		g.fillRect(0, 0, WIDTH, HEIGHT);
+
+
 		g.setFont(Constants.FONT_ITEMS);
 
 		//draw backgrounds first. all other pictures will be drawn in front of it
@@ -154,7 +155,11 @@ public class World extends GameWorld{
 		}
 
 		//Draw all objects/entities in the map here
-		for(MapObject obj : listWithMapObjects){
+
+		Iterator<MapObject> it = listWithMapObjects.iterator();
+		while(it.hasNext()){
+			MapObject obj = it.next();
+
 			//do not draw entities outside of the player's range
 			if(isOutOfBounds(obj))
 				continue;
@@ -264,13 +269,13 @@ public class World extends GameWorld{
 
 		//process key input
 		handleInput();
-		
+
 		if(player.isDead() && !(guiDisplaying instanceof GuiDeathScreen)){
 			//TODO
 			//player.update for death animation here
-			
+
 			//if animation.playedOnce
-			
+
 			//then display death gui
 			guiDisplaying = new GuiDeathScreen(this, player);
 
@@ -314,7 +319,10 @@ public class World extends GameWorld{
 
 			player.update();
 
-			for(MapObject obj : listWithMapObjects){
+			Iterator<MapObject> it = listWithMapObjects.iterator();
+
+			while(it.hasNext()){
+				MapObject obj = it.next();
 
 				if(!isOutOfBounds(obj) || obj.persistantUpdate()){
 					obj.update();
@@ -342,7 +350,7 @@ public class World extends GameWorld{
 						if(player.getCollidingMapObjects().contains(obj))
 							player.getCollidingMapObjects().remove(obj);
 
-						listWithMapObjects.remove(obj);
+						it.remove();
 
 						if(obj instanceof EntityLiving){
 							if(((EntityLiving) obj).canPlayDeathAnimation()){
@@ -405,7 +413,7 @@ public class World extends GameWorld{
 
 		if (player.getHealth() == 0)
 			return;
-		
+
 		player.handleInput();
 
 		if (KeyHandler.isPressed(KeyHandler.B))
@@ -421,14 +429,6 @@ public class World extends GameWorld{
 
 		tag.writeBoolean("creatureFlag", hasCreaturesSpawned);
 
-		DataList list = new DataList();
-		for(MapObject mo : listWithMapObjects){
-			DataTag dt = new DataTag();
-			mo.writeToSave(dt);
-			list.write(dt);
-		}
-
-		tag.writeList("content", list);
 	}
 
 	@Override
@@ -518,7 +518,9 @@ public class World extends GameWorld{
 		}
 
 		else if(cmd.equals("kill")){
-			for(MapObject mo : listWithMapObjects){
+			Iterator<MapObject> it = listWithMapObjects.iterator();
+			while(it.hasNext()){
+				MapObject mo = it.next();
 				if(mo instanceof EntityLiving)
 					mo.remove = true;
 			}
@@ -544,7 +546,7 @@ public class World extends GameWorld{
 			if(split.length == 3){
 				Item item = Items.getItemFromUIN(split[1]);
 				if(item != null){
-					ItemStack stack = new ItemStack(item, Integer.valueOf(split[2]), item.getItemDamage());
+					ItemStack stack = new ItemStack(item, Integer.valueOf(split[2]));
 					player.setStackInNextAvailableSlot(stack);
 				}
 			}

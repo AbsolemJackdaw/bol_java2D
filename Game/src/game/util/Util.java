@@ -66,11 +66,11 @@ public class Util {
 
 			g.setFont(Constants.FONT_ITEMS);
 
-			for(int index = 0; index < stack.getItem().getToolTip(stack).size(); index++){
+			for(int index = 0; index < stack.getToolTip().size(); index++){
 				if(index == 0) // item name
-					Utility.drawStringWithShadow(stack.getItem().getToolTip(stack).get(index), pos[0] + 5, pos[1] + 11 + (index * 10), g);
+					Utility.drawStringWithShadow(stack.getToolTip().get(index), pos[0] + 5, pos[1] + 11 + (index * 10), g);
 				else
-					Utility.drawStringWithShadow(stack.getItem().getToolTip(stack).get(index), pos[0] + 5, pos[1] + 14 + (index * 10), g, new Color(0.4f, 0.5f, 0.7f), new Color(0.2f, 0.2f, 0.5f));
+					Utility.drawStringWithShadow(stack.getToolTip().get(index), pos[0] + 5, pos[1] + 14 + (index * 10), g, new Color(0.4f, 0.5f, 0.7f), new Color(0.2f, 0.2f, 0.5f));
 
 			}
 		}

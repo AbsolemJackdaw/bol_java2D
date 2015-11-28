@@ -8,8 +8,8 @@ import game.World;
 import game.entity.living.player.Player;
 import game.gui.GuiCrafting;
 import game.item.ItemStack;
-import game.item.ItemTool;
 import game.item.Items;
+import game.item.tool.ItemTool;
 
 import java.awt.image.BufferedImage;
 

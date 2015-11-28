@@ -7,18 +7,18 @@ public class ItemBelt extends ItemArmor{
 
 	public ItemBelt(String uin,String displayName) {
 		super(uin, displayName, EXTRA);
-
+		
 		if(uin.contains("_s"))
-			tooltipList.add("1/3 upgrades added");
+			info.add("1/3 upgrades added");
 		
 		else if(uin.contains("_l"))
-			tooltipList.add("3/3 upgrades added");
+			info.add("3/3 upgrades added");
 		
 		else if(uin.contains("_m"))
-			tooltipList.add("2/3 upgrades added");
+			info.add("2/3 upgrades added");
 		
 		else
-			tooltipList.add("0/3 upgrades added");
+			info.add("0/3 upgrades added");
 	}
 
 	/**the amount of extra slots it adds to the player's inventory*/

@@ -46,13 +46,14 @@ import game.item.ItemArmor;
 import game.item.ItemBelt;
 import game.item.ItemBlock;
 import game.item.ItemStack;
-import game.item.ItemTool;
 import game.item.Items;
+import game.item.tool.ItemTool;
 import game.util.Util;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Player extends EntityLiving implements IInventory{
@@ -112,7 +113,7 @@ public class Player extends EntityLiving implements IInventory{
 	private boolean wasInwater;
 
 	private float bufferHealth;
-	
+
 	public Player(World world) {
 		super(world, "player");
 
@@ -136,7 +137,7 @@ public class Player extends EntityLiving implements IInventory{
 		setPosition(5, 5);
 
 		initHealth(3f);
-		
+
 		knockBackForce = 2d;
 	}
 
@@ -152,12 +153,12 @@ public class Player extends EntityLiving implements IInventory{
 
 			bufferHealth += f;
 			float deducted = 0f;
-			
+
 			while(bufferHealth >= 0.5f){
 				bufferHealth -= 0.5f;
 				deducted += 0.5f;
 			}
-			
+
 			super.hurtEntity(deducted, p);
 
 		}
@@ -237,14 +238,14 @@ public class Player extends EntityLiving implements IInventory{
 		if(right)
 			facingRight = true;
 	}
-	
+
 	@Override
 	public void setLeft(boolean b) {
 		super.setLeft(b);
 		if(left)
 			facingRight = false;
 	}
-	
+
 	private int delay = 20;
 
 	public void handleInput(){
@@ -280,41 +281,46 @@ public class Player extends EntityLiving implements IInventory{
 		}
 
 
-		if(KeyHandler.isPressed(KeyHandler.INTERACT))
-			for(MapObject o : getWorld().listWithMapObjects)
+		if(KeyHandler.isPressed(KeyHandler.INTERACT)){
+
+			Iterator<MapObject> it = getWorld().listWithMapObjects.iterator();
+			while(it.hasNext()){
+				MapObject o = it.next();
 				if(o.intersects(this))
 					o.interact(this);
+			}
 
-		for(int key : hotBarKeys)
-			if(KeyHandler.isPressed(key)){
-				int keyPressed = key - KeyHandler.ONE;
+			for(int key : hotBarKeys)
+				if(KeyHandler.isPressed(key)){
+					int keyPressed = key - KeyHandler.ONE;
 
-				if(getStackInSlot(keyPressed) != null){
-					if(getStackInSlot(keyPressed).getItem() != null){
-						Item item = getStackInSlot(keyPressed).getItem();
-						//place down blocks
-						if(item instanceof ItemBlock){
-							item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(),this, keyPressed);
-						}
-						//equip armor or weapon
-						else if(item instanceof ItemTool){
-							if(invArmor.getWeapon() == null){
-								invArmor.setWeapon(getStackInSlot(keyPressed).copy());
-								setStackInSlot(keyPressed, null);
-							}else
+					if(getStackInSlot(keyPressed) != null){
+						if(getStackInSlot(keyPressed).getItem() != null){
+							Item item = getStackInSlot(keyPressed).getItem();
+							//place down blocks
+							if(item instanceof ItemBlock){
+								item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(),this, keyPressed);
+							}
+							//equip armor or weapon
+							else if(item instanceof ItemTool){
+								if(invArmor.getWeapon() == null){
+									invArmor.setWeapon(getStackInSlot(keyPressed).copy());
+									setStackInSlot(keyPressed, null);
+								}else
+									item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
+							}
+							//any other item
+							else
 								item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
 						}
-						//any other item
-						else
-							item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
-					}
-				}else{
-					if(invArmor.getWeapon() != null){
-						setStackInSlot(keyPressed, invArmor.getWeapon().copy());
-						invArmor.setWeapon(null);
+					}else{
+						if(invArmor.getWeapon() != null){
+							setStackInSlot(keyPressed, invArmor.getWeapon().copy());
+							invArmor.setWeapon(null);
+						}
 					}
 				}
-			}
+		}
 	}
 
 	@Override
@@ -753,7 +759,7 @@ public class Player extends EntityLiving implements IInventory{
 
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack) {
-		
+
 		if(inventory[slot] == null && stack != null)
 			inventory[slot] = stack.copy();
 		else if (stack == null ){
@@ -1017,7 +1023,7 @@ public class Player extends EntityLiving implements IInventory{
 			right = true;
 		}
 	}
-	
+
 	public boolean isDead(){
 		return health <= 0f;
 	}
