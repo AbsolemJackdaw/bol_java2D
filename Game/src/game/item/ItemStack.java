@@ -18,10 +18,14 @@ public class ItemStack
 
 	private ToolModifier[] mods;
 
+	private int modifiersCount;
+
 	public ItemStack(Item i, int size) {
 		item = i;
 		stackSize = size;
-		
+
+		modifiersCount = i.modifiers;
+
 		initMaxDamage();
 		initToolTips();
 	}
@@ -41,7 +45,7 @@ public class ItemStack
 		//if item can be damaged
 		if(getMaxDamage() > 0)
 			tooltipList.add(getDamage()+"/"+getMaxDamage());
-		
+
 		if(getItem().hasModifiers()){
 			if(mods != null){
 				int count = 0;
@@ -77,9 +81,9 @@ public class ItemStack
 	public ItemStack setDamage(int i){
 		if(i > getMaxDamage())
 			i = getMaxDamage();
-		
+
 		damage = i;
-		
+
 		return this;
 	}
 	public int getDamage(){
@@ -108,11 +112,7 @@ public class ItemStack
 		DataList modList = data.readList("mods");
 
 		if(modList != null){
-			if(modList.data().size() > 3)
-				is.mods = new ToolModifier[modList.data().size()];
-			else
-				is.mods = new ToolModifier[3];
-
+			is.mods = new ToolModifier[modList.data().size()];
 			for(int i = 0; i < modList.data().size(); i ++){
 				DataTag dt = modList.readArray(i);
 				ToolModifier mod = new ToolModifier(dt);
@@ -131,9 +131,10 @@ public class ItemStack
 		data.writeInt("dmg", getDamage());
 		item.writeToSave(data);
 
-		DataList modList = new DataList();
+		DataList modList = null;
 
-		if(mods != null)
+		if(mods != null){
+			modList = new DataList();
 			for(ToolModifier mod : mods){
 				if(mod != null){
 					DataTag tag = new DataTag();
@@ -141,6 +142,7 @@ public class ItemStack
 					modList.write(tag);
 				}
 			}
+		}
 
 		data.writeList("mods", modList);
 
@@ -216,7 +218,7 @@ public class ItemStack
 	public void addModifier(ToolModifier mod){
 
 		if(mods == null){
-			mods = new ToolModifier[3];
+			mods = new ToolModifier[modifiersCount];
 			mods[0] = mod;
 		}
 
@@ -259,7 +261,7 @@ public class ItemStack
 			}
 		return bonus;
 	}
-	
+
 	public int getModifierCount(int modID){
 		int count = 0;
 
@@ -275,4 +277,8 @@ public class ItemStack
 		return count;
 	}
 
+	@Override
+	public String toString() {
+		return getItem().getDisplayName() + " " + damage + " " + getMaxDamage() + " ";
+	}
 }

@@ -8,6 +8,7 @@ public class ToolModifier {
 	public static final int EFF = 1;
 	public static final int DUR = 2;
 	public static final int MOD = 3;
+	public static final int UPG = 4;
 
 	private int ID = -1;
 	private int modifier = -1;

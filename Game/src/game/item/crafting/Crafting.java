@@ -25,8 +25,8 @@ public class Crafting {
 	public static final int Whetstone = 10;
 	public static final int Leather = 11;
 
-	public static final int Oven = 2;
-
+	public static final int RefinedStone = 12; 
+	public static final int OvenBase = 13; 
 
 	//ADVANCED CRAFTING
 	public static final int Lantern = 0;
@@ -59,17 +59,17 @@ public class Crafting {
 		case Sword:
 			return new ItemStack[]{
 					new ItemStack(Items.handle_sword, 1),
-					new ItemStack(Items.rock, 1)
+					new ItemStack(Items.stone, 1)
 			};
 		case Axe:
 			return new ItemStack[]{
 					new ItemStack(Items.handle_soft, 1),
-					new ItemStack(Items.rock, 1)
+					new ItemStack(Items.stone, 1)
 			};
 		case Pickaxe:
 			return new ItemStack[]{
 					new ItemStack(Items.handle_hard, 1),
-					new ItemStack(Items.rock, 1)
+					new ItemStack(Items.stone, 1)
 			};
 
 		case Belt:
@@ -86,13 +86,25 @@ public class Crafting {
 		case Whetstone:
 			return new ItemStack[]{
 					new ItemStack(Items.leather, 1),
-					new ItemStack(Items.rock, 1)
+					new ItemStack(Items.stone, 1)
 			};
 
 		case Leather:
 			return new ItemStack[]{
 					new ItemStack(Items.leather, 1),
 					new ItemStack(Items.leather, 1)
+			};
+			
+		case RefinedStone:
+			return new ItemStack[]{
+					new ItemStack(Items.stone, 1),
+					new ItemStack(Items.stone, 1)
+			};
+			
+		case OvenBase:
+			return new ItemStack[]{
+					new ItemStack(Items.refinedStone, 1),
+					new ItemStack(Items.refinedStone, 1)
 			};
 		}
 		return null;
@@ -128,6 +140,10 @@ public class Crafting {
 			return new ItemStack(Items.whetstone);		
 		case Leather:
 			return new ItemStack(Items.leather_fine);			
+		case RefinedStone:
+			return new ItemStack(Items.refinedStone);
+		case OvenBase:
+			return new ItemStack(Items.ovenBase);
 		}
 
 		return null;
@@ -159,7 +175,7 @@ public class Crafting {
 
 		boolean callBack = true;
 
-		for(int i = 0 ; i < 12; i++){
+		for(int i = 0 ; i < 20; i++){
 
 			ItemStack[] compare = getRecipe(i);
 
@@ -168,8 +184,9 @@ public class Crafting {
 
 			if(compare.length == 2){
 				//any match. does not allow for order based crafting
+				
 				if(compare[0].equals(stacks[0]) && compare[1].equals(stacks[1]) || 
-						compare[1].equals(stacks[0]) && compare[0].equals(stacks[1])){
+						compare[0].equals(stacks[1]) && compare[1].equals(stacks[0])){
 
 					System.out.println("Recipe " + i + " was a match");
 
@@ -199,14 +216,12 @@ public class Crafting {
 
 		//no recipe matched, try craftingCallBack
 		if(callBack){
+			System.out.println("no recipe match found... ressorting to callback");
+
 			ItemStack copy = stacks[1].copy();
 			Item item = stacks[1].getItem();
 			
 			item.craftingCallBack(stacks[0], stacks[1]);
-			
-			System.out.println(!copy.equals(stacks[1]));
-			System.out.println(copy);
-			System.out.println(stacks[1]);
 			
 			player.setStackInSlot(slots[1], null);
 			player.setStackInSlot(slots[1], stacks[1]);

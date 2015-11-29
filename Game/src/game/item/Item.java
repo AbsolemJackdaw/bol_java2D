@@ -29,6 +29,8 @@ public class Item {
 
 	protected List <String> info;
 
+	protected int modifiers = 3;
+	
 	public Item(String uin, String displayName){
 		UIN = uin;
 		this.displayName = displayName;
@@ -140,7 +142,7 @@ public class Item {
 		return true;
 	}
 
-	public void update(){
+	public void update(Player player, ItemStack stack, int slot){
 
 	}
 
@@ -165,7 +167,8 @@ public class Item {
 	 * @param base : the stack that can be changed
 	 */
 	public void craftingCallBack(ItemStack component, ItemStack base){
-		
+		if(!base.canAddModifier())
+			return;
 	}
 
 	/**

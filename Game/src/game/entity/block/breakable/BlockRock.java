@@ -20,7 +20,7 @@ public class BlockRock extends BlockBreakable{
 	
 	@Override
 	public ItemStack getDrop() {
-		return new ItemStack(Items.rock, new Random().nextInt(4)+1);
+		return new ItemStack(Items.stone, new Random().nextInt(4)+1);
 	}
 	
 	@Override

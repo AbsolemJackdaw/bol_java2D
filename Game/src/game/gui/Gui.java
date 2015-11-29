@@ -63,4 +63,12 @@ public class Gui {
 	public int[] getToolTipWindowPosition(){
 		return new int[]{0,0};
 	}
+	
+	/**
+	 * Method called in world update function.
+	 * allows for gui's to have update logic
+	 */
+	public void update(){
+		
+	}
 }

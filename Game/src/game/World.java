@@ -276,8 +276,12 @@ public class World extends GameWorld{
 			return;
 		}
 
+		guiDisplaying.update();
+
 		//update game logics only if displaying gui is HUD, or the gui doesnt pause the game aka, in world
 		if(guiDisplaying instanceof GuiHud || guiDisplaying != null && !guiDisplaying.pausesGame()){
+
+
 
 			if(shake){
 
@@ -640,7 +644,7 @@ public class World extends GameWorld{
 				if(stack.getItem().equals(Items.lantern)){
 
 					ItemLantern lant = (ItemLantern) stack.getItem();
-					if(!lant.isLit())
+					if(!lant.isLit(stack))
 						break;
 
 					int i =5;

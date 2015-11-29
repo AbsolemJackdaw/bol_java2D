@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import engine.image.Images;
 import game.entity.block.Blocks;
+import game.item.block.ItemBlock;
+import game.item.block.ItemBlockOven;
 import game.item.tool.ItemSword;
 import game.item.tool.ItemTool;
 import game.item.tool.ItemTool.EnumTool;
@@ -22,19 +24,21 @@ public class Items {
 
 	public static Item stick = new Item("stick", "Stick").setTexture(Images.loadImage("/items/resources/stick.png"));
 	public static Item iron = new Item("iron", "Chunk of Iron").setTexture(Images.loadImage("/items/resources/iron.png")).setCookable();
-	public static Item rock = new Item("stone", "Rock").setTexture(Images.loadImage("/items/resources/stone.png"));
+	public static Item stone = new Item("stone", "Stone").setTexture(Images.loadImage("/items/resources/stone.png"));
 	public static Item ingot = new Item("ingot", "Iron Ingot").setTexture(Images.loadImage("/items/resources/ingot.png"));
 	public static Item grease = new Item("grease", "Grease").setTexture(Images.loadImage("/items/resources/grease.png"));
 	public static Item leather = new Item("leather", "Skin").setTexture(Images.loadImage("/items/resources/leather.png"));
 	public static Item leather_fine = new Item("leather_fine", "Leather").setTexture(Images.loadImage("/items/resources/leather.png"));
 	public static Item woodChip = new Item("woodchip","Wood Chips").setTexture(Images.loadImage("/items/resources/wood_chip.png")).setFuel().setFuelTimer(800);
-
+	public static Item refinedStone = new Item("refinedstone","Nicely Worked and Processed Stone by You").setTexture(Images.loadImage("/items/resources/stone_refined.png"));
+	public static Item whetstone = new Item("whetstone","WhetStone").setTexture(Images.loadImage("/items/manufactured/whetstone.png"));
+	
+	public static Item ovenBase = new ItemOvenbase("ovenbase", "Oven Base").setTexture(Images.loadImage("/items/manufactured/oven_base.png"));
+	
 	public static Item handle_sword = new Item("handle_sword","Sword Handle").setTexture(Images.loadImage("/items/tools/handle_sword.png"));
 	public static Item handle_soft = new Item("handle_soft","Modest Handle").setTexture(Images.loadImage("/items/tools/handle_soft.png"));
 	public static Item handle_hard = new Item("handle_hard","Greater Handle").setTexture(Images.loadImage("/items/tools/handle_hard.png"));
 
-	public static Item whetstone = new Item("whetstone","WhetStone").setTexture(Images.loadImage("/items/manufactured/whetstone.png"));
-	
 	public static ItemFood meat_pig_raw = (ItemFood) new ItemFood("pig_raw", "Raw Pig Meat", 0.5F).setTexture(Images.loadImage("/items/food/meat_pig.png")).setCookable();
 	public static ItemFood meat_pig = (ItemFood)new ItemFood("pig_cooked","Pig Meat", 1f).setTexture(Images.loadImage("/items/food/meat_pig_cooked.png"));
 	public static ItemFood meat_fish_raw = (ItemFood) new ItemFood("fish_raw", "Raw Fish", 0.75f).setTexture(Images.loadImage("/items/food/meat_fish_raw.png")).setCookable();
@@ -42,10 +46,11 @@ public class Items {
 	
 	public static ItemPouch pouch = (ItemPouch) new ItemPouch("pouch","Leather Pouch").setTexture(Images.loadImage("/items/manufactured/pouch.png"));
 
-	public static ItemBlock craftTable = (ItemBlock) new ItemBlock(Blocks.CRAFTINGTABLE, "Work Desk").setTexture(Images.loadImage("/blocks/workbench.png"));
-	public static ItemBlock campfire = (ItemBlock) new ItemBlock(Blocks.CAMPFIRE, "Campfire").setTexture(Images.loadImage("/blocks/fire_logs.png"));
-	public static ItemBlock oven = (ItemBlock) new ItemBlock(Blocks.OVEN, "Oven").setTexture(Images.loadImage("/blocks/oven.png"));
-	public static ItemBlock advancedCraftTable = (ItemBlock) new ItemBlock(Blocks.ADVANCEDCRAFT, "Advanced Work Desk").setTexture(Images.loadImage("/blocks/advanced_workbench.png"));
+//	public static ItemBlock craftTable = (ItemBlock) new ItemBlock(Blocks.CRAFTINGTABLE, "Work Desk").setTexture(Images.loadImage("/blocks/workbench.png"));
+//	public static ItemBlock campfire = (ItemBlock) new ItemBlock(Blocks.CAMPFIRE, "Campfire").setTexture(Images.loadImage("/blocks/fire_logs.png"));
+//	public static ItemBlock advancedCraftTable = (ItemBlock) new ItemBlock(Blocks.ADVANCEDCRAFT, "Advanced Work Desk").setTexture(Images.loadImage("/blocks/advanced_workbench.png"));
+
+	public static ItemBlockOven oven = (ItemBlockOven) new ItemBlockOven(Blocks.OVEN, "Oven").setTexture(Images.loadImage("/blocks/oven.png"));
 
 	public static ItemTool pickaxe = (ItemTool) new ItemTool("pickaxe", "Stone Pickaxe", EnumTool.ROCK).setBaseAttack(2).setEffectiveness(ItemTool.PICKAXE).setEffectiveDamage(5).setBaseDamage(75).setTexture(Images.loadImage("/items/tools/pickaxe.png"));
 	public static ItemTool sword   = (ItemTool) new ItemSword("sword", "Stone Sword", EnumTool.ROCK).setBaseAttack(4).setEffectiveness(ItemTool.SWORD).setEffectiveDamage(2).setBaseDamage(120).setTexture(Images.loadImage("/items/tools/sword.png"));
@@ -65,12 +70,12 @@ public class Items {
 	public static void loadItems(){
 
 			registerItem(stick);
-			registerItem(craftTable);
+//			registerItem(craftTable);
 			registerItem(woodChip);
 			registerItem(iron);
-			registerItem(rock);
+			registerItem(stone);
 			registerItem(pickaxe);
-			registerItem(campfire);
+//			registerItem(campfire);
 			registerItem(sword);
 			registerItem(axe);
 			registerItem(oven);
@@ -85,19 +90,19 @@ public class Items {
 			registerItem(belt_l);
 			registerItem(leather);
 			registerItem(pouch);
-			registerItem(advancedCraftTable);
+//			registerItem(advancedCraftTable);
 			registerItem(bomb);
 			registerItem(bomb_better);
 			registerItem(bomb_ultra);
 			registerItem(meat_fish_raw);
 			registerItem(meat_fish);
-
+			registerItem(whetstone);
+			registerItem(leather_fine);
 			registerItem(handle_sword);
 			registerItem(handle_soft);
 			registerItem(handle_hard);
-			
-			registerItem(whetstone);
-			registerItem(leather_fine);
+			registerItem(refinedStone);
+			registerItem(ovenBase);
 
 	}
 

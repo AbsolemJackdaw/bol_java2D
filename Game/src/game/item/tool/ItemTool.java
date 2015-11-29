@@ -32,6 +32,7 @@ public class ItemTool extends Item {
 	public ItemTool(String uin, String displayName, EnumTool type){
 		super(uin, displayName);
 		this.type = type;
+		this.modifiers = 3;
 	}
 
 	public ItemTool setBaseAttack(int baseAttack) {
@@ -107,10 +108,9 @@ public class ItemTool extends Item {
 	
 	@Override
 	public void craftingCallBack(ItemStack component, ItemStack base) {
-		if(!base.canAddModifier())
-			return;
+		super.craftingCallBack(component, base);
 		
-		if(component.getItem().equals(Items.rock) && type == EnumTool.ROCK){
+		if(component.getItem().equals(Items.stone) && type == EnumTool.ROCK){
 			base.addModifier(new ToolModifier(ToolModifier.DUR, 10, ToolModifier.EFF, 1));
 		}
 		else if(component.getItem().equals(Items.iron) && type == EnumTool.IRON){

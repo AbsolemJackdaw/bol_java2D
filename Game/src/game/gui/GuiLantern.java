@@ -9,7 +9,6 @@ import game.item.ItemStack;
 import game.item.Items;
 import game.util.Util;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -32,31 +31,31 @@ public class GuiLantern extends GuiContainer {
 	@Override
 	public void draw(Graphics2D g) {
 
-		g.drawImage(img.getSubimage(0, 0, 100, 108), centerX - 50, centerY - 54 ,null);
-
-		int time = lantern.burnTime/60;
-		int minutes = time/60;
-		int seconds = time%60;
-		String sec = seconds < 10 ? "0"+seconds : ""+seconds;
-
-		g.setColor(Color.white);
-		g.drawString(minutes+":"+sec, centerX + 19, centerY - 42);
-
-		if(lantern != null)
-			if(lantern.isLit())
-				g.drawImage(img.getSubimage(100, 0, 48, 62), centerX - 50 + 11, centerY - 54 + 3 ,null);
-
-		drawPlayerExtendedContainer(g, 0, 89, 37, 92, 50, -53, img);
-		drawPlayerInventoryItems(g, 48, 18);
-
-		ItemStack i = secondairyInventory.getStackInSlot(0);
-		if(i != null){
-			int x = centerX - 23;
-			int y = centerY - 22;
-			i.getItem().draw(g, x, y, i);
-		}
-		super.draw(g);
-		lantern.update();
+//		g.drawImage(img.getSubimage(0, 0, 100, 108), centerX - 50, centerY - 54 ,null);
+//
+//		int time = lantern.get/60;
+//		int minutes = time/60;
+//		int seconds = time%60;
+//		String sec = seconds < 10 ? "0"+seconds : ""+seconds;
+//
+//		g.setColor(Color.white);
+//		g.drawString(minutes+":"+sec, centerX + 19, centerY - 42);
+//
+//		if(lantern != null)
+//			if(lantern.isLit())
+//				g.drawImage(img.getSubimage(100, 0, 48, 62), centerX - 50 + 11, centerY - 54 + 3 ,null);
+//
+//		drawPlayerExtendedContainer(g, 0, 89, 37, 92, 50, -53, img);
+//		drawPlayerInventoryItems(g, 48, 18);
+//
+//		ItemStack i = secondairyInventory.getStackInSlot(0);
+//		if(i != null){
+//			int x = centerX - 23;
+//			int y = centerY - 22;
+//			i.getItem().draw(g, x, y, i);
+//		}
+//		super.draw(g);
+//		lantern.update();
 	}
 
 	@Override
@@ -114,25 +113,25 @@ public class GuiLantern extends GuiContainer {
 						}
 					}
 				}else{ //slot used to light the lamp
-					if(lantern != null){
-						if(lantern.getStackInSlot(0) != null){
-
-							lantern.burnTime += lantern.defaultBurnTime;
-							Util.decreaseStack(secondairyInventory, 0, 1);
-
-							if(!lantern.isLit())
-								lantern.setLit(true);
-						}else{ // if lamp stack is empty, it can be toggled on or off !
-							if(lantern.isLit()){
-								lantern.setLit(false);
-								return;
-							}
-							if(!lantern.isLit() && lantern.burnTime > 0){
-								lantern.setLit(true);
-								return;
-							}
-						}
-					}
+//					if(lantern != null){
+//						if(lantern.getStackInSlot(0) != null){
+//
+//							lantern.burnTime += lantern.defaultBurnTime;
+//							Util.decreaseStack(secondairyInventory, 0, 1);
+//
+//							if(!lantern.isLit())
+//								lantern.setLit(true);
+//						}else{ // if lamp stack is empty, it can be toggled on or off !
+//							if(lantern.isLit()){
+//								lantern.setLit(false);
+//								return;
+//							}
+//							if(!lantern.isLit() && lantern.burnTime > 0){
+//								lantern.setLit(true);
+//								return;
+//							}
+//						}
+//					}
 				}
 			}else{
 				int slot = slotIndex[0]+ (slotIndex[1]*(rowsX()));

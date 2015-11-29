@@ -222,8 +222,7 @@ public class Loading {
 
 				world.tasks.add(new WorldTask(WorldTask.SWIM, 1, EnumTask.ACTION));
 				world.tasks.add(new WorldTask(Items.woodChip.getDisplayName(), 10, EnumTask.COLLECTIBLE));
-				world.tasks.add(new WorldTask(Items.rock.getDisplayName(), 5, EnumTask.COLLECTIBLE));
-				world.tasks.add(new WorldTask(Items.craftTable.getDisplayName(), 1, EnumTask.CRAFT));
+				world.tasks.add(new WorldTask(Items.stone.getDisplayName(), 5, EnumTask.COLLECTIBLE));
 
 				BlockInfoPane pane = null;
 				ArrayList<String> text = null;

@@ -47,12 +47,12 @@ public class BlockLight extends BlockBreakable implements IInventory{
 
 	@Override
 	public BufferedImage getEntityTexture() {
-		return Items.campfire.getTexture();
+		return null;// Items.campfire.getTexture();
 	}
 
 	@Override
 	public ItemStack getDrop() {
-		return new ItemStack(Items.campfire, 1);
+		return null; //new ItemStack(Items.campfire, 1);
 	}
 
 	@Override

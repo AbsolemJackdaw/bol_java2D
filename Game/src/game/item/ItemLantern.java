@@ -9,14 +9,13 @@ import game.gui.GuiLantern;
 
 public class ItemLantern extends Item implements IInventory {
 
-	public int burnTime = 0;
-	public final int defaultBurnTime = 60*60;
-	private boolean isLit = false;
+	public final int defaultBurnTime = -(60*60);
 
 	public ItemLantern(String uin, String displayName) {
 		super(uin, displayName);
 		
 		this.info.add("A small light in the darkness ... ");
+		setBaseDamage(defaultBurnTime);
 	}
 
 	@Override
@@ -103,36 +102,36 @@ public class ItemLantern extends Item implements IInventory {
 	@Override
 	public void writeToSave(DataTag tag) {
 		super.writeToSave(tag);
-		tag.writeInt("burntime", burnTime);
-		tag.writeBoolean("isLit", isLit());
 	}
 
 	@Override
 	public void readFromSave(DataTag tag) {
 		super.readFromSave(tag);
-		burnTime = tag.readInt("burntime");
-		setLit(tag.readBoolean("isLit"));
 	}
 
-	public boolean isLit() {
-		return isLit;
+	public boolean isLit(ItemStack stack) {
+		return stack.getDamage() < 0;
 	}
 
-	public void setLit(boolean isLit) {
-		this.isLit = isLit;
+	public void setLit(ItemStack stack, boolean isLit) {
+		stack.setDamage(0);
 	}
 
 	@Override
-	public void update(){
+	public void update(Player player, ItemStack stack, int slot){
 		
-		if(burnTime > 0)
-			if(isLit())
-				burnTime--;
+		//TODO change this ! 
+		//logic should be handled in itemstack ...? or so. idk.
+		//this is bound to affect all other instances of itemLantern as well
+		
+		if(stack.getDamage() < 0)
+			if(isLit(stack))
+				stack.setDamage(stack.getDamage()+1);
 			else
 				;
 		else
-			if(isLit())
-				setLit(false);
+			if(isLit(stack))
+				setLit(stack, false);
 
 	}
 

@@ -55,7 +55,7 @@ public class BlockCraftingTable extends BlockBreakable {
 	
 	@Override
 	public ItemStack getDrop() {
-		return !advanced ?  new ItemStack(Items.craftTable, 1) : new ItemStack(Items.advancedCraftTable, 1) ;
+		return null; //!advanced ?  new ItemStack(Items.craftTable, 1) : new ItemStack(Items.advancedCraftTable, 1) ;
 	}
 	
 }

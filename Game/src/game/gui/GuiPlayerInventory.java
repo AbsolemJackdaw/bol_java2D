@@ -317,4 +317,17 @@ public class GuiPlayerInventory extends GuiContainer {
 	private void craft(){
 		Crafting.craft(player, craftables, craftSlots);
 	}
+
+	@Override
+	public void update() {
+
+		for(int i = 0; i < player.getInventory().getItems().length; i++){
+			ItemStack stack = player.getInventory().getItems()[i];
+			if(stack != null){
+				Item item = stack.getItem();
+				if(item.isUpdateAble())
+					item.update(player, stack, i);
+			}
+		}
+	}
 }

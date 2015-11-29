@@ -20,7 +20,7 @@ public class DataTag {
 	public DataTag() {
 		data = new JSONObject();
 	}
-	
+
 	public JSONObject getData(){ return data; }
 
 	public boolean hasTag(String tag){
@@ -35,20 +35,20 @@ public class DataTag {
 
 	@SuppressWarnings("unchecked")
 	public void writeList(String tag, DataList list){
-
-		data.put(tag, list.data());
+		if(list != null)
+			data.put(tag, list.data());
 
 	}
 
 	public DataList readList(String tag){
-		
+
 		if(!data.containsKey(tag)){
 			System.out.println("The tag "+ tag + " did not exist.");
 			return null;
 		}
-		
+
 		DataList list = new DataList((JSONArray)data.get(tag));
-		
+
 		return list;
 	}
 
@@ -127,20 +127,20 @@ public class DataTag {
 			b = 1;
 		else
 			b = 0;
-		
+
 		data.put(tag, b);
 	}
-	
+
 	public boolean readBoolean(String tag){
 
 		Object o = data.get(tag);
-		
+
 		if(o instanceof Byte){
 			Byte b = (Byte)o;
-			
+
 			return b == 0 ? false : true;
 		}
-		
+
 		return o.toString().equals("0") ? false : true;
 	}
 }

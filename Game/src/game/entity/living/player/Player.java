@@ -44,9 +44,9 @@ import game.entity.living.EntityLiving;
 import game.item.Item;
 import game.item.ItemArmor;
 import game.item.ItemBelt;
-import game.item.ItemBlock;
 import game.item.ItemStack;
 import game.item.Items;
+import game.item.block.ItemBlock;
 import game.item.tool.ItemTool;
 import game.util.Util;
 
@@ -360,11 +360,12 @@ public class Player extends EntityLiving implements IInventory{
 
 		updatePlayerAnimation();
 
-		for(ItemStack stack : getInventory().getItems()){
+		for(int i = 0; i < getInventory().getItems().length; i++){
+			ItemStack stack = getInventory().getItems()[i];
 			if(stack != null){
 				Item item = stack.getItem();
 				if(item.isUpdateAble())
-					item.update();
+					item.update(this, stack, i);
 			}
 		}
 
