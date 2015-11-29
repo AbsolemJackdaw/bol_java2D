@@ -27,6 +27,11 @@ public class Crafting {
 
 	public static final int RefinedStone = 12; 
 	public static final int OvenBase = 13; 
+	
+	public static final int PickaxeSmooth = 14;
+	public static final int AxeSmooth = 15;
+	public static final int SwordSmooth = 16;
+
 
 	//ADVANCED CRAFTING
 	public static final int Lantern = 0;
@@ -72,6 +77,22 @@ public class Crafting {
 					new ItemStack(Items.stone, 1)
 			};
 
+		case SwordSmooth:
+			return new ItemStack[]{
+					new ItemStack(Items.handle_sword, 1),
+					new ItemStack(Items.refinedStone, 1)
+			};
+		case AxeSmooth:
+			return new ItemStack[]{
+					new ItemStack(Items.handle_soft, 1),
+					new ItemStack(Items.refinedStone, 1)
+			};
+		case PickaxeSmooth:
+			return new ItemStack[]{
+					new ItemStack(Items.handle_hard, 1),
+					new ItemStack(Items.refinedStone, 1)
+			};
+			
 		case Belt:
 			return new ItemStack[]{
 					new ItemStack(Items.leather_fine, 1),
@@ -118,12 +139,19 @@ public class Crafting {
 			return new ItemStack(Items.stick, 2);
 
 		case Pickaxe: 
-			return new ItemStack(Items.pickaxe, 1);
+			return new ItemStack(Items.rock_pickaxe, 1);
 		case Sword :
-			return new ItemStack(Items.sword, 1);
+			return new ItemStack(Items.rock_sword, 1);
 		case Axe :
-			return new ItemStack(Items.axe, 1);
+			return new ItemStack(Items.rock_axe, 1);
 
+		case PickaxeSmooth: 
+			return new ItemStack(Items.stone_pickaxe, 1);
+		case SwordSmooth :
+			return new ItemStack(Items.stone_sword, 1);
+		case AxeSmooth :
+			return new ItemStack(Items.stone_axe, 1);
+			
 		case SoftHandle:
 			return new ItemStack(Items.handle_soft);
 		case HardHandle:

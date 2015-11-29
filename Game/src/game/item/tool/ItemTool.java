@@ -18,14 +18,15 @@ public class ItemTool extends Item {
 	public int effectiveDamage;
 
 	public EnumTool type;
-	
+
 	public static final int NOTHING = 0;
 	public static final int PICKAXE = 1;
 	public static final int AXE = 2;
 	public static final int SWORD = 3;
-	
+
 	public static enum EnumTool {
 		ROCK,
+		STONE,
 		IRON
 	}
 
@@ -57,7 +58,7 @@ public class ItemTool extends Item {
 
 	/**Used to calculate damage done to blocks*/
 	public int getEffectiveDamage(ItemStack stack){
-		
+
 		return effectiveDamage + stack.getBonus(ToolModifier.EFF);
 	}
 
@@ -105,16 +106,22 @@ public class ItemTool extends Item {
 	public int getAttackDamage(ItemStack stack){
 		return getBaseAttack() + stack.getBonus(ToolModifier.DMG);
 	}
-	
+
 	@Override
 	public void craftingCallBack(ItemStack component, ItemStack base) {
 		super.craftingCallBack(component, base);
-		
+
 		if(component.getItem().equals(Items.stone) && type == EnumTool.ROCK){
 			base.addModifier(new ToolModifier(ToolModifier.DUR, 10, ToolModifier.EFF, 1));
+			base.damageStack(-10);
+		}
+		else if(component.getItem().equals(Items.refinedStone) && type == EnumTool.STONE){
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.EFF, 2));
+			base.damageStack(-20);
 		}
 		else if(component.getItem().equals(Items.iron) && type == EnumTool.IRON){
 			base.addModifier(new ToolModifier(ToolModifier.DUR, 50, ToolModifier.EFF, 3));
+			base.damageStack(-50);
 		}
 	}
 }

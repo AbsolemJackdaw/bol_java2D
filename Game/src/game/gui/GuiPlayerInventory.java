@@ -3,6 +3,7 @@ package game.gui;
 import engine.image.Images;
 import engine.keyhandlers.KeyHandler;
 import engine.window.GamePanel;
+import engine.window.gameAid.Utility;
 import game.World;
 import game.entity.living.player.Player;
 import game.item.Item;
@@ -81,7 +82,7 @@ public class GuiPlayerInventory extends GuiContainer {
 			ItemStack stack = secondairyInventory.getStackInSlot(slot);
 			if(stack != null){
 				if(!stack.getItem().isStackable() && stack.getDamage() > 0){
-					double dmg = (double)stack.getDamage()/100.0d * 15.0d;
+					double dmg = (double)stack.getDamage()/(double)stack.getMaxDamage() * 15.0d;
 
 					g.setColor(Color.DARK_GRAY);
 					g.drawRect(centerX - 26 + (18*slot),centerY-14, 15, 1);
@@ -98,7 +99,10 @@ public class GuiPlayerInventory extends GuiContainer {
 			text.add(KeyHandler.getKeyName(KeyHandler.CRAFT) + ":craft");
 		}
 
-		Util.drawToolTipText(g, text, new int[]{GamePanel.WIDTH/2 - 150/2 - 1, GamePanel.HEIGHT/2 - 75/2 + 46}, null, null);
+		if(crafting)
+			Utility.drawCenteredString(g, text.get(0), Constants.FONT_ITEMS, GamePanel.WIDTH/2 - 150/2 + 73, GamePanel.HEIGHT/2 - 75/2 + 5);
+		else
+			Util.drawToolTipText(g, text, new int[]{GamePanel.WIDTH/2 - 150/2 - 1, GamePanel.HEIGHT/2 - 75/2 + 46}, null, null);
 
 	}
 
@@ -146,9 +150,7 @@ public class GuiPlayerInventory extends GuiContainer {
 				crafting = true;
 
 				text.clear();
-				text.add("Combine");
-				text.add("" + player.getStackInSlot(slot_index).getItem().getDisplayName());
-				text.add("with...");
+				text.add("Combine "+ player.getStackInSlot(slot_index).getItem().getDisplayName() + " with...");
 
 				craftables[0] = player.getStackInSlot(slot_index).copy();
 				craftSlots[0] = slot_index;

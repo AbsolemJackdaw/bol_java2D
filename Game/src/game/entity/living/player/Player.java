@@ -286,38 +286,38 @@ public class Player extends EntityLiving implements IInventory{
 				if(mo.intersects(this))
 					mo.interact(this);
 			}
+		}
 
-			for(int key : hotBarKeys)
-				if(KeyHandler.isPressed(key)){
-					int keyPressed = key - KeyHandler.ONE;
+		for(int key : hotBarKeys)
+			if(KeyHandler.isPressed(key)){
+				int keyPressed = key - KeyHandler.ONE;
 
-					if(getStackInSlot(keyPressed) != null){
-						if(getStackInSlot(keyPressed).getItem() != null){
-							Item item = getStackInSlot(keyPressed).getItem();
-							//place down blocks
-							if(item instanceof ItemBlock){
-								item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(),this, keyPressed);
-							}
-							//equip armor or weapon
-							else if(item instanceof ItemTool){
-								if(invArmor.getWeapon() == null){
-									invArmor.setWeapon(getStackInSlot(keyPressed).copy());
-									setStackInSlot(keyPressed, null);
-								}else
-									item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
-							}
-							//any other item
-							else
+				if(getStackInSlot(keyPressed) != null){
+					if(getStackInSlot(keyPressed).getItem() != null){
+						Item item = getStackInSlot(keyPressed).getItem();
+						//place down blocks
+						if(item instanceof ItemBlock){
+							item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(),this, keyPressed);
+						}
+						//equip armor or weapon
+						else if(item instanceof ItemTool){
+							if(invArmor.getWeapon() == null){
+								invArmor.setWeapon(getStackInSlot(keyPressed).copy());
+								setStackInSlot(keyPressed, null);
+							}else
 								item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
 						}
-					}else{
-						if(invArmor.getWeapon() != null){
-							setStackInSlot(keyPressed, invArmor.getWeapon().copy());
-							invArmor.setWeapon(null);
-						}
+						//any other item
+						else
+							item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
+					}
+				}else{
+					if(invArmor.getWeapon() != null){
+						setStackInSlot(keyPressed, invArmor.getWeapon().copy());
+						invArmor.setWeapon(null);
 					}
 				}
-		}
+			}
 	}
 
 	@Override
@@ -397,15 +397,15 @@ public class Player extends EntityLiving implements IInventory{
 
 			if(bl.getEffectiveTool() == ItemTool.AXE){
 				if(invArmor.getWeapon() == null){
-					if(getInventory().hasStack(new ItemStack(Items.axe,1))){
-						int i = getSlotForStack(new ItemStack(Items.axe, 1));
+					if(getInventory().hasStack(new ItemStack(Items.rock_axe,1))){
+						int i = getSlotForStack(new ItemStack(Items.rock_axe, 1));
 						invArmor.setWeapon(getStackInSlot(i).copy());
 						getInventory().setStackInSlot(i, null);
 					}
 				}
-				else if(!invArmor.getWeapon().getItem().equals(Items.axe)){
-					if(getInventory().hasStack(new ItemStack(Items.axe,1))){
-						int i = getSlotForStack(new ItemStack(Items.axe, 1));
+				else if(!invArmor.getWeapon().getItem().equals(Items.rock_axe)){
+					if(getInventory().hasStack(new ItemStack(Items.rock_axe,1))){
+						int i = getSlotForStack(new ItemStack(Items.rock_axe, 1));
 
 						ItemStack heldTool = invArmor.getWeapon().copy();
 						ItemStack newTool = getStackInSlot(i).copy();
@@ -417,15 +417,15 @@ public class Player extends EntityLiving implements IInventory{
 				}
 			}else if(bl.getEffectiveTool() == ItemTool.PICKAXE){
 				if(invArmor.getWeapon() == null){
-					if(getInventory().hasStack(new ItemStack(Items.pickaxe,1))){
-						int i = getSlotForStack(new ItemStack(Items.pickaxe, 1));
+					if(getInventory().hasStack(new ItemStack(Items.rock_pickaxe,1))){
+						int i = getSlotForStack(new ItemStack(Items.rock_pickaxe, 1));
 						invArmor.setWeapon(getStackInSlot(i).copy());
 						getInventory().setStackInSlot(i, null);
 					}
 				}
-				else if(!invArmor.getWeapon().getItem().equals(Items.pickaxe)){
-					if(getInventory().hasStack(new ItemStack(Items.pickaxe,1))){
-						int i = getSlotForStack(new ItemStack(Items.pickaxe, 1));
+				else if(!invArmor.getWeapon().getItem().equals(Items.rock_pickaxe)){
+					if(getInventory().hasStack(new ItemStack(Items.rock_pickaxe,1))){
+						int i = getSlotForStack(new ItemStack(Items.rock_pickaxe, 1));
 						ItemStack heldTool = invArmor.getWeapon().copy();
 						ItemStack newTool = getStackInSlot(i).copy();
 
@@ -436,15 +436,15 @@ public class Player extends EntityLiving implements IInventory{
 				}
 			}else if(bl.getEffectiveTool() == ItemTool.SWORD){
 				if(invArmor.getWeapon() == null){
-					if(getInventory().hasStack(new ItemStack(Items.sword,1))){
-						int i = getSlotForStack(new ItemStack(Items.sword, 1));
+					if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
+						int i = getSlotForStack(new ItemStack(Items.rock_sword, 1));
 						invArmor.setWeapon(getStackInSlot(i).copy());
 						getInventory().setStackInSlot(i, null);
 					}
 				}
-				else if(!invArmor.getWeapon().getItem().equals(Items.sword)){
-					if(getInventory().hasStack(new ItemStack(Items.sword,1))){
-						int i = getSlotForStack(new ItemStack(Items.sword, 1));
+				else if(!invArmor.getWeapon().getItem().equals(Items.rock_sword)){
+					if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
+						int i = getSlotForStack(new ItemStack(Items.rock_sword, 1));
 						ItemStack heldTool = invArmor.getWeapon().copy();
 						ItemStack newTool = getStackInSlot(i).copy();
 
@@ -457,15 +457,15 @@ public class Player extends EntityLiving implements IInventory{
 		}
 		else if (o instanceof EntityLiving){
 			if(invArmor.getWeapon() == null){
-				if(getInventory().hasStack(new ItemStack(Items.sword,1))){
-					int i = getSlotForStack(new ItemStack(Items.sword, 1));
+				if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
+					int i = getSlotForStack(new ItemStack(Items.rock_sword, 1));
 					invArmor.setWeapon(getStackInSlot(i).copy());
 					getInventory().setStackInSlot(i, null);
 				}
 			}
-			else if(!invArmor.getWeapon().getItem().equals(Items.sword)){
-				if(getInventory().hasStack(new ItemStack(Items.sword,1))){
-					int i = getSlotForStack(new ItemStack(Items.sword, 1));
+			else if(!invArmor.getWeapon().getItem().equals(Items.rock_sword)){
+				if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
+					int i = getSlotForStack(new ItemStack(Items.rock_sword, 1));
 					ItemStack heldTool = invArmor.getWeapon().copy();
 					ItemStack newTool = getStackInSlot(i).copy();
 

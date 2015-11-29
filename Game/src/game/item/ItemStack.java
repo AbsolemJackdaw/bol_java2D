@@ -78,13 +78,13 @@ public class ItemStack
 		return this;
 	}
 
-	public ItemStack setDamage(int i){
-		if(i > getMaxDamage())
-			i = getMaxDamage();
+	public void setDamage(int i){
+//		if(i > getMaxDamage())
+//			i = getMaxDamage();
 
 		damage = i;
 
-		return this;
+		initToolTips();
 	}
 	public int getDamage(){
 		return damage;
@@ -107,12 +107,13 @@ public class ItemStack
 		int dmg = data.readInt("dmg");
 		item.readFromSave(data);
 
-		ItemStack is = new ItemStack(item, size).setDamage(dmg);
+		ItemStack is = new ItemStack(item, size);
+		is.setDamage(dmg);
 
 		DataList modList = data.readList("mods");
 
 		if(modList != null){
-			is.mods = new ToolModifier[modList.data().size()];
+			is.mods = new ToolModifier[is.item.modifiers];
 			for(int i = 0; i < modList.data().size(); i ++){
 				DataTag dt = modList.readArray(i);
 				ToolModifier mod = new ToolModifier(dt);

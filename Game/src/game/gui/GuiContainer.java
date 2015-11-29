@@ -227,7 +227,7 @@ public class GuiContainer extends Gui implements Container{
 
 
 												if(!i.getItem().isStackable() && i.getDamage() > 0){
-													double dmg = (double)i.getDamage()/100.0d * 15.0d;
+													double dmg = (double)i.getDamage()/(double)i.getMaxDamage() * 15.0d;
 													g.setColor(Color.DARK_GRAY);
 													g.drawRect(x,y+14, 15, 1);
 													g.setColor(Color.GREEN);
