@@ -51,13 +51,13 @@ public class Items {
 
 	public static ItemBlockOven oven = (ItemBlockOven) new ItemBlockOven(Blocks.OVEN, "Oven").setTexture(Images.loadImage("/blocks/oven.png"));
 
-	public static ItemTool rock_pickaxe = (ItemTool) new ItemTool("pickaxe", "Stone Pickaxe", EnumTool.ROCK).setBaseAttack(2).setEffectiveness(ItemTool.PICKAXE).setEffectiveDamage(5).setBaseDamage(75).setTexture(Images.loadImage("/items/tools/pickaxe.png"));
-	public static ItemTool rock_sword   = (ItemTool) new ItemSword("sword", "Stone Sword", EnumTool.ROCK).setBaseAttack(4).setEffectiveness(ItemTool.SWORD).setEffectiveDamage(2).setBaseDamage(120).setTexture(Images.loadImage("/items/tools/sword.png"));
+	public static ItemTool rock_pickaxe = (ItemTool) new ItemTool("pickaxe", "Stone Pickaxe", EnumTool.ROCK).setBaseAttack(1).setEffectiveness(ItemTool.PICKAXE).setEffectiveDamage(5).setBaseDamage(75).setTexture(Images.loadImage("/items/tools/pickaxe.png"));
+	public static ItemTool rock_sword   = (ItemTool) new ItemSword("sword", "Stone Sword", EnumTool.ROCK).setBaseAttack(3).setEffectiveness(ItemTool.SWORD).setEffectiveDamage(2).setBaseDamage(120).setTexture(Images.loadImage("/items/tools/sword.png"));
 	public static ItemTool rock_axe   = (ItemTool) new ItemTool("axe", "Stone Axe", EnumTool.ROCK).setBaseAttack(2).setEffectiveness(ItemTool.AXE).setEffectiveDamage(2).setBaseDamage(75).setTexture(Images.loadImage("/items/tools/axe.png"));
 
-	public static ItemTool stone_pickaxe = (ItemTool) new ItemTool("stone_pickaxe", "Smooth Pickaxe", EnumTool.STONE).setBaseAttack(3).setEffectiveness(ItemTool.PICKAXE).setEffectiveDamage(7).setBaseDamage(100).setTexture(Images.loadImage("/items/tools/pickaxe.png"));
-	public static ItemTool stone_sword   = (ItemTool) new ItemSword("stone_sword", "Smooth Sword", EnumTool.STONE).setBaseAttack(6).setEffectiveness(ItemTool.SWORD).setEffectiveDamage(3).setBaseDamage(150).setTexture(Images.loadImage("/items/tools/sword.png"));
-	public static ItemTool stone_axe   = (ItemTool) new ItemTool("stone_axe", "Smooth Axe", EnumTool.STONE).setBaseAttack(4).setEffectiveness(ItemTool.AXE).setEffectiveDamage(4).setBaseDamage(100).setTexture(Images.loadImage("/items/tools/axe.png"));
+	public static ItemTool stone_pickaxe = (ItemTool) new ItemTool("stone_pickaxe", "Smooth Pickaxe", EnumTool.STONE).setBaseAttack(2).setEffectiveness(ItemTool.PICKAXE).setEffectiveDamage(7).setBaseDamage(100).setTexture(Images.loadImage("/items/tools/pickaxe.png"));
+	public static ItemTool stone_sword   = (ItemTool) new ItemSword("stone_sword", "Smooth Sword", EnumTool.STONE).setBaseAttack(5).setEffectiveness(ItemTool.SWORD).setEffectiveDamage(3).setBaseDamage(150).setTexture(Images.loadImage("/items/tools/sword.png"));
+	public static ItemTool stone_axe   = (ItemTool) new ItemTool("stone_axe", "Smooth Axe", EnumTool.STONE).setBaseAttack(3).setEffectiveness(ItemTool.AXE).setEffectiveDamage(4).setBaseDamage(100).setTexture(Images.loadImage("/items/tools/axe.png"));
 
 	public static ItemLantern lantern = (ItemLantern) new ItemLantern("lantern", "Lantern").setTexture(Images.loadImage("/items/lantern.png"));		
 
@@ -106,6 +106,9 @@ public class Items {
 			registerItem(handle_hard);
 			registerItem(refinedStone);
 			registerItem(ovenBase);
+			registerItem(stone_sword);
+			registerItem(stone_axe);
+			registerItem(stone_pickaxe);
 
 	}
 

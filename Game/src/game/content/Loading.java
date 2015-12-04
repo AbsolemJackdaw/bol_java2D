@@ -211,9 +211,9 @@ public class Loading {
 
 		Util.startLoadIcon();
 
-		new SwingWorker<Void, Integer>(){
-			@Override
-			protected Void doInBackground() throws Exception {
+//		new SwingWorker<Void, Integer>(){
+//			@Override
+//			protected Void doInBackground() throws Exception {
 
 				World world = (World)gsm.getGameState(gsm.getCurrentState());
 
@@ -362,16 +362,16 @@ public class Loading {
 					world.listWithMapObjects.add(wood);
 				}
 
-				Util.stopLoadIcon();
-
-				return null;
-			}
-
-			@Override
-			protected void done() {
-				super.done();
-			}
-		}.execute();
+//				Util.stopLoadIcon();
+//
+//				return null;
+//			}
+//
+//			@Override
+//			protected void done() {
+//				super.done();
+//			}
+//		}.execute();
 	}
 
 	public static void startAtLastSavedLevel(GameStateManagerBase gsm){
@@ -486,6 +486,8 @@ public class Loading {
 			generateRandomOre(world, Blocks.IRON, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 10);
 
 			populateEntities(world, Entity.PIG, 20);
+			populateEntities(world, Entity.BAT, 10);
+
 		}
 	}
 

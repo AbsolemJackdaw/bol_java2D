@@ -21,3 +21,7 @@ recipes to do
 bombs : pouch, gunpowder, modifiers : more gunpower, more power ?
 
 oven = Stone + stone = Tenacious Stone. Teson + Teson = Oven Base. ovenBase X 5 mods = 5 Teson;
+
+__
+
+make a TooltipComponent which stores sizes, text, and font. draw the component instead of just some text

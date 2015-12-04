@@ -101,7 +101,7 @@ public class Crafting {
 		case Pouch:
 			return new ItemStack[]{
 					new ItemStack(Items.leather_fine, 1),
-					new ItemStack(Items.iron, 1)
+					new ItemStack(Items.ingot, 1)
 			};
 
 		case Whetstone:

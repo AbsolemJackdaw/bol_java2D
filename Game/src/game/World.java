@@ -364,7 +364,8 @@ public class World extends GameWorld{
 	public void handleInput() {
 
 		if(KeyHandler.isPressed(KeyHandler.CTRL)){
-			//			player.initHealth(15f);
+//			player.initHealth(3f);
+//			player.setMaxAirSupply(1000);
 		}
 
 		if(isConsoleDisplayed){

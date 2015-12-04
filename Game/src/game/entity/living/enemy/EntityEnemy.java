@@ -44,12 +44,15 @@ public class EntityEnemy extends EntityLiving {
 			attackTimer = 0;
 
 		if(isAgressive()){
+
+			if(maxSpeed != getDefMaxSpeed()*1.5d)
+				maxSpeed = getDefMaxSpeed()*1.5d;
+
 			AI.setPathToPlayer(this);
-			
-			if(attackTimer % 300 == 0){ //5 seconds
+
+			if(attackTimer % 120 == 0){ //2seconds
 				Player p = getWorld().getPlayer();
 				if(getRectangle().intersects(p.getRectangle())){
-					//TODO implement correctly !
 					p.hurtEntity(getAttackDamage(), null);
 				}
 			}

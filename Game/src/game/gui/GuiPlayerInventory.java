@@ -41,6 +41,13 @@ public class GuiPlayerInventory extends GuiContainer {
 		//		buttonList.add(new Button(centerX - 50, centerY + 13, Items.craftTable.getTexture()));
 		//		buttonList.add(new Button(centerX - 18 - 50, centerY + 13, Items.stick.getTexture()));
 
+		calculateBeltSpace();
+
+		text  = new ArrayList<String>();
+	}
+
+	private void calculateBeltSpace() {
+
 		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
 			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
 			Item i = is.getItem();
@@ -48,13 +55,17 @@ public class GuiPlayerInventory extends GuiContainer {
 				int dex = ((ItemBelt)i).getInventorySlots();
 				extra = dex;
 			}
+		}	else{
+			extra = 0;
 		}
-
-		text  = new ArrayList<String>();
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
+
+		//		g.setColor(new Color(1f,1f,1f,0.1f));
+		//		g.fillRect(0,0, GamePanel.WIDTH, GamePanel.HEIGHT);
+
 		g.drawImage(img.getSubimage(35, 3, 150, 75), GamePanel.WIDTH/2 - 150/2, GamePanel.HEIGHT/2 - 75/2 ,null);
 
 		g.drawImage(player.playerSheet.get(0)[0],  GamePanel.WIDTH/2 - 150/2 + 5,  GamePanel.HEIGHT/2 - 75/2 + 8, null);
@@ -143,7 +154,10 @@ public class GuiPlayerInventory extends GuiContainer {
 	@Override
 	public void handleGuiKeyInput() {
 
-		if(KeyHandler.isPressed(KeyHandler.CRAFT)){
+		if(crafting && !isPlayerInventory())
+			crafting = false;
+
+		if(KeyHandler.isPressed(KeyHandler.CRAFT) && isPlayerInventory()){
 
 			if(player.getStackInSlot(slot_index) != null && !crafting){
 
@@ -238,20 +252,10 @@ public class GuiPlayerInventory extends GuiContainer {
 
 				//switch armor to player inventory
 				if(isNotPlayerInventory() && secondairyInventory != null){ //armor inventory
-
-					if(slot_index !=2){ // dont remove belts !
+					if(slot_index != 2){ // dont remove belts !
 						if(secondairyInventory.getStackInSlot(slot_index) != null)
 							if(playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(slot_index)))
 								secondairyInventory.setStackInSlot(slot_index, null);
-					}else{
-						//check if any space is left within the reachable inventory
-						for(int i = 0; i < 10 + extra; i++){
-							if(playerInventory.getStackInSlot(i) == null){
-								player.setStackInSlot(i, secondairyInventory.getStackInSlot(slot_index).copy());
-								secondairyInventory.setStackInSlot(slot_index, null);
-								break;
-							}
-						}
 					}
 				}
 
@@ -309,6 +313,7 @@ public class GuiPlayerInventory extends GuiContainer {
 						}
 					}
 				}
+		calculateBeltSpace();
 	}
 
 	@Override

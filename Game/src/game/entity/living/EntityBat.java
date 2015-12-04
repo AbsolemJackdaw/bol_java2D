@@ -44,6 +44,7 @@ public class EntityBat extends EntityEnemy{
 		maxFallSpeed = 0.0;
 		jumpStart = 0;
 		stopJumpSpeed = 0;
+		knockBackForce = 2d;
 
 		boolean b = rand.nextBoolean();
 		facingRight = b;
@@ -57,7 +58,6 @@ public class EntityBat extends EntityEnemy{
 	@Override
 	public ItemStack[] getDrops() {
 		return new ItemStack[]{new ItemStack(Items.leather, rand.nextInt(3)+1)};
-
 	}
 
 	@Override
@@ -78,14 +78,18 @@ public class EntityBat extends EntityEnemy{
 	@Override
 	public void getNextPosition() {
 		super.getNextPosition();
-		
-		AI.getNextPositionFlying(this, 20);
+
+		if(!isAgressive())
+			AI.getNextPositionFlying(this, 20);
+		else
+			AI.getNextPositionFlying(this, 2);
+
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		super.draw(g);
-		
+
 		if(getHurtTimer()%5 == 0)
 			super.draw(g, eye);
 	}
@@ -108,7 +112,7 @@ public class EntityBat extends EntityEnemy{
 		bottomLeft = bl > 6;
 		bottomRight = br > 6;
 	}
-	
+
 	@Override
 	public float getAttackDamage() {
 		return 0.5f;

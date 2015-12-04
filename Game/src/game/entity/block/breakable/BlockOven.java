@@ -30,7 +30,7 @@ public class BlockOven extends BlockBreakable implements IInventory{
 	Animation fire = new Animation();
 
 	public BlockOven(World world) {
-		super(world, "oven",ItemTool.NOTHING);
+		super(world, "oven", ItemTool.PICKAXE);
 
 		fire.setFrames(Images.loadMultiImage("/blocks/ovenFire.png", 32, 0, 4));
 		fire.setDelay(50);

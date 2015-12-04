@@ -113,6 +113,9 @@ public class Player extends EntityLiving implements IInventory{
 
 	private float bufferHealth;
 
+	private int airSupply = 1000;
+	private int maxAirSupply = 1000;
+	
 	public Player(World world) {
 		super(world, "player");
 
@@ -325,6 +328,20 @@ public class Player extends EntityLiving implements IInventory{
 
 		super.update();
 
+		if(inWater){
+			if(airSupply > 0){
+				airSupply--;
+			}
+			
+			else{
+				if(-(airSupply) % 20 == 0){
+					hurtEntity(0.5f, this);
+				}
+			}
+		}else{
+			airSupply = maxAirSupply;
+		}
+		
 		if (currentAction == ACTION_ATTACK){
 
 			if(this.invArmor.getWeapon() != null){
@@ -1024,5 +1041,17 @@ public class Player extends EntityLiving implements IInventory{
 
 	public boolean isDead(){
 		return health <= 0f;
+	}
+	
+	public int getAirSupply() {
+		return airSupply;
+	}
+	
+	public int getMaxAirSupply() {
+		return maxAirSupply;
+	}
+	
+	public void setMaxAirSupply(int maxAirSupply) {
+		this.maxAirSupply = airSupply = maxAirSupply;
 	}
 }

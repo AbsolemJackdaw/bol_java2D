@@ -167,15 +167,15 @@ public class GuiContainer extends Gui implements Container{
 		if(KeyHandler.isValidationKeyPressed())
 			if(isNotPlayerInventory() && secondairyInventory != null){
 				if(secondairyInventory.getStackInSlot(slot_index) != null)
-					
+
 					if(KeyHandler.prevKeyState[KeyHandler.SHIFT]){
-						
+
 					}else{
 						if(playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(slot_index)))
 							secondairyInventory.setStackInSlot(slot_index, null);
 					}
-					
-					
+
+
 			}else{
 				int slot = slotIndex[0]+ (slotIndex[1]*(rowsX()));
 				if(playerInventory.getStackInSlot(slot) != null)
@@ -186,6 +186,10 @@ public class GuiContainer extends Gui implements Container{
 
 	protected boolean isNotPlayerInventory(){
 		return currentContainer == BLOCK_INVENTORY;
+	}
+
+	protected boolean isPlayerInventory(){
+		return currentContainer == PLAYER_INVENTORY;
 	}
 
 	@Override

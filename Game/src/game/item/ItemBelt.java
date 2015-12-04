@@ -1,5 +1,8 @@
 package game.item;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemBelt extends ItemArmor{
 
 	/**the amount of extra slots it adds to the player's inventory*/
@@ -7,18 +10,6 @@ public class ItemBelt extends ItemArmor{
 
 	public ItemBelt(String uin,String displayName) {
 		super(uin, displayName, EXTRA);
-		
-		if(uin.contains("_s"))
-			info.add("1/3 upgrades added");
-		
-		else if(uin.contains("_l"))
-			info.add("3/3 upgrades added");
-		
-		else if(uin.contains("_m"))
-			info.add("2/3 upgrades added");
-		
-		else
-			info.add("0/3 upgrades added");
 	}
 
 	/**the amount of extra slots it adds to the player's inventory*/
@@ -29,6 +20,26 @@ public class ItemBelt extends ItemArmor{
 
 	public int getInventorySlots(){
 		return inventorySlots;
+	}
+	
+	@Override
+	public List<String> getInfo(ItemStack stack) {
+
+		info = new ArrayList<String>();
+		
+		if(stack.getItem().equals(Items.belt_s))
+			info.add("1/3 upgrades added");
+		
+		else if(stack.getItem().equals(Items.belt_l))
+			info.add("3/3 upgrades added");
+		
+		else if(stack.getItem().equals(Items.belt_m))
+			info.add("2/3 upgrades added");
+		
+		else
+			info.add("0/3 upgrades added");
+		
+		return info;
 	}
 
 }

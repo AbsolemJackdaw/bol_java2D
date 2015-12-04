@@ -260,4 +260,12 @@ public class EntityLiving extends MapObject{
 			facingRight = false;
 		}
 	}
+	
+	public double getDefMaxSpeed() {
+		return defMaxSpeed;
+	}
+	
+	public double getDefMoveSpeed() {
+		return defMoveSpeed;
+	}
 }

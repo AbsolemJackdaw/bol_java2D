@@ -42,7 +42,7 @@ public class GuiHud extends Gui{
 			ItemStack stack = player.getStackInSlot(slot);
 			if(stack != null){
 				if(!stack.getItem().isStackable() && stack.getDamage() > 0){
-					double dmg = (double)stack.getDamage()/100.0d * 15.0d;
+					double dmg = (double)stack.getDamage()/(double)stack.getMaxDamage() * 15.0d;
 
 					g.setColor(Color.DARK_GRAY);
 					g.drawRect(slotStartX+ (17*slot),(GamePanel.HEIGHT - 10), 15, 1);
@@ -60,7 +60,7 @@ public class GuiHud extends Gui{
 			g.drawImage(img.getSubimage(185, 63, 15, 18), center + 32, GamePanel.HEIGHT - 50, null);
 			g.drawImage(img.getSubimage(35, 0, 18, 18), slotStartX, GamePanel.HEIGHT - 49, null);
 
-			double dmg = (double)heldItem.getDamage()/100.0d * 15.0d;
+			double dmg = (double)heldItem.getDamage()/(double)heldItem.getMaxDamage() * 15.0d;
 
 			g.setColor(Color.DARK_GRAY);
 			g.drawRect(slotStartX,(GamePanel.HEIGHT - 35), 15, 1);
@@ -81,7 +81,7 @@ public class GuiHud extends Gui{
 		}
 
 		int maxX = 0;
-		
+
 		if(player.getMaxHealth() < 5)
 			maxX = (int)(player.getMaxHealth()-1) * 13;
 		else
@@ -103,6 +103,17 @@ public class GuiHud extends Gui{
 				g.drawImage(img.getSubimage(0, 0, 8, 16), centerX + 100 -maxX - 32 + xOffset, GamePanel.HEIGHT - 40 - yOffset, null);
 			}else if((i*10)%2 == 1.0f){
 				g.drawImage(img.getSubimage(8, 0, 8, 16), centerX + 100 - maxX + 8 - 32 + xOffset, GamePanel.HEIGHT - 40 - yOffset, null);
+			}
+		}
+
+		if(player.isInWater()){
+			int air = player.getAirSupply() / 200;
+		System.out.println(air);
+			
+		for(int i = 0; i < air + 1; i++){
+				int xOffset = i%5 * 12;
+				int yOffset = ((int)i/5)*12;
+				g.drawImage(img.getSubimage(64, 0, 16, 16), centerX + 100 - maxX - 10 - 32 - xOffset, GamePanel.HEIGHT - 36 - yOffset, 10, 10, null);
 			}
 		}
 	}

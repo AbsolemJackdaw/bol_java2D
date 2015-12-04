@@ -16,6 +16,8 @@ public class BlockIron extends BlockBreakable {
 	public BlockIron(World world) {
 		super(world, Blocks.IRON, ItemTool.PICKAXE);
 		setHealth(50);
+
+		blockInfo.add("pickaxe");
 	}
 
 	@Override
@@ -42,4 +44,6 @@ public class BlockIron extends BlockBreakable {
 	public boolean needsToolToMine() {
 		return true;
 	}
+	
+	
 }

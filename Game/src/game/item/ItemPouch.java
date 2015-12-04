@@ -1,6 +1,8 @@
 package game.item;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import engine.keyhandlers.KeyHandler;
 import game.entity.living.player.Player;
@@ -12,9 +14,16 @@ public class ItemPouch extends Item {
 	public ItemPouch(String uin,String displayName) {
 		super(uin, displayName);
 
+	}
+	
+	@Override
+	public List<String> getInfo(ItemStack stack) {
+		info = new ArrayList<String>();
+		
 		info.add("Used to upgrade your Belt.");
 		info.add(KeyEvent.getKeyText(KeyHandler.registeredKeys[KeyHandler.SPACE]) + " to use");
-
+		
+		return info;
 	}
 
 	@Override
