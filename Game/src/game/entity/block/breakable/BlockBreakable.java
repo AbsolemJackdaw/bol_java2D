@@ -7,6 +7,7 @@ import game.entity.block.Block;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.tool.ItemTool;
+import game.item.tool.ItemTool.EnumTools;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -18,7 +19,7 @@ public class BlockBreakable extends Block{
 	private boolean jiggle;
 
 	/**the tool that can be used to destroy this block*/
-	private int effectiveTool;
+	private EnumTools effectiveTool;
 
 	int tracker = 0;
 
@@ -26,17 +27,17 @@ public class BlockBreakable extends Block{
 		super(world, uin);
 	}
 
-	public BlockBreakable(World world, String uin, int toolEffectiveness) {
+	public BlockBreakable(World world, String uin, EnumTools toolEffectiveness) {
 		this(world, uin);
 		setEffectiveTool(toolEffectiveness);
 	}
 
-	public BlockBreakable setEffectiveTool(int tool){
+	public BlockBreakable setEffectiveTool(EnumTools tool){
 		effectiveTool = tool;
 		return this;
 	}
 
-	public int getEffectiveTool(){
+	public EnumTools getEffectiveTool(){
 		return effectiveTool;
 	}
 
@@ -100,7 +101,7 @@ public class BlockBreakable extends Block{
 		if(weaponStack != null && weaponStack.getItem() instanceof ItemTool)
 			tool = ((ItemTool)weaponStack.getItem());
 
-		if(tool != null && effectiveTool == tool.getEffectiveness())
+		if(tool != null)
 			wepDmg = tool.getEffectiveDamage(weaponStack);
 
 		switch (getType()) {
@@ -120,13 +121,13 @@ public class BlockBreakable extends Block{
 		}else{
 			if(needsToolToMine()){//if this block needs a tool, break only when tool is held
 				if(effectiveTool == tool.getEffectiveness())
-					health -= player.getAttackDamage() + wepDmg;
+					health -=wepDmg;
 			}else
 				if(effectiveTool == tool.getEffectiveness())//if the block doesnt need a tool, a bonus for wielding the right tool will kick in
-					health -= player.getAttackDamage() + wepDmg;
-				else
-					health -= player.getAttackDamage() + (wepDmg/2);//if bonus tool is net yield, use half of the current weapons dmg as bonus
-
+					health -= wepDmg;
+				else{
+					health -= wepDmg/2;//if bonus tool is not yield, use half of the current weapons dmg as bonus
+				}
 		}
 
 		if(health <= 0)

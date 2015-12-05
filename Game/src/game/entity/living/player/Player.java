@@ -48,6 +48,7 @@ import game.item.ItemStack;
 import game.item.Items;
 import game.item.block.ItemBlock;
 import game.item.tool.ItemTool;
+import game.item.tool.ItemTool.EnumTools;
 import game.util.Util;
 
 import java.awt.Graphics2D;
@@ -115,7 +116,9 @@ public class Player extends EntityLiving implements IInventory{
 
 	private int airSupply = 1000;
 	private int maxAirSupply = 1000;
-	
+
+	private int integerToTrackHeldItem = -1;
+
 	public Player(World world) {
 		super(world, "player");
 
@@ -332,7 +335,7 @@ public class Player extends EntityLiving implements IInventory{
 			if(airSupply > 0){
 				airSupply--;
 			}
-			
+
 			else{
 				if(-(airSupply) % 20 == 0){
 					hurtEntity(0.5f, this);
@@ -341,7 +344,7 @@ public class Player extends EntityLiving implements IInventory{
 		}else{
 			airSupply = maxAirSupply;
 		}
-		
+
 		if (currentAction == ACTION_ATTACK){
 
 			if(this.invArmor.getWeapon() != null){
@@ -412,86 +415,126 @@ public class Player extends EntityLiving implements IInventory{
 		if(o instanceof BlockBreakable){
 			BlockBreakable bl = (BlockBreakable)o;
 
-			if(bl.getEffectiveTool() == ItemTool.AXE){
+			if(bl.getEffectiveTool() == EnumTools.AXE){
 				if(invArmor.getWeapon() == null){
-					if(getInventory().hasStack(new ItemStack(Items.rock_axe,1))){
-						int i = getSlotForStack(new ItemStack(Items.rock_axe, 1));
-						invArmor.setWeapon(getStackInSlot(i).copy());
-						getInventory().setStackInSlot(i, null);
+					if(hasTool(EnumTools.AXE)){
+						invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
+						getInventory().setStackInSlot(integerToTrackHeldItem, null);
 					}
 				}
-				else if(!invArmor.getWeapon().getItem().equals(Items.rock_axe)){
-					if(getInventory().hasStack(new ItemStack(Items.rock_axe,1))){
-						int i = getSlotForStack(new ItemStack(Items.rock_axe, 1));
+				else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.AXE)){
+					if(hasTool(EnumTools.AXE)){
 
 						ItemStack heldTool = invArmor.getWeapon().copy();
-						ItemStack newTool = getStackInSlot(i).copy();
+						ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
 
 						invArmor.setWeapon(newTool);
-						setStackInSlot(i, null);
-						setStackInSlot(i, heldTool.copy());
+						setStackInSlot(integerToTrackHeldItem, null);
+						setStackInSlot(integerToTrackHeldItem, heldTool.copy());
 					}
 				}
-			}else if(bl.getEffectiveTool() == ItemTool.PICKAXE){
+			}else if(bl.getEffectiveTool() == EnumTools.PICKAXE){
 				if(invArmor.getWeapon() == null){
-					if(getInventory().hasStack(new ItemStack(Items.rock_pickaxe,1))){
-						int i = getSlotForStack(new ItemStack(Items.rock_pickaxe, 1));
-						invArmor.setWeapon(getStackInSlot(i).copy());
-						getInventory().setStackInSlot(i, null);
+					if(hasTool(EnumTools.PICKAXE)){
+						invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
+						getInventory().setStackInSlot(integerToTrackHeldItem, null);
 					}
 				}
-				else if(!invArmor.getWeapon().getItem().equals(Items.rock_pickaxe)){
-					if(getInventory().hasStack(new ItemStack(Items.rock_pickaxe,1))){
-						int i = getSlotForStack(new ItemStack(Items.rock_pickaxe, 1));
+				else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.PICKAXE)){
+					if(hasTool(EnumTools.PICKAXE)){
 						ItemStack heldTool = invArmor.getWeapon().copy();
-						ItemStack newTool = getStackInSlot(i).copy();
+						ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
 
 						invArmor.setWeapon(newTool);
-						setStackInSlot(i, null);
-						setStackInSlot(i, heldTool);
+						setStackInSlot(integerToTrackHeldItem, null);
+						setStackInSlot(integerToTrackHeldItem, heldTool);
 					}
 				}
-			}else if(bl.getEffectiveTool() == ItemTool.SWORD){
+			}else if(bl.getEffectiveTool() == EnumTools.SWORD){
 				if(invArmor.getWeapon() == null){
-					if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
-						int i = getSlotForStack(new ItemStack(Items.rock_sword, 1));
-						invArmor.setWeapon(getStackInSlot(i).copy());
-						getInventory().setStackInSlot(i, null);
-					}
+					if(hasTool(EnumTools.SWORD))
+						if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
+							invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
+							getInventory().setStackInSlot(integerToTrackHeldItem, null);
+						}
 				}
-				else if(!invArmor.getWeapon().getItem().equals(Items.rock_sword)){
-					if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
-						int i = getSlotForStack(new ItemStack(Items.rock_sword, 1));
+				else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.SWORD)){
+					if(hasTool(EnumTools.SWORD)){
 						ItemStack heldTool = invArmor.getWeapon().copy();
-						ItemStack newTool = getStackInSlot(i).copy();
+						ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
 
 						invArmor.setWeapon(newTool);
-						setStackInSlot(i, null);
-						setStackInSlot(i, heldTool);
+						setStackInSlot(integerToTrackHeldItem, null);
+						setStackInSlot(integerToTrackHeldItem, heldTool);
 					}
 				}
 			}
 		}
 		else if (o instanceof EntityLiving){
 			if(invArmor.getWeapon() == null){
-				if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
-					int i = getSlotForStack(new ItemStack(Items.rock_sword, 1));
-					invArmor.setWeapon(getStackInSlot(i).copy());
-					getInventory().setStackInSlot(i, null);
+				if(hasTool(EnumTools.SWORD)){
+					invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
+					getInventory().setStackInSlot(integerToTrackHeldItem, null);
 				}
 			}
-			else if(!invArmor.getWeapon().getItem().equals(Items.rock_sword)){
-				if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
-					int i = getSlotForStack(new ItemStack(Items.rock_sword, 1));
+			else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.SWORD)){
+				if(hasTool(EnumTools.SWORD)){
 					ItemStack heldTool = invArmor.getWeapon().copy();
-					ItemStack newTool = getStackInSlot(i).copy();
+					ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
 
 					invArmor.setWeapon(newTool);
-					setStackInSlot(i, null);
-					setStackInSlot(i, heldTool);
+					setStackInSlot(integerToTrackHeldItem, null);
+					setStackInSlot(integerToTrackHeldItem, heldTool);
 				}
 			}
 		}
+
+		integerToTrackHeldItem = -1; // re init the integer
+	}
+
+	/**
+	 * checks if the player's inventory has the highest tier of asked tool
+	 * @param tool : the tool, in enum, to be searched for
+	 */
+	private boolean hasTool(EnumTools tool){
+
+		int intBuffer = -1;
+		ItemStack stackBuffer = null;
+
+		for(int i = 0; i < getInventory().getMaxSlots(); i ++){
+			ItemStack stack = getInventory().getStackInSlot(i);
+
+			if(stack != null){
+				if(stack.getItem() instanceof ItemTool){
+					ItemTool item = ((ItemTool)stack.getItem());
+
+					System.out.println("stack"+i + " is a tool");
+					
+					if(item.getEffectiveness().equals(tool)){
+						System.out.println(item.getUIN() + " is " + tool);
+						
+						if(stackBuffer != null){
+							System.out.println("stackbuffer was already set");
+							System.out.println();
+							if(item.getMaterial().getId() > ((ItemTool)stackBuffer.getItem()).getMaterial().getId()){
+								stackBuffer = stack;
+								intBuffer = i;
+							}
+						}else{
+							stackBuffer = stack;
+							intBuffer = i;
+						}
+					}
+				}
+			}
+		}
+
+		if(stackBuffer != null){
+			integerToTrackHeldItem = intBuffer;
+			return true;
+		}
+
+		return false;
 	}
 
 	public void setAttacking() {
@@ -1042,15 +1085,15 @@ public class Player extends EntityLiving implements IInventory{
 	public boolean isDead(){
 		return health <= 0f;
 	}
-	
+
 	public int getAirSupply() {
 		return airSupply;
 	}
-	
+
 	public int getMaxAirSupply() {
 		return maxAirSupply;
 	}
-	
+
 	public void setMaxAirSupply(int maxAirSupply) {
 		this.maxAirSupply = airSupply = maxAirSupply;
 	}

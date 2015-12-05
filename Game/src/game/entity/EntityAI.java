@@ -118,12 +118,6 @@ public class EntityAI {
 	}
 
 	public void panic(EntityLiving el) {
-		//		if(el.left){
-		//			el.setRight(true);
-		//		}else
-		//			el.setLeft(true);
-		//		el.moveSpeed = el.moveSpeed*1.5;
-		//		el.maxSpeed = el.maxSpeed*2;
 	}
 
 }

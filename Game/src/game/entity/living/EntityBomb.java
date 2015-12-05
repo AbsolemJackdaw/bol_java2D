@@ -30,8 +30,8 @@ public class EntityBomb extends EntityLiving {
 		width = 24;
 		height = 24;
 
-		moveSpeed = 0.9f;  // inital walking speed. you speed up as you walk
-		maxSpeed = 0; // change to jump farther and walk faster
+		initMoveSpeed(0.9);  // inital walking speed. you speed up as you walk
+		initMaxSpeed(0); // change to jump farther and walk faster
 		stopSpeed = 0.02;
 		fallSpeed = 0.09; // affects falling and jumping
 		maxFallSpeed = 4.0;

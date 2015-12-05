@@ -148,7 +148,7 @@ public class TileMap {
 			return tiles[r][c].getID();
 		}
 
-		System.out.println("Coordinates were out of map bounds ! Returned a solid block to prevent crash.");
+		System.out.println("Coordinates were out of map bounds ! Returned a solid block to prevent crash. " + x+"/"+mapXRows +" " + y + "/" + mapYRows);
 		return numTilesAcross + 1;
 	}
 

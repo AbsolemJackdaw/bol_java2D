@@ -13,7 +13,7 @@ import game.gui.GuiOven;
 import game.item.ItemStack;
 import game.item.Items;
 import game.item.crafting.OvenRecipes;
-import game.item.tool.ItemTool;
+import game.item.tool.ItemTool.EnumTools;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -30,7 +30,7 @@ public class BlockOven extends BlockBreakable implements IInventory{
 	Animation fire = new Animation();
 
 	public BlockOven(World world) {
-		super(world, "oven", ItemTool.PICKAXE);
+		super(world, "oven", EnumTools.PICKAXE);
 
 		fire.setFrames(Images.loadMultiImage("/blocks/ovenFire.png", 32, 0, 4));
 		fire.setDelay(50);

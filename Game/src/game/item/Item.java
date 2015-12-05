@@ -55,7 +55,7 @@ public class Item {
 		texture = img;
 		return this;
 	}
-
+	
 	public BufferedImage getTexture(){
 		return texture;
 	}
@@ -130,7 +130,6 @@ public class Item {
 
 	/**called when the player presses the numbers on the keyboard to use an item*/
 	public void useItem(ItemStack stack, TileMap map, World world, Player player, int key){
-		//System.out.println("item is used");
 	}
 
 	/**if the item can handle any logic set to true: it will call the update method*/

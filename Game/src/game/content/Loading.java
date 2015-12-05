@@ -423,6 +423,9 @@ public class Loading {
 		}
 	}
 
+	/**
+	 * sets an entity at a random air tile. 
+	 */
 	private static void populateEntities(World world, String uin, int rarity){
 
 		if(Constants.RANDOM.nextInt(rarity) > 0)
@@ -478,7 +481,8 @@ public class Loading {
 			}
 		}
 
-		System.out.println(airBlocks/10);
+		System.out.println("airblocks in map : " + airBlocks);
+		System.out.println("loops for populating map : " + (airBlocks/10));
 
 		for(int i = 0; i < airBlocks/10; i++){
 			generateRandomTree(world, Constants.RANDOM.nextInt(x),  Constants.RANDOM.nextInt(y));
@@ -486,7 +490,8 @@ public class Loading {
 			generateRandomOre(world, Blocks.IRON, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 10);
 
 			populateEntities(world, Entity.PIG, 20);
-			populateEntities(world, Entity.BAT, 10);
+			populateEntities(world, Entity.SAMBAT, 7);
+			populateEntities(world, Entity.WARFBAT, 25);
 
 		}
 	}

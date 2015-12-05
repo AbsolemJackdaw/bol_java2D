@@ -8,7 +8,7 @@ import game.World;
 import game.entity.living.player.Player;
 import game.gui.GuiCrafting;
 import game.item.ItemStack;
-import game.item.tool.ItemTool;
+import game.item.tool.ItemTool.EnumTools;
 
 import java.awt.image.BufferedImage;
 
@@ -18,7 +18,7 @@ public class BlockCraftingTable extends BlockBreakable {
 	private boolean advanced;
 	
 	public BlockCraftingTable(World world, int health, boolean advanced, String name) {
-		super(world, name, ItemTool.NOTHING);
+		super(world, name, EnumTools.NOTHING);
 		setHealth(health);
 		this.advanced = advanced;
 		

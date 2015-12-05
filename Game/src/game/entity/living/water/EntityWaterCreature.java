@@ -8,8 +8,8 @@ public class EntityWaterCreature extends EntityLiving {
 	public EntityWaterCreature(GameWorld world, String uin) {
 		super(world, uin);
 		
-		moveSpeed = 0.07 + rand.nextDouble()/10;
-		maxSpeed = 0.4 + rand.nextDouble(); 
+		initMoveSpeed(0.07 + rand.nextDouble()/10);
+		initMaxSpeed(0.4 + rand.nextDouble());
 		stopSpeed = 0.14;
 		fallSpeed = 0.0; 
 		maxFallSpeed = 0.0;
@@ -38,9 +38,6 @@ public class EntityWaterCreature extends EntityLiving {
 			//being out of the water shouldn't occur though
 			
 		}
-		
-		
-		
 	}
 	
 	@Override

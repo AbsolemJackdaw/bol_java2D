@@ -8,7 +8,7 @@ import game.entity.block.Blocks;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.Items;
-import game.item.tool.ItemTool;
+import game.item.tool.ItemTool.EnumTools;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -24,7 +24,7 @@ public class BlockWood extends BlockBreakable{
 	}
 
 	public BlockWood(World world) {
-		super(world, Blocks.VINE, ItemTool.AXE);
+		super(world, Blocks.VINE, EnumTools.AXE);
 		setHealth(5);
 
 		moveSpeed = 0; 

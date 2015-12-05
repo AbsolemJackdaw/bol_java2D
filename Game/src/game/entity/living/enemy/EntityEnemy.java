@@ -15,10 +15,13 @@ public class EntityEnemy extends EntityLiving {
 
 	protected int endAgressionChance;
 
+	protected int attackDelay;
+	
 	public EntityEnemy(World world, String uin) {
 		super(world, uin);
 
 		endAgressionChance = 200;
+		attackDelay = 120;
 	}
 
 	@Override

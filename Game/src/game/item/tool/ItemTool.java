@@ -14,25 +14,36 @@ import java.util.List;
 public class ItemTool extends Item {
 
 	public int baseAttack;
-	private int effectiveness;
+	private EnumTools effectiveness;
 	public int effectiveDamage;
 
-	public EnumTool type;
+	private EnumMaterial material;
 
-	public static final int NOTHING = 0;
-	public static final int PICKAXE = 1;
-	public static final int AXE = 2;
-	public static final int SWORD = 3;
-
-	public static enum EnumTool {
-		ROCK,
-		STONE,
-		IRON
+	public static enum EnumMaterial{
+		ROCK(0),
+		STONE(1),
+		IRON(2);
+		
+		private int id;
+		EnumMaterial(int id){
+			this.id = id;
+		}
+		
+		public int getId() {
+			return id;
+		}
+	}
+	
+	public static enum EnumTools {
+		NOTHING,
+		PICKAXE,
+		AXE,
+		SWORD
 	}
 
-	public ItemTool(String uin, String displayName, EnumTool type){
+	public ItemTool(String uin, String displayName, EnumMaterial material){
 		super(uin, displayName);
-		this.type = type;
+		this.material = material;
 		this.modifiers = 3;
 	}
 
@@ -47,12 +58,12 @@ public class ItemTool extends Item {
 	}
 
 	/**Returns the effective type of this tool (pickaxe, axe, sword or none)*/
-	public int getEffectiveness(){
+	public EnumTools getEffectiveness(){
 		return effectiveness;
 	}
 
-	public ItemTool setEffectiveness(int i){
-		this.effectiveness = i;
+	public ItemTool setEffectiveness(EnumTools tool){
+		this.effectiveness = tool;
 		return this;
 	}
 
@@ -111,17 +122,21 @@ public class ItemTool extends Item {
 	public void craftingCallBack(ItemStack component, ItemStack base) {
 		super.craftingCallBack(component, base);
 
-		if(component.getItem().equals(Items.stone) && type == EnumTool.ROCK){
+		if(component.getItem().equals(Items.stone) && material == EnumMaterial.ROCK){
 			base.addModifier(new ToolModifier(ToolModifier.DUR, 10, ToolModifier.EFF, 1));
 			base.damageStack(-10);
 		}
-		else if(component.getItem().equals(Items.refinedStone) && type == EnumTool.STONE){
+		else if(component.getItem().equals(Items.refinedStone) && material == EnumMaterial.STONE){
 			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.EFF, 2));
 			base.damageStack(-20);
 		}
-		else if(component.getItem().equals(Items.iron) && type == EnumTool.IRON){
+		else if(component.getItem().equals(Items.iron) && material == EnumMaterial.IRON){
 			base.addModifier(new ToolModifier(ToolModifier.DUR, 50, ToolModifier.EFF, 3));
 			base.damageStack(-50);
 		}
+	}
+	
+	public EnumMaterial getMaterial() {
+		return material;
 	}
 }

@@ -108,7 +108,6 @@ public class GuiHud extends Gui{
 
 		if(player.isInWater()){
 			int air = player.getAirSupply() / 200;
-		System.out.println(air);
 			
 		for(int i = 0; i < air + 1; i++){
 				int xOffset = i%5 * 12;

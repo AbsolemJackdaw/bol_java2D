@@ -1,27 +1,26 @@
-package game.entity.living;
-
-import engine.image.Images;
-import engine.imaging.Animation;
-import game.World;
-import game.entity.living.enemy.EntityEnemy;
-import game.item.ItemStack;
-import game.item.Items;
+package game.entity.living.enemy;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import engine.image.Images;
+import engine.imaging.Animation;
+import game.World;
+import game.item.ItemStack;
+import game.item.Items;
+
 
 public class EntityBat extends EntityEnemy{
 
-	private BufferedImage[] eye_RU;
-	private BufferedImage[] eye_RD;
-	private Animation eye;
+	protected BufferedImage[] eye_up;
+	protected BufferedImage[] eye_down;
+	protected Animation eye;
 
 	public EntityBat(World world, String uin) {
 		super(world, uin);
 
-		eye_RU = Images.loadMultiImage("/entity/bat/bat_eye_RU.png", 32, 0, 4);
-		eye_RD = Images.loadMultiImage("/entity/bat/bat_eye_RD.png", 32, 0, 4);
+		eye_up = Images.loadMultiImage("/entity/bat/bat_eye_up.png", 32, 0, 4);
+		eye_down = Images.loadMultiImage("/entity/bat/bat_eye_down.png", 32, 0, 4);
 
 		eye = new Animation();
 		eye.setDelay(50);
@@ -64,13 +63,13 @@ public class EntityBat extends EntityEnemy{
 	public void update() {
 		super.update();
 
-		if(tileMap.getBlockID(currentRow, currentColumn) < 6)
+		if(tileMap.getBlockID(currentRow, currentColumn) < 8)
 			AI.swimOrFly(this);
 
 		if(up && right || up && left)
-			eye.setFrames(eye_RU);
+			eye.setFrames(eye_up);
 		if(down && right || down && left)
-			eye.setFrames(eye_RD);
+			eye.setFrames(eye_down);
 
 		eye.setFrame(getAnimation().getFrame());
 	}

@@ -7,7 +7,8 @@ import game.entity.block.Blocks;
 import game.item.block.ItemBlockOven;
 import game.item.tool.ItemSword;
 import game.item.tool.ItemTool;
-import game.item.tool.ItemTool.EnumTool;
+import game.item.tool.ItemTool.EnumMaterial;
+import game.item.tool.ItemTool.EnumTools;
 
 public class Items {
 
@@ -30,7 +31,7 @@ public class Items {
 	public static Item leather_fine = new Item("leather_fine", "Leather").setTexture(Images.loadImage("/items/resources/leather.png"));
 	public static Item woodChip = new Item("woodchip","Wood Chips").setTexture(Images.loadImage("/items/resources/wood_chip.png")).setFuel().setFuelTimer(800);
 	public static Item refinedStone = new Item("refinedstone","Smooth Stone").setTexture(Images.loadImage("/items/resources/stone_refined.png"));
-	public static Item whetstone = new Item("whetstone","WhetStone").setTexture(Images.loadImage("/items/manufactured/whetstone.png"));
+	public static Item whetstone = new ItemWhetstone("whetstone","WhetStone").setTexture(Images.loadImage("/items/manufactured/whetstone.png"));
 	
 	public static Item ovenBase = new ItemOvenbase("ovenbase", "Oven Base").setTexture(Images.loadImage("/items/manufactured/oven_base.png"));
 	
@@ -40,8 +41,8 @@ public class Items {
 
 	public static ItemFood meat_pig_raw = (ItemFood) new ItemFood("pig_raw", "Raw Pig Meat", 0.5F).setTexture(Images.loadImage("/items/food/meat_pig.png")).setCookable();
 	public static ItemFood meat_pig = (ItemFood)new ItemFood("pig_cooked","Pig Meat", 1f).setTexture(Images.loadImage("/items/food/meat_pig_cooked.png"));
-	public static ItemFood meat_fish_raw = (ItemFood) new ItemFood("fish_raw", "Raw Fish", 0.75f).setTexture(Images.loadImage("/items/food/meat_fish_raw.png")).setCookable();
-	public static ItemFood meat_fish = (ItemFood) new ItemFood("fish_cooked", "Fish Filet", 1.5f).setTexture(Images.loadImage("/items/food/meat_fish_cooked.png"));
+	public static ItemFood meat_fish_raw = (ItemFood) new ItemFood("fish_raw", "Raw Fish", 0.5f).setTexture(Images.loadImage("/items/food/meat_fish_raw.png")).setCookable();
+	public static ItemFood meat_fish = (ItemFood) new ItemFood("fish_cooked", "Fish Filet", 1f).setTexture(Images.loadImage("/items/food/meat_fish_cooked.png"));
 	
 	public static ItemPouch pouch = (ItemPouch) new ItemPouch("pouch","Leather Pouch").setTexture(Images.loadImage("/items/manufactured/pouch.png"));
 
@@ -51,13 +52,13 @@ public class Items {
 
 	public static ItemBlockOven oven = (ItemBlockOven) new ItemBlockOven(Blocks.OVEN, "Oven").setTexture(Images.loadImage("/blocks/oven.png"));
 
-	public static ItemTool rock_pickaxe = (ItemTool) new ItemTool("pickaxe", "Stone Pickaxe", EnumTool.ROCK).setBaseAttack(1).setEffectiveness(ItemTool.PICKAXE).setEffectiveDamage(5).setBaseDamage(75).setTexture(Images.loadImage("/items/tools/pickaxe.png"));
-	public static ItemTool rock_sword   = (ItemTool) new ItemSword("sword", "Stone Sword", EnumTool.ROCK).setBaseAttack(3).setEffectiveness(ItemTool.SWORD).setEffectiveDamage(2).setBaseDamage(120).setTexture(Images.loadImage("/items/tools/sword.png"));
-	public static ItemTool rock_axe   = (ItemTool) new ItemTool("axe", "Stone Axe", EnumTool.ROCK).setBaseAttack(2).setEffectiveness(ItemTool.AXE).setEffectiveDamage(2).setBaseDamage(75).setTexture(Images.loadImage("/items/tools/axe.png"));
+	public static ItemTool rock_pickaxe = (ItemTool) new ItemTool("pickaxe", "Stone Pickaxe", EnumMaterial.ROCK).setBaseAttack(1).setEffectiveness(EnumTools.PICKAXE).setEffectiveDamage(5).setBaseDamage(75).setTexture(Images.loadImage("/items/tools/pickaxe.png"));
+	public static ItemTool rock_sword   = (ItemTool) new ItemSword("sword", "Stone Sword", EnumMaterial.ROCK).setBaseAttack(3).setEffectiveness(EnumTools.SWORD).setEffectiveDamage(2).setBaseDamage(120).setTexture(Images.loadImage("/items/tools/sword.png"));
+	public static ItemTool rock_axe   = (ItemTool) new ItemTool("axe", "Stone Axe", EnumMaterial.ROCK).setBaseAttack(2).setEffectiveness(EnumTools.AXE).setEffectiveDamage(2).setBaseDamage(75).setTexture(Images.loadImage("/items/tools/axe.png"));
 
-	public static ItemTool stone_pickaxe = (ItemTool) new ItemTool("stone_pickaxe", "Smooth Pickaxe", EnumTool.STONE).setBaseAttack(2).setEffectiveness(ItemTool.PICKAXE).setEffectiveDamage(7).setBaseDamage(100).setTexture(Images.loadImage("/items/tools/pickaxe.png"));
-	public static ItemTool stone_sword   = (ItemTool) new ItemSword("stone_sword", "Smooth Sword", EnumTool.STONE).setBaseAttack(5).setEffectiveness(ItemTool.SWORD).setEffectiveDamage(3).setBaseDamage(150).setTexture(Images.loadImage("/items/tools/sword.png"));
-	public static ItemTool stone_axe   = (ItemTool) new ItemTool("stone_axe", "Smooth Axe", EnumTool.STONE).setBaseAttack(3).setEffectiveness(ItemTool.AXE).setEffectiveDamage(4).setBaseDamage(100).setTexture(Images.loadImage("/items/tools/axe.png"));
+	public static ItemTool stone_pickaxe = (ItemTool) new ItemTool("stone_pickaxe", "Smooth Pickaxe", EnumMaterial.STONE).setBaseAttack(2).setEffectiveness(EnumTools.PICKAXE).setEffectiveDamage(7).setBaseDamage(100).setTexture(Images.loadImage("/items/tools/pickaxe.png"));
+	public static ItemTool stone_sword   = (ItemTool) new ItemSword("stone_sword", "Smooth Sword", EnumMaterial.STONE).setBaseAttack(5).setEffectiveness(EnumTools.SWORD).setEffectiveDamage(3).setBaseDamage(150).setTexture(Images.loadImage("/items/tools/sword.png"));
+	public static ItemTool stone_axe   = (ItemTool) new ItemTool("stone_axe", "Smooth Axe", EnumMaterial.STONE).setBaseAttack(3).setEffectiveness(EnumTools.AXE).setEffectiveDamage(4).setBaseDamage(100).setTexture(Images.loadImage("/items/tools/axe.png"));
 
 	public static ItemLantern lantern = (ItemLantern) new ItemLantern("lantern", "Lantern").setTexture(Images.loadImage("/items/lantern.png"));		
 

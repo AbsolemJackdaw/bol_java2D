@@ -19,8 +19,8 @@ public class EntityEnvironement extends EntityLiving{
 		height = 32;
 
 		//environement entities can only fall by basic
-		moveSpeed = 0.0;
-		maxSpeed = 0; 
+		initMoveSpeed(0.0);
+		initMaxSpeed(0.0); 
 		stopSpeed = 0;
 		fallSpeed = 0.15; 
 		maxFallSpeed = 4.0;

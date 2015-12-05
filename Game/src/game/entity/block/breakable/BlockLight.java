@@ -11,7 +11,7 @@ import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.GuiFire;
 import game.item.ItemStack;
-import game.item.tool.ItemTool;
+import game.item.tool.ItemTool.EnumTools;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -26,7 +26,7 @@ public class BlockLight extends BlockBreakable implements IInventory{
 	Animation fire = new Animation();
 
 	public BlockLight(World world, String uin) {
-		super(world, uin, ItemTool.NOTHING);
+		super(world, uin, EnumTools.NOTHING);
 		setHealth(2);
 		fire.setFrames(Images.loadMultiImage("/blocks/camp_fire.png", 32, 0, 4));
 		fire.setDelay(90);
