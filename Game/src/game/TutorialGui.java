@@ -98,7 +98,7 @@ public class TutorialGui extends GameState{
 						//this screen pops up when no game has been played yet
 						//or no saves have been found
 
-						currentWorld.loadMap("maps/tutorial_island.map");
+						currentWorld.loadMap("maps/tut/tutorial_island.map");
 
 						//initiate current world. sets new player 
 						currentWorld.init();

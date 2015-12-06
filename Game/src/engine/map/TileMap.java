@@ -6,11 +6,13 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
 import engine.window.GamePanel;
 import engine.window.gameAid.Window;
+import game.map.Maps;
 
 public class TileMap {
 
@@ -198,7 +200,14 @@ public class TileMap {
 
 		try {
 			
-			final File f = new File(s);
+			File f = new File(s);
+			
+			if(!f.exists()){
+				System.out.println("MapFile wasn't found for " + s);
+				System.out.println("Trying to generate a new map...");
+
+				f = new File(Maps.getMaps().get(new Random().nextInt(Maps.getMaps().size())));
+			}
 			
 			final BufferedReader br = new BufferedReader(new FileReader(f)); // InputStreamReader(in));
 

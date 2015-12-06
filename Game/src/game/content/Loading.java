@@ -52,7 +52,7 @@ public class Loading {
 		// x1 + x2 is max_total maps, where map min is 2
 		
 		int i = new Random().nextInt(Maps.getMaps().size());
-		String s = "maps/" + Maps.getMaps().get(i);
+		String s = "maps" + Maps.getMaps().get(i);
 		System.out.println(s);
 		
 		return s;

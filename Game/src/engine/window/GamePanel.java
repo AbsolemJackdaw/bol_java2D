@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	// dimensions
 	public static final int WIDTH = Window.getWidth()/2; //(int)screenSize.getWidth()/2; //TODO apply screensize modifications possible ?
 	public static final int HEIGHT = Window.getHeight()/2; //(int)screenSize.getHeight()/2;
-	public static float SCALE = 2f;
+	public static float SCALE = Window.scaledInstance();
 
 	public static int SCALEDX;
 	public static int SCALEDY;
