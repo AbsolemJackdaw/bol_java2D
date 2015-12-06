@@ -1,66 +1,95 @@
 package game.map;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.Date;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class Maps {
 
 	private static ArrayList<String> maps;
 
-	public static void init(){
+	public void init(){
 		maps = new ArrayList<String>();
-		load();
+
+		readUsingZipInputStream();
+
+		loadIntoList();
 	}
 
-	private static void load(){
-		System.out.println("loading");
+	private void loadIntoList(){
 
-		final String path = "maps/";
-		final File jarFile = new File(Maps.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+		File dir = new File("maps/");
 
-		if(jarFile.isFile()) {  // Run with JAR file
+		if(!dir.exists() || dir.listFiles().length == 0){
+			System.out.println("ERROR ! No Maps were found. Game cannot continue !!");
+			System.out.println("Exiting game");
+			System.exit(0);
+		}
+
+		for(File f : dir.listFiles()){
+			maps.add(f.getName());
+		}
+	}
+
+	private static void readUsingZipInputStream() {
+
+		try {
+			InputStream is = Maps.class.getResourceAsStream("/maps/maps.zip");
+			final ZipInputStream zis = new ZipInputStream(is);
 
 			try {
-				JarFile jar = new JarFile(jarFile);
+				ZipEntry entry;
+				while ((entry = zis.getNextEntry()) != null) {
 
-				final Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
-				while(entries.hasMoreElements()) {
-					final String name = entries.nextElement().getName();
-					if (name.startsWith(path +"map")) { //filter according to the path
-						maps.add(name);
-					}
-				}
-				jar.close();
+					String name = entry.getName();
+					File f = new File(name);
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else { // Run with IDE
-			final URL url = Maps.class.getResource("/" + path);
-			System.out.println(url);
-			if (url != null) {
-				try {
-					final File apps = new File(url.toURI());
-					for (File app : apps.listFiles()) {
-						if(app.getName().startsWith("map")){
-							maps.add(app.getName());
+					if(name.endsWith("/")){
+						f.mkdirs();
+						continue;
+					}else{
+						if(!name.endsWith(".map")){
+							System.out.println("skipped " + name + " which had an invalid extension");
+							continue;
 						}
 					}
-				} catch (URISyntaxException ex) {
-					// never happens
+
+					System.out.printf("File: %s Size %d  Modified on %TD %n", entry.getName(), entry.getSize(), new Date(entry.getTime()));
+					extractEntry(entry, zis);
 				}
+			} finally {
+				is.close();
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	}
+
+	private static void extractEntry(final ZipEntry entry, InputStream is) throws IOException {
+		String exractedFile = entry.getName();
+		FileOutputStream fos = null;
+
+		try {
+			fos = new FileOutputStream(exractedFile);
+			final byte[] buf = new byte[2048];
+			int length;
+
+			while ((length = is.read(buf, 0, buf.length)) >= 0) {
+				fos.write(buf, 0, length);
+			}
+
+		} catch (IOException ioex) {
+			fos.close();
+		}
+
 	}
 
 	public static ArrayList<String> getMaps() {
 		return maps;
 	}
-
 }

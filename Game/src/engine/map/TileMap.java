@@ -4,8 +4,8 @@ package engine.map;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileReader;
 
 import javax.imageio.ImageIO;
 
@@ -197,9 +197,10 @@ public class TileMap {
 	public void loadMap(String s) {
 
 		try {
-
-			final InputStream in = getClass().getResourceAsStream(s);
-			final BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			
+			final File f = new File(s);
+			
+			final BufferedReader br = new BufferedReader(new FileReader(f)); // InputStreamReader(in));
 
 			mapXRows = Integer.parseInt(br.readLine());
 			mapYRows = Integer.parseInt(br.readLine());
@@ -220,6 +221,8 @@ public class TileMap {
 				for (int col = 0; col < mapXRows; col++)
 					map[row][col] = Integer.parseInt(tokens[col]);
 			}
+			
+			br.close();
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

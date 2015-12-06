@@ -46,7 +46,7 @@ public class GamePanelExtended extends GamePanel{
 			
 			@Override
 			public void run() {
-				Maps.init();
+				new Maps().init();
 			}
 		}).start();
 	}
