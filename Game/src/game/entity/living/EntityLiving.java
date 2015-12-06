@@ -173,9 +173,9 @@ public class EntityLiving extends MapObject{
 
 		if(wep != null && wep.getItem() instanceof ItemTool){
 			ItemTool tool = (ItemTool)wep.getItem();
-			if(EnumTools.SWORD == tool.getEffectiveness()){
-				wepDmg = ((ItemTool)wep.getItem()).getEffectiveDamage(wep);
-			}
+			
+			wepDmg = ((ItemTool)wep.getItem()).getAttackDamage(wep);
+			
 			wep.damageStack(1);
 		}
 

@@ -92,7 +92,7 @@ public class World extends GameWorld{
 
 		//init if no saves are found, and the player wants to play the tutorial
 		if(Save.getWorldData(0) == null)
-			if(resourceMapPath.equals("/maps/tutorial_island")){
+			if(resourceMapPath.equals("maps/tut/tutorial_island.map")){
 				Loading.loadTutorialLevel(gsm);
 			}
 
