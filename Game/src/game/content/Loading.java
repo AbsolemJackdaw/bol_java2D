@@ -18,11 +18,13 @@ import game.entity.block.environement.BlockInfoPane;
 import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 import game.item.Items;
+import game.map.Maps;
 import game.util.Constants;
 import game.util.Util;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.SwingWorker;
 
@@ -48,9 +50,11 @@ public class Loading {
 
 		//skip map x_1, so that map is used only in the very beginning
 		// x1 + x2 is max_total maps, where map min is 2
-		int i = Constants.RANDOM.nextInt(2)+1;
-		String s = "/maps/map_" + i;
+		
+		int i = new Random().nextInt(Maps.getMaps().size());
+		String s = "/maps/" + Maps.getMaps().get(i);
 		System.out.println(s);
+		
 		return s;
 	}
 

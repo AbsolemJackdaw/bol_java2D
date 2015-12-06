@@ -5,23 +5,14 @@ import engine.music.Music;
 
 public class MusicPanel implements Runnable{
 
-	public static String sound = "";
-	private boolean running;
+	/**used only to load music*/
 	
 	@Override
 	public void run() {
 
-		running = true;
-		
 		Music.init();
 		loadMusic();
 		
-		while (running) {
-			if(sound.length() > 1){
-				Music.play(sound);
-				sound = "";
-			}
-		}
 	}
 
 	public void loadMusic(){

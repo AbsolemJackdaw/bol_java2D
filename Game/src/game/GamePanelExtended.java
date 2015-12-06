@@ -11,6 +11,7 @@ import engine.gamestate.GameStateManagerBase;
 import engine.image.Images;
 import engine.window.GamePanel;
 import engine.window.gameAid.Utility;
+import game.map.Maps;
 import game.util.Constants;
 import game.util.Util;
 
@@ -36,6 +37,20 @@ public class GamePanelExtended extends GamePanel{
 		return new GameStateManager();
 	}
 
+	@Override
+	public void addNotify() {
+		super.addNotify();
+		System.out.println("notify");
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Maps.init();
+			}
+		}).start();
+	}
+	
 	public static boolean drawLoadingIcon;
 
 	@Override
