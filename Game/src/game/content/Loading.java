@@ -474,7 +474,7 @@ public class Loading {
 
 				//full water block
 				if(world.tileMap.getBlockID(i, j) == 10){
-					if(Constants.RANDOM.nextInt(15) == 0){
+					if(Constants.RANDOM.nextInt(25) == 0){
 						int fish = Constants.RANDOM.nextInt(4)+1;
 						while(fish > 0){
 							populateWaterEntities(world, Entity.FISH, i, j);
