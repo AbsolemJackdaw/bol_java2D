@@ -40,7 +40,6 @@ public class GamePanelExtended extends GamePanel{
 	@Override
 	public void addNotify() {
 		super.addNotify();
-		System.out.println("notify");
 		
 		new Thread(new Runnable() {
 			

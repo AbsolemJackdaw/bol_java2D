@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -26,13 +25,14 @@ public class Maps {
 		File dir = new File("maps/");
 
 		if(!dir.exists() || dir.listFiles().length == 0){
-			System.out.println("ERROR ! No Maps were found. Game cannot continue !!");
+			System.out.println("ERROR ! Map Directory unexistent ! Game cannot continue !!");
 			System.out.println("Exiting game");
 			System.exit(0);
 		}
 
 		for(File f : dir.listFiles()){
-			maps.add(f.getName());
+			if(!f.isDirectory())
+				maps.add(f.getName());
 		}
 	}
 
@@ -59,7 +59,7 @@ public class Maps {
 						}
 					}
 
-					System.out.printf("File: %s Size %d  Modified on %TD %n", entry.getName(), entry.getSize(), new Date(entry.getTime()));
+					System.out.printf("Map Entries: %s Size %d  Modified on %TD %n", entry.getName(), entry.getSize());
 					extractEntry(entry, zis);
 				}
 			} finally {

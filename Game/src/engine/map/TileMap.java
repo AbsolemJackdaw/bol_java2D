@@ -199,14 +199,14 @@ public class TileMap {
 	public void loadMap(String s) {
 
 		try {
-			
 			File f = new File(s);
 			
 			if(!f.exists()){
 				System.out.println("MapFile wasn't found for " + s);
 				System.out.println("Trying to generate a new map...");
 
-				f = new File(Maps.getMaps().get(new Random().nextInt(Maps.getMaps().size())));
+				f = new File("maps/"+Maps.getMaps().get(new Random().nextInt(Maps.getMaps().size())));
+				System.out.println(f.getName());
 			}
 			
 			final BufferedReader br = new BufferedReader(new FileReader(f)); // InputStreamReader(in));

@@ -508,14 +508,8 @@ public class Player extends EntityLiving implements IInventory{
 				if(stack.getItem() instanceof ItemTool){
 					ItemTool item = ((ItemTool)stack.getItem());
 
-					System.out.println("stack"+i + " is a tool");
-					
 					if(item.getEffectiveness().equals(tool)){
-						System.out.println(item.getUIN() + " is " + tool);
-						
 						if(stackBuffer != null){
-							System.out.println("stackbuffer was already set");
-							System.out.println();
 							if(item.getMaterial().getId() > ((ItemTool)stackBuffer.getItem()).getMaterial().getId()){
 								stackBuffer = stack;
 								intBuffer = i;
