@@ -31,6 +31,10 @@ public class Crafting {
 	public static final int PickaxeSmooth = 14;
 	public static final int AxeSmooth = 15;
 	public static final int SwordSmooth = 16;
+	
+	public static final int PickaxeIron = 17;
+	public static final int AxeIron = 18;
+	public static final int SwordIron = 19;
 
 
 	//ADVANCED CRAFTING
@@ -93,6 +97,21 @@ public class Crafting {
 					new ItemStack(Items.refinedStone, 1)
 			};
 			
+		case SwordIron:
+			return new ItemStack[]{
+					new ItemStack(Items.handle_sword, 1),
+					new ItemStack(Items.ingot, 1)
+			};
+		case AxeIron:
+			return new ItemStack[]{
+					new ItemStack(Items.handle_soft, 1),
+					new ItemStack(Items.ingot, 1)
+			};
+		case PickaxeIron:
+			return new ItemStack[]{
+					new ItemStack(Items.handle_hard, 1),
+					new ItemStack(Items.ingot, 1)
+			};
 		case Belt:
 			return new ItemStack[]{
 					new ItemStack(Items.leather_fine, 1),

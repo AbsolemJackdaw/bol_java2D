@@ -10,9 +10,13 @@ public class ItemOvenbase extends Item {
 
 	public ItemOvenbase(String uin, String displayName) {
 		super(uin, displayName);
-		modifiers = 5;
 	}
 
+	@Override
+	public int getModifiers() {
+		return 5;
+	}
+	
 	@Override
 	public boolean isStackable() {
 		return false;

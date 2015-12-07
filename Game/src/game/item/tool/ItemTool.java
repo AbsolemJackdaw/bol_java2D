@@ -23,17 +23,17 @@ public class ItemTool extends Item {
 		ROCK(0),
 		STONE(1),
 		IRON(2);
-		
+
 		private int id;
 		EnumMaterial(int id){
 			this.id = id;
 		}
-		
+
 		public int getId() {
 			return id;
 		}
 	}
-	
+
 	public static enum EnumTools {
 		NOTHING,
 		PICKAXE,
@@ -44,7 +44,6 @@ public class ItemTool extends Item {
 	public ItemTool(String uin, String displayName, EnumMaterial material){
 		super(uin, displayName);
 		this.material = material;
-		this.modifiers = 3;
 	}
 
 	public ItemTool setBaseAttack(int baseAttack) {
@@ -114,6 +113,14 @@ public class ItemTool extends Item {
 		return true;
 	}
 
+	@Override
+	public int getModifiers() {
+		return getMaterial() == EnumMaterial.ROCK ? 1 :
+			getMaterial() == EnumMaterial.STONE ?  3 :
+				getMaterial() == EnumMaterial.IRON ? 5 : 2
+						;
+	}
+
 	public int getAttackDamage(ItemStack stack){
 		return getBaseAttack() + stack.getBonus(ToolModifier.DMG);
 	}
@@ -123,19 +130,19 @@ public class ItemTool extends Item {
 		super.craftingCallBack(component, base);
 
 		if(component.getItem().equals(Items.stone) && material == EnumMaterial.ROCK){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 10, ToolModifier.EFF, 1));
-			base.damageStack(-10);
-		}
-		else if(component.getItem().equals(Items.refinedStone) && material == EnumMaterial.STONE){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.EFF, 2));
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.EFF, 3));
 			base.damageStack(-20);
 		}
+		else if(component.getItem().equals(Items.refinedStone) && material == EnumMaterial.STONE){
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 15, ToolModifier.EFF, 3));
+			base.damageStack(-15);
+		}
 		else if(component.getItem().equals(Items.iron) && material == EnumMaterial.IRON){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 50, ToolModifier.EFF, 3));
-			base.damageStack(-50);
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 30, ToolModifier.EFF, 3));
+			base.damageStack(-30);
 		}
 	}
-	
+
 	public EnumMaterial getMaterial() {
 		return material;
 	}

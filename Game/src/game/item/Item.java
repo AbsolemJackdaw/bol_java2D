@@ -29,8 +29,6 @@ public class Item {
 
 	protected List <String> info;
 
-	protected int modifiers = 3;
-	
 	public Item(String uin, String displayName){
 		UIN = uin;
 		this.displayName = displayName;
@@ -179,5 +177,9 @@ public class Item {
 	
 	public boolean hasModifiers(){
 		return false;
+	}
+	
+	public int getModifiers(){
+		return hasModifiers() ? 3 : 0;
 	}
 }

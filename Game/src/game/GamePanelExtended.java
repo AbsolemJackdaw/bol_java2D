@@ -24,7 +24,7 @@ public class GamePanelExtended extends GamePanel{
 	public GamePanelExtended() {
 		super();
 
-		icon = Images.loadImage("/items/tools/pickaxe.png");
+		icon = Images.loadImage("/items/tools/rock_pickaxe.png");
 
 		// Create a new blank cursor.
 		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);

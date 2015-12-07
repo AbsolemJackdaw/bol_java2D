@@ -59,7 +59,8 @@ public class Maps {
 						}
 					}
 
-					System.out.printf("Map Entries: %s Size %d  Modified on %TD %n", entry.getName(), entry.getSize());
+//					System.out.printf("Map Entries: %s Size %d  Modified on %TD %n", entry.getName(), entry.getSize());
+					
 					extractEntry(entry, zis);
 				}
 			} finally {

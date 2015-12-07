@@ -8,6 +8,7 @@ public class ItemSword extends ItemTool{
 	public ItemSword(String uin, String displayName, EnumMaterial type) {
 		super(uin, displayName, type);
 	}
+	
 
 	@Override
 	public void craftingCallBack(ItemStack component, ItemStack base) {
@@ -15,12 +16,12 @@ public class ItemSword extends ItemTool{
 			return;
 		
 		if(component.getItem().equals(Items.stone) && getMaterial() == EnumMaterial.ROCK){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 5, ToolModifier.DMG, 1));
-			base.damageStack(-5);
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.DMG, 3));
+			base.damageStack(-20);
 		}
 		else if(component.getItem().equals(Items.refinedStone) && getMaterial() == EnumMaterial.STONE){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 10, ToolModifier.DMG, 2));
-			base.damageStack(-10);
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 15, ToolModifier.DMG, 3));
+			base.damageStack(-15);
 		}
 		else if(component.getItem().equals(Items.iron) && getMaterial() == EnumMaterial.IRON){
 			base.addModifier(new ToolModifier(ToolModifier.DUR, 25, ToolModifier.DMG, 3));

@@ -24,7 +24,7 @@ public class ItemStack
 		item = i;
 		stackSize = size;
 
-		modifiersCount = i.modifiers;
+		modifiersCount = i.getModifiers();
 
 		initMaxDamage();
 		initToolTips();
@@ -54,11 +54,18 @@ public class ItemStack
 					if(mod != null)
 						count ++;
 				}
-				tooltipList.add("Mods : " + count + "/"  + getMods().length);
+				tooltipList.add("Mods : " + count + "/"  + (Math.max(getItem().getModifiers(), getMods().length)));
 			}else{
-				tooltipList.add("Mods : " + "0/3");
+				tooltipList.add("Mods : " + "0/"+ getItem().getModifiers());
 			}
 		}
+		
+		if(mods != null){
+			String name = tooltipList.get(0);
+			String prefix = getModNameForStack();
+			tooltipList.set(0, prefix+name);
+		}
+		
 	}
 
 	public ItemStack(Item i) {
@@ -79,8 +86,8 @@ public class ItemStack
 	}
 
 	public void setDamage(int i){
-//		if(i > getMaxDamage())
-//			i = getMaxDamage();
+		//		if(i > getMaxDamage())
+		//			i = getMaxDamage();
 
 		damage = i;
 
@@ -113,7 +120,7 @@ public class ItemStack
 		DataList modList = data.readList("mods");
 
 		if(modList != null){
-			is.mods = new ToolModifier[is.item.modifiers];
+			is.mods = new ToolModifier[is.item.getModifiers()];
 			for(int i = 0; i < modList.data().size(); i ++){
 				DataTag dt = modList.readArray(i);
 				ToolModifier mod = new ToolModifier(dt);
@@ -276,6 +283,41 @@ public class ItemStack
 				}
 			}
 		return count;
+	}
+
+	private String getModNameForStack(){
+
+		String name = "";
+
+		if(getBonus(ToolModifier.DMG) >= 20)
+			name += "Ultra Sharp";
+		else if(getBonus(ToolModifier.DMG) >= 10)
+			name += "Pretty Sharp";
+		else if(getBonus(ToolModifier.DMG) >= 5)
+			name += "Sharp";
+
+		if(name.length() > 1)
+			name+= " ";
+
+		if(getModifierCount(ToolModifier.DUR) >= 10)
+			name += "Imperishable";
+		else if(getModifierCount(ToolModifier.DUR) >= 5)
+			name += "Strong";
+		else if(getModifierCount(ToolModifier.DUR) >= 3)
+			name += "Robust";
+
+		if(name.length() > 1)
+			name+= " ";
+
+		if(getModifierCount(ToolModifier.EFF) >= 5)
+			name += "Virtuous";
+		else if(getModifierCount(ToolModifier.EFF) >= 3)
+			name += "Shrewd";
+
+		if(name.length() > 1)
+			name+= " ";
+
+		return name;
 	}
 
 	@Override
