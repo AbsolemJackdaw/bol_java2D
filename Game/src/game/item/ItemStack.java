@@ -290,32 +290,23 @@ public class ItemStack
 		String name = "";
 
 		if(getBonus(ToolModifier.DMG) >= 20)
-			name += "Ultra Sharp";
+			name += "Ultra Sharp ";
 		else if(getBonus(ToolModifier.DMG) >= 10)
-			name += "Pretty Sharp";
+			name += "Pretty Sharp ";
 		else if(getBonus(ToolModifier.DMG) >= 5)
-			name += "Sharp";
-
-		if(name.length() > 1)
-			name+= " ";
+			name += "Sharp ";
 
 		if(getModifierCount(ToolModifier.DUR) >= 10)
-			name += "Imperishable";
+			name += "Imperishable ";
 		else if(getModifierCount(ToolModifier.DUR) >= 5)
-			name += "Strong";
+			name += "Strong ";
 		else if(getModifierCount(ToolModifier.DUR) >= 3)
-			name += "Robust";
-
-		if(name.length() > 1)
-			name+= " ";
+			name += "Robust ";
 
 		if(getModifierCount(ToolModifier.EFF) >= 5)
-			name += "Virtuous";
+			name += "Virtuous ";
 		else if(getModifierCount(ToolModifier.EFF) >= 3)
-			name += "Shrewd";
-
-		if(name.length() > 1)
-			name+= " ";
+			name += "Shrewd ";
 
 		return name;
 	}

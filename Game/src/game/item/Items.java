@@ -60,7 +60,6 @@ public class Items {
 	public static ItemTool stone_axe  = (ItemTool) new ItemTool("stone_axe", "Smooth Axe", EnumMaterial.STONE).setBaseAttack(2).setEffectiveness(EnumTools.AXE).setEffectiveDamage(2).setBaseDamage(90).setTexture(Images.loadImage("/items/tools/smooth_axe.png"));
 	public static ItemTool iron_axe   =     (ItemTool) new ItemTool("iron_axe", "Iron Axe", EnumMaterial.IRON).setBaseAttack(2).setEffectiveness(EnumTools.AXE).setEffectiveDamage(2).setBaseDamage(110).setTexture(Images.loadImage("/items/tools/iron_axe.png"));
 
-
 	public static ItemLantern lantern = (ItemLantern) new ItemLantern("lantern", "Lantern").setTexture(Images.loadImage("/items/lantern.png"));		
 
 	public static ItemBelt belt = (ItemBelt) new ItemBelt("belt","Belt").setInventorySlots(5).setTexture(Images.loadImage("/items/manufactured/belt.png"));
@@ -75,12 +74,10 @@ public class Items {
 	public static void loadItems(){
 
 		registerItem(stick);
-		//			registerItem(craftTable);
 		registerItem(woodChip);
 		registerItem(iron);
 		registerItem(stone);
 		registerItem(rock_pickaxe);
-		//			registerItem(campfire);
 		registerItem(rock_sword);
 		registerItem(rock_axe);
 		registerItem(oven);
@@ -95,7 +92,6 @@ public class Items {
 		registerItem(belt_l);
 		registerItem(leather);
 		registerItem(pouch);
-		//			registerItem(advancedCraftTable);
 		registerItem(bomb);
 		registerItem(bomb_better);
 		registerItem(bomb_ultra);
@@ -111,6 +107,9 @@ public class Items {
 		registerItem(stone_sword);
 		registerItem(stone_axe);
 		registerItem(stone_pickaxe);
+		registerItem(iron_sword);
+		registerItem(iron_axe);
+		registerItem(iron_pickaxe);
 
 	}
 

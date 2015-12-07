@@ -16,19 +16,19 @@ public class ItemSword extends ItemTool{
 			return;
 		
 		if(component.getItem().equals(Items.stone) && getMaterial() == EnumMaterial.ROCK){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.DMG, 3));
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.DMG, 1));
 			base.damageStack(-20);
 		}
 		else if(component.getItem().equals(Items.refinedStone) && getMaterial() == EnumMaterial.STONE){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 15, ToolModifier.DMG, 3));
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 15, ToolModifier.DMG, 1));
 			base.damageStack(-15);
 		}
-		else if(component.getItem().equals(Items.iron) && getMaterial() == EnumMaterial.IRON){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 25, ToolModifier.DMG, 3));
-			base.damageStack(-25);
+		else if(component.getItem().equals(Items.ingot) && getMaterial() == EnumMaterial.IRON){
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 30, ToolModifier.DMG, 2));
+			base.damageStack(-30);
 			
 		}else if(component.getItem().equals(Items.whetstone)){
-			base.addModifier(new ToolModifier(ToolModifier.DMG, 5, ToolModifier.EFF, 2));
+			base.addModifier(new ToolModifier(ToolModifier.DMG, 3, ToolModifier.EFF, 1));
 		}
 	}
 }

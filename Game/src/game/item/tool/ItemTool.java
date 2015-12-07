@@ -130,15 +130,15 @@ public class ItemTool extends Item {
 		super.craftingCallBack(component, base);
 
 		if(component.getItem().equals(Items.stone) && material == EnumMaterial.ROCK){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.EFF, 3));
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.EFF, 1));
 			base.damageStack(-20);
 		}
 		else if(component.getItem().equals(Items.refinedStone) && material == EnumMaterial.STONE){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 15, ToolModifier.EFF, 3));
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 15, ToolModifier.EFF, 1));
 			base.damageStack(-15);
 		}
-		else if(component.getItem().equals(Items.iron) && material == EnumMaterial.IRON){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 30, ToolModifier.EFF, 3));
+		else if(component.getItem().equals(Items.ingot) && material == EnumMaterial.IRON){
+			base.addModifier(new ToolModifier(ToolModifier.DUR, 30, ToolModifier.EFF, 2));
 			base.damageStack(-30);
 		}
 	}
