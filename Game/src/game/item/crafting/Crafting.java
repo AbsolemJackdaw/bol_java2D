@@ -171,6 +171,13 @@ public class Crafting {
 		case AxeSmooth :
 			return new ItemStack(Items.stone_axe, 1);
 			
+		case PickaxeIron: 
+			return new ItemStack(Items.iron_pickaxe, 1);
+		case SwordIron :
+			return new ItemStack(Items.iron_sword, 1);
+		case AxeIron :
+			return new ItemStack(Items.iron_axe, 1);
+			
 		case SoftHandle:
 			return new ItemStack(Items.handle_soft);
 		case HardHandle:
