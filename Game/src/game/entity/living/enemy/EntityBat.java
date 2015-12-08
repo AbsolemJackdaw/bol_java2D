@@ -56,7 +56,7 @@ public class EntityBat extends EntityEnemy{
 
 	@Override
 	public ItemStack[] getDrops() {
-		return new ItemStack[]{new ItemStack(Items.leather, rand.nextInt(3)+1)};
+		return new ItemStack[]{new ItemStack(Items.leather, rand.nextInt(2)+1)};
 	}
 
 	@Override

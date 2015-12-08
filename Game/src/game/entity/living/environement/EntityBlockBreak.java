@@ -10,7 +10,7 @@ public class EntityBlockBreak extends EntityDeathParticle {
 		super(world, uin);
 		jumpStart = -3;
 		
-		width = height = entitySizeX = entitySizeY = 16;
+		width = height = entitySizeX = entitySizeY = rand.nextInt(8)+8;
 	}
 	
 	private BufferedImage[] particles = null;

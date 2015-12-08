@@ -108,19 +108,10 @@ public class BlockBreakable extends Block{
 				health -= player.getAttackDamage();
 			}
 		}else{
-//			if(needsToolToMine()){//if this block needs a tool, break only when tool is held
-				if(effectiveTool == tool.getEffectiveness()){
-					hit();
-					health -=wepDmg;
-				}
-//			}
-			//now only exclusive tools will work
-			//			else
-			//				if(effectiveTool == tool.getEffectiveness())//if the block doesnt need a tool, a bonus for wielding the right tool will kick in
-			//					health -= wepDmg;
-			//				else{
-			//					health -= wepDmg/2;//if bonus tool is not yield, use half of the current weapons dmg as bonus
-			//				}
+			if(effectiveTool == tool.getEffectiveness()){
+				hit();
+				health -=wepDmg;
+			}
 		}
 
 		if(health <= 0)
@@ -159,9 +150,9 @@ public class BlockBreakable extends Block{
 			if(p.getInventory().setStackInNextAvailableSlot(getDrop())){
 				remove = true;
 
-				if(p.invArmor.getWeapon() != null){
+				if(p.invArmor.getWeapon() != null)
 					p.invArmor.getWeapon().damageStack(1);
-				}
+
 			}else {
 				remove = false;
 				health = defaultHealth;

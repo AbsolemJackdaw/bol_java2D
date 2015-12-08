@@ -45,15 +45,15 @@ public class Crafting {
 			addRecipe(new ItemStack[]{new ItemStack(Items.stick, 1),new ItemStack(Items.stick, 1)}, new ItemStack(Items.handle_soft, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.stick, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.handle_hard, 1));
 
-			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.stone, 1)}, new ItemStack(Items.rock_sword, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.wood_sword, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.stone_sword, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.ingot, 1)}, new ItemStack(Items.iron_sword, 1));
 
-			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.stone, 1)}, new ItemStack(Items.rock_axe, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.wood_axe, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.stone_axe, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.ingot, 1)}, new ItemStack(Items.iron_axe, 1));
 
-			addRecipe(new ItemStack[]{new ItemStack(Items.handle_hard, 1),new ItemStack(Items.stone, 1)}, new ItemStack(Items.rock_pickaxe, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_hard, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.wood_pickaxe, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.handle_hard, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.stone_pickaxe, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.handle_hard, 1),new ItemStack(Items.ingot, 1)}, new ItemStack(Items.iron_pickaxe, 1));
 
@@ -137,8 +137,6 @@ public class Crafting {
 
 				if(compare[0].equals(stacks[0]) && compare[1].equals(stacks[1]) || 
 						compare[0].equals(stacks[1]) && compare[1].equals(stacks[0])){
-
-					System.out.println("Recipe " + i + " was a match");
 
 					boolean flag = false;
 

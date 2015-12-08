@@ -453,7 +453,7 @@ public class Player extends EntityLiving implements IInventory{
 			}else if(bl.getEffectiveTool() == EnumTools.SWORD){
 				if(invArmor.getWeapon() == null){
 					if(hasTool(EnumTools.SWORD))
-						if(getInventory().hasStack(new ItemStack(Items.rock_sword,1))){
+						if(getInventory().hasStack(new ItemStack(Items.wood_sword,1))){
 							invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
 							getInventory().setStackInSlot(integerToTrackHeldItem, null);
 						}

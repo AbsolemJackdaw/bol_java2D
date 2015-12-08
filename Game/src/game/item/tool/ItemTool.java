@@ -5,7 +5,6 @@ import game.World;
 import game.entity.living.player.Player;
 import game.item.Item;
 import game.item.ItemStack;
-import game.item.Items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,11 @@ public class ItemTool extends Item {
 
 	private EnumMaterial material;
 
+	/**used in tool subclasses to set a general modifier number for a set of upgrades*/
+	protected int mod;
+	
 	public static enum EnumMaterial{
-		ROCK(0),
+		WOOD(0),
 		STONE(1),
 		IRON(2);
 
@@ -115,7 +117,7 @@ public class ItemTool extends Item {
 
 	@Override
 	public int getModifiers() {
-		return getMaterial() == EnumMaterial.ROCK ? 1 :
+		return getMaterial() == EnumMaterial.WOOD ? 1 :
 			getMaterial() == EnumMaterial.STONE ?  3 :
 				getMaterial() == EnumMaterial.IRON ? 5 : 2
 						;
@@ -128,19 +130,6 @@ public class ItemTool extends Item {
 	@Override
 	public void craftingCallBack(ItemStack component, ItemStack base) {
 		super.craftingCallBack(component, base);
-
-		if(component.getItem().equals(Items.stone) && material == EnumMaterial.ROCK){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 20, ToolModifier.EFF, 1));
-			base.damageStack(-20);
-		}
-		else if(component.getItem().equals(Items.refinedStone) && material == EnumMaterial.STONE){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 15, ToolModifier.EFF, 1));
-			base.damageStack(-15);
-		}
-		else if(component.getItem().equals(Items.ingot) && material == EnumMaterial.IRON){
-			base.addModifier(new ToolModifier(ToolModifier.DUR, 30, ToolModifier.EFF, 2));
-			base.damageStack(-30);
-		}
 	}
 
 	public EnumMaterial getMaterial() {
