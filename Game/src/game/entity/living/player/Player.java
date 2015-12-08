@@ -471,20 +471,23 @@ public class Player extends EntityLiving implements IInventory{
 			}
 		}
 		else if (o instanceof EntityLiving){
-			if(invArmor.getWeapon() == null){
-				if(hasTool(EnumTools.SWORD)){
-					invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
-					getInventory().setStackInSlot(integerToTrackHeldItem, null);
-				}
-			}
-			else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.SWORD)){
-				if(hasTool(EnumTools.SWORD)){
-					ItemStack heldTool = invArmor.getWeapon().copy();
-					ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
 
-					invArmor.setWeapon(newTool);
-					setStackInSlot(integerToTrackHeldItem, null);
-					setStackInSlot(integerToTrackHeldItem, heldTool);
+			if(((EntityLiving)o).canPlayDeathAnimation()){
+				if(invArmor.getWeapon() == null){
+					if(hasTool(EnumTools.SWORD)){
+						invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
+						getInventory().setStackInSlot(integerToTrackHeldItem, null);
+					}
+				}
+				else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.SWORD)){
+					if(hasTool(EnumTools.SWORD)){
+						ItemStack heldTool = invArmor.getWeapon().copy();
+						ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
+
+						invArmor.setWeapon(newTool);
+						setStackInSlot(integerToTrackHeldItem, null);
+						setStackInSlot(integerToTrackHeldItem, heldTool);
+					}
 				}
 			}
 		}

@@ -107,11 +107,12 @@ public class GuiPlayerInventory extends GuiContainer {
 		if(crafting){
 		
 			String info = "";
-			for(String s : text)
-				info += s;
+			for(int i = 0; i < 2; i++)
+				info += text.get(i);
 			
-			Utility.drawCenteredString(g, info, Constants.FONT_ITEMS, GamePanel.WIDTH/2 - 150/2 + 73, GamePanel.HEIGHT/2 - 75/2 + 5);
-			
+			Utility.drawCenteredString(g, info, Constants.FONT_ITEMS, GamePanel.WIDTH/2 - 150/2 + 90, GamePanel.HEIGHT/2 - 75/2 -5);
+			Utility.drawCenteredString(g, text.get(2), Constants.FONT_ITEMS, GamePanel.WIDTH/2 - 150/2 + 90, GamePanel.HEIGHT/2 - 75/2 + 5);
+
 		}
 		else
 			Util.drawToolTipText(g, text, new int[]{GamePanel.WIDTH/2 - 150/2 - 1, GamePanel.HEIGHT/2 - 75/2 + 46}, null, null);
@@ -170,10 +171,13 @@ public class GuiPlayerInventory extends GuiContainer {
 
 				text.clear();
 				text.add("Combine "+ player.getStackInSlot(slot_index).getItem().getDisplayName() + " with ");
-				text.add(player.getStackInSlot(slot_index).getItem().getDisplayName());
-				
+				text.add(player.getStackInSlot(slot_index).getItem().getDisplayName() + " : ");
+
 				craftables[0] = player.getStackInSlot(slot_index).copy();
 				craftSlots[0] = slot_index;
+				
+				text.add(Crafting.getCraftResultName(craftables[0], craftables[0], slot_index, slot_index));
+
 			}
 
 			else if(player.getStackInSlot(slot_index) != null && crafting){
@@ -346,9 +350,11 @@ public class GuiPlayerInventory extends GuiContainer {
 		if(crafting){
 			if(playerInventory.getStackInSlot(slot_index) != null){
 				String name = playerInventory.getStackInSlot(slot_index).getItem().getDisplayName();
-				text.set(1, name);
+				text.set(1, name + " : ");
+				text.set(2, Crafting.getCraftResultName(craftables[0], playerInventory.getStackInSlot(slot_index), craftSlots[0], slot_index));
 			}else{
 				text.set(1, "...");
+				text.set(2, "");
 			}
 		}
 	}

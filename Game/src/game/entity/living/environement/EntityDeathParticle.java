@@ -13,22 +13,15 @@ import java.awt.image.BufferedImage;
 
 public class EntityDeathParticle extends EntityLiving {
 
-	private BufferedImage[] parts;
-	private int partID = -1;
-	private int timer = 180;
+	protected BufferedImage[] parts;
+	protected int partID = -1;
+	protected int timer = 180;
 	private int rotation = 0;
 
 	public EntityDeathParticle(GameWorld world, String uin) {
 		super(world, uin);
 
-		parts = Images.loadMultiImage("/entity/death_particle.png", 16, 0, 8);
-		partID = rand.nextInt(8);
-
-		if(!hasAnimation()){
-			BufferedImage[] bi = new BufferedImage[]{getEntityTexture()};
-			animation.setFrames(bi);
-			animation.setDelay(Animation.NONE);
-		}
+//		reloadTexture();
 
 		boolean right = rand.nextBoolean();
 		this.right = right;
@@ -48,6 +41,21 @@ public class EntityDeathParticle extends EntityLiving {
 		maxFallSpeed = 4.0;
 		jumpStart = -5;
 		stopJumpSpeed = 0.3;
+	}
+
+	@Override
+	public void reloadTexture() {
+		parts = getParts();
+		partID = rand.nextInt(getParts().length);
+
+		if(!hasAnimation()){
+			BufferedImage[] bi = new BufferedImage[]{getEntityTexture()};
+			animation.setFrames(bi);
+			animation.setDelay(Animation.NONE);
+		}
+	}
+	protected BufferedImage[] getParts(){
+		return Images.loadMultiImage("/entity/death_anim.png", 16, 0, 8);
 	}
 
 	@Override
@@ -108,12 +116,12 @@ public class EntityDeathParticle extends EntityLiving {
 
 		if (facingRight)
 			g.drawImage(Util.rotateImage(am.getImage(), rotation),
-					(int) ((xScreen + xmap) - (32 / 2)),
-					(int) ((yScreen + ymap) - (32 / 2)), 32, 32, null);
+					(int) ((xScreen + xmap) - (width)),
+					(int) ((yScreen + ymap) - (height)), width*2, height*2, null);
 		else
 			g.drawImage(Util.rotateImage(am.getImage(), rotation),
-					(int) (((xScreen + xmap) - (32 / 2)) + 32),
-					(int) ((yScreen + ymap) - (32 / 2)), -32, 32, null);
+					(int) (((xScreen + xmap) - (width)) + width*2),
+					(int) ((yScreen + ymap) - (height)), -(width*2), height*2, null);
 
 		if (getWorld().showBoundingBoxes) {
 			g.setColor(Color.WHITE);

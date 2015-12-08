@@ -32,11 +32,13 @@ import game.content.SpawningLogic;
 import game.content.WorldTask;
 import game.content.save.Save;
 import game.entity.Entity;
+import game.entity.block.Block;
 import game.entity.block.Blocks;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.block.breakable.BlockLight;
 import game.entity.block.breakable.BlockOven;
 import game.entity.living.EntityLiving;
+import game.entity.living.environement.EntityBlockBreak;
 import game.entity.living.environement.EntityDeathParticle;
 import game.entity.living.player.Player;
 import game.gui.Gui;
@@ -350,22 +352,43 @@ public class World extends GameWorld{
 
 						if(mo instanceof EntityLiving){
 							if(((EntityLiving) mo).canPlayDeathAnimation()){
-								
+
 								int parts = new Random().nextInt(10)+5;
-								
+
 								for(int i = 0; i < parts; i++){
-									
+
 									EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATH, this);
 
 									if(entity instanceof EntityDeathParticle){
 										EntityDeathParticle edp = (EntityDeathParticle)entity;
-										
+
 										if(edp != null){
+											edp.reloadTexture();
 											edp.setPosition(mo.getScreenXpos(), mo.getScreenYpos());
 											edp.setJumping(true);
 											edp.dy = edp.jumpStart;
 											listWithMapObjects.add(edp);
 										}
+									}
+								}
+							}
+						}else if (mo instanceof BlockBreakable){
+							int parts = new Random().nextInt(10)+5;
+
+							for(int i = 0; i < parts; i++){
+
+								EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATHBLOCK, this);
+
+								if(entity instanceof EntityBlockBreak){
+									EntityBlockBreak edp = (EntityBlockBreak)entity;
+
+									if(edp != null){
+										edp.setParticleTexture(mo.getAnimation().getImage());
+										edp.reloadTexture();
+										edp.setPosition(mo.getScreenXpos(), mo.getScreenYpos());
+										edp.setJumping(true);
+										edp.dy = edp.jumpStart;
+										listWithMapObjects.add(edp);
 									}
 								}
 							}
@@ -380,8 +403,8 @@ public class World extends GameWorld{
 	public void handleInput() {
 
 		if(KeyHandler.isPressed(KeyHandler.CTRL)){
-//			player.initHealth(3f);
-//			player.setMaxAirSupply(1000);
+			//			player.initHealth(3f);
+			//			player.setMaxAirSupply(1000);
 		}
 
 		if(isConsoleDisplayed){

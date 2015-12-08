@@ -8,6 +8,8 @@ import game.util.Util;
 
 public class Crafting {
 
+	private static final int recipes = 25;
+
 	//basic crafting
 	public static final int Sticks = 0;
 
@@ -27,11 +29,11 @@ public class Crafting {
 
 	public static final int RefinedStone = 12; 
 	public static final int OvenBase = 13; 
-	
+
 	public static final int PickaxeSmooth = 14;
 	public static final int AxeSmooth = 15;
 	public static final int SwordSmooth = 16;
-	
+
 	public static final int PickaxeIron = 17;
 	public static final int AxeIron = 18;
 	public static final int SwordIron = 19;
@@ -96,7 +98,7 @@ public class Crafting {
 					new ItemStack(Items.handle_hard, 1),
 					new ItemStack(Items.refinedStone, 1)
 			};
-			
+
 		case SwordIron:
 			return new ItemStack[]{
 					new ItemStack(Items.handle_sword, 1),
@@ -134,13 +136,13 @@ public class Crafting {
 					new ItemStack(Items.leather, 1),
 					new ItemStack(Items.leather, 1)
 			};
-			
+
 		case RefinedStone:
 			return new ItemStack[]{
 					new ItemStack(Items.stone, 1),
 					new ItemStack(Items.stone, 1)
 			};
-			
+
 		case OvenBase:
 			return new ItemStack[]{
 					new ItemStack(Items.refinedStone, 1),
@@ -170,14 +172,14 @@ public class Crafting {
 			return new ItemStack(Items.stone_sword, 1);
 		case AxeSmooth :
 			return new ItemStack(Items.stone_axe, 1);
-			
+
 		case PickaxeIron: 
 			return new ItemStack(Items.iron_pickaxe, 1);
 		case SwordIron :
 			return new ItemStack(Items.iron_sword, 1);
 		case AxeIron :
 			return new ItemStack(Items.iron_axe, 1);
-			
+
 		case SoftHandle:
 			return new ItemStack(Items.handle_soft);
 		case HardHandle:
@@ -211,6 +213,37 @@ public class Crafting {
 		return null;
 	}
 
+	public static String getCraftResultName(ItemStack stack, ItemStack stack2, int slot, int slot2){
+		if(stack == null && stack2 == null)
+			return "nothing...";
+
+		if(stack.equals(stack2) && slot == slot2){
+			if(stack.stackSize <= 1){
+				return "nothing...";
+			}
+		}
+
+		for(int i = 0 ; i < recipes; i++){
+
+			ItemStack[] compare = getRecipe(i);
+
+			if(compare == null || compare[0] == null || compare[1] == null)
+				continue;
+
+			if(compare.length == 2){
+				//any match. does not allow for order based crafting
+
+				if(compare[0].equals(stack) && compare[1].equals(stack2) || 
+						compare[0].equals(stack2) && compare[1].equals(stack)){
+
+					return result(i).getItem().getDisplayName();
+				}
+			}
+		}
+
+		return "nothing...";
+	}
+
 	public static void craft(Player player, ItemStack[] stacks, int[] slots){
 
 		if(stacks[0] == null || stacks[1] == null)
@@ -229,7 +262,7 @@ public class Crafting {
 
 		boolean callBack = true;
 
-		for(int i = 0 ; i < 20; i++){
+		for(int i = 0 ; i < recipes; i++){
 
 			ItemStack[] compare = getRecipe(i);
 
@@ -238,7 +271,7 @@ public class Crafting {
 
 			if(compare.length == 2){
 				//any match. does not allow for order based crafting
-				
+
 				if(compare[0].equals(stacks[0]) && compare[1].equals(stacks[1]) || 
 						compare[0].equals(stacks[1]) && compare[1].equals(stacks[0])){
 
@@ -274,12 +307,12 @@ public class Crafting {
 
 			ItemStack copy = stacks[1].copy();
 			Item item = stacks[1].getItem();
-			
+
 			item.craftingCallBack(stacks[0], stacks[1]);
-			
+
 			player.setStackInSlot(slots[1], null);
 			player.setStackInSlot(slots[1], stacks[1]);
-			
+
 			if(!copy.equals(stacks[1])){
 
 				Util.decreaseStack(player, slots[0], 1);

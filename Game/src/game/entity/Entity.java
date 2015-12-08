@@ -8,6 +8,7 @@ import game.entity.living.EntityPig;
 import game.entity.living.EntityWorm;
 import game.entity.living.enemy.EntityBat;
 import game.entity.living.enemy.EntityWarfBat;
+import game.entity.living.environement.EntityBlockBreak;
 import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.environement.EntityDeathParticle;
 import game.entity.living.environement.EntityExplosion;
@@ -24,6 +25,7 @@ public class Entity {
 	public static final String BOMB = "bomb";
 	public static final String FISH = "fish";
 	public static final String DEATH = "death";
+	public static final String DEATHBLOCK = "deathblock";
 
 	public static EntityLiving createEntityFromUIN(String s, GameWorld world){
 
@@ -46,6 +48,8 @@ public class Entity {
 			return new EntityFish((World)world, FISH);
 		case DEATH:
 			return new EntityDeathParticle((World)world, DEATH);
+		case DEATHBLOCK:
+			return new EntityBlockBreak((World)world, DEATHBLOCK);
 		}
 
 		return null;

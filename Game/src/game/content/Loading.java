@@ -491,11 +491,11 @@ public class Loading {
 		for(int i = 0; i < airBlocks/10; i++){
 			generateRandomTree(world, Constants.RANDOM.nextInt(x),  Constants.RANDOM.nextInt(y));
 			generateRandomOre(world, Blocks.ROCK, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 3);
-			generateRandomOre(world, Blocks.IRON, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 10);
+			generateRandomOre(world, Blocks.IRON, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 15);
 
 			populateEntities(world, Entity.PIG, 20);
 			populateEntities(world, Entity.SAMBAT, 7);
-			populateEntities(world, Entity.WARFBAT, 25);
+			populateEntities(world, Entity.WARFBAT, 30);
 
 		}
 	}
