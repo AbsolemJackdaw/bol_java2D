@@ -9,6 +9,7 @@ import game.entity.living.EntityWorm;
 import game.entity.living.enemy.EntityBat;
 import game.entity.living.enemy.EntityWarfBat;
 import game.entity.living.environement.EntityDeathAnim;
+import game.entity.living.environement.EntityDeathParticle;
 import game.entity.living.environement.EntityExplosion;
 import game.entity.living.water.EntityFish;
 
@@ -22,6 +23,7 @@ public class Entity {
 	public static final String WORM = "worm";
 	public static final String BOMB = "bomb";
 	public static final String FISH = "fish";
+	public static final String DEATH = "death";
 
 	public static EntityLiving createEntityFromUIN(String s, GameWorld world){
 
@@ -42,6 +44,8 @@ public class Entity {
 			return new EntityExplosion((World)world);
 		case FISH:
 			return new EntityFish((World)world, FISH);
+		case DEATH:
+			return new EntityDeathParticle((World)world, DEATH);
 		}
 
 		return null;
