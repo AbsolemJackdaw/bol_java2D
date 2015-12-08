@@ -21,8 +21,8 @@ public class EntityDeathParticle extends EntityLiving {
 	public EntityDeathParticle(GameWorld world, String uin) {
 		super(world, uin);
 
-		parts = Images.loadMultiImage("/entity/death_particle.png", 16, 0, 6);
-		partID = rand.nextInt(6);
+		parts = Images.loadMultiImage("/entity/death_particle.png", 16, 0, 8);
+		partID = rand.nextInt(8);
 
 		if(!hasAnimation()){
 			BufferedImage[] bi = new BufferedImage[]{getEntityTexture()};

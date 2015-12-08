@@ -37,7 +37,6 @@ import game.entity.block.breakable.BlockBreakable;
 import game.entity.block.breakable.BlockLight;
 import game.entity.block.breakable.BlockOven;
 import game.entity.living.EntityLiving;
-import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.environement.EntityDeathParticle;
 import game.entity.living.player.Player;
 import game.gui.Gui;
@@ -369,11 +368,6 @@ public class World extends GameWorld{
 										}
 									}
 								}
-								
-								
-//								EntityDeathAnim anim = mo.getDeathAnimation();
-//								anim.setPosition(mo.getScreenXpos(), mo.getScreenYpos());
-//								listWithMapObjects.add(anim);
 							}
 						}
 						break;

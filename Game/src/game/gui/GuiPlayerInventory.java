@@ -38,9 +38,6 @@ public class GuiPlayerInventory extends GuiContainer {
 
 		secondairyInventory = p.invArmor.getInventory();
 
-		//		buttonList.add(new Button(centerX - 50, centerY + 13, Items.craftTable.getTexture()));
-		//		buttonList.add(new Button(centerX - 18 - 50, centerY + 13, Items.stick.getTexture()));
-
 		calculateBeltSpace();
 
 		text  = new ArrayList<String>();
@@ -62,9 +59,6 @@ public class GuiPlayerInventory extends GuiContainer {
 
 	@Override
 	public void draw(Graphics2D g) {
-
-		//		g.setColor(new Color(1f,1f,1f,0.1f));
-		//		g.fillRect(0,0, GamePanel.WIDTH, GamePanel.HEIGHT);
 
 		g.drawImage(img.getSubimage(35, 3, 150, 75), GamePanel.WIDTH/2 - 150/2, GamePanel.HEIGHT/2 - 75/2 ,null);
 
@@ -110,8 +104,15 @@ public class GuiPlayerInventory extends GuiContainer {
 			text.add(KeyHandler.getKeyName(KeyHandler.CRAFT) + ":craft");
 		}
 
-		if(crafting)
-			Utility.drawCenteredString(g, text.get(0), Constants.FONT_ITEMS, GamePanel.WIDTH/2 - 150/2 + 73, GamePanel.HEIGHT/2 - 75/2 + 5);
+		if(crafting){
+		
+			String info = "";
+			for(String s : text)
+				info += s;
+			
+			Utility.drawCenteredString(g, info, Constants.FONT_ITEMS, GamePanel.WIDTH/2 - 150/2 + 73, GamePanel.HEIGHT/2 - 75/2 + 5);
+			
+		}
 		else
 			Util.drawToolTipText(g, text, new int[]{GamePanel.WIDTH/2 - 150/2 - 1, GamePanel.HEIGHT/2 - 75/2 + 46}, null, null);
 
@@ -154,8 +155,12 @@ public class GuiPlayerInventory extends GuiContainer {
 	@Override
 	public void handleGuiKeyInput() {
 
-		if(crafting && !isPlayerInventory())
+		if(crafting && !isPlayerInventory()){
 			crafting = false;
+			text.clear();
+			text.add(KeyHandler.getKeyName(KeyHandler.JUNK) + ":discard");
+			text.add(KeyHandler.getKeyName(KeyHandler.CRAFT) + ":craft");
+		}
 
 		if(KeyHandler.isPressed(KeyHandler.CRAFT) && isPlayerInventory()){
 
@@ -164,8 +169,9 @@ public class GuiPlayerInventory extends GuiContainer {
 				crafting = true;
 
 				text.clear();
-				text.add("Combine "+ player.getStackInSlot(slot_index).getItem().getDisplayName() + " with...");
-
+				text.add("Combine "+ player.getStackInSlot(slot_index).getItem().getDisplayName() + " with ");
+				text.add(player.getStackInSlot(slot_index).getItem().getDisplayName());
+				
 				craftables[0] = player.getStackInSlot(slot_index).copy();
 				craftSlots[0] = slot_index;
 			}
@@ -334,6 +340,15 @@ public class GuiPlayerInventory extends GuiContainer {
 				Item item = stack.getItem();
 				if(item.isUpdateAble())
 					item.update(player, stack, i);
+			}
+		}
+		
+		if(crafting){
+			if(playerInventory.getStackInSlot(slot_index) != null){
+				String name = playerInventory.getStackInSlot(slot_index).getItem().getDisplayName();
+				text.set(1, name);
+			}else{
+				text.set(1, "...");
 			}
 		}
 	}
