@@ -25,7 +25,6 @@ public class Crafting {
 		}
 
 		return recipyList.get(i);
-
 	}
 
 	public static ItemStack result(int i) {
@@ -105,7 +104,7 @@ public class Crafting {
 			}
 		}
 
-		return "none...";
+		return "nothing";
 	}
 
 	public static void craft(Player player, ItemStack[] stacks, int[] slots){
