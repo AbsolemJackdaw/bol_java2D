@@ -9,6 +9,7 @@ import engine.window.GamePanel;
 import game.content.Loading;
 import game.content.save.Save;
 import game.item.Items;
+import game.item.crafting.Crafting;
 import game.util.Constants;
 
 public class LoadingScreen extends GameState{
@@ -46,7 +47,7 @@ public class LoadingScreen extends GameState{
 	public void update() {
 
 		if(loading == 200)
-			currentlyLoading = "sounds";
+			currentlyLoading = "recipes";
 		if(loading == 150)
 			currentlyLoading = "items";
 		if(loading == 100)
@@ -56,9 +57,9 @@ public class LoadingScreen extends GameState{
 
 		loading--;
 
-//		if(loading <= 200)
-//			Loading.loadMusic();
-
+		if(loading <= 200)
+			Crafting.loadRecipes();
+		
 		if(loading <= 150)
 			Items.loadItems();
 

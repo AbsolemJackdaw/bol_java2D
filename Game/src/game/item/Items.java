@@ -27,12 +27,14 @@ public class Items {
 	public static Item stone = new Item("stone", "Stone").setTexture(Images.loadImage("/items/resources/stone.png"));
 	public static Item ingot = new Item("ingot", "Iron Ingot").setTexture(Images.loadImage("/items/resources/ingot.png"));
 	public static Item grease = new Item("grease", "Grease").setTexture(Images.loadImage("/items/resources/grease.png"));
-	public static Item leather = new Item("leather", "Skin").setTexture(Images.loadImage("/items/resources/leather.png"));
+	public static Item leather = new Item("leather", "Skin").setTexture(Images.loadImage("/items/resources/skin.png"));
 	public static Item leather_fine = new Item("leather_fine", "Leather").setTexture(Images.loadImage("/items/resources/leather.png"));
+	public static Item leather_strap = new Item("strap","Leather Strap").setTexture(Images.loadImage("/items/manufactured/leather_strap.png"));
 	public static Item woodChip = new Item("woodchip","Wood Chips").setTexture(Images.loadImage("/items/resources/wood_chip.png")).setFuel().setFuelTimer(800);
 	public static Item refinedStone = new Item("refinedstone","Smooth Stone").setTexture(Images.loadImage("/items/resources/stone_refined.png"));
+	
 	public static Item whetstone = new ItemWhetstone("whetstone","WhetStone").setTexture(Images.loadImage("/items/manufactured/whetstone.png"));
-
+	
 	public static Item ovenBase = new ItemOvenbase("ovenbase", "Oven Base").setTexture(Images.loadImage("/items/manufactured/oven_base.png"));
 
 	public static Item handle_sword = new Item("handle_sword","Sword Handle").setTexture(Images.loadImage("/items/tools/handle_sword.png"));
@@ -110,6 +112,7 @@ public class Items {
 		registerItem(iron_sword);
 		registerItem(iron_axe);
 		registerItem(iron_pickaxe);
+		registerItem(leather_strap);
 
 	}
 

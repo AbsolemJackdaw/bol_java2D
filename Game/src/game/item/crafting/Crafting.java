@@ -6,203 +6,67 @@ import game.item.ItemStack;
 import game.item.Items;
 import game.util.Util;
 
+import java.util.ArrayList;
+
 public class Crafting {
 
-	private static final int recipes = 25;
+	private static ArrayList<ItemStack[]> recipyList = new ArrayList<ItemStack[]>();
+	private static ArrayList<ItemStack> resultList = new ArrayList<ItemStack>();
 
-	//basic crafting
-	public static final int Sticks = 0;
-
-	public static final int SwordHandle = 2;
-	public static final int SoftHandle = 3;
-	public static final int HardHandle = 4;
-
-	public static final int Pickaxe = 5;
-	public static final int Sword = 6;
-	public static final int Axe = 7;
-
-	public static final int Belt = 8;
-	public static final int Pouch = 9;
-
-	public static final int Whetstone = 10;
-	public static final int Leather = 11;
-
-	public static final int RefinedStone = 12; 
-	public static final int OvenBase = 13; 
-
-	public static final int PickaxeSmooth = 14;
-	public static final int AxeSmooth = 15;
-	public static final int SwordSmooth = 16;
-
-	public static final int PickaxeIron = 17;
-	public static final int AxeIron = 18;
-	public static final int SwordIron = 19;
-
-
-	//ADVANCED CRAFTING
-	public static final int Lantern = 0;
-
-	public static ItemStack[] getRecipe(int i){
-
-		switch(i){
-		case Sticks:
-			return new ItemStack[]{
-					new ItemStack(Items.woodChip, 1),
-					new ItemStack(Items.woodChip, 1)
-			};
-
-		case SwordHandle:
-			return new ItemStack[]{
-					new ItemStack(Items.leather, 1),
-					new ItemStack(Items.stick, 1)
-			};
-		case SoftHandle:
-			return new ItemStack[]{
-					new ItemStack(Items.stick, 1),
-					new ItemStack(Items.stick, 1)
-			};
-		case HardHandle:
-			return new ItemStack[]{
-					new ItemStack(Items.woodChip, 1),
-					new ItemStack(Items.stick, 1)
-			};
-
-		case Sword:
-			return new ItemStack[]{
-					new ItemStack(Items.handle_sword, 1),
-					new ItemStack(Items.stone, 1)
-			};
-		case Axe:
-			return new ItemStack[]{
-					new ItemStack(Items.handle_soft, 1),
-					new ItemStack(Items.stone, 1)
-			};
-		case Pickaxe:
-			return new ItemStack[]{
-					new ItemStack(Items.handle_hard, 1),
-					new ItemStack(Items.stone, 1)
-			};
-
-		case SwordSmooth:
-			return new ItemStack[]{
-					new ItemStack(Items.handle_sword, 1),
-					new ItemStack(Items.refinedStone, 1)
-			};
-		case AxeSmooth:
-			return new ItemStack[]{
-					new ItemStack(Items.handle_soft, 1),
-					new ItemStack(Items.refinedStone, 1)
-			};
-		case PickaxeSmooth:
-			return new ItemStack[]{
-					new ItemStack(Items.handle_hard, 1),
-					new ItemStack(Items.refinedStone, 1)
-			};
-
-		case SwordIron:
-			return new ItemStack[]{
-					new ItemStack(Items.handle_sword, 1),
-					new ItemStack(Items.ingot, 1)
-			};
-		case AxeIron:
-			return new ItemStack[]{
-					new ItemStack(Items.handle_soft, 1),
-					new ItemStack(Items.ingot, 1)
-			};
-		case PickaxeIron:
-			return new ItemStack[]{
-					new ItemStack(Items.handle_hard, 1),
-					new ItemStack(Items.ingot, 1)
-			};
-		case Belt:
-			return new ItemStack[]{
-					new ItemStack(Items.leather_fine, 1),
-					new ItemStack(Items.leather_fine, 1)
-			};
-		case Pouch:
-			return new ItemStack[]{
-					new ItemStack(Items.leather_fine, 1),
-					new ItemStack(Items.ingot, 1)
-			};
-
-		case Whetstone:
-			return new ItemStack[]{
-					new ItemStack(Items.leather, 1),
-					new ItemStack(Items.stone, 1)
-			};
-
-		case Leather:
-			return new ItemStack[]{
-					new ItemStack(Items.leather, 1),
-					new ItemStack(Items.leather, 1)
-			};
-
-		case RefinedStone:
-			return new ItemStack[]{
-					new ItemStack(Items.stone, 1),
-					new ItemStack(Items.stone, 1)
-			};
-
-		case OvenBase:
-			return new ItemStack[]{
-					new ItemStack(Items.refinedStone, 1),
-					new ItemStack(Items.refinedStone, 1)
-			};
-		}
-		return null;
+	public static void addRecipe(ItemStack[] stack, ItemStack result){
+		recipyList.add(stack);
+		resultList.add(result);
 	}
 
-	public static ItemStack result(int i){
+	public static ItemStack[] recipe(int i){
 
-		switch (i) {
-
-		case Sticks:
-			return new ItemStack(Items.stick, 2);
-
-		case Pickaxe: 
-			return new ItemStack(Items.rock_pickaxe, 1);
-		case Sword :
-			return new ItemStack(Items.rock_sword, 1);
-		case Axe :
-			return new ItemStack(Items.rock_axe, 1);
-
-		case PickaxeSmooth: 
-			return new ItemStack(Items.stone_pickaxe, 1);
-		case SwordSmooth :
-			return new ItemStack(Items.stone_sword, 1);
-		case AxeSmooth :
-			return new ItemStack(Items.stone_axe, 1);
-
-		case PickaxeIron: 
-			return new ItemStack(Items.iron_pickaxe, 1);
-		case SwordIron :
-			return new ItemStack(Items.iron_sword, 1);
-		case AxeIron :
-			return new ItemStack(Items.iron_axe, 1);
-
-		case SoftHandle:
-			return new ItemStack(Items.handle_soft);
-		case HardHandle:
-			return new ItemStack(Items.handle_hard);
-		case SwordHandle:
-			return new ItemStack(Items.handle_sword);
-
-		case Belt : 
-			return new ItemStack(Items.belt);
-		case Pouch:
-			return new ItemStack(Items.pouch);
-
-		case Whetstone:
-			return new ItemStack(Items.whetstone);		
-		case Leather:
-			return new ItemStack(Items.leather_fine);			
-		case RefinedStone:
-			return new ItemStack(Items.refinedStone);
-		case OvenBase:
-			return new ItemStack(Items.ovenBase);
+		if(i >= recipyList.size()){
+			return null;
 		}
 
-		return null;
+		return recipyList.get(i);
+
+	}
+
+	public static ItemStack result(int i) {
+
+		if(i >= resultList.size()){
+			return null ;
+		}
+
+		return resultList.get(i);
+	}
+
+	public static void loadRecipes(){
+
+		if(recipyList.isEmpty() && resultList.isEmpty()){
+			addRecipe(new ItemStack[]{new ItemStack(Items.woodChip, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.stick, 2));
+
+			addRecipe(new ItemStack[]{new ItemStack(Items.leather, 1),new ItemStack(Items.stick, 1)}, new ItemStack(Items.handle_sword, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.stick, 1),new ItemStack(Items.stick, 1)}, new ItemStack(Items.handle_soft, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.stick, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.handle_hard, 1));
+
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.stone, 1)}, new ItemStack(Items.rock_sword, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.stone_sword, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.ingot, 1)}, new ItemStack(Items.iron_sword, 1));
+
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.stone, 1)}, new ItemStack(Items.rock_axe, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.stone_axe, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.ingot, 1)}, new ItemStack(Items.iron_axe, 1));
+
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_hard, 1),new ItemStack(Items.stone, 1)}, new ItemStack(Items.rock_pickaxe, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_hard, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.stone_pickaxe, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_hard, 1),new ItemStack(Items.ingot, 1)}, new ItemStack(Items.iron_pickaxe, 1));
+
+			addRecipe(new ItemStack[]{new ItemStack(Items.leather_strap, 1),new ItemStack(Items.leather_strap, 1)}, new ItemStack(Items.belt, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.leather_fine, 1),new ItemStack(Items.leather_fine, 1)}, new ItemStack(Items.leather_strap, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.leather, 1),new ItemStack(Items.leather, 1)}, new ItemStack(Items.leather_fine, 1));
+
+			addRecipe(new ItemStack[]{new ItemStack(Items.leather, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.whetstone, 1));
+
+			addRecipe(new ItemStack[]{new ItemStack(Items.stone, 1),new ItemStack(Items.stone, 1)}, new ItemStack(Items.refinedStone, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.refinedStone, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.ovenBase, 1));
+		}
 	}
 
 	public static ItemStack resultAdvanced(int i){
@@ -215,17 +79,17 @@ public class Crafting {
 
 	public static String getCraftResultName(ItemStack stack, ItemStack stack2, int slot, int slot2){
 		if(stack == null && stack2 == null)
-			return "nothing...";
+			return "no stacks...";
 
 		if(stack.equals(stack2) && slot == slot2){
 			if(stack.stackSize <= 1){
-				return "nothing...";
+				return "stacksize to low...";
 			}
 		}
 
-		for(int i = 0 ; i < recipes; i++){
+		for(int i = 0 ; i < recipyList.size(); i++){
 
-			ItemStack[] compare = getRecipe(i);
+			ItemStack[] compare = recipe(i);
 
 			if(compare == null || compare[0] == null || compare[1] == null)
 				continue;
@@ -241,7 +105,7 @@ public class Crafting {
 			}
 		}
 
-		return "nothing...";
+		return "none...";
 	}
 
 	public static void craft(Player player, ItemStack[] stacks, int[] slots){
@@ -262,9 +126,9 @@ public class Crafting {
 
 		boolean callBack = true;
 
-		for(int i = 0 ; i < recipes; i++){
+		for(int i = 0 ; i < recipyList.size(); i++){
 
-			ItemStack[] compare = getRecipe(i);
+			ItemStack[] compare = recipe(i);
 
 			if(compare == null || compare[0] == null || compare[1] == null)
 				continue;
@@ -282,7 +146,7 @@ public class Crafting {
 					for(int content = 0; content < player.getInventory().getMaxSlots(); content++){
 
 						if(player.getStackInSlot(content) == null ||
-								player.getStackInSlot(content) != null && player.getStackInSlot(content).getItem().getUIN().equals(result(i).getItem().getUIN())){
+								player.getStackInSlot(content) != null && player.getStackInSlot(content).getItem().getUIN().equals(resultList.get(i).getItem().getUIN())){
 
 							Util.decreaseStack(player, slots[0], 1);
 							Util.decreaseStack(player, slots[1], 1);
@@ -326,7 +190,7 @@ public class Crafting {
 		ItemStack result = null;
 
 		if(!advanced){
-			input = getRecipe(recipe);
+			input = recipe(recipe);
 			result = result(recipe);
 		}else{
 			input = getRecipeAdvanced(recipe);
