@@ -180,8 +180,10 @@ public class Util {
 	 * image has to be square
 	 */
 	public static BufferedImage rotateImage(BufferedImage item, double rotation){
+		return rotateImage(item, rotation, item.getWidth() + 20, 20/2);
+	}
 
-		int size = item.getWidth() + 20;
+	public static BufferedImage rotateImage(BufferedImage item, double rotation, int size, int extra){
 
 		//create blank canvas that is bigger the the image drawn.
 		BufferedImage canvas = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
@@ -193,7 +195,10 @@ public class Util {
 		//		g2d.fillRect(0, 0, size, size);
 
 		//rotate canvas internally
-		g2d.rotate(Math.toRadians(rotation), size/2, size/2);
+		if(rotation < 0)
+			g2d.rotate(-Math.toRadians(rotation), size/2, size/2);
+		else
+			g2d.rotate(Math.toRadians(rotation), size/2, size/2);
 
 		//		g2d.setColor(new Color(0,1,0,0.5f));
 		//		g2d.fillRect(0, 0, size, size);
@@ -202,7 +207,7 @@ public class Util {
 		//		g2d.drawRect(size/2, 0, 1, size);
 
 		//draw image centered, extra/2
-		g2d.drawImage(item, 10, 10, null);
+		g2d.drawImage(item, extra, extra, null);
 
 		return canvas;
 	}
