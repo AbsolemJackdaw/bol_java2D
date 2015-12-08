@@ -91,8 +91,6 @@ public class BlockBreakable extends Block{
 	@Override
 	public void onEntityHit(Player player) {
 
-		jiggle = true;
-
 		int wepDmg = 0;
 
 		ItemStack weaponStack = player.invArmor.getWeapon();
@@ -104,30 +102,25 @@ public class BlockBreakable extends Block{
 		if(tool != null)
 			wepDmg = tool.getEffectiveDamage(weaponStack);
 
-		switch (getType()) {
-		case ROCK:
-			Music.play("hit_rock_" + (rand.nextInt(4)+1));
-			break;
-		case WOOD:
-			Music.play("hit_wood_" + (rand.nextInt(5)+1));
-			break;
-		default:
-			break;
-		}
-
 		if(tool == null){
-			if(!needsToolToMine())
+			if(!needsToolToMine()){
+				hit();
 				health -= player.getAttackDamage();
+			}
 		}else{
-			if(needsToolToMine()){//if this block needs a tool, break only when tool is held
-				if(effectiveTool == tool.getEffectiveness())
+//			if(needsToolToMine()){//if this block needs a tool, break only when tool is held
+				if(effectiveTool == tool.getEffectiveness()){
+					hit();
 					health -=wepDmg;
-			}else
-				if(effectiveTool == tool.getEffectiveness())//if the block doesnt need a tool, a bonus for wielding the right tool will kick in
-					health -= wepDmg;
-				else{
-					health -= wepDmg/2;//if bonus tool is not yield, use half of the current weapons dmg as bonus
 				}
+//			}
+			//now only exclusive tools will work
+			//			else
+			//				if(effectiveTool == tool.getEffectiveness())//if the block doesnt need a tool, a bonus for wielding the right tool will kick in
+			//					health -= wepDmg;
+			//				else{
+			//					health -= wepDmg/2;//if bonus tool is not yield, use half of the current weapons dmg as bonus
+			//				}
 		}
 
 		if(health <= 0)
@@ -137,6 +130,16 @@ public class BlockBreakable extends Block{
 	@Override
 	public void onEntityHit(float damage) {
 
+		hit();
+
+		health -= damage;
+
+		if(health <= 0)
+			remove = true;
+
+	}
+
+	private void hit(){
 		jiggle = true;
 
 		switch (getType()) {
@@ -149,12 +152,6 @@ public class BlockBreakable extends Block{
 		default:
 			break;
 		}
-
-		health -= damage;
-
-		if(health <= 0)
-			remove = true;
-
 	}
 
 	protected void mine(Player p){
