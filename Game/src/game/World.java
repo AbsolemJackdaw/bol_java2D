@@ -11,6 +11,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
+import java.util.Random;
 
 import engine.game.GameWorld;
 import engine.game.MapObject;
@@ -37,6 +38,7 @@ import game.entity.block.breakable.BlockLight;
 import game.entity.block.breakable.BlockOven;
 import game.entity.living.EntityLiving;
 import game.entity.living.environement.EntityDeathAnim;
+import game.entity.living.environement.EntityDeathParticle;
 import game.entity.living.player.Player;
 import game.gui.Gui;
 import game.gui.GuiPlayerInventory;
@@ -349,9 +351,29 @@ public class World extends GameWorld{
 
 						if(mo instanceof EntityLiving){
 							if(((EntityLiving) mo).canPlayDeathAnimation()){
-								EntityDeathAnim anim = mo.getDeathAnimation();
-								anim.setPosition(mo.getScreenXpos(), mo.getScreenYpos());
-								listWithMapObjects.add(anim);
+								
+								int parts = new Random().nextInt(10)+5;
+								
+								for(int i = 0; i < parts; i++){
+									
+									EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATH, this);
+
+									if(entity instanceof EntityDeathParticle){
+										EntityDeathParticle edp = (EntityDeathParticle)entity;
+										
+										if(edp != null){
+											edp.setPosition(mo.getScreenXpos(), mo.getScreenYpos());
+											edp.setJumping(true);
+											edp.dy = edp.jumpStart;
+											listWithMapObjects.add(edp);
+										}
+									}
+								}
+								
+								
+//								EntityDeathAnim anim = mo.getDeathAnimation();
+//								anim.setPosition(mo.getScreenXpos(), mo.getScreenYpos());
+//								listWithMapObjects.add(anim);
 							}
 						}
 						break;
