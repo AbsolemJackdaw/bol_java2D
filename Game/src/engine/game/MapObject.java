@@ -144,6 +144,16 @@ public abstract class MapObject {
 		return animation;
 	}
 
+	public MapObject setEntityAnimation(BufferedImage[] img, int delay){
+
+		if(hasAnimation()){
+			getAnimation().setFrames(img);
+			getAnimation().setDelay(delay);
+		}
+		
+		return this;
+	}
+
 	/**if this returns false, make sure you override getEntityTexture to set a non-animated texture*/
 	public boolean hasAnimation(){
 		return false;
@@ -155,6 +165,17 @@ public abstract class MapObject {
 	 */
 	protected BufferedImage getEntityTexture(){
 		return this.animation.getDefaultAnimation()[0];
+	}
+
+	public MapObject setEntityTexture(BufferedImage img){
+
+		if(!hasAnimation()){
+			BufferedImage[] bi = new BufferedImage[]{img};
+			animation.setFrames(bi);
+			animation.setDelay(Animation.NONE);
+		}
+
+		return this;
 	}
 
 	/**processes the surrounding tiles so the entity can update it's falling/walking logic*/
@@ -381,7 +402,7 @@ public abstract class MapObject {
 		if(down)
 			down = !b;
 	}
-	
+
 	public void setDown(boolean b) {
 		down = b;
 		if(up)
