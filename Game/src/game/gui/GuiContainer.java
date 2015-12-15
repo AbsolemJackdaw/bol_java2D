@@ -6,9 +6,9 @@ import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.container.Container;
 import game.item.Item;
-import game.item.ItemArmor;
-import game.item.ItemBelt;
 import game.item.ItemStack;
+import game.item.armor.ItemArmor;
+import game.item.armor.ItemBelt;
 import game.util.Util;
 
 import java.awt.Color;
@@ -204,8 +204,8 @@ public class GuiContainer extends Gui implements Container{
 
 	protected void drawPlayerInventoryItems(Graphics2D g, int offsetX, int offsetY){
 		int extra = 0;
-		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
-			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
+		if(player.armorInventory.getStackInSlot(ItemArmor.EXTRA) != null){
+			ItemStack is = player.armorInventory.getStackInSlot(ItemArmor.EXTRA);
 			Item i = is.getItem();
 			if(i instanceof ItemBelt){
 				int dex = ((ItemBelt)i).getInventorySlots();
@@ -246,8 +246,8 @@ public class GuiContainer extends Gui implements Container{
 	protected void drawPlayerExtendedContainer(Graphics2D g, int offsetX, int offsetY, int subX, int subY, int posX, int posY, BufferedImage img){
 
 		int extra = 0;
-		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
-			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
+		if(player.armorInventory.getStackInSlot(ItemArmor.EXTRA) != null){
+			ItemStack is = player.armorInventory.getStackInSlot(ItemArmor.EXTRA);
 			Item i = is.getItem();
 			if(i instanceof ItemBelt){
 				int dex = ((ItemBelt)i).getInventorySlots();
@@ -262,8 +262,8 @@ public class GuiContainer extends Gui implements Container{
 
 	protected int getExtraSlots(){
 
-		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
-			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
+		if(player.armorInventory.getStackInSlot(ItemArmor.EXTRA) != null){
+			ItemStack is = player.armorInventory.getStackInSlot(ItemArmor.EXTRA);
 			Item i = is.getItem();
 			if(i instanceof ItemBelt){
 				int dex = ((ItemBelt)i).getInventorySlots();

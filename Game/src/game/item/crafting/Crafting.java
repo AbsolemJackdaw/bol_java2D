@@ -65,6 +65,12 @@ public class Crafting {
 
 			addRecipe(new ItemStack[]{new ItemStack(Items.stone, 1),new ItemStack(Items.stone, 1)}, new ItemStack(Items.refinedStone, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.refinedStone, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.ovenBase, 1));
+
+			addRecipe(new ItemStack[]{new ItemStack(Items.stick, 1),new ItemStack(Items.gem_blue, 1)}, new ItemStack(Items.gem_hammer, 1));
+			
+			addRecipe(new ItemStack[]{new ItemStack(Items.leather_fine, 1),new ItemStack(Items.plate_iron, 1)}, new ItemStack(Items.helm_iron, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.leather_fine, 1),new ItemStack(Items.plate_wood, 1)}, new ItemStack(Items.helm_wood, 1));
+
 		}
 	}
 
@@ -162,7 +168,32 @@ public class Crafting {
 			}
 		}
 
-		//no recipe matched, try craftingCallBack
+		ItemStack craftingItem = null;
+		ItemStack craftedItem = null;
+		int toggle = -1;
+
+		if(stacks[0].getItem() instanceof ICraftingItem){
+			craftingItem = stacks[0];
+			craftedItem = stacks[1];
+			toggle = 1;
+		}
+		else if (stacks[1].getItem() instanceof ICraftingItem){
+			craftingItem = stacks[1];
+			craftedItem = stacks[0];
+			toggle = 0;
+		}
+
+		if(craftingItem != null){
+
+			ICraftingItem item = ((ICraftingItem)craftingItem.getItem());
+			
+			if(item.canCraft(craftedItem)){
+				item.craft(player, craftedItem, slots[toggle]);
+				callBack = false;	
+			}
+		}
+
+		//no recipe matched, nor any of the items was a crafting item,  try craftingCallBack
 		if(callBack){
 			System.out.println("no recipe match found... ressorting to callback");
 

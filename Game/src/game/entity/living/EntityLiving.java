@@ -169,7 +169,7 @@ public class EntityLiving extends MapObject{
 		int dmg = p.getAttackDamage();
 
 		int wepDmg = 0;
-		ItemStack wep = p.invArmor.getWeapon();
+		ItemStack wep = p.armorInventory.getWeapon();
 
 		if(wep != null && wep.getItem() instanceof ItemTool){
 			ItemTool tool = (ItemTool)wep.getItem();

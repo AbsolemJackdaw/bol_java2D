@@ -18,8 +18,7 @@ public class EntityPig extends EntityLiving{
 
 		initHealth(8f);
 
-		getAnimation().setFrames(Images.loadMultiImage("/entity/piggy.png", 32, 0, 4));
-		getAnimation().setDelay(150);
+		setEntityAnimation(Images.loadMultiImage("/entity/piggy.png", 32, 0, 4), 150);
 
 		entitySizeX = 32;
 		entitySizeY = 32;

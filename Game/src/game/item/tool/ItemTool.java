@@ -83,12 +83,12 @@ public class ItemTool extends Item {
 	public void useItem(ItemStack item, TileMap map, World world, Player player,int key) {
 
 		ItemStack invCopy = item;
-		ItemStack equippedWeapon = player.invArmor.getWeapon();
+		ItemStack equippedWeapon = player.armorInventory.getWeapon();
 
 		ItemStack newInvItem = equippedWeapon.copy();
 		ItemStack newWeapon = invCopy.copy();
 
-		player.invArmor.setWeapon(newWeapon);
+		player.armorInventory.setWeapon(newWeapon);
 		player.getInventory().setStackInSlot(key, null);
 		player.getInventory().setStackInSlot(key, newInvItem);
 

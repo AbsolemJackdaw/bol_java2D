@@ -7,9 +7,9 @@ import engine.window.gameAid.Utility;
 import game.World;
 import game.entity.living.player.Player;
 import game.item.Item;
-import game.item.ItemArmor;
-import game.item.ItemBelt;
 import game.item.ItemStack;
+import game.item.armor.ItemArmor;
+import game.item.armor.ItemBelt;
 import game.item.crafting.Crafting;
 import game.item.tool.ItemTool;
 import game.util.Constants;
@@ -36,7 +36,7 @@ public class GuiPlayerInventory extends GuiContainer {
 
 		img = Images.loadImage("/gui/playerGui.png");
 
-		secondairyInventory = p.invArmor.getInventory();
+		secondairyInventory = p.armorInventory.getInventory();
 
 		calculateBeltSpace();
 
@@ -45,8 +45,8 @@ public class GuiPlayerInventory extends GuiContainer {
 
 	private void calculateBeltSpace() {
 
-		if(player.invArmor.getStackInSlot(ItemArmor.EXTRA) != null){
-			ItemStack is = player.invArmor.getStackInSlot(ItemArmor.EXTRA);
+		if(player.armorInventory.getStackInSlot(ItemArmor.EXTRA) != null){
+			ItemStack is = player.armorInventory.getStackInSlot(ItemArmor.EXTRA);
 			Item i = is.getItem();
 			if(i instanceof ItemBelt){
 				int dex = ((ItemBelt)i).getInventorySlots();
@@ -105,11 +105,11 @@ public class GuiPlayerInventory extends GuiContainer {
 		}
 
 		if(crafting){
-		
+
 			String info = "";
 			for(int i = 0; i < 2; i++)
 				info += text.get(i);
-			
+
 			Utility.drawCenteredString(g, info, Constants.FONT_ITEMS, GamePanel.WIDTH/2 - 150/2 + 90, GamePanel.HEIGHT/2 - 75/2 -5);
 			Utility.drawCenteredString(g, text.get(2), Constants.FONT_ITEMS, GamePanel.WIDTH/2 - 150/2 + 90, GamePanel.HEIGHT/2 - 75/2 + 5);
 
@@ -175,7 +175,7 @@ public class GuiPlayerInventory extends GuiContainer {
 
 				craftables[0] = player.getStackInSlot(slot_index).copy();
 				craftSlots[0] = slot_index;
-				
+
 				text.add(Crafting.getCraftResultName(craftables[0], craftables[0], slot_index, slot_index));
 
 			}
@@ -237,7 +237,7 @@ public class GuiPlayerInventory extends GuiContainer {
 									playerInventory.setStackInSlot(slot_index, null);
 								}
 							}else{
-								if(player.invArmor.getExtra() != null){
+								if(player.armorInventory.getExtra() != null){
 									ItemStack hotBarCopy = playerInventory.getStackInSlot(key_slot).copy();
 
 									for(int i = 10; i < player.getInventory().getMaxSlots(); i++){
@@ -258,18 +258,19 @@ public class GuiPlayerInventory extends GuiContainer {
 	protected void containerItemSwappingLogic() {
 
 		if(secondairyInventory != null)
-			if(KeyHandler.isValidationKeyPressed())
+			if(KeyHandler.isValidationKeyPressed()){
 
 				//switch armor to player inventory
 				if(isNotPlayerInventory() && secondairyInventory != null){ //armor inventory
 					if(slot_index != 2){ // dont remove belts !
 						if(secondairyInventory.getStackInSlot(slot_index) != null)
-							if(playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(slot_index)))
+							if(playerInventory.setStackInNextAvailableSlot(secondairyInventory.getStackInSlot(slot_index))){
 								secondairyInventory.setStackInSlot(slot_index, null);
+							}
 					}
 				}
 
-		//inventory to armor logic
+				//inventory to armor logic
 				else{
 					int slot = slotIndex[0]+ (slotIndex[1]*(rowsX()));
 
@@ -297,7 +298,6 @@ public class GuiPlayerInventory extends GuiContainer {
 									playerInventory.setStackInSlot(slot, b);
 									secondairyInventory.setStackInSlot(3, a);
 								}
-
 							}
 						}else if(item instanceof ItemArmor){
 							ItemArmor armor = (ItemArmor)item;
@@ -323,7 +323,9 @@ public class GuiPlayerInventory extends GuiContainer {
 						}
 					}
 				}
-		calculateBeltSpace();
+				redrawPlayer();
+				calculateBeltSpace();
+			}
 	}
 
 	@Override
@@ -346,7 +348,7 @@ public class GuiPlayerInventory extends GuiContainer {
 					item.update(player, stack, i);
 			}
 		}
-		
+
 		if(crafting){
 			if(playerInventory.getStackInSlot(slot_index) != null){
 				String name = playerInventory.getStackInSlot(slot_index).getItem().getDisplayName();
@@ -357,5 +359,10 @@ public class GuiPlayerInventory extends GuiContainer {
 				text.set(2, "");
 			}
 		}
+	}
+
+	private void redrawPlayer(){
+		player.currentAction = -1;
+		player.updatePlayerAnimation();
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import engine.keyhandlers.KeyHandler;
 import game.entity.living.player.Player;
+import game.item.armor.ItemBelt;
 import game.util.Util;
 
 
@@ -34,7 +35,7 @@ public class ItemPouch extends Item {
 	@Override
 	public void inventoryCallBack(int slot, Player player) {
 
-		ItemStack stack = player.invArmor.getStackInSlot(2);
+		ItemStack stack = player.armorInventory.getStackInSlot(2);
 
 		if(stack != null){
 			if(stack.getItem() instanceof ItemBelt){
@@ -45,22 +46,22 @@ public class ItemPouch extends Item {
 
 				if(slots == Items.belt.getInventorySlots()){
 
-					player.invArmor.setStackInSlot(2, null);
-					player.invArmor.setStackInSlot(2, new ItemStack(Items.belt_s));
+					player.armorInventory.setStackInSlot(2, null);
+					player.armorInventory.setStackInSlot(2, new ItemStack(Items.belt_s));
 					Util.decreaseStack(player.getInventory(), slot, 1);
 					return;
 
 				}else if(slots == Items.belt_s.getInventorySlots()){
 
-					player.invArmor.setStackInSlot(2, null);
-					player.invArmor.setStackInSlot(2, new ItemStack(Items.belt_m));
+					player.armorInventory.setStackInSlot(2, null);
+					player.armorInventory.setStackInSlot(2, new ItemStack(Items.belt_m));
 					Util.decreaseStack(player.getInventory(), slot, 1);
 					return;
 
 				}else if(slots == Items.belt_m.getInventorySlots()){
 
-					player.invArmor.setStackInSlot(2, null);
-					player.invArmor.setStackInSlot(2, new ItemStack(Items.belt_l));
+					player.armorInventory.setStackInSlot(2, null);
+					player.armorInventory.setStackInSlot(2, new ItemStack(Items.belt_l));
 					Util.decreaseStack(player.getInventory(), slot, 1);
 					return;
 				}

@@ -3,7 +3,7 @@ package game.item.block;
 import engine.game.MapObject;
 import engine.map.TileMap;
 import game.World;
-import game.entity.block.Blocks;
+import game.block.Blocks;
 import game.entity.living.player.Player;
 import game.item.Item;
 import game.item.ItemStack;

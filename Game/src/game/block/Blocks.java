@@ -1,8 +1,11 @@
-package game.entity.block;
+package game.block;
 
 import engine.game.MapObject;
+import engine.image.Images;
 import game.World;
+import game.entity.block.Block;
 import game.entity.block.breakable.BlockCraftingTable;
+import game.entity.block.breakable.BlockGem;
 import game.entity.block.breakable.BlockIron;
 import game.entity.block.breakable.BlockLight;
 import game.entity.block.breakable.BlockOven;
@@ -15,6 +18,7 @@ public class Blocks {
 	public static final String VINE = "vine";
 	public static final String CRAFTINGTABLE = "workdesk";
 	public static final String IRON = "iron_ore";
+	public static final String GEM = "gem_ore";
 	public static final String ROCK = "rock";
 	public static final String CAMPFIRE = "campfire";
 	public static final String OVEN = "oven";
@@ -28,7 +32,9 @@ public class Blocks {
 		case CRAFTINGTABLE:
 			return new BlockCraftingTable(w, 5, false, CRAFTINGTABLE).setType(Block.WOOD);
 		case IRON:
-			return new BlockIron(w).setType(Block.ROCK);
+			return new BlockIron(w).setType(Block.ROCK).setEntityTexture(Images.loadImage("/blocks/rock_iron.png"));
+		case GEM:
+			return new BlockGem(w).setType(Block.ROCK).setEntityTexture(Images.loadImage("/blocks/gem_deposit.png"));
 		case ROCK:
 			return new BlockRock(w).setType(Block.ROCK);
 		case CAMPFIRE:

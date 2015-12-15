@@ -1,31 +1,7 @@
 
 package game.entity.living.player;
 
-import static game.util.Constants.ACTION_ATTACK;
-import static game.util.Constants.ACTION_FALLING;
-import static game.util.Constants.ACTION_IDLE;
-import static game.util.Constants.ACTION_JUMPING;
-import static game.util.Constants.ACTION_WALK;
-import static game.util.Constants.ARMOR_EXTRA_ATTACK;
-import static game.util.Constants.ARMOR_EXTRA_IDLE;
-import static game.util.Constants.ARMOR_EXTRA_JUMP;
-import static game.util.Constants.ARMOR_EXTRA_RUN;
-import static game.util.Constants.ARMS_ATTACK;
-import static game.util.Constants.ARMS_IDLE;
-import static game.util.Constants.ARMS_RUN;
-import static game.util.Constants.ARMS_WEAPON;
-import static game.util.Constants.ARM_JUMP;
-import static game.util.Constants.BODY_ATTACK;
-import static game.util.Constants.BODY_IDLE;
-import static game.util.Constants.BODY_RUN;
-import static game.util.Constants.HEAD_ATTACK;
-import static game.util.Constants.HEAD_IDLE;
-import static game.util.Constants.HEAD_JUMP;
-import static game.util.Constants.LEGS_ATTACK;
-import static game.util.Constants.LEGS_IDLE;
-import static game.util.Constants.LEGS_RUN;
-import static game.util.Constants.LEG_JUMP;
-import static game.util.Constants.hotBarKeys;
+import static game.util.Constants.*;
 import engine.game.MapObject;
 import engine.image.Images;
 import engine.imaging.Animation;
@@ -42,10 +18,10 @@ import game.entity.block.breakable.BlockBreakable;
 import game.entity.inventory.IInventory;
 import game.entity.living.EntityLiving;
 import game.item.Item;
-import game.item.ItemArmor;
-import game.item.ItemBelt;
 import game.item.ItemStack;
 import game.item.Items;
+import game.item.armor.ItemArmor;
+import game.item.armor.ItemBelt;
 import game.item.block.ItemBlock;
 import game.item.tool.ItemTool;
 import game.item.tool.ItemTool.EnumTools;
@@ -84,21 +60,13 @@ public class Player extends EntityLiving implements IInventory{
 		/*body (general)*/1,
 		/*idle*/1,1,8,
 		/*falling/jump*/2,2,
-		/*running*/9,1,10,
+		/*running*/10,1,10, 
 		/*weapon arms*/1,
 		/*fight arms*/3,
 		/*fight body parts*/3
 	};
 
-	public static final int[] beltAnim = {
-		/*body idle*/1,
-		/*body attack*/1,
-		/*falling/jump*/1,
-		/*running*/10,
-	};
-
 	public ArrayList<BufferedImage[]> playerSheet = Images.loadMultiAnimation(playerSprites, 32, 32, "/player/player_2.png");
-	public ArrayList<BufferedImage[]> beltSheet = Images.loadMultiAnimation(beltAnim, 32, 32, "/player/belt_anim.png");
 
 	int weaponRotation = 0;
 
@@ -107,7 +75,7 @@ public class Player extends EntityLiving implements IInventory{
 	/**Where 0 is Helmet, 1 is Chest, 2 is Extra and 3 is Weapon*/
 	private ItemStack[] armorItems = new ItemStack[4];
 
-	public ArmorInventory invArmor = new ArmorInventory();
+	public ArmorInventory armorInventory = new ArmorInventory();
 
 	private boolean inWater;
 	private boolean wasInwater;
@@ -156,7 +124,21 @@ public class Player extends EntityLiving implements IInventory{
 
 		if(!isFlinching()){
 
-			bufferHealth += f;
+			float reduction = 0f;
+			
+			if(this.armorInventory.getHelm() != null){
+				reduction += ((ItemArmor)armorInventory.getHelm().getItem()).getDamageReduction();
+			}
+			if(this.armorInventory.getBody() != null){
+				reduction += ((ItemArmor)armorInventory.getBody().getItem()).getDamageReduction();
+			}
+			
+			if(reduction < 1f)
+				reduction = 1f;
+			
+			float reduced = f / reduction;
+			
+			bufferHealth += reduced;
 			float deducted = 0f;
 
 			while(bufferHealth >= 0.5f){
@@ -182,21 +164,25 @@ public class Player extends EntityLiving implements IInventory{
 		if(getHurtTimer()%5 == 0){
 			//Draw all parts here
 			super.draw(g);
+			
 			super.draw(g, head);
+
 			super.draw(g, arms);
-			super.draw(g, legs);
-			//armor parts
-			if(armor_extra.hasFrames())
-				super.draw(g, armor_extra);
-			if(armor_head.hasFrames())
-				super.draw(g,armor_head);
 			if(armor_arms.hasFrames())
 				super.draw(g,armor_arms);
+			
+			super.draw(g, legs);
+			
+			if(armor_head.hasFrames())
+				super.draw(g,armor_head);
+			
+			if(armor_extra.hasFrames())
+				super.draw(g, armor_extra);
 		}
 
-		if(invArmor.getWeapon() != null){
+		if(armorInventory.getWeapon() != null){
 
-			BufferedImage weapon = invArmor.getWeapon().getItem().getTexture();
+			BufferedImage weapon = armorInventory.getWeapon().getItem().getTexture();
 
 			BufferedImage canvas = Util.rotateImage(weapon, weaponRotation);
 
@@ -307,8 +293,8 @@ public class Player extends EntityLiving implements IInventory{
 						}
 						//equip armor or weapon
 						else if(item instanceof ItemTool){
-							if(invArmor.getWeapon() == null){
-								invArmor.setWeapon(getStackInSlot(keyPressed).copy());
+							if(armorInventory.getWeapon() == null){
+								armorInventory.setWeapon(getStackInSlot(keyPressed).copy());
 								setStackInSlot(keyPressed, null);
 							}else
 								item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
@@ -318,9 +304,9 @@ public class Player extends EntityLiving implements IInventory{
 							item.useItem(getStackInSlot(keyPressed), tileMap, getWorld(), this, keyPressed);
 					}
 				}else{
-					if(invArmor.getWeapon() != null){
-						setStackInSlot(keyPressed, invArmor.getWeapon().copy());
-						invArmor.setWeapon(null);
+					if(armorInventory.getWeapon() != null){
+						setStackInSlot(keyPressed, armorInventory.getWeapon().copy());
+						armorInventory.setWeapon(null);
 					}
 				}
 			}
@@ -347,7 +333,7 @@ public class Player extends EntityLiving implements IInventory{
 
 		if (currentAction == ACTION_ATTACK){
 
-			if(this.invArmor.getWeapon() != null){
+			if(this.armorInventory.getWeapon() != null){
 				weaponRotation += 30;
 				if(weaponRotation >= 360){
 					attacking = false;
@@ -372,9 +358,9 @@ public class Player extends EntityLiving implements IInventory{
 		}
 
 		//remove weapon if broken after attacking
-		if(invArmor.getWeapon() != null)
-			if(invArmor.getWeapon().getDamage() < 0){
-				invArmor.setWeapon(null);
+		if(armorInventory.getWeapon() != null)
+			if(armorInventory.getWeapon().getDamage() < 0){
+				armorInventory.setWeapon(null);
 				//TODO break sound and or animation	
 			}
 
@@ -407,63 +393,63 @@ public class Player extends EntityLiving implements IInventory{
 	private void matchTool(MapObject o) {
 
 		//player needs a belt to auto - match tool !
-		if(invArmor.getStackInSlot(ItemArmor.EXTRA) == null)
+		if(armorInventory.getStackInSlot(ItemArmor.EXTRA) == null)
 			return;
-		if(!(invArmor.getStackInSlot(ItemArmor.EXTRA).getItem() instanceof ItemBelt))
+		if(!(armorInventory.getStackInSlot(ItemArmor.EXTRA).getItem() instanceof ItemBelt))
 			return;
 
 		if(o instanceof BlockBreakable){
 			BlockBreakable bl = (BlockBreakable)o;
 
 			if(bl.getEffectiveTool() == EnumTools.AXE){
-				if(invArmor.getWeapon() == null){
+				if(armorInventory.getWeapon() == null){
 					if(hasTool(EnumTools.AXE)){
-						invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
+						armorInventory.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
 						getInventory().setStackInSlot(integerToTrackHeldItem, null);
 					}
 				}
-				else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.AXE)){
+				else if(!((ItemTool)armorInventory.getWeapon().getItem()).getEffectiveness().equals(EnumTools.AXE)){
 					if(hasTool(EnumTools.AXE)){
 
-						ItemStack heldTool = invArmor.getWeapon().copy();
+						ItemStack heldTool = armorInventory.getWeapon().copy();
 						ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
 
-						invArmor.setWeapon(newTool);
+						armorInventory.setWeapon(newTool);
 						setStackInSlot(integerToTrackHeldItem, null);
 						setStackInSlot(integerToTrackHeldItem, heldTool.copy());
 					}
 				}
 			}else if(bl.getEffectiveTool() == EnumTools.PICKAXE){
-				if(invArmor.getWeapon() == null){
+				if(armorInventory.getWeapon() == null){
 					if(hasTool(EnumTools.PICKAXE)){
-						invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
+						armorInventory.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
 						getInventory().setStackInSlot(integerToTrackHeldItem, null);
 					}
 				}
-				else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.PICKAXE)){
+				else if(!((ItemTool)armorInventory.getWeapon().getItem()).getEffectiveness().equals(EnumTools.PICKAXE)){
 					if(hasTool(EnumTools.PICKAXE)){
-						ItemStack heldTool = invArmor.getWeapon().copy();
+						ItemStack heldTool = armorInventory.getWeapon().copy();
 						ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
 
-						invArmor.setWeapon(newTool);
+						armorInventory.setWeapon(newTool);
 						setStackInSlot(integerToTrackHeldItem, null);
 						setStackInSlot(integerToTrackHeldItem, heldTool);
 					}
 				}
 			}else if(bl.getEffectiveTool() == EnumTools.SWORD){
-				if(invArmor.getWeapon() == null){
+				if(armorInventory.getWeapon() == null){
 					if(hasTool(EnumTools.SWORD))
 						if(getInventory().hasStack(new ItemStack(Items.wood_sword,1))){
-							invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
+							armorInventory.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
 							getInventory().setStackInSlot(integerToTrackHeldItem, null);
 						}
 				}
-				else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.SWORD)){
+				else if(!((ItemTool)armorInventory.getWeapon().getItem()).getEffectiveness().equals(EnumTools.SWORD)){
 					if(hasTool(EnumTools.SWORD)){
-						ItemStack heldTool = invArmor.getWeapon().copy();
+						ItemStack heldTool = armorInventory.getWeapon().copy();
 						ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
 
-						invArmor.setWeapon(newTool);
+						armorInventory.setWeapon(newTool);
 						setStackInSlot(integerToTrackHeldItem, null);
 						setStackInSlot(integerToTrackHeldItem, heldTool);
 					}
@@ -473,18 +459,18 @@ public class Player extends EntityLiving implements IInventory{
 		else if (o instanceof EntityLiving){
 
 			if(((EntityLiving)o).canPlayDeathAnimation()){
-				if(invArmor.getWeapon() == null){
+				if(armorInventory.getWeapon() == null){
 					if(hasTool(EnumTools.SWORD)){
-						invArmor.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
+						armorInventory.setWeapon(getStackInSlot(integerToTrackHeldItem).copy());
 						getInventory().setStackInSlot(integerToTrackHeldItem, null);
 					}
 				}
-				else if(!((ItemTool)invArmor.getWeapon().getItem()).getEffectiveness().equals(EnumTools.SWORD)){
+				else if(!((ItemTool)armorInventory.getWeapon().getItem()).getEffectiveness().equals(EnumTools.SWORD)){
 					if(hasTool(EnumTools.SWORD)){
-						ItemStack heldTool = invArmor.getWeapon().copy();
+						ItemStack heldTool = armorInventory.getWeapon().copy();
 						ItemStack newTool = getStackInSlot(integerToTrackHeldItem).copy();
 
-						invArmor.setWeapon(newTool);
+						armorInventory.setWeapon(newTool);
 						setStackInSlot(integerToTrackHeldItem, null);
 						setStackInSlot(integerToTrackHeldItem, heldTool);
 					}
@@ -542,24 +528,41 @@ public class Player extends EntityLiving implements IInventory{
 	private BufferedImage[] getBodyPart(int i){
 		return playerSheet.get(i);
 	}
-
-	private BufferedImage[] getArmorExtra(int i){
-		ItemStack extra = invArmor.getStackInSlot(2);
-
+	
+	private BufferedImage[] getArmorHead(int i){
+		ItemStack extra = armorInventory.getStackInSlot(0);
+		
 		if(extra != null)
-			if(extra.getItem() instanceof ItemBelt)
-				return beltSheet.get(i);
+				return ((ItemArmor)extra.getItem()).getAnimationSheet().get(i);
+
+		return null;
+	}
+	
+	private BufferedImage[] getArmorBody(int i){
+		ItemStack extra = armorInventory.getStackInSlot(1);
+		
+		if(extra != null)
+				return ((ItemArmor)extra.getItem()).getAnimationSheet().get(i);
 
 		return null;
 	}
 
-	private void updatePlayerAnimation() {
+	private BufferedImage[] getArmorExtra(int i){
+		ItemStack extra = armorInventory.getStackInSlot(2);
+		
+		if(extra != null)
+				return ((ItemArmor)extra.getItem()).getAnimationSheet().get(i);
+
+		return null;
+	}
+	
+	public void updatePlayerAnimation() {
 		// set animation
 		if (attacking) {
 			if (currentAction != ACTION_ATTACK) {
 				currentAction = ACTION_ATTACK;
 
-				if(invArmor.getWeapon() != null){
+				if(armorInventory.getWeapon() != null){
 					//body
 					getAnimation().setFrames(getBodyPart(BODY_IDLE));
 					head.setFrames(getBodyPart(HEAD_IDLE));
@@ -569,6 +572,7 @@ public class Player extends EntityLiving implements IInventory{
 					legs.setDelay(Animation.NONE);
 
 					armor_extra.setFrames(getArmorExtra(ARMOR_EXTRA_IDLE));
+					armor_head.setFrames(getArmorHead(ARMOR_HEAD_IDLE));
 
 				}else{
 					getAnimation().setFrames(getBodyPart(BODY_ATTACK));
@@ -584,6 +588,8 @@ public class Player extends EntityLiving implements IInventory{
 					legs.setDelay(Animation.NONE);
 
 					armor_extra.setFrames(getArmorExtra(ARMOR_EXTRA_ATTACK));
+					armor_head.setFrames(getArmorHead(ARMOR_HEAD_ATTACK));
+
 				}
 
 
@@ -593,7 +599,7 @@ public class Player extends EntityLiving implements IInventory{
 				currentAction = ACTION_FALLING;
 
 				getAnimation().setFrames(getBodyPart(BODY_RUN));
-				getAnimation().setDelay(100);
+				getAnimation().setDelay(75);
 
 				head.setFrames(getBodyPart(HEAD_JUMP));
 				head.setFrame(1);
@@ -605,7 +611,9 @@ public class Player extends EntityLiving implements IInventory{
 				legs.setFrame(1);
 				legs.setDelay(Animation.NONE);
 
-				armor_extra.setFrames(getArmorExtra(ARMOR_EXTRA_RUN));
+				armor_extra.setFrames(getArmorExtra(ARMOR_EXTRA_JUMP));
+				armor_head.setFrames(getArmorHead(ARMOR_HEAD_FALL));
+
 			}
 		} else if (dy < 0) {
 			if (currentAction != ACTION_JUMPING) {
@@ -623,6 +631,8 @@ public class Player extends EntityLiving implements IInventory{
 				legs.setDelay(Animation.NONE);
 
 				armor_extra.setFrames(getArmorExtra(ARMOR_EXTRA_JUMP));
+				armor_head.setFrames(getArmorHead(ARMOR_HEAD_JUMP));
+
 			}
 		} else if (left || right) {
 			if (currentAction != ACTION_WALK) {
@@ -636,6 +646,10 @@ public class Player extends EntityLiving implements IInventory{
 				legs.setDelay(75);
 
 				armor_extra.setFrames(getArmorExtra(ARMOR_EXTRA_RUN));
+				armor_extra.setDelay(75);
+				
+				armor_head.setFrames(getArmorHead(ARMOR_HEAD_IDLE));
+
 
 			}
 		} else if (currentAction != ACTION_IDLE) {
@@ -649,14 +663,16 @@ public class Player extends EntityLiving implements IInventory{
 			arms.setDelay(Animation.NONE);
 			legs.setFrames(getBodyPart(LEGS_IDLE));
 			legs.setDelay(75);
-			if(invArmor.getWeapon() != null){
+			if(armorInventory.getWeapon() != null){
 				legs.setFrame(0);
 				legs.setDelay(Animation.NONE);
 			}
 
 			armor_extra.setFrames(getArmorExtra(ARMOR_EXTRA_IDLE));
+			armor_head.setFrames(getArmorHead(ARMOR_HEAD_IDLE));
+
 		}
-		if(invArmor.getWeapon() != null){
+		if(armorInventory.getWeapon() != null){
 			arms.setFrames(getBodyPart(ARMS_WEAPON));
 		}
 
@@ -667,6 +683,10 @@ public class Player extends EntityLiving implements IInventory{
 
 		if(armor_extra.hasFrames())
 			armor_extra.update();
+		if(armor_head.hasFrames())
+			armor_head.update();
+		if(armor_arms.hasFrames())
+			armor_arms.update();
 	}
 
 	@Override
@@ -871,7 +891,7 @@ public class Player extends EntityLiving implements IInventory{
 
 		DataList armor = new DataList();
 		for(int slot = 0; slot < this.armorItems.length; slot++){
-			ItemStack stack = invArmor.getStackInSlot(slot);
+			ItemStack stack = armorInventory.getStackInSlot(slot);
 			if(stack != null){
 				DataTag tag = new DataTag();
 				stack.writeToSave(tag);
@@ -899,7 +919,7 @@ public class Player extends EntityLiving implements IInventory{
 			DataTag tag = armor.readArray(i);
 			int slot = tag.readInt("slot");
 			ItemStack stack = ItemStack.createFromSave(tag);
-			invArmor.setStackInSlot(slot, stack);
+			armorInventory.setStackInSlot(slot, stack);
 		}
 	}
 

@@ -5,12 +5,12 @@ import game.block.Blocks;
 import game.item.Items;
 
 
-public class BlockIron extends BlockOre {
+public class BlockGem extends BlockOre {
 
-	public BlockIron(World world) {
-		super(world, Blocks.IRON);
-		setHealth(50);
-		setOre(Items.iron);
+	public BlockGem(World world) {
+		super(world, Blocks.GEM);
+		setHealth(75);
+		setOre(Items.gem_blue);
 		setDropAmmount(rand.nextInt(2) + 1);
 	}
 }

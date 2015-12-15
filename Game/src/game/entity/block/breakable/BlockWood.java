@@ -4,7 +4,7 @@ import engine.game.MapObject;
 import engine.image.Images;
 import engine.save.DataTag;
 import game.World;
-import game.entity.block.Blocks;
+import game.block.Blocks;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.Items;

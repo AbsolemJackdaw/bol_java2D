@@ -2,7 +2,7 @@ package game.entity.block.breakable;
 
 import engine.image.Images;
 import game.World;
-import game.entity.block.Blocks;
+import game.block.Blocks;
 import game.item.ItemStack;
 import game.item.Items;
 import game.item.tool.ItemTool.EnumTools;

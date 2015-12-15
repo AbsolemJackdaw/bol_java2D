@@ -93,7 +93,7 @@ public class BlockBreakable extends Block{
 
 		int wepDmg = 0;
 
-		ItemStack weaponStack = player.invArmor.getWeapon();
+		ItemStack weaponStack = player.armorInventory.getWeapon();
 		ItemTool tool = null;
 
 		if(weaponStack != null && weaponStack.getItem() instanceof ItemTool)
@@ -150,8 +150,8 @@ public class BlockBreakable extends Block{
 			if(p.getInventory().setStackInNextAvailableSlot(getDrop())){
 				remove = true;
 
-				if(p.invArmor.getWeapon() != null)
-					p.invArmor.getWeapon().damageStack(1);
+				if(p.armorInventory.getWeapon() != null)
+					p.armorInventory.getWeapon().damageStack(1);
 
 			}else {
 				remove = false;

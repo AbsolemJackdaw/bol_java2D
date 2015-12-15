@@ -1,16 +1,26 @@
-package game.item;
+package game.item.armor;
+
+import game.item.ItemStack;
+import game.item.Items;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemBelt extends ItemArmor{
 
+	public ItemBelt(String uin, String displayName, String armorTexture) {
+		super(uin, displayName, armorTexture, EXTRA);
+		
+		animationLengthArray = new int[]{
+				/*body idle*/1,
+				/*body attack*/1,
+				/*falling/jump*/1,
+				/*running*/10,
+			};
+	}
+
 	/**the amount of extra slots it adds to the player's inventory*/
 	private int inventorySlots;
-
-	public ItemBelt(String uin,String displayName) {
-		super(uin, displayName, EXTRA);
-	}
 
 	/**the amount of extra slots it adds to the player's inventory*/
 	public ItemBelt setInventorySlots(int nr){
@@ -41,5 +51,4 @@ public class ItemBelt extends ItemArmor{
 		
 		return info;
 	}
-
 }

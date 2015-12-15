@@ -7,10 +7,10 @@ import engine.map.TileMap;
 import engine.save.DataTag;
 import game.GameStateManager;
 import game.World;
+import game.block.Blocks;
 import game.content.WorldTask.EnumTask;
 import game.content.save.Save;
 import game.entity.Entity;
-import game.entity.block.Blocks;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.block.breakable.BlockRock;
 import game.entity.block.breakable.BlockWood;
@@ -412,8 +412,11 @@ public class Loading {
 		}
 	}
 
-	private static void generateRandomOre(World world, String block, int x, int y, int rarity){
+	private static void generateRandomOre(World world, String block, int rarity){
 
+		int x = Constants.RANDOM.nextInt(world.tileMap.getXRows());
+		int y = Constants.RANDOM.nextInt(world.tileMap.getYRows());
+		
 		if(Constants.RANDOM.nextInt(rarity) > 0)
 			return;
 
@@ -490,9 +493,14 @@ public class Loading {
 
 		for(int i = 0; i < airBlocks/10; i++){
 			generateRandomTree(world, Constants.RANDOM.nextInt(x),  Constants.RANDOM.nextInt(y));
-			generateRandomOre(world, Blocks.ROCK, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 3);
-			generateRandomOre(world, Blocks.IRON, Constants.RANDOM.nextInt(x), Constants.RANDOM.nextInt(y), 15);
-
+			generateRandomOre(world, Blocks.ROCK, 3);
+			generateRandomOre(world, Blocks.IRON, 15);
+			generateRandomOre(world, Blocks.GEM, 2);
+			
+			if(index > 10){ //should be after first boss
+				generateRandomOre(world, Blocks.GEM, airBlocks/9);
+			}
+			
 			populateEntities(world, Entity.PIG, 20);
 			populateEntities(world, Entity.SAMBAT, 7);
 			populateEntities(world, Entity.WARFBAT, 30);
@@ -508,7 +516,6 @@ public class Loading {
 	public static void readRandomParts(DataTag tag){
 		index = tag.readInt("worldIndex");
 		maps = tag.readInt("mapNumber");
-		//		tutorial = tag.readBoolean("tutorialPlayed");
 	}
 
 }

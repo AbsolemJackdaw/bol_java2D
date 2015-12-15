@@ -3,7 +3,9 @@ package game.item;
 import java.util.HashMap;
 
 import engine.image.Images;
-import game.entity.block.Blocks;
+import game.block.Blocks;
+import game.item.armor.ItemBelt;
+import game.item.armor.ItemHelm;
 import game.item.block.ItemBlockOven;
 import game.item.tool.ItemAxe;
 import game.item.tool.ItemPickaxe;
@@ -34,9 +36,13 @@ public class Items {
 	public static Item leather_strap = new Item("strap","Leather Strap").setTexture(Images.loadImage("/items/manufactured/leather_strap.png"));
 	public static Item woodChip = new Item("woodchip","Wood Chips").setTexture(Images.loadImage("/items/resources/wood_chip.png")).setFuel().setFuelTimer(800);
 	public static Item refinedStone = new Item("refinedstone","Smooth Stone").setTexture(Images.loadImage("/items/resources/stone_refined.png"));
-	
+	public static Item gem_blue = new Item("bluegem", "Blue Gem").setTexture(Images.loadImage("/items/resources/gem_blue.png"));
+	public static Item plate_iron = new Item("plate_iron", "Iron Plate").setTexture(Images.loadImage("/items/manufactured/plate_iron.png"));
+	public static Item plate_wood = new Item("plate_wood", "Wooden Plate").setTexture(Images.loadImage("/items/manufactured/plate_wood.png"));
+	public static Item plate_leather = new Item("plate_leather", "Leather Plate").setTexture(Images.loadImage("/items/manufactured/plate_leather.png"));
+
 	public static Item whetstone = new ItemWhetstone("whetstone","WhetStone").setTexture(Images.loadImage("/items/manufactured/whetstone.png"));
-	
+
 	public static Item ovenBase = new ItemOvenbase("ovenbase", "Oven Base").setTexture(Images.loadImage("/items/manufactured/oven_base.png"));
 
 	public static Item handle_sword = new Item("handle_sword","Sword Handle").setTexture(Images.loadImage("/items/tools/handle_sword.png"));
@@ -66,14 +72,22 @@ public class Items {
 
 	public static ItemLantern lantern = (ItemLantern) new ItemLantern("lantern", "Lantern").setTexture(Images.loadImage("/items/lantern.png"));		
 
-	public static ItemBelt belt = (ItemBelt) new ItemBelt("belt","Belt").setInventorySlots(5).setTexture(Images.loadImage("/items/manufactured/belt.png"));
-	public static ItemBelt belt_s = (ItemBelt) new ItemBelt("belt_s", "Belt").setInventorySlots(10).setTexture(Images.loadImage("/items/manufactured/belt_small.png"));
-	public static ItemBelt belt_m = (ItemBelt) new ItemBelt("belt_m", "Belt").setInventorySlots(15).setTexture(Images.loadImage("/items/manufactured/belt_med.png"));
-	public static ItemBelt belt_l = (ItemBelt) new ItemBelt("belt_l", "Belt").setInventorySlots(20).setTexture(Images.loadImage("/items/manufactured/belt_large.png"));
+	public static ItemBelt belt = (ItemBelt) new ItemBelt("belt","Belt", "belt").setInventorySlots(5).setTexture(Images.loadImage("/items/manufactured/belt.png"));
+	public static ItemBelt belt_s = (ItemBelt) new ItemBelt("belt_s", "Belt", "belt").setInventorySlots(10).setTexture(Images.loadImage("/items/manufactured/belt_small.png"));
+	public static ItemBelt belt_m = (ItemBelt) new ItemBelt("belt_m", "Belt", "belt").setInventorySlots(15).setTexture(Images.loadImage("/items/manufactured/belt_med.png"));
+	public static ItemBelt belt_l = (ItemBelt) new ItemBelt("belt_l", "Belt", "belt").setInventorySlots(20).setTexture(Images.loadImage("/items/manufactured/belt_large.png"));
+
+	public static ItemHelm helm_iron = (ItemHelm) new ItemHelm("helm_iron","Iron Helm").setDamageReduction(1.1f).setTexture(Images.loadImage("/items/manufactured/helm_iron.png"));
+	public static ItemHelm helm_wood = (ItemHelm) new ItemHelm("helm_wood","Wooden Helm").setDamageReduction(1.1f).setTexture(Images.loadImage("/items/manufactured/helm_wood.png"));
+
+	public static ItemHelm stache = (ItemHelm) new ItemHelm("stache","WarfStache").setTexture(Images.loadImage("/items/manufactured/stache.png"));
+	public static ItemHelm sam_eye = (ItemHelm) new ItemHelm("septiceye","Sceptic Eye").setTexture(Images.loadImage("/items/manufactured/septiceye.png"));
 
 	public static ItemBomb bomb = (ItemBomb) new ItemBomb("bomb", "Bomb", 2).setTexture(Images.loadImage("/items/bomb.png"));
 	public static ItemBomb bomb_better = (ItemBomb) new ItemBomb("bomb_b", "Better Bomb", 4).setTexture(Images.loadImage("/items/bomb.png"));
 	public static ItemBomb bomb_ultra = (ItemBomb) new ItemBomb("bomb_u", "Ultra Bomb", 8).setTexture(Images.loadImage("/items/bomb.png"));
+
+	public static ItemGemHammer gem_hammer = (ItemGemHammer) new ItemGemHammer("gemhammer", "Gem Hammer").setTexture(Images.loadImage("/items/manufactured/gem_hammer.png"));
 
 	public static void loadItems(){
 
@@ -115,6 +129,15 @@ public class Items {
 		registerItem(iron_axe);
 		registerItem(iron_pickaxe);
 		registerItem(leather_strap);
+		registerItem(gem_blue);
+		registerItem(gem_hammer);
+		registerItem(plate_iron);
+		registerItem(plate_leather);
+		registerItem(plate_wood);
+		registerItem(helm_iron);
+		registerItem(helm_wood);
+		registerItem(stache);
+		registerItem(sam_eye);
 
 	}
 

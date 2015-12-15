@@ -54,7 +54,7 @@ public class GuiHud extends Gui{
 		}
 
 		///draw held item///
-		ItemStack heldItem = player.invArmor.getWeapon();
+		ItemStack heldItem = player.armorInventory.getWeapon();
 		if(heldItem != null){
 			g.drawImage(img.getSubimage(0, 63, 32, 18), center, GamePanel.HEIGHT - 50, null);
 			g.drawImage(img.getSubimage(185, 63, 15, 18), center + 32, GamePanel.HEIGHT - 50, null);
