@@ -11,7 +11,6 @@ import game.entity.EntityMovement;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.tool.ItemTool;
-import game.item.tool.ItemTool.EnumTools;
 
 public class EntityLiving extends MapObject{
 

@@ -1,7 +1,35 @@
 
 package game.entity.living.player;
 
-import static game.util.Constants.*;
+import static game.util.Constants.ACTION_ATTACK;
+import static game.util.Constants.ACTION_FALLING;
+import static game.util.Constants.ACTION_IDLE;
+import static game.util.Constants.ACTION_JUMPING;
+import static game.util.Constants.ACTION_WALK;
+import static game.util.Constants.ARMOR_EXTRA_ATTACK;
+import static game.util.Constants.ARMOR_EXTRA_IDLE;
+import static game.util.Constants.ARMOR_EXTRA_JUMP;
+import static game.util.Constants.ARMOR_EXTRA_RUN;
+import static game.util.Constants.ARMOR_HEAD_ATTACK;
+import static game.util.Constants.ARMOR_HEAD_FALL;
+import static game.util.Constants.ARMOR_HEAD_IDLE;
+import static game.util.Constants.ARMOR_HEAD_JUMP;
+import static game.util.Constants.ARMS_ATTACK;
+import static game.util.Constants.ARMS_IDLE;
+import static game.util.Constants.ARMS_RUN;
+import static game.util.Constants.ARMS_WEAPON;
+import static game.util.Constants.ARM_JUMP;
+import static game.util.Constants.BODY_ATTACK;
+import static game.util.Constants.BODY_IDLE;
+import static game.util.Constants.BODY_RUN;
+import static game.util.Constants.HEAD_ATTACK;
+import static game.util.Constants.HEAD_IDLE;
+import static game.util.Constants.HEAD_JUMP;
+import static game.util.Constants.LEGS_ATTACK;
+import static game.util.Constants.LEGS_IDLE;
+import static game.util.Constants.LEGS_RUN;
+import static game.util.Constants.LEG_JUMP;
+import static game.util.Constants.hotBarKeys;
 import engine.game.MapObject;
 import engine.image.Images;
 import engine.imaging.Animation;
