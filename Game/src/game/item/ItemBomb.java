@@ -26,7 +26,7 @@ public class ItemBomb extends Item {
 			EntityBomb bomb = (EntityBomb)entity;
 
 			if(bomb != null){
-				bomb.setPosition(player.getScreenXpos(), player.getScreenYpos());
+				bomb.setPosition(player.getPosX(), player.getPosY());
 				bomb.setLeft(!player.facingRight);
 				bomb.setRight(player.facingRight);
 				bomb.maxSpeed = power;
@@ -34,7 +34,7 @@ public class ItemBomb extends Item {
 				bomb.dy = bomb.jumpStart;
 				bomb.setBlastPower(power);
 				bomb.setBlastRadius(power == 2 ? 32 : power == 4 ? 48 : 80);
-				world.listWithMapObjects.add(bomb);
+				world.addEntity(bomb);
 			}
 
 			Util.decreaseStack(player, key, 1);

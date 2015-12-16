@@ -58,8 +58,8 @@ public class EntityEnvironement extends EntityLiving{
 	public void update() {
 		super.update();
 
-		if(getAnimation().hasPlayedOnce())
-			this.remove = true;
+//		if(getAnimation().hasPlayedOnce())
+//			this.remove = true;
 	}
 	
 	@Override

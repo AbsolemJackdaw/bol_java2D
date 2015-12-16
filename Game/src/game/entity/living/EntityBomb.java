@@ -87,7 +87,7 @@ public class EntityBomb extends EntityLiving {
 
 		this.entitySizeX = this.entitySizeY = getBlastRadius();
 
-		for(MapObject mo : getWorld().listWithMapObjects){
+		for(MapObject mo : getWorld().getWorldEntities()){
 			if(!(mo instanceof EntityDeathAnim  || mo instanceof EntityBomb))
 				if(this.getRectangle().intersects(mo.getRectangle())){
 					mo.onEntityHit(getBlastPower());

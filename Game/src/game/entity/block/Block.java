@@ -64,7 +64,7 @@ public class Block extends MapObject{
 		//TODO falling needs tweeking for blocks only under his position
 		if(falling){
 			
-			for(MapObject mo : getWorld().listWithMapObjects){
+			for(MapObject mo : getWorld().getWorldEntities()){
 				if(mo instanceof Block){
 					Block b = (Block)mo;
 

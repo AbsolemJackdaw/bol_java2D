@@ -274,7 +274,7 @@ public class Player extends EntityLiving implements IInventory{
 
 		if(KeyHandler.isPressed(KeyHandler.INTERACT)){
 
-			for(MapObject mo : getWorld().listWithMapObjects){
+			for(MapObject mo : getWorld().getWorldEntities()){
 				if(mo.intersects(this))
 					mo.interact(this);
 			}
@@ -349,9 +349,9 @@ public class Player extends EntityLiving implements IInventory{
 			for(MapObject obj : collidingEntities){
 
 				matchTool(obj);
-				if(obj.getScreenXpos() > getScreenXpos() && facingRight)
+				if(obj.getPosX() > getPosX() && facingRight)
 					obj.onEntityHit(this);
-				else if( obj.getScreenXpos() < getScreenXpos() && !facingRight)
+				else if( obj.getPosX() < getPosX() && !facingRight)
 					obj.onEntityHit(this);
 
 			}

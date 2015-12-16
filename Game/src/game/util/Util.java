@@ -212,6 +212,39 @@ public class Util {
 		return canvas;
 	}
 
+	/**
+	 * Colors an image with specified color.
+	 * @param r Red value. Between 0 and 1
+	 * @param g Green value. Between 0 and 1
+	 * @param b Blue value. Between 0 and 1
+	 * @param src The image to color
+	 * @return The colored image
+	 */
+	//thanks stackoverflow's HardcodedCat
+	public static BufferedImage color(float r, float g, float b, BufferedImage src) {
+
+		// Copy image ( who made that so complicated :< )
+		BufferedImage newImage = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TRANSLUCENT);
+		Graphics2D graphics = newImage.createGraphics();
+		graphics.drawImage(src, 0, 0, null);
+		graphics.dispose();
+
+		// Color image
+		for (int i = 0; i < newImage.getWidth(); i++) {
+			for (int j = 0; j < newImage.getHeight(); j++) {
+				int ax = newImage.getColorModel().getAlpha(newImage.getRaster().getDataElements(i, j, null));
+				int rx = newImage.getColorModel().getRed(newImage.getRaster().getDataElements(i, j, null));
+				int gx = newImage.getColorModel().getGreen(newImage.getRaster().getDataElements(i, j, null));
+				int bx = newImage.getColorModel().getBlue(newImage.getRaster().getDataElements(i, j, null));
+				rx *= r;
+				gx *= g;
+				bx *= b;
+				newImage.setRGB(i, j, (ax << 24) | (rx << 16) | (gx << 8) | (bx << 0));
+			}
+		}
+		return newImage;
+	}
+
 	public static void startLoadIcon(){
 		GamePanelExtended.drawLoadingIcon = true;
 	}

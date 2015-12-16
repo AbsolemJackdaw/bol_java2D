@@ -75,7 +75,7 @@ public class BlockWood extends BlockBreakable{
 	public void informNeighbors(){
 		if(!isEndBlock){
 
-			for(MapObject mo : getWorld().listWithMapObjects){
+			for(MapObject mo : getWorld().getWorldEntities()){
 				if(mo instanceof BlockWood){
 					if(mo.currentRow == currentRow){
 						if(mo.currentColumn == currentColumn+1){

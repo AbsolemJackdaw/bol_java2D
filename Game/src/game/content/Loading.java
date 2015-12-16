@@ -240,21 +240,21 @@ public class Loading {
 						" to move.");
 				pane.setText(text);
 				pane.setPosition(66,63);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				pane = new BlockInfoPane(world, Blocks.SIGN);
 				text = new ArrayList<String>();
 				text.add("Or arrow Keys, whatever...");
 				pane.setText(text);
 				pane.setPosition(69,63);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				pane = new BlockInfoPane(world, Blocks.SIGN);
 				text = new ArrayList<String>();
 				text.add(KeyHandler.getKeyName(KeyHandler.UP).toLowerCase() + " to jump up ! ^" );
 				pane.setText(text);
 				pane.setPosition(74,63);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				pane = new BlockInfoPane(world, Blocks.SIGN);
 				text = new ArrayList<String>();
@@ -262,7 +262,7 @@ public class Loading {
 				text.add("strawberry river !");
 				pane.setText(text);
 				pane.setPosition(78,63);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				pane = new BlockInfoPane(world, Blocks.SIGN);
 				text = new ArrayList<String>();
@@ -271,7 +271,7 @@ public class Loading {
 				text.add("Lets get to the other side !");
 				pane.setText(text);
 				pane.setPosition(81,63);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				pane = new BlockInfoPane(world, Blocks.SIGN);
 				text = new ArrayList<String>();
@@ -279,7 +279,7 @@ public class Loading {
 				text.add("YOU ARE TAKING A BATH !");
 				pane.setText(text);
 				pane.setPosition(104,64);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				pane = new BlockInfoPane(world, Blocks.SIGN);
 				text = new ArrayList<String>();
@@ -287,7 +287,7 @@ public class Loading {
 				text.add("Just keep hopping up !");
 				pane.setText(text);
 				pane.setPosition(116, 59);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				pane = new BlockInfoPane(world, Blocks.SIGN);
 				text = new ArrayList<String>();
@@ -296,7 +296,7 @@ public class Loading {
 				text.add("Completete all of them to go on ! ");
 				pane.setText(text);
 				pane.setPosition(83, 48);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				pane = new BlockInfoPane(world, Blocks.SIGN);
 				text = new ArrayList<String>();
@@ -305,7 +305,7 @@ public class Loading {
 				text.add("Place down the desk with the number in the hotbar.");
 				pane.setText(text);
 				pane.setPosition(102, 22);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				pane = new BlockInfoPane(world, Blocks.SIGN);
 				text = new ArrayList<String>();
@@ -314,56 +314,56 @@ public class Loading {
 				text.add("You're ready for adventure... Have fun !");
 				pane.setText(text);
 				pane.setPosition(115, 22);
-				world.listWithMapObjects.add(pane);
+				world.addEntity(pane);
 
 				BlockRock rock ;
 
 				rock = new BlockRock(world);
 				rock.setPosition(67, 48);
-				world.listWithMapObjects.add(rock);
+				world.addEntity(rock);
 
 				rock = new BlockRock(world);
 				rock.setPosition(73, 28);
-				world.listWithMapObjects.add(rock);
+				world.addEntity(rock);
 
 				rock = new BlockRock(world);
 				rock.setPosition(85, 39);
-				world.listWithMapObjects.add(rock);
+				world.addEntity(rock);
 
 				rock = new BlockRock(world);
 				rock.setPosition(91, 30);
-				world.listWithMapObjects.add(rock);
+				world.addEntity(rock);
 
 				BlockWood wood;
 				for(int i = 0; i < 3; i++){
 					wood = new BlockWood(world, i == 2);
 					wood.setPosition(75, 39+i);
-					world.listWithMapObjects.add(wood);
+					world.addEntity(wood);
 				}
 
 				for(int i = 0; i < 4; i++){
 					wood = new BlockWood(world, i == 3);
 					wood.setPosition(68, 39+i);
-					world.listWithMapObjects.add(wood);
+					world.addEntity(wood);
 				}
 
 				for(int i = 0; i < 3; i++){
 					wood = new BlockWood(world, i == 2);
 					wood.setPosition(81, 26+i);
-					world.listWithMapObjects.add(wood);
+					world.addEntity(wood);
 				}
 
 
 				for(int i = 0; i < 3; i++){
 					wood = new BlockWood(world, i == 2);
 					wood.setPosition(70, 31+i);
-					world.listWithMapObjects.add(wood);
+					world.addEntity(wood);
 				}
 
 				for(int i = 0; i < 4; i++){
 					wood = new BlockWood(world, i == 3);
 					wood.setPosition(98, 30+i);
-					world.listWithMapObjects.add(wood);
+					world.addEntity(wood);
 				}
 
 //				Util.stopLoadIcon();
@@ -405,7 +405,7 @@ public class Loading {
 				for(int i = 0; i < numLogs; i++){
 					vine = new BlockWood(world, i == numLogs-1);
 					vine.setPosition(x, y+i);
-					world.listWithMapObjects.add(vine);
+					world.addEntity(vine);
 				}
 			}
 
@@ -426,7 +426,7 @@ public class Loading {
 
 		if(tm.isAir(x, y) && tm.getType(y+1, x) == Tile.SOLID){
 			b.setPosition(x, y);
-			world.listWithMapObjects.add(b);
+			world.addEntity(b);
 		}
 	}
 
@@ -449,7 +449,7 @@ public class Loading {
 			if(world.tileMap.getBlockID(x, y) == 0){
 				if(world.tileMap.getBlockID(x, y+1) > 0){
 					el.setPosition(x, y);
-					world.listWithMapObjects.add(el);
+					world.addEntity(el);
 
 				}
 			}
@@ -459,7 +459,7 @@ public class Loading {
 
 		EntityLiving el = (EntityLiving) Entity.createEntityFromUIN(uin, world);
 		el.setPosition(x, y);
-		world.listWithMapObjects.add(el);
+		world.addEntity(el);
 	}
 
 	private static void populateWorld(final World world){
@@ -477,7 +477,7 @@ public class Loading {
 
 				//full water block
 				if(world.tileMap.getBlockID(i, j) == 10){
-					if(Constants.RANDOM.nextInt(25) == 0){
+					if(Constants.RANDOM.nextInt(50) == 0){
 						int fish = Constants.RANDOM.nextInt(4)+1;
 						while(fish > 0){
 							populateWaterEntities(world, Entity.FISH, i, j);

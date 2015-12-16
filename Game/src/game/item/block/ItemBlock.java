@@ -17,8 +17,8 @@ public class ItemBlock extends Item{
 
 	public void placeBlock(World world, Player p){
 		MapObject mo = Blocks.loadMapObjectFromString(getUIN(), world);
-		mo.setPosition(p.getScreenXpos(), p.getScreenYpos());
-		world.listWithMapObjects.add(mo);
+		mo.setPosition(p.getPosX(), p.getPosY());
+		world.addEntity(mo);
 	}
 
 	@Override

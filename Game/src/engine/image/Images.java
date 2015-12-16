@@ -1,5 +1,8 @@
 package engine.image;
 
+import game.util.Util;
+
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -74,8 +77,31 @@ public class Images {
 		}
 		return null;
 	}
+	
+	public static BufferedImage[] loadColoredMultiImage(String s, int x, int y, int sizeX, int sizeY, int subImages, float r, float g, float b) {
+		BufferedImage[] ret;
+		try {
+			final BufferedImage spritesheet = ImageIO.read(Images.class.getResourceAsStream(s));
+
+			ret = new BufferedImage[subImages];
+
+			for (int i = 0; i < subImages; i++)
+				ret[i] = Util.color(r, g, b, spritesheet.getSubimage(i * x, y, sizeX, sizeY));
+
+			return ret;
+		} catch (final Exception e) {
+			e.printStackTrace();
+			System.out.println("Error loading graphics." + " " + s + " might be an invalid directory");
+			System.exit(0);
+		}
+		return null;
+	}
 
 	public static BufferedImage[] loadMultiImage(String s, int x, int y, int subImages) {
 		return loadMultiImage(s, x, y, x, x, subImages);
+	}
+	
+	public static BufferedImage[] loadColoredMultiImage(String s, int x, int y, int subImages, Color color) {
+		return loadColoredMultiImage(s, x, y, x, x, subImages, (float)color.getRed()/255f,(float)color.getGreen()/255f,(float)color.getBlue()/255f);
 	}
 }

@@ -33,7 +33,6 @@ import game.content.SpawningLogic;
 import game.content.WorldTask;
 import game.content.save.Save;
 import game.entity.Entity;
-import game.entity.block.Block;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.block.breakable.BlockLight;
 import game.entity.block.breakable.BlockOven;
@@ -78,9 +77,6 @@ public class World extends GameWorld{
 		super(gsm);
 
 		tileMap = new TileMap(32);
-
-		listWithMapObjects = new ArrayList<MapObject>();
-
 	}
 
 	/**
@@ -142,8 +138,8 @@ public class World extends GameWorld{
 
 		//draw the tile map
 		tileMap.draw(g, 
-				(int)player.getScreenXpos()/32, 
-				(int)player.getScreenYpos()/32,  1);
+				(int)player.getPosX()/32, 
+				(int)player.getPosY()/32,  1);
 
 		//set night shade if it's night
 		if(nightAlhpa > 0.1f){
@@ -156,7 +152,7 @@ public class World extends GameWorld{
 
 		//Draw all objects/entities in the map here
 
-		for(MapObject mo : listWithMapObjects){
+		for(MapObject mo : getWorldEntities()){
 			//do not draw entities outside of the player's range
 			if(isOutOfBounds(mo))
 				continue;
@@ -170,7 +166,7 @@ public class World extends GameWorld{
 		//draw the player. draw it before the night shade !
 		player.draw(g);
 
-		tileMap.draw(g, (int)player.getScreenXpos()/32, (int)player.getScreenYpos()/32,  2);
+		tileMap.draw(g, (int)player.getPosX()/32, (int)player.getPosY()/32,  2);
 
 		//draw night shade after all visible in the world
 		if(nightAlhpa > 0.1f)
@@ -254,7 +250,7 @@ public class World extends GameWorld{
 		}
 
 		//move tilemap around 
-		tileMap.setPosition(((WIDTH / 2) - player.getScreenXpos()) + offset, ((HEIGHT / 2) - player.getScreenYpos()+randOff));
+		tileMap.setPosition(((WIDTH / 2) - player.getPosX()) + offset, ((HEIGHT / 2) - player.getPosY()+randOff));
 
 		//update backgrounds to move them around
 		if(backGrounds != null && !backGrounds.isEmpty())
@@ -320,7 +316,9 @@ public class World extends GameWorld{
 
 			player.update();
 
-			for(MapObject mo : listWithMapObjects){
+			loadQueuedEntities();
+
+			for(MapObject mo : getWorldEntities()){
 
 				if(!isOutOfBounds(mo) || mo.persistantUpdate()){
 					mo.update();
@@ -342,59 +340,70 @@ public class World extends GameWorld{
 						if(player.getCollidingMapObjects().isEmpty())
 							player.isCollidingWithBlock = false;
 					}
+				}
+			}
 
-					if(mo.remove){
+			// remove any objects after updates, given some blocks/entities spawn other entities on update !
+			for(MapObject mo : getWorldEntities()){
+				if(mo.remove){
 
-						if(player.getCollidingMapObjects().contains(mo))
-							player.getCollidingMapObjects().remove(mo);
+					if(player.getCollidingMapObjects().contains(mo))
+						player.getCollidingMapObjects().remove(mo);
 
-						listWithMapObjects.remove(mo);
+					if(mo instanceof EntityLiving)
+						createDeathAnimation(mo);
+					else if (mo instanceof BlockBreakable)
+						createBlockBreakAnimation(mo);
+					
+					removeEntity(mo);
+				}
+			}
+			
+			removeQueuedEntities();
+		}
+	}
 
-						if(mo instanceof EntityLiving){
-							if(((EntityLiving) mo).canPlayDeathAnimation()){
+	private void createDeathAnimation(MapObject mo) {
+		if(((EntityLiving) mo).canPlayDeathAnimation()){
 
-								int parts = new Random().nextInt(10)+5;
+			int parts = new Random().nextInt(10)+5;
 
-								for(int i = 0; i < parts; i++){
+			for(int i = 0; i < parts; i++){
 
-									EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATH, this);
+				EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATH, this);
 
-									if(entity instanceof EntityDeathParticle){
-										EntityDeathParticle edp = (EntityDeathParticle)entity;
+				if(entity instanceof EntityDeathParticle){
+					EntityDeathParticle edp = (EntityDeathParticle)entity;
 
-										if(edp != null){
-											edp.reloadTexture();
-											edp.setPosition(mo.getScreenXpos(), mo.getScreenYpos());
-											edp.setJumping(true);
-											edp.dy = edp.jumpStart;
-											listWithMapObjects.add(edp);
-										}
-									}
-								}
-							}
-						}else if (mo instanceof BlockBreakable){
-							int parts = new Random().nextInt(10)+5;
-
-							for(int i = 0; i < parts; i++){
-
-								EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATHBLOCK, this);
-
-								if(entity instanceof EntityBlockBreak){
-									EntityBlockBreak edp = (EntityBlockBreak)entity;
-
-									if(edp != null){
-										edp.setParticleTexture(mo.getAnimation().getImage());
-										edp.reloadTexture();
-										edp.setPosition(mo.getScreenXpos(), mo.getScreenYpos());
-										edp.setJumping(true);
-										edp.dy = edp.jumpStart;
-										listWithMapObjects.add(edp);
-									}
-								}
-							}
-						}
-						break;
+					if(edp != null){
+						edp.reloadTexture();
+						edp.setPosition(mo.getPosX(), mo.getPosY());
+						edp.setJumping(true);
+						edp.dy = edp.jumpStart;
+						addEntity(edp);
 					}
+				}
+			}
+		}
+	}
+
+	private void createBlockBreakAnimation(MapObject mo) {
+		int parts = new Random().nextInt(10)+5;
+
+		for(int i = 0; i < parts; i++){
+
+			EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATHBLOCK, this);
+
+			if(entity instanceof EntityBlockBreak){
+				EntityBlockBreak edp = (EntityBlockBreak)entity;
+
+				if(edp != null){
+					edp.setParticleTexture(mo.getAnimation().getImage());
+					edp.reloadTexture();
+					edp.setPosition(mo.getPosX(), mo.getPosY());
+					edp.setJumping(true);
+					edp.dy = edp.jumpStart;
+					addEntity(edp);
 				}
 			}
 		}
@@ -482,12 +491,12 @@ public class World extends GameWorld{
 			String uin = dt.readString("UIN");
 
 			MapObject mo = Blocks.loadMapObjectFromString(uin, this);
-
 			if(mo == null)
 				mo = Entity.createEntityFromUIN(uin, this);
+
 			if(mo != null){
 				mo.readFromSave(dt);
-				listWithMapObjects.add(mo);
+				addEntity(mo);
 			}else{
 				System.out.println("The Entity for " + uin + " was not recognized. Skipped loading this entity");
 			}
@@ -507,8 +516,8 @@ public class World extends GameWorld{
 	}
 
 	private boolean isOutOfBounds(MapObject obj){
-		int Px = (int)player.getScreenXpos();
-		int Py = (int)player.getScreenYpos();
+		int Px = (int)player.getPosX();
+		int Py = (int)player.getPosY();
 
 		int screenX = Window.getWidth()/(32*(int)GamePanel.SCALE);
 		int screenY = Window.getHeight()/(32*(int)GamePanel.SCALE);
@@ -522,8 +531,8 @@ public class World extends GameWorld{
 		int yDistanceMin = Py-arroundY;
 		int yDistanceMax = Py+arroundY;
 
-		if(obj.getScreenXpos() >= xDistanceMin && obj.getScreenXpos() < xDistanceMax)
-			if(obj.getScreenYpos() >= yDistanceMin && obj.getScreenYpos() < yDistanceMax)
+		if(obj.getPosX() >= xDistanceMin && obj.getPosX() < xDistanceMax)
+			if(obj.getPosY() >= yDistanceMin && obj.getPosY() < yDistanceMax)
 				return false;
 
 		return true;
@@ -553,7 +562,7 @@ public class World extends GameWorld{
 		}
 
 		else if(cmd.equals("kill")){
-			for(MapObject mo : listWithMapObjects){
+			for(MapObject mo : getWorldEntities()){
 				if(mo instanceof EntityLiving)
 					mo.remove = true;
 			}
@@ -584,12 +593,12 @@ public class World extends GameWorld{
 				}
 			}
 		}else if(cmd.startsWith("spawn")){
-			String [] split = cmd.split("\\s+") ;
+			String [] split = cmd.split("\\s+");
 			if(split.length == 2){
 				EntityLiving entity = Entity.createEntityFromUIN(split[1], this);
 				if(entity != null){
-					entity.setPosition(player.getScreenXpos(), player.getScreenYpos());
-					listWithMapObjects.add(entity);
+					entity.setPosition(player.getPosX(), player.getPosY());
+					addEntity(entity);
 				}
 			}
 			else if(split.length == 3){
@@ -597,8 +606,8 @@ public class World extends GameWorld{
 				for(int i = 0; i < loop; i ++){
 					EntityLiving entity = Entity.createEntityFromUIN(split[1], this);
 					if(entity != null){
-						entity.setPosition(player.getScreenXpos(), player.getScreenYpos());
-						listWithMapObjects.add(entity);
+						entity.setPosition(player.getPosX(), player.getPosY());
+						addEntity(entity);
 					}
 				}
 			}

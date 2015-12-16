@@ -325,11 +325,13 @@ public abstract class MapObject {
 		return (int) ((yScreen + ymap) - (entitySizeY / 2));
 	}
 
-	public double getScreenXpos() {
+	/**returns relative x position of the entity*/
+	public double getPosX() {
 		return xScreen;
 	}
 
-	public double getScreenYpos() {
+	/**returns relative y position of the entity*/
+	public double getPosY() {
 		return yScreen;
 	}
 
