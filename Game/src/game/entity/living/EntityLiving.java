@@ -11,6 +11,7 @@ import game.entity.EntityMovement;
 import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.tool.ItemTool;
+import game.util.WeightedStack;
 
 public class EntityLiving extends MapObject{
 
@@ -63,7 +64,7 @@ public class EntityLiving extends MapObject{
 		Music.play(getEntityHitSound());
 
 		health -= f;
-		
+
 		if(health <= 0){
 			this.remove=true;
 			kill(player);
@@ -172,9 +173,7 @@ public class EntityLiving extends MapObject{
 
 		if(wep != null && wep.getItem() instanceof ItemTool){
 			ItemTool tool = (ItemTool)wep.getItem();
-			
-			wepDmg = ((ItemTool)wep.getItem()).getAttackDamage(wep);
-			
+			wepDmg = tool.getAttackDamage(wep);
 			wep.damageStack(1);
 		}
 
@@ -192,14 +191,25 @@ public class EntityLiving extends MapObject{
 
 		if(player!= null)
 			if(getDrops() != null){
-				int index;
 
-				if(getDrops().length == 1)
-					index = 0;
-				else
-					index = rand.nextInt(getDrops().length);
-
-				if(player.setStackInNextAvailableSlot(getDrops()[index])){
+				double totalWeight = 0.0d;
+				for (WeightedStack ws : getDrops()){
+				    totalWeight += ws.getWeight();
+				}
+				// Now choose a random item
+				int randomIndex = -1;
+				double random = rand.nextDouble() * totalWeight;
+				for (int i = 0; i < getDrops().length; ++i)
+				{
+				    random -= getDrops()[i].getWeight();
+				    if (random <= 0.0d)
+				    {
+				        randomIndex = i;
+				        break;
+				    }
+				}
+				
+				if(player.setStackInNextAvailableSlot(getDrops()[randomIndex].getStack())){
 					this.remove = true;
 				}else{
 					health = maxHealth;
@@ -211,7 +221,7 @@ public class EntityLiving extends MapObject{
 			this.remove = true;
 	}
 
-	public ItemStack[] getDrops() {
+	public WeightedStack[] getDrops() {
 		return null;
 	}
 
@@ -260,11 +270,11 @@ public class EntityLiving extends MapObject{
 			facingRight = false;
 		}
 	}
-	
+
 	public double getDefMaxSpeed() {
 		return defMaxSpeed;
 	}
-	
+
 	public double getDefMoveSpeed() {
 		return defMoveSpeed;
 	}

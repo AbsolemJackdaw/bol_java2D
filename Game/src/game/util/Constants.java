@@ -63,9 +63,12 @@ public class Constants {
 	public static final int ARMOR_HEAD_JUMP = 2;
 	public static final int ARMOR_HEAD_FALL = 3;
 	
-	public static final int ARMOR_TORSO_IDLE = 1;
-	public static final int ARMOR_TORSO_RUN = 4;
-	public static final int ARMOR_TORSO_ATTACK = 7;
+	public static final int ARMOR_TORSO_IDLE = 0;
+	public static final int ARMOR_TORSO_NOT_IDLE = 1;
+	public static final int ARMOR_TORSO_ATTACK = 2;
+	
+//	public static final int ARMOR_TORSO_JUMP = 2;
+//	public static final int ARMOR_TORSO_RUN = 3;
 
 	
 

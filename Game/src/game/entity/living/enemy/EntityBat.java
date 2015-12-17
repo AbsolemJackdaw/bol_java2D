@@ -8,6 +8,7 @@ import engine.imaging.Animation;
 import game.World;
 import game.item.ItemStack;
 import game.item.Items;
+import game.util.WeightedStack;
 
 
 public class EntityBat extends EntityEnemy{
@@ -55,8 +56,11 @@ public class EntityBat extends EntityEnemy{
 	}
 
 	@Override
-	public ItemStack[] getDrops() {
-		return new ItemStack[]{new ItemStack(Items.leather, rand.nextInt(2)+1)};
+	public WeightedStack[] getDrops() {
+		return new WeightedStack[]{
+				new WeightedStack(new ItemStack(Items.leather, rand.nextInt(2)+1), 0.95),
+				new WeightedStack(new ItemStack(Items.sam_eye, 1),0.05)
+		};
 	}
 
 	@Override

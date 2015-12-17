@@ -5,6 +5,7 @@ import game.World;
 import game.entity.EntityAI;
 import game.item.ItemStack;
 import game.item.Items;
+import game.util.WeightedStack;
 
 import java.awt.Graphics2D;
 
@@ -70,10 +71,12 @@ public class EntityPig extends EntityLiving{
 	private ItemStack[] drops = new ItemStack[2];
 
 	@Override
-	public ItemStack[] getDrops() {
-		drops[0] = new ItemStack(Items.meat_pig_raw, rand.nextInt(2)+1);
-		drops[1] = new ItemStack(Items.leather, rand.nextInt(3)+1);
-		return drops;
+	public WeightedStack[] getDrops() {
+		
+		return new WeightedStack[]{
+				new WeightedStack(drops[0] = new ItemStack(Items.meat_pig_raw, rand.nextInt(2)+1), 0.4),
+				new WeightedStack(new ItemStack(Items.leather, rand.nextInt(3)+1), 0.6)
+		};
 	}
 
 	@Override

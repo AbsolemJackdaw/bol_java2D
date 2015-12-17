@@ -5,6 +5,7 @@ import java.util.HashMap;
 import engine.image.Images;
 import game.block.Blocks;
 import game.item.armor.ItemBelt;
+import game.item.armor.ItemChest;
 import game.item.armor.ItemHelm;
 import game.item.block.ItemBlockOven;
 import game.item.tool.ItemAxe;
@@ -58,17 +59,17 @@ public class Items {
 
 	public static ItemBlockOven oven = (ItemBlockOven) new ItemBlockOven(Blocks.OVEN, "Oven").setTexture(Images.loadImage("/blocks/oven.png"));
 
-	public static ItemTool wood_pickaxe =         (ItemTool) new ItemPickaxe("pickaxe", "Wooden Pickaxe", EnumMaterial.WOOD).setBaseAttack(2).setEffectiveness(EnumTools.PICKAXE).setEffectiveDamage(2).setBaseDamage(16).setTexture(Images.loadImage("/items/tools/wood_pickaxe.png"));
-	public static ItemTool stone_pickaxe= (ItemTool) new ItemPickaxe("stone_pickaxe", "Smooth Pickaxe", EnumMaterial.STONE).setBaseAttack(2).setEffectiveness(EnumTools.PICKAXE).setEffectiveDamage(2).setBaseDamage(16).setTexture(Images.loadImage("/items/tools/smooth_pickaxe.png"));
-	public static ItemTool iron_pickaxe =     (ItemTool) new ItemPickaxe("iron_pickaxe", "Iron Pickaxe", EnumMaterial.IRON).setBaseAttack(2).setEffectiveness(EnumTools.PICKAXE).setEffectiveDamage(2).setBaseDamage(32).setTexture(Images.loadImage("/items/tools/iron_pickaxe.png"));
+	public static ItemTool wood_pickaxe =         (ItemTool) new ItemPickaxe("pickaxe", "Wooden Pickaxe", EnumMaterial.WOOD).setBaseAttack(2).setEffectiveness(EnumTools.PICKAXE).setEffectiveDamage(2).setStackDamage(16).setTexture(Images.loadImage("/items/tools/wood_pickaxe.png"));
+	public static ItemTool stone_pickaxe= (ItemTool) new ItemPickaxe("stone_pickaxe", "Smooth Pickaxe", EnumMaterial.STONE).setBaseAttack(2).setEffectiveness(EnumTools.PICKAXE).setEffectiveDamage(2).setStackDamage(16).setTexture(Images.loadImage("/items/tools/smooth_pickaxe.png"));
+	public static ItemTool iron_pickaxe =     (ItemTool) new ItemPickaxe("iron_pickaxe", "Iron Pickaxe", EnumMaterial.IRON).setBaseAttack(2).setEffectiveness(EnumTools.PICKAXE).setEffectiveDamage(2).setStackDamage(32).setTexture(Images.loadImage("/items/tools/iron_pickaxe.png"));
 
-	public static ItemTool wood_sword   =         (ItemTool) new ItemSword("sword", "Wooden Sword", EnumMaterial.WOOD).setBaseAttack(3).setEffectiveness(EnumTools.SWORD).setEffectiveDamage(2).setBaseDamage(32).setTexture(Images.loadImage("/items/tools/wood_sword.png"));
-	public static ItemTool stone_sword  = (ItemTool) new ItemSword("stone_sword", "Smooth Sword", EnumMaterial.STONE).setBaseAttack(3).setEffectiveness(EnumTools.SWORD).setEffectiveDamage(2).setBaseDamage(48).setTexture(Images.loadImage("/items/tools/smooth_sword.png"));
-	public static ItemTool iron_sword   =     (ItemTool) new ItemSword("iron_sword", "Iron Sword", EnumMaterial.IRON).setBaseAttack(3).setEffectiveness(EnumTools.SWORD).setEffectiveDamage(2).setBaseDamage(64).setTexture(Images.loadImage("/items/tools/iron_sword.png"));
+	public static ItemTool wood_sword   =         (ItemTool) new ItemSword("sword", "Wooden Sword", EnumMaterial.WOOD).setBaseAttack(3).setEffectiveness(EnumTools.SWORD).setEffectiveDamage(2).setStackDamage(32).setTexture(Images.loadImage("/items/tools/wood_sword.png"));
+	public static ItemTool stone_sword  = (ItemTool) new ItemSword("stone_sword", "Smooth Sword", EnumMaterial.STONE).setBaseAttack(3).setEffectiveness(EnumTools.SWORD).setEffectiveDamage(2).setStackDamage(48).setTexture(Images.loadImage("/items/tools/smooth_sword.png"));
+	public static ItemTool iron_sword   =     (ItemTool) new ItemSword("iron_sword", "Iron Sword", EnumMaterial.IRON).setBaseAttack(3).setEffectiveness(EnumTools.SWORD).setEffectiveDamage(2).setStackDamage(64).setTexture(Images.loadImage("/items/tools/iron_sword.png"));
 
-	public static ItemTool wood_axe   =         (ItemTool) new ItemAxe("axe", "Wooden Axe", EnumMaterial.WOOD).setBaseAttack(2).setEffectiveness(EnumTools.AXE).setEffectiveDamage(2).setBaseDamage(32).setTexture(Images.loadImage("/items/tools/wood_axe.png"));
-	public static ItemTool stone_axe  = (ItemTool) new ItemAxe("stone_axe", "Smooth Axe", EnumMaterial.STONE).setBaseAttack(2).setEffectiveness(EnumTools.AXE).setEffectiveDamage(2).setBaseDamage(32).setTexture(Images.loadImage("/items/tools/smooth_axe.png"));
-	public static ItemTool iron_axe   =     (ItemTool) new ItemAxe("iron_axe", "Iron Axe", EnumMaterial.IRON).setBaseAttack(2).setEffectiveness(EnumTools.AXE).setEffectiveDamage(2).setBaseDamage(48).setTexture(Images.loadImage("/items/tools/iron_axe.png"));
+	public static ItemTool wood_axe   =         (ItemTool) new ItemAxe("axe", "Wooden Axe", EnumMaterial.WOOD).setBaseAttack(2).setEffectiveness(EnumTools.AXE).setEffectiveDamage(2).setStackDamage(32).setTexture(Images.loadImage("/items/tools/wood_axe.png"));
+	public static ItemTool stone_axe  = (ItemTool) new ItemAxe("stone_axe", "Smooth Axe", EnumMaterial.STONE).setBaseAttack(2).setEffectiveness(EnumTools.AXE).setEffectiveDamage(2).setStackDamage(32).setTexture(Images.loadImage("/items/tools/smooth_axe.png"));
+	public static ItemTool iron_axe   =     (ItemTool) new ItemAxe("iron_axe", "Iron Axe", EnumMaterial.IRON).setBaseAttack(2).setEffectiveness(EnumTools.AXE).setEffectiveDamage(2).setStackDamage(48).setTexture(Images.loadImage("/items/tools/iron_axe.png"));
 
 	public static ItemLantern lantern = (ItemLantern) new ItemLantern("lantern", "Lantern").setTexture(Images.loadImage("/items/lantern.png"));		
 
@@ -77,11 +78,13 @@ public class Items {
 	public static ItemBelt belt_m = (ItemBelt) new ItemBelt("belt_m", "Belt", "belt").setInventorySlots(15).setTexture(Images.loadImage("/items/manufactured/belt_med.png"));
 	public static ItemBelt belt_l = (ItemBelt) new ItemBelt("belt_l", "Belt", "belt").setInventorySlots(20).setTexture(Images.loadImage("/items/manufactured/belt_large.png"));
 
-	public static ItemHelm helm_iron = (ItemHelm) new ItemHelm("helm_iron","Iron Helm").setDamageReduction(1.1f).setTexture(Images.loadImage("/items/manufactured/helm_iron.png"));
-	public static ItemHelm helm_wood = (ItemHelm) new ItemHelm("helm_wood","Wooden Helm").setDamageReduction(1.1f).setTexture(Images.loadImage("/items/manufactured/helm_wood.png"));
+	public static ItemHelm helm_wood = (ItemHelm) new ItemHelm("helm_wood","Wooden Helm").setDamageReduction(0.1f).setStackDamage(25).setTexture(Images.loadImage("/items/manufactured/armor/helm_wood.png"));
+	public static ItemHelm helm_iron = (ItemHelm) new ItemHelm("helm_iron","Iron Helm").setDamageReduction(0.2f).setStackDamage(45).setTexture(Images.loadImage("/items/manufactured/armor/helm_iron.png"));
+	public static ItemHelm stache = (ItemHelm) new ItemHelm("stache","WarfStache").setDamageReduction(0.12f).setStackDamage(75).setTexture(Images.loadImage("/items/manufactured/armor/stache.png"));
+	public static ItemHelm sam_eye = (ItemHelm) new ItemHelm("septiceye","Sceptic Eye").setDamageReduction(0.12f).setStackDamage(75).setTexture(Images.loadImage("/items/manufactured/armor/septiceye.png"));
 
-	public static ItemHelm stache = (ItemHelm) new ItemHelm("stache","WarfStache").setTexture(Images.loadImage("/items/manufactured/stache.png"));
-	public static ItemHelm sam_eye = (ItemHelm) new ItemHelm("septiceye","Sceptic Eye").setTexture(Images.loadImage("/items/manufactured/septiceye.png"));
+	public static ItemChest chest_wood = (ItemChest) new ItemChest("armor_wood", "Wooden ChestPlate").setDamageReduction(0.2f).setStackDamage(30).setTexture(Images.loadImage("/items/manufactured/armor/chest_wood.png"));
+	public static ItemChest chest_iron = (ItemChest) new ItemChest("armor_iron", "Iron ChestPlate").setDamageReduction(0.5f).setStackDamage(50).setTexture(Images.loadImage("/items/manufactured/armor/chest_iron.png"));
 
 	public static ItemBomb bomb = (ItemBomb) new ItemBomb("bomb", "Bomb", 2).setTexture(Images.loadImage("/items/bomb.png"));
 	public static ItemBomb bomb_better = (ItemBomb) new ItemBomb("bomb_b", "Better Bomb", 4).setTexture(Images.loadImage("/items/bomb.png"));
@@ -138,6 +141,8 @@ public class Items {
 		registerItem(helm_wood);
 		registerItem(stache);
 		registerItem(sam_eye);
+		registerItem(chest_wood);
+		registerItem(chest_iron);
 
 	}
 

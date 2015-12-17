@@ -11,6 +11,7 @@ import game.entity.block.breakable.BlockLight;
 import game.entity.block.breakable.BlockOven;
 import game.entity.block.breakable.BlockRock;
 import game.entity.block.breakable.BlockWood;
+import game.entity.block.environement.BlockDroppedItem;
 import game.entity.block.environement.BlockInfoPane;
 
 public class Blocks {
@@ -24,6 +25,7 @@ public class Blocks {
 	public static final String OVEN = "oven";
 	public static final String ADVANCEDCRAFT = "advanced_workdesk";
 	public static final String SIGN = "sign";
+	public static final String ITEM = "itemblock";
 
 	public static MapObject loadMapObjectFromString(String uin, World w){
 		switch (uin) {
@@ -45,6 +47,8 @@ public class Blocks {
 			return new BlockCraftingTable(w, 20, true, ADVANCEDCRAFT).setType(Block.WOOD);
 		case SIGN:
 			return new BlockInfoPane(w, SIGN);
+		case ITEM:
+			return new BlockDroppedItem(w, ITEM);
 		default:
 			break;
 		}

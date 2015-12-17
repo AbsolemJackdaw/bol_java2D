@@ -71,6 +71,11 @@ public class Crafting {
 			addRecipe(new ItemStack[]{new ItemStack(Items.leather_fine, 1),new ItemStack(Items.plate_iron, 1)}, new ItemStack(Items.helm_iron, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.leather_fine, 1),new ItemStack(Items.plate_wood, 1)}, new ItemStack(Items.helm_wood, 1));
 
+			addRecipe(new ItemStack[]{new ItemStack(Items.plate_wood, 1),new ItemStack(Items.plate_wood, 1)}, new ItemStack(Items.chest_wood, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.plate_iron, 1),new ItemStack(Items.plate_iron, 1)}, new ItemStack(Items.chest_iron, 1));
+
+			addRecipe(new ItemStack[]{new ItemStack(Items.plate_leather, 1),new ItemStack(Items.plate_iron, 1)}, new ItemStack(Items.pouch, 1));
+
 		}
 	}
 

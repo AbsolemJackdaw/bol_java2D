@@ -2,6 +2,8 @@ package game.gui;
 
 import engine.keyhandlers.KeyHandler;
 import game.World;
+import game.block.Blocks;
+import game.entity.block.environement.BlockDroppedItem;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
 import game.gui.container.Container;
@@ -9,6 +11,7 @@ import game.item.Item;
 import game.item.ItemStack;
 import game.item.armor.ItemArmor;
 import game.item.armor.ItemBelt;
+import game.util.Constants;
 import game.util.Util;
 
 import java.awt.Color;
@@ -151,12 +154,25 @@ public class GuiContainer extends Gui implements Container{
 		}
 		else if (KeyHandler.isPressed(KeyHandler.JUNK)){
 			if(isNotPlayerInventory() && secondairyInventory != null){
-				if(secondairyInventory.getStackInSlot(slot_index) != null)
+				if(secondairyInventory.getStackInSlot(slot_index) != null){
+					
+					BlockDroppedItem bdi = new BlockDroppedItem(world, Blocks.ITEM, secondairyInventory.getStackInSlot(slot_index));
+					bdi.setPosition(player.getPosX() + ((Constants.RANDOM.nextDouble()*20)-10), player.getPosY());
+					player.getWorld().addEntity(bdi);
+					
 					secondairyInventory.setStackInSlot(slot_index, null);
+				}
 			}else{
 				int slot = slotIndex[0]+ (slotIndex[1]*(rowsX()));
-				if(playerInventory.getStackInSlot(slot) != null)
+				if(playerInventory.getStackInSlot(slot) != null){
+					
+					BlockDroppedItem bdi = new BlockDroppedItem(world, Blocks.ITEM, playerInventory.getStackInSlot(slot));
+					bdi.setPosition(player.getPosX() + ((Constants.RANDOM.nextDouble()*20)-10), player.getPosY());
+					player.getWorld().addEntity(bdi);
+					
 					playerInventory.setStackInSlot(slot, null);
+
+				}
 			}
 		}
 		containerItemSwappingLogic();

@@ -4,6 +4,7 @@ import engine.image.Images;
 import game.World;
 import game.item.ItemStack;
 import game.item.Items;
+import game.util.WeightedStack;
 
 public class EntityWarfBat extends EntityBat {
 
@@ -20,17 +21,20 @@ public class EntityWarfBat extends EntityBat {
 
 		initMoveSpeed(0.02 + rand.nextDouble()/10);
 		initMaxSpeed(0.5 + rand.nextDouble());
-		
+
 		attackDelay = 60;
 	}
-	
+
 	@Override
 	public boolean isAgressive() {
 		return true;
 	}
 
 	@Override
-	public ItemStack[] getDrops() {
-		return new ItemStack[]{new ItemStack(Items.leather, rand.nextInt(2)+1), new ItemStack(Items.stache)} ;
+	public WeightedStack[] getDrops() {
+		return new WeightedStack[]{
+				new WeightedStack(new ItemStack(Items.leather, rand.nextInt(2)+1), 0.9), 
+				new WeightedStack(new ItemStack(Items.stache),0.1)
+		};
 	}
 }

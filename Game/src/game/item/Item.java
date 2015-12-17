@@ -36,7 +36,7 @@ public class Item {
 		info = new ArrayList<String>();
 	}
 
-	public Item setBaseDamage(int i){
+	public Item setStackDamage(int i){
 		itemBaseDamage = i;
 		return this;
 	}

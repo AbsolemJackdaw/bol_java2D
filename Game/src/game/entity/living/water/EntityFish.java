@@ -6,9 +6,9 @@ import java.awt.image.BufferedImage;
 import engine.game.GameWorld;
 import engine.image.Images;
 import engine.save.DataTag;
-import game.entity.living.player.Player;
 import game.item.ItemStack;
 import game.item.Items;
+import game.util.WeightedStack;
 
 public class EntityFish extends EntityWaterCreature {
 
@@ -18,9 +18,9 @@ public class EntityFish extends EntityWaterCreature {
 		super(world, uin);
 
 		meta = rand.nextInt(7);
-		
+
 		initFish();
-		
+
 		initHealth(3);
 
 	}
@@ -76,32 +76,10 @@ public class EntityFish extends EntityWaterCreature {
 	}
 
 	@Override
-	public ItemStack[] getDrops() {
-		return new ItemStack[]{new ItemStack(Items.meat_fish_raw, 1)};
-	}
-
-	@Override
-	public void kill(Player player) {
-
-		if(player!= null)
-			if(getDrops() != null){
-				int index;
-
-				if(getDrops().length == 1)
-					index = 0;
-				else
-					index = rand.nextInt(getDrops().length);
-
-				if(player.setStackInNextAvailableSlot(getDrops()[index])){
-					this.remove = true;
-				}else{
-					health = maxHealth;
-				}
-			}
-			else
-				;
-		else
-			this.remove = true;
+	public WeightedStack[] getDrops() {
+		return new WeightedStack[]{
+				new WeightedStack(new ItemStack(Items.meat_fish_raw, 1),1.0)
+		};
 	}
 
 	private void initFish(){

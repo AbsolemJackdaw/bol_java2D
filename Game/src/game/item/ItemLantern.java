@@ -15,7 +15,7 @@ public class ItemLantern extends Item implements IInventory {
 		super(uin, displayName);
 		
 		this.info.add("A small light in the darkness ... ");
-		setBaseDamage(defaultBurnTime);
+		setStackDamage(defaultBurnTime);
 	}
 
 	@Override

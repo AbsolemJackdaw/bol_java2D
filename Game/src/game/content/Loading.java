@@ -414,12 +414,12 @@ public class Loading {
 
 	private static void generateRandomOre(World world, String block, int rarity){
 
+		if(Constants.RANDOM.nextInt(rarity) > 0)
+			return;
+		
 		int x = Constants.RANDOM.nextInt(world.tileMap.getXRows());
 		int y = Constants.RANDOM.nextInt(world.tileMap.getYRows());
 		
-		if(Constants.RANDOM.nextInt(rarity) > 0)
-			return;
-
 		TileMap tm = world.tileMap;
 
 		BlockBreakable b = (BlockBreakable) Blocks.loadMapObjectFromString(block, world);
@@ -495,10 +495,9 @@ public class Loading {
 			generateRandomTree(world, Constants.RANDOM.nextInt(x),  Constants.RANDOM.nextInt(y));
 			generateRandomOre(world, Blocks.ROCK, 3);
 			generateRandomOre(world, Blocks.IRON, 15);
-			generateRandomOre(world, Blocks.GEM, 2);
 			
-			if(index > 10){ //should be after first boss
-				generateRandomOre(world, Blocks.GEM, airBlocks/9);
+			if(index > 5){ //should be after first boss
+				generateRandomOre(world, Blocks.GEM, airBlocks/5);
 			}
 			
 			populateEntities(world, Entity.PIG, 20);
