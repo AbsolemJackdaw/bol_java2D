@@ -1,9 +1,8 @@
 package game.entity.living.environement;
 
-import engine.game.GameWorld;
 import engine.image.Images;
 import engine.imaging.Animation;
-import game.entity.living.EntityLiving;
+import game.World;
 import game.util.Constants;
 import game.util.Util;
 
@@ -11,14 +10,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public class EntityDeathParticle extends EntityLiving {
+public class EntityDeathParticle extends EntityDeathAnim{
 
 	protected BufferedImage[] parts;
 	protected int partID = -1;
 	protected int timer = 180;
 	private int rotation = 0;
 
-	public EntityDeathParticle(GameWorld world, String uin) {
+	public EntityDeathParticle(World world, String uin) {
 		super(world, uin);
 
 //		reloadTexture();
@@ -55,7 +54,7 @@ public class EntityDeathParticle extends EntityLiving {
 		}
 	}
 	protected BufferedImage[] getParts(){
-		return Images.loadMultiImage("/entity/death_anim.png", 16, 0, 8);
+		return Images.loadMultiImage("/entity/particles/death_anim.png", 16, 0, 8);
 	}
 
 	@Override

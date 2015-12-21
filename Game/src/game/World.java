@@ -33,11 +33,13 @@ import game.content.SpawningLogic;
 import game.content.WorldTask;
 import game.content.save.Save;
 import game.entity.Entity;
+import game.entity.block.Block;
 import game.entity.block.breakable.BlockBreakable;
 import game.entity.block.breakable.BlockLight;
 import game.entity.block.breakable.BlockOven;
 import game.entity.living.EntityLiving;
 import game.entity.living.environement.EntityBlockBreak;
+import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.environement.EntityDeathParticle;
 import game.entity.living.player.Player;
 import game.gui.Gui;
@@ -354,35 +356,40 @@ public class World extends GameWorld{
 						createDeathAnimation(mo);
 					else if (mo instanceof BlockBreakable)
 						createBlockBreakAnimation(mo);
-					
+
 					removeEntity(mo);
 				}
 			}
-			
+
 			removeQueuedEntities();
 		}
 	}
 
 	private void createDeathAnimation(MapObject mo) {
 		if(((EntityLiving) mo).canPlayDeathAnimation()){
+			if(((EntityLiving) mo).getDeathAnimation().getUin().equals(Entity.DEATHANIM_MEAT)){
+				int parts = new Random().nextInt(10)+5;
 
-			int parts = new Random().nextInt(10)+5;
+				for(int i = 0; i < parts; i++){
 
-			for(int i = 0; i < parts; i++){
+					EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATHPARTICLE, this);
 
-				EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATH, this);
+					if(entity instanceof EntityDeathParticle){
+						EntityDeathParticle edp = (EntityDeathParticle)entity;
 
-				if(entity instanceof EntityDeathParticle){
-					EntityDeathParticle edp = (EntityDeathParticle)entity;
-
-					if(edp != null){
-						edp.reloadTexture();
-						edp.setPosition(mo.getPosX(), mo.getPosY());
-						edp.setJumping(true);
-						edp.dy = edp.jumpStart;
-						addEntity(edp);
+						if(edp != null){
+							edp.reloadTexture();
+							edp.setPosition(mo.getPosX(), mo.getPosY());
+							edp.setJumping(true);
+							edp.dy = edp.jumpStart;
+							addEntity(edp);
+						}
 					}
 				}
+			}else{
+				EntityDeathAnim eda = ((EntityLiving) mo).getDeathAnimation();
+				eda.setPosition(mo.getPosX(), mo.getPosY());
+				addEntity(eda);
 			}
 		}
 	}
@@ -395,15 +402,15 @@ public class World extends GameWorld{
 			EntityLiving entity = Entity.createEntityFromUIN(Entity.DEATHBLOCK, this);
 
 			if(entity instanceof EntityBlockBreak){
-				EntityBlockBreak edp = (EntityBlockBreak)entity;
+				EntityBlockBreak ebb = (EntityBlockBreak)entity;
 
-				if(edp != null){
-					edp.setParticleTexture(mo.getAnimation().getImage());
-					edp.reloadTexture();
-					edp.setPosition(mo.getPosX(), mo.getPosY());
-					edp.setJumping(true);
-					edp.dy = edp.jumpStart;
-					addEntity(edp);
+				if(ebb != null){
+					ebb.setParticleTexture(mo.getAnimation().getImage());
+					ebb.reloadTexture();
+					ebb.setPosition(mo.getPosX(), mo.getPosY());
+					ebb.setJumping(true);
+					ebb.dy = ebb.jumpStart;
+					addEntity(ebb);
 				}
 			}
 		}
@@ -490,7 +497,8 @@ public class World extends GameWorld{
 			DataTag dt = list.readArray(i);
 			String uin = dt.readString("UIN");
 
-			MapObject mo = Blocks.loadMapObjectFromString(uin, this);
+			MapObject mo = Blocks.loadBlockFromString(uin, this);
+
 			if(mo == null)
 				mo = Entity.createEntityFromUIN(uin, this);
 
@@ -599,6 +607,12 @@ public class World extends GameWorld{
 				if(entity != null){
 					entity.setPosition(player.getPosX(), player.getPosY());
 					addEntity(entity);
+				}else{
+					Block b = (Block) Blocks.loadBlockFromString(split[1], this);
+					if(b != null){
+						b.setPosition(player.getPosX(), player.getPosY());
+						addEntity(b);
+					}
 				}
 			}
 			else if(split.length == 3){
@@ -608,6 +622,12 @@ public class World extends GameWorld{
 					if(entity != null){
 						entity.setPosition(player.getPosX(), player.getPosY());
 						addEntity(entity);
+					}else{
+						Block b = (Block) Blocks.loadBlockFromString(split[1], this);
+						if(b != null){
+							b.setPosition(player.getPosX(), player.getPosY());
+							addEntity(b);
+						}
 					}
 				}
 			}

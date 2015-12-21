@@ -29,8 +29,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private Thread thread;
 	private boolean running;
 	
-	private Thread musicThread;
-
 	long lastLoopTime = System.nanoTime();
 	final int TARGET_FPS = 60;
 	final long OPTIMAL_TIME = 1000000000 / TARGET_FPS; 
@@ -81,12 +79,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			addKeyListener(this);
 			thread.start();
 		}
-		
-		if(musicThread == null){
-			musicThread = new Thread(new MusicPanel());
-			musicThread.start();
-		}
-
 	}
 
 	/**

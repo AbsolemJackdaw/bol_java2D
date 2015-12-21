@@ -2,7 +2,6 @@ package game.entity.living;
 
 import java.awt.Graphics2D;
 
-import engine.game.GameWorld;
 import engine.game.MapObject;
 import engine.music.Music;
 import engine.save.DataTag;
@@ -38,11 +37,16 @@ public class EntityLiving extends MapObject{
 
 	protected EntityMovement AI;
 
-	public EntityLiving(GameWorld world, String uin) {
+	public EntityLiving(World world, String uin) {
 		super(world, uin);
 
 		knockBackForce = 3d;
 		AI = new EntityMovement();
+
+		boolean b = rand.nextBoolean();
+		facingRight = b;
+		right = b;
+		left = !b;
 	}
 
 	@Override
@@ -146,6 +150,7 @@ public class EntityLiving extends MapObject{
 			}
 		}
 
+		doBasicMovement();
 	}
 
 	public void initMaxSpeed(double speed){
@@ -194,21 +199,21 @@ public class EntityLiving extends MapObject{
 
 				double totalWeight = 0.0d;
 				for (WeightedStack ws : getDrops()){
-				    totalWeight += ws.getWeight();
+					totalWeight += ws.getWeight();
 				}
 				// Now choose a random item
 				int randomIndex = -1;
 				double random = rand.nextDouble() * totalWeight;
 				for (int i = 0; i < getDrops().length; ++i)
 				{
-				    random -= getDrops()[i].getWeight();
-				    if (random <= 0.0d)
-				    {
-				        randomIndex = i;
-				        break;
-				    }
+					random -= getDrops()[i].getWeight();
+					if (random <= 0.0d)
+					{
+						randomIndex = i;
+						break;
+					}
 				}
-				
+
 				if(player.setStackInNextAvailableSlot(getDrops()[randomIndex].getStack())){
 					this.remove = true;
 				}else{
@@ -277,5 +282,14 @@ public class EntityLiving extends MapObject{
 
 	public double getDefMoveSpeed() {
 		return defMoveSpeed;
+	}
+
+	public boolean isAgressive(){
+		return false;
+	}
+
+	protected void doBasicMovement(){
+		AI.jumpOverHurdle(this);
+		AI.doBasicEntityMovement(this);
 	}
 }

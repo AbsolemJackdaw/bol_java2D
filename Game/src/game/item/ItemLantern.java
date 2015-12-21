@@ -5,7 +5,6 @@ import engine.save.DataTag;
 import game.World;
 import game.entity.inventory.IInventory;
 import game.entity.living.player.Player;
-import game.gui.GuiLantern;
 
 public class ItemLantern extends Item implements IInventory {
 
@@ -21,8 +20,8 @@ public class ItemLantern extends Item implements IInventory {
 	@Override
 	public void useItem(ItemStack item, TileMap map, World world, Player player,	int key) {
 
-		GuiLantern gui = new GuiLantern(this, player).setLantern(this);
-		world.displayGui(gui);
+//		GuiLantern gui = new GuiLantern(this, player).setLantern(this);
+//		world.displayGui(gui);
 
 	}
 

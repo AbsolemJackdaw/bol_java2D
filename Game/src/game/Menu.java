@@ -90,7 +90,6 @@ public class Menu extends GameState{
 
 			//any save check. i chose random parts
 			if(!Save.readRandomParts()){ // if no save is found
-
 				gsm.setState(GameStateManager.TUTORIAL);
 
 			}else{ //read saves and continue playing
@@ -99,13 +98,10 @@ public class Menu extends GameState{
 
 				new SwingWorker<Void, Integer>() {
 					@Override
-					protected Void doInBackground() throws Exception {
+					protected Void doInBackground() {
 
 						try {
 							gsm.setState(GameStateManager.GAME);
-							
-							//new blank world
-							World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
 
 							//read map index
 							Save.readRandomParts();
@@ -113,19 +109,22 @@ public class Menu extends GameState{
 							//load saves from world. if none, the basic map will be loaded 
 							Loading.startAtLastSavedLevel(gsm);
 
+							//new blank world
+							World currentWorld = (World)gsm.getGameState(gsm.getCurrentState());
+							
 							//initiate current world. sets new player 
 							currentWorld.init();
-							
+
 						} catch (Exception e) {
 							e.printStackTrace();
 							System.out.println("an exception was cought trying to start up the game");
 							System.out.println("Exiting game");
 							System.exit(0);
 						}
-						
+
 						return null;
 					}
-					
+
 					@Override
 					protected void done() {
 						super.done();

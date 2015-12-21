@@ -129,11 +129,11 @@ public class Player extends EntityLiving implements IInventory{
 			
 			if(this.armorInventory.getHelm() != null){
 				reduction += ((ItemArmor)armorInventory.getHelm().getItem()).getDamageReduction();
-				Util.decreaseStack(armorInventory, 0, 1);
+				armorInventory.getHelm().damageStack(1);
 			}
 			if(this.armorInventory.getBody() != null){
 				reduction += ((ItemArmor)armorInventory.getBody().getItem()).getDamageReduction();
-				Util.decreaseStack(armorInventory, 1, 1);
+				armorInventory.getBody().damageStack(1);
 			}
 			
 			float reduced = f / reduction;
@@ -170,8 +170,6 @@ public class Player extends EntityLiving implements IInventory{
 			
 			//head
 			super.draw(g, head);
-			if(armor_head.hasFrames())
-				super.draw(g,armor_head);
 			
 			if(armor_body.hasFrames())
 				super.draw(g, armor_body);
@@ -180,6 +178,9 @@ public class Player extends EntityLiving implements IInventory{
 			super.draw(g, arms);
 			if(armor_arms.hasFrames())
 				super.draw(g,armor_arms);
+			
+			if(armor_head.hasFrames())
+				super.draw(g,armor_head);
 			
 			//legs
 			super.draw(g, legs);
@@ -320,6 +321,8 @@ public class Player extends EntityLiving implements IInventory{
 				}
 			}
 	}
+	
+	ItemStack previousArmorstack = null;
 
 	@Override
 	public void update() {
@@ -383,7 +386,7 @@ public class Player extends EntityLiving implements IInventory{
 					item.update(this, stack, i);
 			}
 		}
-
+		
 		for(WorldTask task : ((World)world).tasks){
 			if(!task.isAchieved()){
 				if(task.object().equals(WorldTask.JUMP) && KeyHandler.isPressed(KeyHandler.UP))
@@ -1127,5 +1130,9 @@ public class Player extends EntityLiving implements IInventory{
 
 	public void setMaxAirSupply(int maxAirSupply) {
 		this.maxAirSupply = airSupply = maxAirSupply;
+	}
+	
+	@Override
+	protected void doBasicMovement() {
 	}
 }

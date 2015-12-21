@@ -1,8 +1,5 @@
 package game.entity.living;
 
-import java.awt.Graphics2D;
-
-import engine.game.GameWorld;
 import engine.game.MapObject;
 import engine.image.Images;
 import engine.music.Music;
@@ -11,17 +8,19 @@ import game.entity.living.environement.EntityDeathAnim;
 import game.entity.living.environement.EntityExplosion;
 import game.entity.living.player.Player;
 
+import java.awt.Graphics2D;
+
 public class EntityBomb extends EntityLiving {
 
 	private int blastPower;
 	private int blastRadius;
 
-	public EntityBomb(GameWorld world, String uin) {
+	public EntityBomb(World world, String uin) {
 		super(world, uin);
 
 		initHealth(8f);
 
-		getAnimation().setFrames(Images.loadMultiImage("/entity/bomb_sheet.png", 32, 0, 4));
+		getAnimation().setFrames(Images.loadMultiImage("/entity/item/bomb.png", 32, 0, 4));
 		getAnimation().setDelay(150);
 
 		entitySizeX = 16;
@@ -88,10 +87,14 @@ public class EntityBomb extends EntityLiving {
 		this.entitySizeX = this.entitySizeY = getBlastRadius();
 
 		for(MapObject mo : getWorld().getWorldEntities()){
-			if(!(mo instanceof EntityDeathAnim  || mo instanceof EntityBomb))
+			if(!(mo instanceof EntityDeathAnim  || mo instanceof EntityBomb)){
 				if(this.getRectangle().intersects(mo.getRectangle())){
 					mo.onEntityHit(getBlastPower());
 				}
+				if(this.getRectangle().intersects(getWorld().getPlayer().getRectangle())){
+					getWorld().getPlayer().onEntityHit((float)getBlastPower()/4f);
+				}
+			}
 		}
 	}
 

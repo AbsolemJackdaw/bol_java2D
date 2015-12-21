@@ -11,7 +11,7 @@ import game.entity.Entity;
 
 public class EntityExplosion extends EntityDeathAnim {
 
-	BufferedImage[] img = Images.loadMultiImage("/entity/explosion.png", 32, 0, 11);
+	BufferedImage[] img = Images.loadMultiImage("/entity/particles/explosion.png", 32, 0, 11);
 	
 	public EntityExplosion(World world) {
 		this(world, 32);
@@ -48,5 +48,13 @@ public class EntityExplosion extends EntityDeathAnim {
 			g.setColor(Color.WHITE);
 			g.draw(getRectangle());
 		}
+	}
+	
+	@Override
+	public void update() {
+		super.update();
+		
+		if(getAnimation().hasPlayedOnce())
+			remove = true;
 	}
 }

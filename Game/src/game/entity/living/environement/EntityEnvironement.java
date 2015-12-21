@@ -1,7 +1,7 @@
 package game.entity.living.environement;
 
-import engine.game.GameWorld;
 import engine.save.DataTag;
+import game.World;
 import game.entity.living.EntityLiving;
 import game.entity.living.player.Player;
 
@@ -9,7 +9,7 @@ import java.awt.Graphics2D;
 
 public class EntityEnvironement extends EntityLiving{
 
-	public EntityEnvironement(GameWorld world, String uin) {
+	public EntityEnvironement(World world, String uin) {
 		super(world, uin);
 
 		entitySizeX = 32;

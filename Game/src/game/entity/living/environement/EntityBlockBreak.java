@@ -1,12 +1,12 @@
 package game.entity.living.environement;
 
-import java.awt.image.BufferedImage;
+import game.World;
 
-import engine.game.GameWorld;
+import java.awt.image.BufferedImage;
 
 public class EntityBlockBreak extends EntityDeathParticle {
 
-	public EntityBlockBreak(GameWorld world, String uin) {
+	public EntityBlockBreak(World world, String uin) {
 		super(world, uin);
 		jumpStart = -3;
 		

@@ -1,11 +1,7 @@
 XboxController detection when connected ? 
  > solution, add a controls menu option to modify controls and switch to/from keyboard to controller
      reload controller when chosen.
-     
-     Imply feature where holding space-bar loops attacking
-     
-particle FX
-
+          
 kao nemesis wanted to imply invisible blocks. a prototype for the invisible blocks type is already set in the Tile class
 
  and i found a way for the invisible goggles btw !
@@ -19,9 +15,6 @@ __
 recipes to do
 
 bombs : pouch, gunpowder, modifiers : more gunpower, more power ?
-
-oven = Stone + stone = Tenacious Stone. Teson + Teson = Oven Base. ovenBase X 5 mods = 5 Teson;
-
 __
 
 make a TooltipComponent which stores sizes, text, and font. draw the component instead of just some text

@@ -2,7 +2,6 @@ package game.entity.living;
 
 import engine.image.Images;
 import game.World;
-import game.entity.EntityAI;
 import game.item.ItemStack;
 import game.item.Items;
 import game.util.WeightedStack;
@@ -11,8 +10,6 @@ import java.awt.Graphics2D;
 
 
 public class EntityPig extends EntityLiving{
-
-	private EntityAI ai = new EntityAI();
 
 	public EntityPig(World world, String uin) {
 		super(world, uin);
@@ -53,7 +50,7 @@ public class EntityPig extends EntityLiving{
 		super.update();
 
 		if(knockBack <= 0)
-			ai.walkAroundRandomly(this);
+			AI.doBasicEntityMovement(this);
 
 		//		calmDown();
 	}

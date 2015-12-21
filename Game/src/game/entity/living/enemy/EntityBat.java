@@ -46,19 +46,15 @@ public class EntityBat extends EntityEnemy{
 		stopJumpSpeed = 0;
 		knockBackForce = 2d;
 
-		boolean b = rand.nextBoolean();
-		facingRight = b;
-		right = b;
-		left = !b;
-		up = b;
-		down = !b;
+		up = facingRight;
+		down = !facingRight;
 
 	}
 
 	@Override
 	public WeightedStack[] getDrops() {
 		return new WeightedStack[]{
-				new WeightedStack(new ItemStack(Items.leather, rand.nextInt(2)+1), 0.95),
+				new WeightedStack(new ItemStack(Items.leather, 1), 0.95),
 				new WeightedStack(new ItemStack(Items.sam_eye, 1),0.05)
 		};
 	}
@@ -119,5 +115,9 @@ public class EntityBat extends EntityEnemy{
 	@Override
 	public float getAttackDamage() {
 		return 0.5f;
+	}
+	
+	@Override
+	protected void doBasicMovement() {
 	}
 }

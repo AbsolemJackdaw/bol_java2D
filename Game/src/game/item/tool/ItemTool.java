@@ -5,6 +5,7 @@ import game.World;
 import game.entity.living.player.Player;
 import game.item.Item;
 import game.item.ItemStack;
+import game.item.Items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,6 +131,12 @@ public class ItemTool extends Item {
 	@Override
 	public void craftingCallBack(ItemStack component, ItemStack base) {
 		super.craftingCallBack(component, base);
+		
+		if(component.getItem().equals(Items.leather_strap)){
+			mod = 50;
+			base.addModifier(new ToolModifier(ToolModifier.DUR, mod));
+			base.damageStack(-mod);
+		}
 	}
 
 	public EnumMaterial getMaterial() {

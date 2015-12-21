@@ -63,7 +63,7 @@ public class Block extends MapObject{
 
 		//TODO falling needs tweeking for blocks only under his position
 		if(falling){
-			
+
 			for(MapObject mo : getWorld().getWorldEntities()){
 				if(mo instanceof Block){
 					Block b = (Block)mo;
@@ -92,7 +92,7 @@ public class Block extends MapObject{
 		return true;
 	}
 
-	public MapObject setType(int type){
+	public Block setType(int type){
 		this.type = type;
 		return this;
 	}
@@ -103,5 +103,9 @@ public class Block extends MapObject{
 
 	public List<String> getBlockInfo(){
 		return blockInfo;
+	}
+
+	public World getWorld(){
+		return (World)super.getWorld();
 	}
 }

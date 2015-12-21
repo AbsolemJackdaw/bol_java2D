@@ -1,11 +1,11 @@
 package game.entity.living.flying;
 
-import engine.game.GameWorld;
+import game.World;
 import game.entity.living.EntityLiving;
 
 public class EntityFlying extends EntityLiving {
 
-	public EntityFlying(GameWorld world, String uin) {
+	public EntityFlying(World world, String uin) {
 		super(world, uin);
 	}
 

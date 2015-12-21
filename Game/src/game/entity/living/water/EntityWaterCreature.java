@@ -1,11 +1,11 @@
 package game.entity.living.water;
 
-import engine.game.GameWorld;
+import game.World;
 import game.entity.living.EntityLiving;
 
 public class EntityWaterCreature extends EntityLiving {
 
-	public EntityWaterCreature(GameWorld world, String uin) {
+	public EntityWaterCreature(World world, String uin) {
 		super(world, uin);
 		
 		initMoveSpeed(0.07 + rand.nextDouble()/10);
@@ -73,5 +73,9 @@ public class EntityWaterCreature extends EntityLiving {
 		topRight = tr < 9 || tr > 10;
 		bottomLeft = bl < 9 || bl > 10;
 		bottomRight = br < 9 || br > 10;
+	}
+	
+	@Override
+	protected void doBasicMovement() {
 	}
 }

@@ -3,9 +3,9 @@ package game.entity.living.water;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-import engine.game.GameWorld;
 import engine.image.Images;
 import engine.save.DataTag;
+import game.World;
 import game.item.ItemStack;
 import game.item.Items;
 import game.util.WeightedStack;
@@ -14,7 +14,7 @@ public class EntityFish extends EntityWaterCreature {
 
 	private int meta = -1;
 
-	public EntityFish(GameWorld world, String uin) {
+	public EntityFish(World world, String uin) {
 		super(world, uin);
 
 		meta = rand.nextInt(7);

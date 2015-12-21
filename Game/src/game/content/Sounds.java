@@ -1,21 +1,17 @@
-package engine.window;
+package game.content;
 
-import static engine.music.Music.load;
 import engine.music.Music;
 
-public class MusicPanel implements Runnable{
 
-	/**used only to load music*/
-	
-	@Override
-	public void run() {
+public class Sounds {
 
+	public static void load(){
 		Music.init();
 		loadMusic();
-		
 	}
 
-	public void loadMusic(){
+
+	private static void loadMusic(){
 		loadMusic("/sounds/block/wood/hit_wood_1.mp3", "hit_wood_1");
 		loadMusic("/sounds/block/wood/hit_wood_2.mp3", "hit_wood_2");
 		loadMusic("/sounds/block/wood/hit_wood_3.mp3", "hit_wood_3");
@@ -43,7 +39,7 @@ public class MusicPanel implements Runnable{
 
 		loadMusic("/sounds/entity/player/splash.mp3", "splash");
 
-		
+
 		loadMusic("/sounds/entity/explosion/explode_0.mp3","explode_0");
 		loadMusic("/sounds/entity/explosion/explode_1.mp3","explode_1");
 		loadMusic("/sounds/entity/explosion/explode_2.mp3","explode_2");
@@ -52,10 +48,11 @@ public class MusicPanel implements Runnable{
 		loadMusic("/sounds/entity/explosion/explode_5.mp3","explode_5");
 		loadMusic("/sounds/entity/explosion/explode_6.mp3","explode_6");
 
+		loadMusic("/sounds/entity/pyrius/attack.mp3","pyrius_attack");
 	}
 
 	private static void loadMusic(String path, String name){
-		load(path, name);
+		Music.load(path, name);
 	}
 
 }
