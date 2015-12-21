@@ -41,12 +41,13 @@ public class Items {
 	public static Item plate_iron = new Item("plate_iron", "Iron Plate").setTexture(Images.loadImage("/items/manufactured/plate_iron.png"));
 	public static Item plate_wood = new Item("plate_wood", "Wooden Plate").setTexture(Images.loadImage("/items/manufactured/plate_wood.png"));
 	public static Item plate_leather = new Item("plate_leather", "Leather Plate").setTexture(Images.loadImage("/items/manufactured/plate_leather.png"));
+	public static Item gunpowder = new Item("gunpowder", "GunPowder").setTexture(Images.loadImage("/items/resources/gunpowder.png"));
 
 	public static Item whetstone = new ItemWhetstone("whetstone","WhetStone").setTexture(Images.loadImage("/items/manufactured/whetstone.png"));
 
 	public static Item ovenBase = new ItemOvenbase("ovenbase", "Oven Base").setTexture(Images.loadImage("/items/manufactured/oven_base.png"));
 
-	public static Item handle_sword = new Item("handle_sword","Sword Handle").setTexture(Images.loadImage("/items/tools/handle_sword.png"));
+	public static Item handle_small = new Item("handle_small","Small Handle").setTexture(Images.loadImage("/items/tools/handle_sword.png"));
 	public static Item handle_soft = new Item("handle_soft","Modest Handle").setTexture(Images.loadImage("/items/tools/handle_soft.png"));
 	public static Item handle_hard = new Item("handle_hard","Greater Handle").setTexture(Images.loadImage("/items/tools/handle_hard.png"));
 
@@ -120,7 +121,7 @@ public class Items {
 		registerItem(meat_fish);
 		registerItem(whetstone);
 		registerItem(leather_fine);
-		registerItem(handle_sword);
+		registerItem(handle_small);
 		registerItem(handle_soft);
 		registerItem(handle_hard);
 		registerItem(refinedStone);
@@ -143,6 +144,7 @@ public class Items {
 		registerItem(sam_eye);
 		registerItem(chest_wood);
 		registerItem(chest_iron);
+		registerItem(gunpowder);
 
 	}
 
