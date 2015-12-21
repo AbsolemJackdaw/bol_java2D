@@ -41,13 +41,13 @@ public class Crafting {
 		if(recipyList.isEmpty() && resultList.isEmpty()){
 			addRecipe(new ItemStack[]{new ItemStack(Items.woodChip, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.stick, 2));
 
-			addRecipe(new ItemStack[]{new ItemStack(Items.leather, 1),new ItemStack(Items.stick, 1)}, new ItemStack(Items.handle_sword, 1));
-			addRecipe(new ItemStack[]{new ItemStack(Items.stick, 1),new ItemStack(Items.stick, 1)}, new ItemStack(Items.handle_soft, 1));
-			addRecipe(new ItemStack[]{new ItemStack(Items.stick, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.handle_hard, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.stick, 1),new ItemStack(Items.stick, 1)}, new ItemStack(Items.handle_small, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_small, 1),new ItemStack(Items.stick, 1)}, new ItemStack(Items.handle_soft, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.stick, 1)}, new ItemStack(Items.handle_hard, 1));
 
-			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.wood_sword, 1));
-			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.stone_sword, 1));
-			addRecipe(new ItemStack[]{new ItemStack(Items.handle_sword, 1),new ItemStack(Items.ingot, 1)}, new ItemStack(Items.iron_sword, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_small, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.wood_sword, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_small, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.stone_sword, 1));
+			addRecipe(new ItemStack[]{new ItemStack(Items.handle_small, 1),new ItemStack(Items.ingot, 1)}, new ItemStack(Items.iron_sword, 1));
 
 			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.woodChip, 1)}, new ItemStack(Items.wood_axe, 1));
 			addRecipe(new ItemStack[]{new ItemStack(Items.handle_soft, 1),new ItemStack(Items.refinedStone, 1)}, new ItemStack(Items.stone_axe, 1));
